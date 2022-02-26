@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"golang.org/x/oauth2"
 )
 
 type ResponseOAuthURL struct {
@@ -15,5 +16,6 @@ type ResponseOAuthURL struct {
 // @Router /google/oauth/url [get]
 // @Success 200 {object} ResponseOAuthURL
 func (c Context) OAuthURL(e echo.Context) error {
-	return e.JSON(http.StatusOK, ResponseOAuthURL{})
+	authURL := c.Config.AuthCodeURL("", oauth2.AccessTypeOffline, oauth2.ApprovalForce)
+	return e.JSON(http.StatusOK, ResponseOAuthURL{URL: authURL})
 }

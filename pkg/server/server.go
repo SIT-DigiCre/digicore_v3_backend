@@ -20,7 +20,7 @@ func CreateEchoServer() *echo.Echo {
 }
 
 func addRouting(e *echo.Echo) {
-	google := google.Context{}
+	google, _ := google.CreateContext()
 	e.GET("/google/oauth/url", google.OAuthURL)
 	e.GET("/google/oauth/callback", google.OAuthCallback)
 }
