@@ -1,10 +1,8 @@
 package main
 
-import (
-	"github.com/labstack/echo/v4"
-)
+import "github.com/SIT-DigiCre/digicore_v3_backend/pkg/server"
 
 func main() {
-	e := echo.New()
-	e.Logger.Fatal(e.Start(":1323"))
+	s := server.CreateEchoServer()
+	s.Logger.Fatal(s.Start(":8000"))
 }
