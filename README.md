@@ -8,3 +8,9 @@ set -a && source .env && set +a
 cd db
 go run github.com/rubenv/sql-migrate/sql-migrate@v1.1.1 up
 ```
+
+## generate swagger docs
+
+```sh
+swag init
+```
