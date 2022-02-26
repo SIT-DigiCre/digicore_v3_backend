@@ -20,7 +20,7 @@ func CreateContext() (Context, error) {
 	}
 	context.Config, err = google.ConfigFromJSON(clientSecretJson, "https://www.googleapis.com/auth/userinfo.email")
 	if err != nil {
-		return context, fmt.Errorf("Unable to parse client_secret.json: %w", err)
+		return context, fmt.Errorf("unable to parse client_secret.json: %w", err)
 	}
 
 	return context, nil
