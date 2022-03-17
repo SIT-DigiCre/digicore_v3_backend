@@ -17,5 +17,5 @@ type ResponseOAuthURL struct {
 // @Success 200 {object} ResponseOAuthURL
 func (c Context) OAuthURL(e echo.Context) error {
 	authURL := c.Config.AuthCodeURL("", oauth2.AccessTypeOffline, oauth2.ApprovalForce)
-	return e.JSON(http.StatusOK, ResponseOAuthURL{URL: authURL})
+	return e.Redirect(http.StatusFound, authURL)
 }
