@@ -71,18 +71,18 @@ func (c Context) OAuthCallback(e echo.Context) error {
 
 func (c Context) GetUserUuid(studentNumber string) (string, error) {
 	userUuid := ""
-	if err := c.DB.QueryRow("SELECT id FROM User WHERE student_number = '?'", studentNumber).Scan(&userUuid); err == sql.ErrNoRows {
-		_, err := c.DB.Exec("INSERT INTO User (student_number) VALUES ('?')", studentNumber)
+	if err := c.DB.QueryRow("SELECT id FROM User WHERE student_number = ?", studentNumber).Scan(&userUuid); err == sql.ErrNoRows {
+		_, err := c.DB.Exec("INSERT INTO User (student_number) VALUES (?)", studentNumber)
 		if err != nil {
-			return "", nil
+			return "", err
 		}
-		if err := c.DB.QueryRow("SELECT id FROM User WHERE student_number = '?'", studentNumber).Scan(&userUuid); err != nil {
-			return "", nil
+		if err := c.DB.QueryRow("SELECT id FROM User WHERE student_number = ?", studentNumber).Scan(&userUuid); err != nil {
+			return "", err
 		}
 	} else if err != nil {
-		return "", nil
+		return "", err
 	}
-	return "", nil
+	return userUuid, nil
 }
 
 func GetSessionId(e *echo.Context, userUuid string) (string, error) {
