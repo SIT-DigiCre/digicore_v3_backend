@@ -14,6 +14,8 @@ type Context struct {
 	DB     *sql.DB
 }
 
+var FrontEndpoint = "http://localhost"
+
 func CreateContext(db *sql.DB) (Context, error) {
 	context := Context{DB: db}
 	clientSecretJson, err := os.ReadFile("client_secret.json")
