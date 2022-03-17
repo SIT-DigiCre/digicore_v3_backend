@@ -1,13 +1,16 @@
 package server
 
 import (
+	"database/sql"
+
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/google"
+	_ "github.com/go-sql-driver/mysql"
 	echo_session "github.com/ipfans/echo-session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func CreateEchoServer(store echo_session.RedisStore) *echo.Echo {
+func CreateEchoServer(store echo_session.RedisStore, db *sql.DB) *echo.Echo {
 	e := echo.New()
 
 	e.Pre(middleware.RemoveTrailingSlash())
@@ -17,14 +20,19 @@ func CreateEchoServer(store echo_session.RedisStore) *echo.Echo {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	addRouting(e)
+	addRouting(e, db)
 	return e
 }
 
-func addRouting(e *echo.Echo) {
-	google, _ := google.CreateContext()
+func addRouting(e *echo.Echo, db *sql.DB) {
+	google, _ := google.CreateContext(db)
 	e.GET("/google/oauth/url", google.OAuthURL)
 	e.GET("/google/oauth/callback", google.OAuthCallback)
+}
+
+func CreateDbConnection(address string) (*sql.DB, error) {
+	db, err := sql.Open("mysql", address)
+	return db, err
 }
 
 func CreateSessionStoreConnection(address string, password string) (echo_session.RedisStore, error) {

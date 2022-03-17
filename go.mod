@@ -3,6 +3,7 @@ module github.com/SIT-DigiCre/digicore_v3_backend
 go 1.17
 
 require (
+	github.com/go-sql-driver/mysql v1.5.0
 	github.com/ipfans/echo-session v0.0.0-20190705175249-db23facf2a33
 	github.com/labstack/echo/v4 v4.6.3
 	github.com/rubenv/sql-migrate v1.1.1
