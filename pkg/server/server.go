@@ -31,6 +31,7 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	e.GET("/google/oauth/callback", google.OAuthCallback)
 
 	user, _ := user.CreateContext(db)
+	e.POST("/user/my", user.SetMyProfile)
 	e.GET("/user/my", user.GetMyProfile)
 	e.POST("/user/my/private", user.SetMyPrivateProfile)
 	e.GET("/user/my/private", user.GetMyPrivateProfile)

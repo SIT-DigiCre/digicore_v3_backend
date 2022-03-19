@@ -52,3 +52,30 @@ func (c Context) GetMyProfile(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseGetMyProfile{Profile: profile})
 }
 
+// Set my prodile
+// @Accept json
+// @Param Profile body Profile true "my profile"
+// @Router /user/my [post]
+// @Success 200 {object} ResponseSetMyProfile
+func (c Context) SetMyProfile(e echo.Context) error {
+	userId, err := GetUserId(&e)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{})
+	}
+	fmt.Println(userId)
+	profile := Profile{}
+	if err := e.Bind(&profile); err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseSetMyPrivateProfile{Error: err.Error()})
+	}
+	if err := profile.validate(); err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseSetMyPrivateProfile{Error: err.Error()})
+	}
+	_, err = c.DB.Exec(`INSERT INTO UserProfile (user_id, username, school_grade, icon_url, discord_userid, short_self_introduction) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?)
+				ON DUPLICATE KEY UPDATE username = ?, school_grade = ?, icon_url = ?, discord_userid = ?, short_self_introduction = ?`,
+		userId, profile.Username, profile.SchoolGrade, profile.IconURL, profile.DiscordUserId, profile.ShortSelfIntroduction,
+		profile.Username, profile.SchoolGrade, profile.IconURL, profile.DiscordUserId, profile.ShortSelfIntroduction)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseSetMyPrivateProfile{Error: err.Error()})
+	}
+	return e.JSON(http.StatusOK, ResponseSetMyPrivateProfile{})
+}
