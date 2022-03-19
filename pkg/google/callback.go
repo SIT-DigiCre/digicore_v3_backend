@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 	echo_session "github.com/ipfans/echo-session"
 	"github.com/labstack/echo/v4"
 )
@@ -39,33 +40,33 @@ func (c Context) OAuthCallback(e echo.Context) error {
 	ctx := context.Background()
 	token, err := c.Config.Exchange(ctx, code)
 	if err != nil {
-		return e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
+		return e.Redirect(http.StatusFound, env.FrontRootURL+"/login?")
 	}
 
 	req, err := http.NewRequest("GET", "https://www.googleapis.com/oauth2/v1/userinfo?access_token="+token.AccessToken, nil)
 	if err != nil {
-		return e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
+		return e.Redirect(http.StatusFound, env.FrontRootURL+"/login?")
 	}
 	client := http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
-		return e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
+		return e.Redirect(http.StatusFound, env.FrontRootURL+"/login?")
 	}
 	userInfo := UserInfoResponse{}
 	json.NewDecoder(res.Body).Decode(&userInfo)
 	if err := userInfo.validate(); err != nil {
-		return e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
+		return e.Redirect(http.StatusFound, env.FrontRootURL+"/login?")
 	}
 	studentNumber := strings.TrimSuffix(userInfo.Email, emailSuffix)
 	userUuid, err := c.GetUserUuid(studentNumber)
 	if err != nil {
-		return e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
+		return e.Redirect(http.StatusFound, env.FrontRootURL+"/login?")
 	}
 	sessionId, err := GetSessionId(&e, userUuid)
 	if err != nil {
-		return e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
+		return e.Redirect(http.StatusFound, env.FrontRootURL+"/login?")
 	}
-	return e.Redirect(http.StatusFound, FrontEndpoint+"/login?session="+sessionId)
+	return e.Redirect(http.StatusFound, env.FrontRootURL+"/login?session="+sessionId)
 }
 
 func (c Context) GetUserUuid(studentNumber string) (string, error) {
