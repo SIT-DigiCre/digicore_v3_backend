@@ -4,6 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/google"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
 	_ "github.com/go-sql-driver/mysql"
 	echo_session "github.com/ipfans/echo-session"
 	"github.com/labstack/echo/v4"
@@ -28,6 +29,10 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	google, _ := google.CreateContext(db)
 	e.GET("/google/oauth/url", google.OAuthURL)
 	e.GET("/google/oauth/callback", google.OAuthCallback)
+
+	user, _ := user.CreateContext(db)
+	e.POST("/user/my/private", user.SetMyPrivateProfile)
+	e.GET("/user/my/private", user.GetMyPrivateProfile)
 }
 
 func CreateDbConnection(address string) (*sql.DB, error) {
