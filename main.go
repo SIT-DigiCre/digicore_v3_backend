@@ -18,7 +18,6 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("%s:%s %s", os.Getenv("REDIS_HOST"), os.Getenv("REDIS_PORT"), os.Getenv("REDIS_PASSWORD"))
 	store, err := server.CreateSessionStoreConnection(fmt.Sprintf("%s:%s", os.Getenv("REDIS_HOST"), os.Getenv("REDIS_PORT")), os.Getenv("REDIS_PASSWORD"))
 	if err != nil {
 		panic(err)
