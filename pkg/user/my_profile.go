@@ -42,8 +42,8 @@ func (c Context) GetMyProfile(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: ""})
 	}
 	profile := Profile{UserId: userId}
-	err = c.DB.QueryRow("SELECT username, school_grade, icon_url, discord_userid, short_self_introduction FROM UserProfile WHERE user_id = UUID_TO_BIN(?)", userId).
-		Scan(&profile.Username, &profile.SchoolGrade, &profile.IconURL, &profile.DiscordUserId, &profile.ShortSelfIntroduction)
+	err = c.DB.QueryRow("SELECT username, school_grade, icon_url, discord_userid, active_limit, short_self_introduction FROM UserProfile WHERE user_id = UUID_TO_BIN(?)", userId).
+		Scan(&profile.Username, &profile.SchoolGrade, &profile.IconURL, &profile.DiscordUserId, &profile.ActiveLimit, &profile.ShortSelfIntroduction)
 	if err == sql.ErrNoRows {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: err.Error()})
 	} else if err != nil {
