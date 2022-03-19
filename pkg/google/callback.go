@@ -39,32 +39,32 @@ func (c Context) OAuthCallback(e echo.Context) error {
 	ctx := context.Background()
 	token, err := c.Config.Exchange(ctx, code)
 	if err != nil {
-		return e.JSON(http.StatusInternalServerError, ResponseOAuthCallback{})
+		return e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
 	}
 
 	req, err := http.NewRequest("GET", "https://www.googleapis.com/oauth2/v1/userinfo?access_token="+token.AccessToken, nil)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseOAuthCallback{})
+		return e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
 	}
 	client := http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseOAuthCallback{})
+		return e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
 	}
 	userInfo := UserInfoResponse{}
 	json.NewDecoder(res.Body).Decode(&userInfo)
 	if err := userInfo.validate(); err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseOAuthCallback{})
+		return e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
 	}
 	studentNumber := strings.TrimSuffix(userInfo.Email, emailSuffix)
 	userUuid, err := c.GetUserUuid(studentNumber)
 	if err != nil {
-		e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
+		return e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
 	}
 	sessionId, err := GetSessionId(&e, userUuid)
 	fmt.Println(err)
 	if err != nil {
-		e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
+		return e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
 	}
 	return e.Redirect(http.StatusFound, FrontEndpoint+"/login?session="+sessionId)
 }
