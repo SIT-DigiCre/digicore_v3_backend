@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"regexp"
+	"unicode/utf8"
 
 	"github.com/labstack/echo/v4"
 )
@@ -21,7 +23,39 @@ type PrivateProfile struct {
 	ParentAddress         string `json:"parent_address"`
 }
 
+var phoneNumberRegex = regexp.MustCompile(`^[0-9]{1,32}$`)
+
 func (p PrivateProfile) validate() error {
+	if 255 < utf8.RuneCountInString(p.FirstName) {
+		return fmt.Errorf("")
+	}
+	if 255 < utf8.RuneCountInString(p.LastName) {
+		return fmt.Errorf("")
+	}
+	if 255 < utf8.RuneCountInString(p.FirstNameKana) {
+		return fmt.Errorf("")
+	}
+	if 255 < utf8.RuneCountInString(p.LastNameKana) {
+		return fmt.Errorf("")
+	}
+	if !phoneNumberRegex.MatchString(p.PhoneNumber) {
+		return fmt.Errorf("")
+	}
+	if 255 < utf8.RuneCountInString(p.Address) {
+		return fmt.Errorf("")
+	}
+	if 255 < utf8.RuneCountInString(p.ParentName) {
+		return fmt.Errorf("")
+	}
+	if !phoneNumberRegex.MatchString(p.ParentCellphoneNumber) {
+		return fmt.Errorf("")
+	}
+	if p.ParentHomephoneNumber != "" && !phoneNumberRegex.MatchString(p.ParentHomephoneNumber) {
+		return fmt.Errorf("")
+	}
+	if 255 < utf8.RuneCountInString(p.ParentAddress) {
+		return fmt.Errorf("")
+	}
 	return nil
 }
 
