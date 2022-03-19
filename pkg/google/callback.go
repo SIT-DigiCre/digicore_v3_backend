@@ -90,7 +90,7 @@ func GetSessionId(e *echo.Context, userUuid string) (string, error) {
 	session.Set("id", userUuid)
 	session.Set("login", true)
 	session.Save()
-	sessionId, err := (*e).Cookie("SESSION")
+	sessionId, err := (*e).Cookie("session")
 	if err != nil {
 		return "", err
 	}
