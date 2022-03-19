@@ -39,7 +39,19 @@ type ResponseSetMyPrivateProfile struct {
 // @Router /user/my/private [get]
 // @Success 200 {object} ResponseGetMyPrivateProfile
 func (c Context) GetMyPrivateProfile(e echo.Context) error {
-	return e.JSON(http.StatusOK, ResponseGetMyPrivateProfile{})
+	userId, err := GetUserId(&e)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{Error: ""})
+	}
+	privateProfile := PrivateProfile{}
+	err = c.DB.QueryRow("SELECT first_name, last_name, first_name_kana, last_name_kana, phone_number, address, parent_name, parent_cellphone_number, parent_homephone_number, parent_address FROM UserPrivateProfile WHERE user_id = UUID_TO_BIN(?)", userId).
+		Scan(&privateProfile.FirstName, &privateProfile.LastName, &privateProfile.FirstNameKana, &privateProfile.LastNameKana, &privateProfile.PhoneNumber, &privateProfile.Address, &privateProfile.ParentName, &privateProfile.ParentCellphoneNumber, &privateProfile.ParentHomephoneNumber, &privateProfile.ParentAddress)
+	if err == sql.ErrNoRows {
+		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{Error: err.Error()})
+	} else if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{Error: err.Error()})
+	}
+	return e.JSON(http.StatusOK, ResponseGetMyPrivateProfile{PrivateProfile: privateProfile})
 }
 
 // Set my private prodile
