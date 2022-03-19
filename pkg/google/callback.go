@@ -62,7 +62,6 @@ func (c Context) OAuthCallback(e echo.Context) error {
 		return e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
 	}
 	sessionId, err := GetSessionId(&e, userUuid)
-	fmt.Println(err)
 	if err != nil {
 		return e.Redirect(http.StatusFound, FrontEndpoint+"/login?")
 	}
