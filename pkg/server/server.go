@@ -15,7 +15,7 @@ func CreateEchoServer(store echo_session.RedisStore, db *sql.DB) *echo.Echo {
 
 	e.Pre(middleware.RemoveTrailingSlash())
 
-	e.Use(echo_session.Sessions("SESSION", store))
+	e.Use(echo_session.Sessions("session", store))
 	e.Use(middleware.CORS())
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
