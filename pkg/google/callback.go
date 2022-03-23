@@ -7,9 +7,10 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
-	echo_session "github.com/ipfans/echo-session"
+	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 )
 
@@ -45,7 +46,7 @@ func (c Context) OAuthCallback(e echo.Context) error {
 	if err != nil {
 		return e.Redirect(http.StatusFound, env.FrontRootURL+"/login?")
 	}
-	sessionId, err := GetSessionId(&e, userUuid)
+	sessionId, err := GetJWT(userUuid)
 	if err != nil {
 		return e.Redirect(http.StatusFound, env.FrontRootURL+"/login?")
 	}
@@ -91,14 +92,15 @@ func (c Context) GetUserUuid(studentNumber string) (string, error) {
 	return userUuid, nil
 }
 
-func GetSessionId(e *echo.Context, userUuid string) (string, error) {
-	session := echo_session.Default(*e)
-	session.Set("id", userUuid)
-	session.Set("login", true)
-	session.Save()
-	sessionId, err := (*e).Cookie("session")
+func GetJWT(userUuid string) (string, error) {
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["uuid"] = userUuid
+	claims["iat"] = time.Now().Unix()
+	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+	tokenString, err := token.SignedString([]byte(env.JWTSecret))
 	if err != nil {
 		return "", err
 	}
-	return sessionId.Value, nil
+	return tokenString, nil
 }
