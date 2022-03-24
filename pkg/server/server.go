@@ -2,6 +2,7 @@ package server
 
 import (
 	"database/sql"
+	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/google"
@@ -29,8 +30,15 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	e.GET("/google/oauth/url", google.OAuthURL)
 	e.GET("/google/oauth/callback", google.OAuthCallback)
 
+	config := middleware.JWTConfig{
+		SigningKey: []byte(env.JWTSecret),
+		ErrorHandler: func(error) error {
+			return echo.NewHTTPError(http.StatusUnauthorized, "invalid or expired jwt")
+		},
+	}
+
 	r := e.Group("/user")
-	r.Use(middleware.JWT([]byte(env.JWTSecret)))
+	r.Use(middleware.JWTWithConfig(config))
 	user, _ := user.CreateContext(db)
 	r.POST("/my/private", user.SetMyPrivateProfile)
 	r.GET("/my/private", user.GetMyPrivateProfile)
