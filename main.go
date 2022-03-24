@@ -18,11 +18,6 @@ func main() {
 		panic(err)
 	}
 
-	store, err := server.CreateSessionStoreConnection(fmt.Sprintf("%s:%s", os.Getenv("REDIS_HOST"), os.Getenv("REDIS_PORT")), os.Getenv("REDIS_PASSWORD"))
-	if err != nil {
-		panic(err)
-	}
-
-	s := server.CreateEchoServer(store, db)
+	s := server.CreateEchoServer(db)
 	s.Logger.Fatal(s.Start(":8000"))
 }
