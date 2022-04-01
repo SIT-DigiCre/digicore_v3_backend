@@ -40,17 +40,17 @@ func (c Context) OAuthCallback(e echo.Context) error {
 	code := e.QueryParam("code")
 	studentNumber, err := c.CheckGooleAccount(code)
 	if err != nil {
-		return e.Redirect(http.StatusFound, env.FrontRootURL+"/login?")
+		return e.Redirect(http.StatusFound, env.FrontRootURL+"/logined?")
 	}
 	userUuid, err := c.GetUserUuid(studentNumber)
 	if err != nil {
-		return e.Redirect(http.StatusFound, env.FrontRootURL+"/login?")
+		return e.Redirect(http.StatusFound, env.FrontRootURL+"/logined?")
 	}
 	sessionId, err := GetJWT(userUuid)
 	if err != nil {
-		return e.Redirect(http.StatusFound, env.FrontRootURL+"/login?")
+		return e.Redirect(http.StatusFound, env.FrontRootURL+"/logined?")
 	}
-	return e.Redirect(http.StatusFound, env.FrontRootURL+"/login?session="+sessionId)
+	return e.Redirect(http.StatusFound, env.FrontRootURL+"/logined?session="+sessionId)
 }
 
 func (c Context) CheckGooleAccount(code string) (string, error) {
