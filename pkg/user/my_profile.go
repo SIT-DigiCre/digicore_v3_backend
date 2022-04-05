@@ -70,17 +70,15 @@ func (c Context) UpdateMyProfile(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{})
 	}
 	fmt.Println(userId)
-	profile := Profile{}
+	profile := UpdateableProfile{}
 	if err := e.Bind(&profile); err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseSetMyPrivateProfile{Error: err.Error()})
 	}
 	if err := profile.validate(); err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseSetMyPrivateProfile{Error: err.Error()})
 	}
-	_, err = c.DB.Exec(`INSERT INTO UserProfile (user_id, username, school_grade, icon_url, discord_userid, short_self_introduction) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?)
-				ON DUPLICATE KEY UPDATE username = ?, school_grade = ?, icon_url = ?, discord_userid = ?, short_self_introduction = ?`,
-		userId, profile.Username, profile.SchoolGrade, profile.IconURL, profile.DiscordUserId, profile.ShortSelfIntroduction,
-		profile.Username, profile.SchoolGrade, profile.IconURL, profile.DiscordUserId, profile.ShortSelfIntroduction)
+	_, err = c.DB.Exec(`UPDATE UserProfile SET username = ?, school_grade = ?, icon_url = ?, short_self_introduction = ? WHERE user_id = UUID_TO_BIN(?)`,
+		profile.Username, profile.SchoolGrade, profile.IconURL, profile.ShortSelfIntroduction, userId)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseSetMyPrivateProfile{Error: err.Error()})
 	}
