@@ -61,7 +61,7 @@ func (c Context) GetMyProfile(e echo.Context) error {
 
 // Update my prodile
 // @Accept json
-// @Param Profile body Profile true "my profile"
+// @Param Profile body UpdateableProfile true "my profile"
 // @Router /user/my [put]
 // @Success 200 {object} ResponseSetMyProfile
 func (c Context) UpdateMyProfile(e echo.Context) error {
