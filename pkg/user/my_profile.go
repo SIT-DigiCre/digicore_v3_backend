@@ -19,7 +19,14 @@ type Profile struct {
 	ShortSelfIntroduction string    `json:"short_self_introduction"`
 }
 
-func (p Profile) validate() error {
+type UpdateableProfile struct {
+	Username              string `json:"username"`
+	SchoolGrade           int    `json:"school_grade"`
+	IconURL               string `json:"icon_url"`
+	ShortSelfIntroduction string `json:"short_self_introduction"`
+}
+
+func (p UpdateableProfile) validate() error {
 	return nil
 }
 
@@ -55,9 +62,9 @@ func (c Context) GetMyProfile(e echo.Context) error {
 // Set my prodile
 // @Accept json
 // @Param Profile body Profile true "my profile"
-// @Router /user/my [post]
+// @Router /user/my [put]
 // @Success 200 {object} ResponseSetMyProfile
-func (c Context) SetMyProfile(e echo.Context) error {
+func (c Context) UpdateMyProfile(e echo.Context) error {
 	userId, err := GetUserId(&e)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{})
