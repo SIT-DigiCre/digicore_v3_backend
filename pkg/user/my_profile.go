@@ -59,7 +59,7 @@ func (c Context) GetMyProfile(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseGetMyProfile{Profile: profile})
 }
 
-// Set my prodile
+// Update my prodile
 // @Accept json
 // @Param Profile body Profile true "my profile"
 // @Router /user/my [put]
