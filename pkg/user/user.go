@@ -15,6 +15,10 @@ type Context struct {
 	DB *sql.DB
 }
 
+type UserStudentNumber struct {
+	StudentNumber string
+}
+
 func CreateContext(db *sql.DB) (Context, error) {
 	context := Context{DB: db}
 
@@ -26,6 +30,13 @@ func GetUserId(e *echo.Context) (string, error) {
 	claims := user.Claims.(jwt.MapClaims)
 	id := claims["uuid"].(string)
 	return id, nil
+}
+
+func GetStudentNumber(c Context, userId string) string {
+	userStudentNumber := UserStudentNumber{}
+	_ = c.DB.QueryRow("SELECT student_number FROM User WHERE id = UUID_TO_BIN(?)", userId).
+		Scan(&userStudentNumber.StudentNumber)
+	return userStudentNumber.StudentNumber
 }
 
 func CreateDefault(db *sql.DB, id string, name string) error {

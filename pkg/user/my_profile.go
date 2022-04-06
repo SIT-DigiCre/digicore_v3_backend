@@ -11,6 +11,7 @@ import (
 
 type Profile struct {
 	UserId                string    `json:"id"`
+	StudentNumber         string    `json:"student_number"`
 	Username              string    `json:"username"`
 	SchoolGrade           int       `json:"school_grade"`
 	IconURL               string    `json:"icon_url"`
@@ -56,6 +57,7 @@ func (c Context) GetMyProfile(e echo.Context) error {
 	} else if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: err.Error()})
 	}
+	profile.StudentNumber = GetStudentNumber(c, profile.UserId)
 	return e.JSON(http.StatusOK, ResponseGetMyProfile{Profile: profile})
 }
 
