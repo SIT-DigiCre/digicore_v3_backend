@@ -87,10 +87,10 @@ func (c Context) GetUserUuid(studentNumber string) (string, error) {
 		if err := c.DB.QueryRow("SELECT BIN_TO_UUID(id) FROM User WHERE student_number = ?", studentNumber).Scan(&userUuid); err != nil {
 			return "", err
 		}
+		if err := user.CreateDefault(c.DB, userUuid, studentNumber); err != nil {
+			return "", err
+		}
 	} else if err != nil {
-		return "", err
-	}
-	if err := user.CreateDefault(c.DB, userUuid, studentNumber); err != nil {
 		return "", err
 	}
 	return userUuid, nil
