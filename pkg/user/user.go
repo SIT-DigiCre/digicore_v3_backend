@@ -46,7 +46,7 @@ func CreateDefault(db *sql.DB, id string, name string) error {
 	}
 	fmt.Printf("%d", enterYear)
 	schoolGrade := time.Now().Year() - 2000 - enterYear + 1
-	_, err = db.Exec(`INSERT INTO UserProfile (user_id, username, school_grade, icon_url, short_self_introduction, discord_userid) VALUES (UUID_TO_BIN(?), ?, ?, ?, 'デジクリ入りました', ?)`, id, name, schoolGrade, env.DefaultIconURL, "null")
+	_, err = db.Exec(`INSERT INTO UserProfile (user_id, username, school_grade, icon_url, short_self_introduction) VALUES (UUID_TO_BIN(?), ?, ?, ?, 'デジクリ入りました')`, id, name, schoolGrade, env.DefaultIconURL)
 	if err != nil {
 		return err
 	}
