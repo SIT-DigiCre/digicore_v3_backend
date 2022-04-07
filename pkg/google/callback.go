@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 )
@@ -84,6 +85,9 @@ func (c Context) GetUserUuid(studentNumber string) (string, error) {
 			return "", err
 		}
 		if err := c.DB.QueryRow("SELECT BIN_TO_UUID(id) FROM User WHERE student_number = ?", studentNumber).Scan(&userUuid); err != nil {
+			return "", err
+		}
+		if err := user.CreateDefault(c.DB, userUuid, studentNumber); err != nil {
 			return "", err
 		}
 	} else if err != nil {
