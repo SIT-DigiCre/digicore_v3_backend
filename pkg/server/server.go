@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"net/http"
 
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/discord"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/google"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
@@ -29,6 +30,10 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	google, _ := google.CreateContext(db)
 	e.GET("/google/oauth/url", google.OAuthURL)
 	e.GET("/google/oauth/callback", google.OAuthCallback)
+
+	discord, _ := discord.CreateContext()
+	e.GET("/discord/oauth/url", discord.OAuthURL)
+	e.GET("/discord/oauth/callback", discord.OAuthCallback)
 
 	config := middleware.JWTConfig{
 		SigningKey: []byte(env.JWTSecret),
