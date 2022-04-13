@@ -11,8 +11,8 @@
 ## db migration
 
 ```sh
-docker compose exec -w /app backend  bash -c 'go run github.com/k0kubun/sqldef/cmd/mysqldef@v0.11.50 --user=${DB_USER} --password=${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} --dry-run < schema.sql'
-docker compose exec -w /app backend  bash -c 'go run github.com/k0kubun/sqldef/cmd/mysqldef@v0.11.50 --user=${DB_USER} --password=${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} < schema.sql'
+docker compose exec -w /app backend  bash -c 'cat ./schema/*.sql | go run github.com/k0kubun/sqldef/cmd/mysqldef@v0.11.50 --user=${DB_USER} --password=${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} --dry-run'
+docker compose exec -w /app backend  bash -c 'cat ./schema/*.sql | go run github.com/k0kubun/sqldef/cmd/mysqldef@v0.11.50 --user=${DB_USER} --password=${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE}'
 ```
 
 ## run env
