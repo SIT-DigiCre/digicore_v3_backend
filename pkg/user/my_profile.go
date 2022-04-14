@@ -20,14 +20,14 @@ type Profile struct {
 	ShortSelfIntroduction string    `json:"short_self_introduction"`
 }
 
-type UpdateableProfile struct {
+type RequestUpdateMyProfile struct {
 	Username              string `json:"username"`
 	SchoolGrade           int    `json:"school_grade"`
 	IconURL               string `json:"icon_url"`
 	ShortSelfIntroduction string `json:"short_self_introduction"`
 }
 
-func (p UpdateableProfile) validate() error {
+func (p RequestUpdateMyProfile) validate() error {
 	return nil
 }
 
@@ -36,18 +36,18 @@ type ResponseGetMyProfile struct {
 	Error   string  `json:"error"`
 }
 
-type ResponseSetMyProfile struct {
+type ResponseUpdateMyProfile struct {
 	Error string `json:"error"`
 }
 
 // Get my prodile
-// @Accept json
 // @Router /user/my [get]
+// @Security Authorization
 // @Success 200 {object} ResponseGetMyProfile
 func (c Context) GetMyProfile(e echo.Context) error {
 	userId, err := GetUserId(&e)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: ""})
+		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: err.Error()})
 	}
 	profile := Profile{UserId: userId}
 	err = c.DB.QueryRow("SELECT username, school_grade, icon_url, discord_userid, active_limit, short_self_introduction FROM UserProfile WHERE user_id = UUID_TO_BIN(?)", userId).
@@ -57,32 +57,36 @@ func (c Context) GetMyProfile(e echo.Context) error {
 	} else if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: err.Error()})
 	}
-	profile.StudentNumber = GetStudentNumber(c, profile.UserId)
+	profile.StudentNumber, err = GetStudentNumber(c.DB, profile.UserId)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: err.Error()})
+	}
 	return e.JSON(http.StatusOK, ResponseGetMyProfile{Profile: profile})
 }
 
 // Update my prodile
 // @Accept json
-// @Param Profile body UpdateableProfile true "my profile"
+// @Param RequestUpdateMyProfile body RequestUpdateMyProfile true "my profile"
+// @Security Authorization
 // @Router /user/my [put]
-// @Success 200 {object} ResponseSetMyProfile
+// @Success 200 {object} ResponseUpdateMyProfile
 func (c Context) UpdateMyProfile(e echo.Context) error {
 	userId, err := GetUserId(&e)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{})
 	}
 	fmt.Println(userId)
-	profile := UpdateableProfile{}
+	profile := RequestUpdateMyProfile{}
 	if err := e.Bind(&profile); err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseSetMyPrivateProfile{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateMyProfile{Error: err.Error()})
 	}
 	if err := profile.validate(); err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseSetMyPrivateProfile{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateMyProfile{Error: err.Error()})
 	}
 	_, err = c.DB.Exec(`UPDATE UserProfile SET username = ?, school_grade = ?, icon_url = ?, short_self_introduction = ? WHERE user_id = UUID_TO_BIN(?)`,
 		profile.Username, profile.SchoolGrade, profile.IconURL, profile.ShortSelfIntroduction, userId)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseSetMyPrivateProfile{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateMyProfile{Error: err.Error()})
 	}
-	return e.JSON(http.StatusOK, ResponseSetMyPrivateProfile{})
+	return e.JSON(http.StatusOK, ResponseUpdateMyProfile{})
 }

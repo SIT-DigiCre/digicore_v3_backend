@@ -48,7 +48,7 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	r.PUT("/my", user.UpdateMyProfile)
 	r.GET("/my", user.GetMyProfile)
 	r.PUT("/my/discord", user.UpdateDiscordId)
-	r.POST("/my/private", user.SetMyPrivateProfile)
+	r.PUT("/my/private", user.UpdateMyPrivateProfile)
 	r.GET("/my/private", user.GetMyPrivateProfile)
 }
 

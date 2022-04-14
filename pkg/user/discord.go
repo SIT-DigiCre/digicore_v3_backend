@@ -7,40 +7,41 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type RequestUpdateDiscord struct {
+type RequestUpdateDiscordId struct {
 	Code string `json:"code"`
 }
 
-type ResponseUpdateDiscord struct {
+type ResponseUpdateDiscordId struct {
 	Error string `json:"error"`
 }
 
 // Update discord id
 // @Accept json
-// @Param RequestUpdateDiscord body RequestUpdateDiscord true "discord oauth code"
-// @Router /user/my/disocrd [put]
-// @Success 200 {object} ResponseUpdateDiscord
+// @Param RequestUpdateDiscordId body RequestUpdateDiscordId true "discord oauth code"
+// @Security Authorization
+// @Router /user/my/discord [put]
+// @Success 200 {object} ResponseUpdateDiscordId
 func (c Context) UpdateDiscordId(e echo.Context) error {
 	userId, err := GetUserId(&e)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscord{})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscordId{Error: err.Error()})
 	}
-	request := RequestUpdateDiscord{}
+	request := RequestUpdateDiscordId{}
 	if err := e.Bind(&request); err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscord{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscordId{Error: err.Error()})
 	}
 	accessToken, err := discord.GetAccessToken(request.Code)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscord{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscordId{Error: err.Error()})
 	}
 	dicordID, err := discord.GetID(accessToken)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscord{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscordId{Error: err.Error()})
 	}
 	_, err = c.DB.Exec(`UPDATE UserProfile SET discord_userid = ? WHERE user_id = UUID_TO_BIN(?)`,
 		dicordID, userId)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseSetMyPrivateProfile{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscordId{Error: err.Error()})
 	}
-	return e.JSON(http.StatusOK, ResponseSetMyPrivateProfile{})
+	return e.JSON(http.StatusOK, ResponseUpdateDiscordId{})
 }

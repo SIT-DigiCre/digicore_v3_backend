@@ -28,15 +28,18 @@ func CreateContext(db *sql.DB) (Context, error) {
 func GetUserId(e *echo.Context) (string, error) {
 	user := (*e).Get("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
-	id := claims["uuid"].(string)
+	id := claims["id"].(string)
 	return id, nil
 }
 
-func GetStudentNumber(c Context, userId string) string {
-	userStudentNumber := UserStudentNumber{}
-	_ = c.DB.QueryRow("SELECT student_number FROM User WHERE id = UUID_TO_BIN(?)", userId).
-		Scan(&userStudentNumber.StudentNumber)
-	return userStudentNumber.StudentNumber
+func GetStudentNumber(db *sql.DB, userId string) (string, error) {
+	studentNumber := ""
+	err := db.QueryRow("SELECT student_number FROM User WHERE id = UUID_TO_BIN(?)", userId).
+		Scan(&studentNumber)
+	if err != nil {
+		return "", err
+	}
+	return studentNumber, nil
 }
 
 func CreateDefault(db *sql.DB, id string, name string) error {
