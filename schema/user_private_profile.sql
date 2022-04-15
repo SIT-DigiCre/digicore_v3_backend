@@ -1,4 +1,3 @@
--- +migrate Up
 CREATE TABLE UserPrivateProfile
 (
     id                      BINARY(16)   NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
@@ -14,8 +13,5 @@ CREATE TABLE UserPrivateProfile
     parent_homephone_number VARCHAR(32)  NOT NULL,
     parent_address          VARCHAR(255) NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES User(id)
+    CONSTRAINT fk_user_id_user_private_profile FOREIGN KEY (user_id) REFERENCES User(id)
 );
-
--- +migrate Down
-DROP TABLE UserPrivateProfile;

@@ -15,10 +15,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type ResponseOAuthCallback struct {
-	AccessToken string `json:"access_token"`
-}
-
 type UserInfoResponse struct {
 	Email string `json:"email"`
 }
@@ -33,21 +29,21 @@ func (u UserInfoResponse) validate() error {
 }
 
 // OAuth callback destination
-// @Accept json
 // @Router /google/oauth/callback [get]
-// @Param code query string true "auth token"
-// @Success 200 {object} ResponseOAuthCallback
+// @Param code query string true "oauth code"
+// @Success 302 "send authorization code to frontend"
+// @Header 302 {string}  Location "/logined?session={}"
 func (c Context) OAuthCallback(e echo.Context) error {
 	code := e.QueryParam("code")
 	studentNumber, err := c.CheckGooleAccount(code)
 	if err != nil {
 		return e.Redirect(http.StatusFound, env.FrontRootURL+"/logined?")
 	}
-	userUuid, err := c.GetUserUuid(studentNumber)
+	userId, err := c.GetUserId(studentNumber)
 	if err != nil {
 		return e.Redirect(http.StatusFound, env.FrontRootURL+"/logined?")
 	}
-	sessionId, err := GetJWT(userUuid)
+	sessionId, err := GetJWT(userId)
 	if err != nil {
 		return e.Redirect(http.StatusFound, env.FrontRootURL+"/logined?")
 	}
@@ -77,29 +73,29 @@ func (c Context) CheckGooleAccount(code string) (string, error) {
 	return strings.TrimSuffix(userInfo.Email, emailSuffix), nil
 }
 
-func (c Context) GetUserUuid(studentNumber string) (string, error) {
-	userUuid := ""
-	if err := c.DB.QueryRow("SELECT BIN_TO_UUID(id) FROM User WHERE student_number = ?", studentNumber).Scan(&userUuid); err == sql.ErrNoRows {
+func (c Context) GetUserId(studentNumber string) (string, error) {
+	userId := ""
+	if err := c.DB.QueryRow("SELECT BIN_TO_UUID(id) FROM User WHERE student_number = ?", studentNumber).Scan(&userId); err == sql.ErrNoRows {
 		_, err := c.DB.Exec("INSERT INTO User (student_number) VALUES (?)", studentNumber)
 		if err != nil {
 			return "", err
 		}
-		if err := c.DB.QueryRow("SELECT BIN_TO_UUID(id) FROM User WHERE student_number = ?", studentNumber).Scan(&userUuid); err != nil {
+		if err := c.DB.QueryRow("SELECT BIN_TO_UUID(id) FROM User WHERE student_number = ?", studentNumber).Scan(&userId); err != nil {
 			return "", err
 		}
-		if err := user.CreateDefault(c.DB, userUuid, studentNumber); err != nil {
+		if err := user.CreateDefault(c.DB, userId, studentNumber); err != nil {
 			return "", err
 		}
 	} else if err != nil {
 		return "", err
 	}
-	return userUuid, nil
+	return userId, nil
 }
 
-func GetJWT(userUuid string) (string, error) {
+func GetJWT(userId string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
-	claims["uuid"] = userUuid
+	claims["id"] = userId
 	claims["iat"] = time.Now().Unix()
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 	tokenString, err := token.SignedString([]byte(env.JWTSecret))

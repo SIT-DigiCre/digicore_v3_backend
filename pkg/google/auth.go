@@ -12,9 +12,9 @@ type ResponseOAuthURL struct {
 }
 
 // Get OAuth request url
-// @Accept json
 // @Router /google/oauth/url [get]
-// @Success 200 {object} ResponseOAuthURL
+// @Success 302 "redirect to oauth page"
+// @Header 302 {string}  Location
 func (c Context) OAuthURL(e echo.Context) error {
 	authURL := c.Config.AuthCodeURL("", oauth2.AccessTypeOffline, oauth2.ApprovalForce)
 	return e.Redirect(http.StatusFound, authURL)
