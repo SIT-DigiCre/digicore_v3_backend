@@ -101,7 +101,7 @@ func (c Context) GetMyPrivateProfile(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseGetMyPrivateProfile{PrivateProfile: privateProfile})
 }
 
-// Set my private prodile
+// Update my private profile
 // @Accept json
 // @Param RequestUpdateMyPrivateProfile body RequestUpdateMyPrivateProfile true "my private profile"
 // @Security Authorization
