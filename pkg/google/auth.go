@@ -20,11 +20,11 @@ type ResponseOAuthURL struct {
 func (c Context) OAuthURL(e echo.Context) error {
 	register := e.QueryParam("register")
 	if register == "true" {
-		redirectURL := oauth2.SetAuthURLParam("redirect_uri", env.BackRootURL+"/google/oauth/callback/register")
+		redirectURL := oauth2.SetAuthURLParam("redirect_uri", env.BackendRootURL+"/google/oauth/callback/register")
 		authURL := c.Config.AuthCodeURL("", oauth2.AccessTypeOffline, oauth2.ApprovalForce, redirectURL)
 		return e.Redirect(http.StatusFound, authURL)
 	}
-	redirectURL := oauth2.SetAuthURLParam("redirect_uri", env.BackRootURL+"/google/oauth/callback/login")
+	redirectURL := oauth2.SetAuthURLParam("redirect_uri", env.BackendRootURL+"/google/oauth/callback/login")
 	authURL := c.Config.AuthCodeURL("", oauth2.AccessTypeOffline, oauth2.ApprovalForce, redirectURL)
 	return e.Redirect(http.StatusFound, authURL)
 }

@@ -36,20 +36,20 @@ func (u UserInfoResponse) validate() error {
 // @Header 302 {string}  Location "/logined?session={}"
 func (c Context) OAuthCallbackLogin(e echo.Context) error {
 	code := e.QueryParam("code")
-	redirectURL := oauth2.SetAuthURLParam("redirect_uri", env.BackRootURL+"/google/oauth/callback/login")
+	redirectURL := oauth2.SetAuthURLParam("redirect_uri", env.BackendRootURL+"/google/oauth/callback/login")
 	studentNumber, err := c.CheckGooleAccount(code, redirectURL)
 	if err != nil {
-		return e.Redirect(http.StatusFound, env.FrontRootURL+"/logined?")
+		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?")
 	}
 	userId, err := c.GetUserId(studentNumber)
 	if err != nil {
-		return e.Redirect(http.StatusFound, env.FrontRootURL+"/logined?")
+		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?")
 	}
 	sessionId, err := GetJWT(userId)
 	if err != nil {
-		return e.Redirect(http.StatusFound, env.FrontRootURL+"/logined?")
+		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?")
 	}
-	return e.Redirect(http.StatusFound, env.FrontRootURL+"/logined?session="+sessionId)
+	return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?session="+sessionId)
 }
 
 // OAuth callback destination (register only)
@@ -59,20 +59,20 @@ func (c Context) OAuthCallbackLogin(e echo.Context) error {
 // @Header 302 {string}  Location "/logined?session={}"
 func (c Context) OAuthCallbackRegister(e echo.Context) error {
 	code := e.QueryParam("code")
-	redirectURL := oauth2.SetAuthURLParam("redirect_uri", env.BackRootURL+"/google/oauth/callback/register")
+	redirectURL := oauth2.SetAuthURLParam("redirect_uri", env.BackendRootURL+"/google/oauth/callback/register")
 	studentNumber, err := c.CheckGooleAccount(code, redirectURL)
 	if err != nil {
-		return e.Redirect(http.StatusFound, env.FrontRootURL+"/logined?")
+		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?")
 	}
 	userId, err := c.RegisterUser(studentNumber)
 	if err != nil {
-		return e.Redirect(http.StatusFound, env.FrontRootURL+"/logined?")
+		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?")
 	}
 	sessionId, err := GetJWT(userId)
 	if err != nil {
-		return e.Redirect(http.StatusFound, env.FrontRootURL+"/logined?")
+		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?")
 	}
-	return e.Redirect(http.StatusFound, env.FrontRootURL+"/logined?session="+sessionId)
+	return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?session="+sessionId)
 }
 
 func (c Context) CheckGooleAccount(code string, redirectURL oauth2.AuthCodeOption) (string, error) {
