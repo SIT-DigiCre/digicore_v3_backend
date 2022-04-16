@@ -2,6 +2,8 @@ package env
 
 import "os"
 
+var BackRootURL = os.Getenv("BACK_ROOT_URL")
+
 var FrontRootURL = os.Getenv("FRONT_ROOT_URL")
 
 var JWTSecret = os.Getenv("JWT_SECRET")

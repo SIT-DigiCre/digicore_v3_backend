@@ -29,7 +29,8 @@ func CreateEchoServer(db *sql.DB) *echo.Echo {
 func addRouting(e *echo.Echo, db *sql.DB) {
 	google, _ := google.CreateContext(db)
 	e.GET("/google/oauth/url", google.OAuthURL)
-	e.GET("/google/oauth/callback", google.OAuthCallback)
+	e.GET("/google/oauth/callback/login", google.OAuthCallbackLogin)
+	e.GET("/google/oauth/callback/register", google.OAuthCallbackRegister)
 
 	discord, _ := discord.CreateContext()
 	e.GET("/discord/oauth/url", discord.OAuthURL)
