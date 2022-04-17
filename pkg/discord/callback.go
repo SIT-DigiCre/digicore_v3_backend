@@ -14,5 +14,5 @@ import (
 // @Header 302 {string}  Location "/user/discord?code={}"
 func (c Context) OAuthCallback(e echo.Context) error {
 	code := e.QueryParam("code")
-	return e.Redirect(http.StatusFound, env.FrontRootURL+"/user/discord?code="+code)
+	return e.Redirect(http.StatusFound, env.FrontendRootURL+"/user/discord?code="+code)
 }
