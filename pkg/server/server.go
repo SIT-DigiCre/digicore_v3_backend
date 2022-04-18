@@ -51,6 +51,8 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	r.PUT("/my/discord", user.UpdateDiscordId)
 	r.PUT("/my/private", user.UpdateMyPrivateProfile)
 	r.GET("/my/private", user.GetMyPrivateProfile)
+	r.PUT("/my/payment", user.UpdateMyPayment)
+	r.GET("/my/payment", user.GetMyPayment)
 }
 
 func CreateDbConnection(address string) (*sql.DB, error) {
