@@ -3,15 +3,18 @@ package user
 import (
 	"database/sql"
 	"net/http"
+	"time"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/util"
 	"github.com/labstack/echo/v4"
 )
 
 type Payment struct {
-	Year         int    `json:"year"`
-	TransferName string `json:"transfer_name"`
-	Checked      bool   `json:"checked"`
+	Year         int       `json:"year"`
+	TransferName string    `json:"transfer_name"`
+	Checked      bool      `json:"checked"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
 }
 
 type RequestUpdateMyPayment struct {
@@ -41,7 +44,7 @@ func (c Context) GetMyPayment(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: err.Error()})
 	}
 	payment := Payment{}
-	err = c.DB.QueryRow("SELECT year, transfer_name, checked FROM UserPayment WHERE year = ? AND user_id = UUID_TO_BIN(?)", util.NowFiscalYear(), userId).Scan(&payment.Year, &payment.TransferName, &payment.Checked)
+	err = c.DB.QueryRow("SELECT year, transfer_name, checked, created_at, updated_at FROM UserPayment WHERE year = ? AND user_id = UUID_TO_BIN(?)", util.NowFiscalYear(), userId).Scan(&payment.Year, &payment.TransferName, &payment.Checked, &payment.CreatedAt, &payment.UpdatedAt)
 	if err == sql.ErrNoRows {
 		return e.JSON(http.StatusOK, ResponseGetMyPayment{Error: err.Error()})
 	} else if err != nil {
