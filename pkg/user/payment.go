@@ -30,6 +30,11 @@ type ResponseGetMyPayment struct {
 	Error   string  `json:"error"`
 }
 
+type ResponseGetMyPaymentHistory struct {
+	Payments []Payment `json:"payments"`
+	Error    string    `json:"error"`
+}
+
 type ResponseUpdateMyPayment struct {
 	Error string `json:"error"`
 }
@@ -51,6 +56,27 @@ func (c Context) GetMyPayment(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyPayment{Error: err.Error()})
 	}
 	return e.JSON(http.StatusOK, ResponseGetMyPayment{Payment: payment})
+}
+
+// Get my payment history
+// @Router /user/my/payment/history [get]
+// @Security Authorization
+// @Success 200 {object} ResponseGetMyPaymentHistory
+func (c Context) GetMyPaymentHistory(e echo.Context) error {
+	userId, err := GetUserId(&e)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: err.Error()})
+	}
+	payments := []Payment{}
+	rows, err := c.DB.Query("SELECT year, transfer_name, checked, created_at, updated_at FROM UserPayment WHERE user_id = UUID_TO_BIN(?)", userId)
+	for rows.Next() {
+		payment := Payment{}
+		if err := rows.Scan(&payment.Year, &payment.TransferName, &payment.Checked, &payment.CreatedAt, &payment.UpdatedAt); err != nil {
+			return e.JSON(http.StatusBadRequest, ResponseGetMyPayment{Error: err.Error()})
+		}
+		payments = append(payments, payment)
+	}
+	return e.JSON(http.StatusOK, ResponseGetMyPaymentHistory{Payments: payments})
 }
 
 // Update my payment
