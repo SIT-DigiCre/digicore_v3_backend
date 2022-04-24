@@ -7,6 +7,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/discord"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/google"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/group"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
@@ -43,14 +44,19 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 		},
 	}
 
-	r := e.Group("/user")
-	r.Use(middleware.JWTWithConfig(config))
+	group_group := e.Group("/group")
+	group_group.Use(middleware.JWTWithConfig(config))
+	group, _ := group.CreateContext(db)
+	group_group.GET("", group.GroupList)
+
+	user_group := e.Group("/user")
+	user_group.Use(middleware.JWTWithConfig(config))
 	user, _ := user.CreateContext(db)
-	r.PUT("/my", user.UpdateMyProfile)
-	r.GET("/my", user.GetMyProfile)
-	r.PUT("/my/discord", user.UpdateDiscordId)
-	r.PUT("/my/private", user.UpdateMyPrivateProfile)
-	r.GET("/my/private", user.GetMyPrivateProfile)
+	user_group.PUT("/my", user.UpdateMyProfile)
+	user_group.GET("/my", user.GetMyProfile)
+	user_group.PUT("/my/discord", user.UpdateDiscordId)
+	user_group.PUT("/my/private", user.UpdateMyPrivateProfile)
+	user_group.GET("/my/private", user.GetMyPrivateProfile)
 }
 
 func CreateDbConnection(address string) (*sql.DB, error) {
