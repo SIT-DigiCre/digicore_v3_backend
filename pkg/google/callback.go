@@ -56,23 +56,23 @@ func (c Context) OAuthCallbackLogin(e echo.Context) error {
 // @Router /google/oauth/callback/register [get]
 // @Param code query string true "oauth code"
 // @Success 302 "send authorization code to frontend"
-// @Header 302 {string}  Location "/logined?session={}"
+// @Header 302 {string}  Location "/registered?session={}"
 func (c Context) OAuthCallbackRegister(e echo.Context) error {
 	code := e.QueryParam("code")
 	redirectURL := oauth2.SetAuthURLParam("redirect_uri", env.BackendRootURL+"/google/oauth/callback/register")
 	studentNumber, err := c.CheckGooleAccount(code, redirectURL)
 	if err != nil {
-		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?")
+		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/registered?")
 	}
 	userId, err := c.RegisterUser(studentNumber)
 	if err != nil {
-		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?")
+		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/registered?")
 	}
 	sessionId, err := GetJWT(userId)
 	if err != nil {
-		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?")
+		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/registered?")
 	}
-	return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?session="+sessionId)
+	return e.Redirect(http.StatusFound, env.FrontendRootURL+"/registered?session="+sessionId)
 }
 
 func (c Context) CheckGooleAccount(code string, redirectURL oauth2.AuthCodeOption) (string, error) {
