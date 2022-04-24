@@ -56,7 +56,7 @@ func (c Context) OAuthCallbackLogin(e echo.Context) error {
 // @Router /google/oauth/callback/register [get]
 // @Param code query string true "oauth code"
 // @Success 302 "send authorization code to frontend"
-// @Header 302 {string}  Location "/logined?session={}"
+// @Header 302 {string}  Location "/registered?session={}"
 func (c Context) OAuthCallbackRegister(e echo.Context) error {
 	code := e.QueryParam("code")
 	redirectURL := oauth2.SetAuthURLParam("redirect_uri", env.BackendRootURL+"/google/oauth/callback/register")
