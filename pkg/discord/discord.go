@@ -26,7 +26,7 @@ type IDResponse struct {
 }
 
 func GetAccessToken(code string) (string, error) {
-	req, err := http.NewRequest("POST", "https://discordapp.com/api/oauth2/token", strings.NewReader(fmt.Sprintf("client_id=%s&client_secret=%s&grant_type=authorization_code&code=%s&redirect_uri=%s", env.DiscordClientID, env.DiscordClientSecret, code, env.DiscordRedirectURL)))
+	req, err := http.NewRequest("POST", "https://discordapp.com/api/oauth2/token", strings.NewReader(fmt.Sprintf("client_id=%s&client_secret=%s&grant_type=authorization_code&code=%s&redirect_uri=%s", env.DiscordClientID, env.DiscordClientSecret, code, env.BackendRootURL+"/discord/oauth/callback")))
 	if err != nil {
 		return "", fmt.Errorf("アクセストークンの取得リクエストの生成に失敗しました")
 	}
@@ -38,7 +38,7 @@ func GetAccessToken(code string) (string, error) {
 	}
 	accessToken := AccessTokenResponse{}
 	err = json.NewDecoder(res.Body).Decode(&accessToken)
-	if err != nil {
+	if err != nil || accessToken.AccessToken == "" {
 		return "", fmt.Errorf("アクセストークンの取得に失敗しました")
 	}
 	return accessToken.AccessToken, nil
