@@ -9,7 +9,3 @@ services:
       - "${BACKEND_PORT}:8000"
     env_file:
       - ".env"
-
-volumes:
-  db_data:
-  redis_data:
