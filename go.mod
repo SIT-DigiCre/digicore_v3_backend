@@ -7,7 +7,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/k0kubun/sqldef v0.11.50
 	github.com/labstack/echo/v4 v4.6.3
-	github.com/swaggo/swag v1.8.0
+	github.com/swaggo/swag v1.8.1
 	golang.org/x/oauth2 v0.0.0-20210402161424-2e8d93401602
 )
 
