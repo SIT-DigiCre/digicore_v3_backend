@@ -37,7 +37,7 @@ func GetStudentNumber(db *sql.DB, userId string) (string, error) {
 	err := db.QueryRow("SELECT student_number FROM User WHERE id = UUID_TO_BIN(?)", userId).
 		Scan(&studentNumber)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("学籍番号の取得に失敗しました")
 	}
 	return studentNumber, nil
 }
@@ -45,13 +45,12 @@ func GetStudentNumber(db *sql.DB, userId string) (string, error) {
 func CreateDefault(db *sql.DB, id string, name string) error {
 	enterYear, err := strconv.Atoi(name[2:4])
 	if err != nil {
-		return err
+		return fmt.Errorf("入学年度の取得に失敗しました")
 	}
-	fmt.Printf("%d", enterYear)
 	schoolGrade := time.Now().Year() - 2000 - enterYear + 1
 	_, err = db.Exec(`INSERT INTO UserProfile (user_id, username, school_grade, icon_url, active_limit) VALUES (UUID_TO_BIN(?), ?, ?, ?, CURRENT_DATE)`, id, name, schoolGrade, env.DefaultIconURL)
 	if err != nil {
-		return err
+		return fmt.Errorf("登録に失敗しました")
 	}
 	return nil
 }
