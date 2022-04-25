@@ -57,7 +57,7 @@ func GetID(accessToken string) (string, error) {
 	}
 	id := IDResponse{}
 	err = json.NewDecoder(res.Body).Decode(&id)
-	if err != nil {
+	if err != nil || id.ID == "" {
 		return "", fmt.Errorf("ユーザー情報の取得に失敗しました")
 	}
 	return id.ID, nil
