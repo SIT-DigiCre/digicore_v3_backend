@@ -90,7 +90,6 @@ func (c Context) UpdateMyProfile(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{Error: err.Error()})
 	}
-	fmt.Println(userId)
 	profile := RequestUpdateMyProfile{}
 	if err := e.Bind(&profile); err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseUpdateMyProfile{Error: "データの読み込みに失敗しました"})
