@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   db:
-    image: mysql:8.0.28
+    image: mariadb:10.0.33
     ports:
       - "${DB_PORT}:3306"
     volumes:
