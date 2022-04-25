@@ -34,7 +34,7 @@ func (p RequestUpdateMyProfile) validate() error {
 	if 255 < utf8.RuneCountInString(p.Username) {
 		errorMsg = append(errorMsg, "ユーザー名は255文字未満である必要があります")
 	}
-	if p.SchoolGrade <= 0 && 10 <= p.SchoolGrade {
+	if p.SchoolGrade <= 0 || 10 <= p.SchoolGrade {
 		errorMsg = append(errorMsg, "学年は1以上9以下である必要があります")
 	}
 	if 255 < utf8.RuneCountInString(p.ShortSelfIntroduction) {
