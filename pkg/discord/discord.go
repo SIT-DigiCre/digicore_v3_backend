@@ -38,7 +38,7 @@ func GetAccessToken(code string) (string, error) {
 	}
 	accessToken := AccessTokenResponse{}
 	err = json.NewDecoder(res.Body).Decode(&accessToken)
-	if err != nil {
+	if err != nil || res.StatusCode != 200 {
 		return "", fmt.Errorf("アクセストークンの取得に失敗しました")
 	}
 	return accessToken.AccessToken, nil
@@ -57,7 +57,7 @@ func GetID(accessToken string) (string, error) {
 	}
 	id := IDResponse{}
 	err = json.NewDecoder(res.Body).Decode(&id)
-	if err != nil {
+	if err != nil || res.StatusCode != 200 {
 		return "", fmt.Errorf("ユーザー情報の取得に失敗しました")
 	}
 	return id.ID, nil
