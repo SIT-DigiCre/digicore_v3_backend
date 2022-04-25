@@ -4,7 +4,7 @@ services:
   db:
     image: mysql:8.0.28
     ports:
-    - "${DB_PORT}:3306"
+      - "${DB_PORT}:3306"
     volumes:
       - "db_data:/var/lib/mysql"
     environment:
@@ -16,9 +16,10 @@ services:
   backend:
     build:
       context: "./"
+      target: "development"
     volumes:
       - "./:/app"
-    ports: 
+    ports:
       - "${BACKEND_PORT}:8000"
     env_file:
       - ".env"
