@@ -34,7 +34,7 @@ func (p RequestUpdateMyProfile) validate() error {
 	if 255 < utf8.RuneCountInString(p.Username) {
 		errorMsg = append(errorMsg, "ユーザー名は255文字未満である必要があります")
 	}
-	if 1 <= p.SchoolGrade && p.SchoolGrade <= 9 {
+	if p.SchoolGrade <= 0 || 10 <= p.SchoolGrade {
 		errorMsg = append(errorMsg, "学年は1以上9以下である必要があります")
 	}
 	if 255 < utf8.RuneCountInString(p.ShortSelfIntroduction) {
@@ -90,7 +90,6 @@ func (c Context) UpdateMyProfile(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{Error: err.Error()})
 	}
-	fmt.Println(userId)
 	profile := RequestUpdateMyProfile{}
 	if err := e.Bind(&profile); err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseUpdateMyProfile{Error: "データの読み込みに失敗しました"})

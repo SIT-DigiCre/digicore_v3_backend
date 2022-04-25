@@ -117,7 +117,6 @@ func (c Context) UpdateMyPrivateProfile(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPrivateProfile{Error: err.Error()})
 	}
-	fmt.Println(userId)
 	privateProfile := RequestUpdateMyPrivateProfile{}
 	if err := e.Bind(&privateProfile); err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPrivateProfile{Error: "データの読み込みに失敗しました"})

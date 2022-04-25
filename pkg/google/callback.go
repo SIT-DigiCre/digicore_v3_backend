@@ -39,15 +39,15 @@ func (c Context) OAuthCallbackLogin(e echo.Context) error {
 	redirectURL := oauth2.SetAuthURLParam("redirect_uri", env.BackendRootURL+"/google/oauth/callback/login")
 	studentNumber, err := c.CheckGooleAccount(code, redirectURL)
 	if err != nil {
-		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?")
+		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?error="+err.Error())
 	}
 	userId, err := c.GetUserId(studentNumber)
 	if err != nil {
-		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?")
+		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?error="+err.Error())
 	}
 	sessionId, err := GetJWT(userId)
 	if err != nil {
-		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?")
+		return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?error="+err.Error())
 	}
 	return e.Redirect(http.StatusFound, env.FrontendRootURL+"/logined?session="+sessionId)
 }
