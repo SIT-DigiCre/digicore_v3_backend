@@ -28,7 +28,7 @@ func (c Context) UpdateDiscordId(e echo.Context) error {
 	}
 	request := RequestUpdateDiscordId{}
 	if err := e.Bind(&request); err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscordId{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscordId{Error: "データの読み込みに失敗しました"})
 	}
 	accessToken, err := discord.GetAccessToken(request.Code)
 	if err != nil {
@@ -41,7 +41,7 @@ func (c Context) UpdateDiscordId(e echo.Context) error {
 	_, err = c.DB.Exec(`UPDATE UserProfile SET discord_userid = ? WHERE user_id = UUID_TO_BIN(?)`,
 		dicordID, userId)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscordId{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscordId{Error: "更新に失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseUpdateDiscordId{})
 }
