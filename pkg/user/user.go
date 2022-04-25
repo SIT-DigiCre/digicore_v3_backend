@@ -29,7 +29,7 @@ func GetUserId(e *echo.Context) (string, error) {
 	user := (*e).Get("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	id := claims["id"].(string)
-	return id, fmt.Errorf("ユーザーIDの取得に失敗しました")
+	return id, nil
 }
 
 func GetStudentNumber(db *sql.DB, userId string) (string, error) {
