@@ -38,7 +38,7 @@ func (c Context) UpdateDiscordId(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscordId{Error: err.Error()})
 	}
-	_, err = c.DB.Exec(`UPDATE UserProfile SET discord_userid = ? WHERE user_id = UUID_TO_BIN(?)`,
+	_, err = c.DB.Exec(`UPDATE UserProfile SET discord_userid = ? WHERE user_id = ?`,
 		dicordID, userId)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscordId{Error: "更新に失敗しました"})

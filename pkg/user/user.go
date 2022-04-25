@@ -34,7 +34,7 @@ func GetUserId(e *echo.Context) (string, error) {
 
 func GetStudentNumber(db *sql.DB, userId string) (string, error) {
 	studentNumber := ""
-	err := db.QueryRow("SELECT student_number FROM User WHERE id = UUID_TO_BIN(?)", userId).
+	err := db.QueryRow("SELECT student_number FROM User WHERE id = ?", userId).
 		Scan(&studentNumber)
 	if err != nil {
 		return "", fmt.Errorf("学籍番号の取得に失敗しました")
@@ -48,7 +48,11 @@ func CreateDefault(db *sql.DB, id string, name string) error {
 		return fmt.Errorf("入学年度の取得に失敗しました")
 	}
 	schoolGrade := time.Now().Year() - 2000 - enterYear + 1
-	_, err = db.Exec(`INSERT INTO UserProfile (user_id, username, school_grade, icon_url, active_limit) VALUES (UUID_TO_BIN(?), ?, ?, ?, CURRENT_DATE)`, id, name, schoolGrade, env.DefaultIconURL)
+	_, err = db.Exec(`INSERT INTO UserProfile (id, user_id, username, school_grade, icon_url, active_limit) VALUES (UUID(), ?, ?, ?, ?, CURRENT_DATE)`, id, name, schoolGrade, env.DefaultIconURL)
+	if err != nil {
+		return fmt.Errorf("登録に失敗しました")
+	}
+	_, err = db.Exec(`INSERT INTO UserPrivateProfile (id, user_id) VALUES (UUID(), ?)`, id)
 	if err != nil {
 		return fmt.Errorf("登録に失敗しました")
 	}
