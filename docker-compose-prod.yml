@@ -2,7 +2,7 @@ version: "3"
 
 services:
   digicoreapi_v3:
-    image: ghcr.io/sit-digicre/digicore_v3_backend:latest
+    image: ghcr.io/sit-digicre/digicore_v3_backend:master
     volumes:
       - "./client_secret.json:/client_secret.json"
     env_file:
