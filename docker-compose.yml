@@ -3,6 +3,7 @@ version: "3.9"
 services:
   db:
     image: mysql:8.0.28
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     ports:
       - "${DB_PORT}:3306"
     volumes:
