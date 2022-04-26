@@ -9,3 +9,13 @@ services:
       - "${BACKEND_PORT}:8000"
     env_file:
       - ".env"
+
+  db:
+    image: mysql:8.0.28
+    volumes:
+      - "db_data:/var/lib/mysql"
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
