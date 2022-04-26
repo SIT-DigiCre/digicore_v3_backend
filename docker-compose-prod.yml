@@ -1,12 +1,10 @@
-version: "3.9"
+version: "3"
 
 services:
   digicoreapi_v3:
-    build:
-      context: "./"
-      target: "production"
-    ports:
-      - "${BACKEND_PORT}:8000"
+    image: ghcr.io/sit-digicre/digicore_v3_backend:latest
+    volumes:
+      - "./client_secret.json:/client_secret.json"
     env_file:
       - ".env"
     networks:
