@@ -11,6 +11,7 @@ services:
       - ".env"
     networks:
       - https_network
+      - digicoreapi
     restart: always
 
   db:
@@ -23,10 +24,14 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     restart: always
+    networks:
+      - digicoreapi
 
 volumes:
   db_data:
 
+
 networks:
   https_network:
     external: true
+  digicoreapi:
