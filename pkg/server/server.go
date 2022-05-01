@@ -57,6 +57,11 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	user_group.PUT("/my/discord", user.UpdateDiscordId)
 	user_group.PUT("/my/private", user.UpdateMyPrivateProfile)
 	user_group.GET("/my/private", user.GetMyPrivateProfile)
+
+	env_group := e.Group("/env")
+	env_group.Use(middleware.JWTWithConfig(config))
+	env, _ := env.CreateContext()
+	env_group.GET("/join", env.GetJoinURL)
 }
 
 func CreateDbConnection(address string) (*sql.DB, error) {

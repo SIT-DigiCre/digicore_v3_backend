@@ -1,11 +1,20 @@
-version: "3.9"
+version: "3"
 
 services:
+  digicoreapi_v3:
+    image: ghcr.io/sit-digicre/digicore_v3_backend:master
+    volumes:
+      - "./client_secret.json:/client_secret.json"
+    env_file:
+      - ".env"
+    networks:
+      - https_network
+      - digicoreapi
+    restart: always
+
   db:
     image: mysql:8.0.28
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    ports:
-      - "${DB_PORT}:3306"
     volumes:
       - "db_data:/var/lib/mysql"
     environment:
@@ -14,18 +23,15 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       TZ: Asia/Tokyo
-
-  backend:
-    build:
-      context: "./"
-      target: "development"
-    volumes:
-      - "./:/app"
-    ports:
-      - "${BACKEND_PORT}:8000"
-    env_file:
-      - ".env"
+    restart: always
+    networks:
+      - digicoreapi
 
 volumes:
   db_data:
-  redis_data:
+
+
+networks:
+  https_network:
+    external: true
+  digicoreapi:
