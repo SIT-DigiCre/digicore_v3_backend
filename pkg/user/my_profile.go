@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/labstack/echo/v4"
 )
@@ -28,6 +30,19 @@ type RequestUpdateMyProfile struct {
 }
 
 func (p RequestUpdateMyProfile) validate() error {
+	errorMsg := []string{}
+	if 255 < utf8.RuneCountInString(p.Username) {
+		errorMsg = append(errorMsg, "ユーザー名は255文字未満である必要があります")
+	}
+	if p.SchoolGrade <= 0 || 10 <= p.SchoolGrade {
+		errorMsg = append(errorMsg, "学年は1以上9以下である必要があります")
+	}
+	if 255 < utf8.RuneCountInString(p.ShortSelfIntroduction) {
+		errorMsg = append(errorMsg, "自己紹介は255文字未満である必要があります")
+	}
+	if len(errorMsg) != 0 {
+		return fmt.Errorf(strings.Join(errorMsg, ","))
+	}
 	return nil
 }
 
@@ -53,9 +68,9 @@ func (c Context) GetMyProfile(e echo.Context) error {
 	err = c.DB.QueryRow("SELECT username, school_grade, icon_url, discord_userid, active_limit, short_self_introduction FROM UserProfile WHERE user_id = UUID_TO_BIN(?)", userId).
 		Scan(&profile.Username, &profile.SchoolGrade, &profile.IconURL, &profile.DiscordUserId, &profile.ActiveLimit, &profile.ShortSelfIntroduction)
 	if err == sql.ErrNoRows {
-		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: err.Error()})
+		return e.JSON(http.StatusOK, ResponseGetMyProfile{Error: "データが登録されていません"})
 	} else if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: "取得に失敗しました"})
 	}
 	profile.StudentNumber, err = GetStudentNumber(c.DB, profile.UserId)
 	if err != nil {
@@ -73,12 +88,11 @@ func (c Context) GetMyProfile(e echo.Context) error {
 func (c Context) UpdateMyProfile(e echo.Context) error {
 	userId, err := GetUserId(&e)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{})
+		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{Error: err.Error()})
 	}
-	fmt.Println(userId)
 	profile := RequestUpdateMyProfile{}
 	if err := e.Bind(&profile); err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateMyProfile{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateMyProfile{Error: "データの読み込みに失敗しました"})
 	}
 	if err := profile.validate(); err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseUpdateMyProfile{Error: err.Error()})
@@ -86,7 +100,7 @@ func (c Context) UpdateMyProfile(e echo.Context) error {
 	_, err = c.DB.Exec(`UPDATE UserProfile SET username = ?, school_grade = ?, icon_url = ?, short_self_introduction = ? WHERE user_id = UUID_TO_BIN(?)`,
 		profile.Username, profile.SchoolGrade, profile.IconURL, profile.ShortSelfIntroduction, userId)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateMyProfile{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateMyProfile{Error: "更新に失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseUpdateMyProfile{})
 }

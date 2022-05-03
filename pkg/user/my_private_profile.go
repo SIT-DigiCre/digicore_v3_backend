@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
+	"strings"
 	"unicode/utf8"
 
 	"github.com/labstack/echo/v4"
@@ -44,35 +45,39 @@ type RequestUpdateMyPrivateProfile struct {
 var phoneNumberRegex = regexp.MustCompile(`^[0-9]{1,32}$`)
 
 func (p RequestUpdateMyPrivateProfile) validate() error {
+	errorMsg := []string{}
 	if 255 < utf8.RuneCountInString(p.FirstName) {
-		return fmt.Errorf("")
+		errorMsg = append(errorMsg, "名前は255文字未満である必要があります")
 	}
 	if 255 < utf8.RuneCountInString(p.LastName) {
-		return fmt.Errorf("")
+		errorMsg = append(errorMsg, "名字は255文字未満である必要があります")
 	}
 	if 255 < utf8.RuneCountInString(p.FirstNameKana) {
-		return fmt.Errorf("")
+		errorMsg = append(errorMsg, "名前のカナは255文字未満である必要があります")
 	}
 	if 255 < utf8.RuneCountInString(p.LastNameKana) {
-		return fmt.Errorf("")
+		errorMsg = append(errorMsg, "名字のカナは255文字未満である必要があります")
 	}
 	if !phoneNumberRegex.MatchString(p.PhoneNumber) {
-		return fmt.Errorf("")
+		errorMsg = append(errorMsg, "電話番号はハイフン無し数字のみの32文字未満である必要があります")
 	}
 	if 255 < utf8.RuneCountInString(p.Address) {
-		return fmt.Errorf("")
+		errorMsg = append(errorMsg, "住所は255文字未満である必要があります")
 	}
 	if 255 < utf8.RuneCountInString(p.ParentName) {
-		return fmt.Errorf("")
+		errorMsg = append(errorMsg, "保護者名は255文字未満である必要があります")
 	}
 	if !phoneNumberRegex.MatchString(p.ParentCellphoneNumber) {
-		return fmt.Errorf("")
+		errorMsg = append(errorMsg, "保護者の携帯電話番号はハイフン無し数字のみの32文字未満である必要があります")
 	}
 	if p.ParentHomephoneNumber != "" && !phoneNumberRegex.MatchString(p.ParentHomephoneNumber) {
-		return fmt.Errorf("")
+		errorMsg = append(errorMsg, "保護者の電話番号はハイフン無し数字のみの32文字未満である必要があります")
 	}
 	if 255 < utf8.RuneCountInString(p.ParentAddress) {
-		return fmt.Errorf("")
+		errorMsg = append(errorMsg, "保護者の住所は255文字未満である必要があります")
+	}
+	if len(errorMsg) != 0 {
+		return fmt.Errorf(strings.Join(errorMsg, ","))
 	}
 	return nil
 }
@@ -94,9 +99,9 @@ func (c Context) GetMyPrivateProfile(e echo.Context) error {
 	err = c.DB.QueryRow("SELECT first_name, last_name, first_name_kana, last_name_kana, phone_number, address, parent_name, parent_cellphone_number, parent_homephone_number, parent_address FROM UserPrivateProfile WHERE user_id = UUID_TO_BIN(?)", userId).
 		Scan(&privateProfile.FirstName, &privateProfile.LastName, &privateProfile.FirstNameKana, &privateProfile.LastNameKana, &privateProfile.PhoneNumber, &privateProfile.Address, &privateProfile.ParentName, &privateProfile.ParentCellphoneNumber, &privateProfile.ParentHomephoneNumber, &privateProfile.ParentAddress)
 	if err == sql.ErrNoRows {
-		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{Error: "データが登録されていません"})
 	} else if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{Error: "取得に失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseGetMyPrivateProfile{PrivateProfile: privateProfile})
 }
@@ -112,10 +117,9 @@ func (c Context) UpdateMyPrivateProfile(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPrivateProfile{Error: err.Error()})
 	}
-	fmt.Println(userId)
 	privateProfile := RequestUpdateMyPrivateProfile{}
 	if err := e.Bind(&privateProfile); err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPrivateProfile{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPrivateProfile{Error: "データの読み込みに失敗しました"})
 	}
 	if err := privateProfile.validate(); err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPrivateProfile{Error: err.Error()})
@@ -125,7 +129,7 @@ func (c Context) UpdateMyPrivateProfile(e echo.Context) error {
 		userId, privateProfile.FirstName, privateProfile.LastName, privateProfile.FirstNameKana, privateProfile.LastNameKana, privateProfile.PhoneNumber, privateProfile.Address, privateProfile.ParentName, privateProfile.ParentCellphoneNumber, privateProfile.ParentHomephoneNumber, privateProfile.ParentAddress,
 		privateProfile.FirstName, privateProfile.LastName, privateProfile.FirstNameKana, privateProfile.LastNameKana, privateProfile.PhoneNumber, privateProfile.Address, privateProfile.ParentName, privateProfile.ParentCellphoneNumber, privateProfile.ParentHomephoneNumber, privateProfile.ParentAddress)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPrivateProfile{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPrivateProfile{Error: "更新に失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseUpdateMyPrivateProfile{})
 }

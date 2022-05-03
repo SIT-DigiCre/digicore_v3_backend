@@ -18,11 +18,11 @@ func CreateContext(db *sql.DB) (Context, error) {
 	context := Context{DB: db}
 	clientSecretJson, err := os.ReadFile("client_secret.json")
 	if err != nil {
-		return context, fmt.Errorf("unknow error: %w", err)
+		return context, fmt.Errorf("GCP認証情報ファイルのオープンに失敗: %w", err)
 	}
 	context.Config, err = google.ConfigFromJSON(clientSecretJson, "https://www.googleapis.com/auth/userinfo.email")
 	if err != nil {
-		return context, fmt.Errorf("unable to parse client_secret.json: %w", err)
+		return context, fmt.Errorf("GCP認証情報ファイルの読み込みに失敗: %w", err)
 	}
 
 	return context, nil
