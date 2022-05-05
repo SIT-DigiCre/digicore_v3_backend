@@ -39,23 +39,23 @@ func (f fileUploadRequest) validate() error {
 	return nil
 }
 
-func uploadBytes(data []byte, fileId string, extension string) error {
+func uploadBytes(data []byte, fileId string, extension string) (int, error) {
 	if env.ConohaFileUploadMaxSize < len(data) {
-		return errors.New("ファイルサイズが大きすぎます")
+		return http.StatusBadRequest, errors.New("ファイルサイズが大きすぎます")
 	}
 	token, err := GetToken()
 	if err != nil {
-		return err
+		return http.StatusInternalServerError, err
 	}
 	url := getFileURL(fileId, extension)
 	_, err = httpRequest(http.MethodPut, url, bytes.NewReader(data), &token)
 	if err != nil {
-		return err
+		return http.StatusInternalServerError, err
 	}
-	return nil
+	return http.StatusOK, nil
 }
 
-func uploadUserData(db *sql.DB, userId string, data []byte, fileName string) (string, error) {
+func createUserFile(db *sql.DB, userId string, data []byte, fileName string) (string, int, error) {
 	id := uuid.New().String()
 	extension := getExtension(fileName)
 	md5Hash := fmt.Sprintf("%x", md5.Sum(data))
@@ -63,13 +63,14 @@ func uploadUserData(db *sql.DB, userId string, data []byte, fileName string) (st
 	err := db.QueryRow(`SELECT name FROM UserFile WHERE user_id = UUID_TO_BIN(?) AND md5_hash = ?`, userId, md5Hash).Scan(&duplicateFileName)
 	// エラーがない = 該当するレコードが存在した場合
 	if err == nil {
-		return "", errors.New(fmt.Sprintf("アップロードされたファイルは既に%sという名前でアップロードされています", duplicateFileName))
+		return "", http.StatusBadRequest, errors.New(fmt.Sprintf("アップロードされたファイルは既に%sという名前でアップロードされています", duplicateFileName))
 	}
 	if err != sql.ErrNoRows {
-		return "", errors.New("データベースのエラーです")
+		return "", http.StatusInternalServerError, errors.New("データベースのエラーです")
 	}
-	if err := uploadBytes(data, id, extension); err != nil {
-		return "", err
+	status, err := uploadBytes(data, id, extension)
+	if err != nil {
+		return "", status, err
 	}
 	kSize := len(data) / 1024
 	_, err = db.Exec(
@@ -82,9 +83,9 @@ func uploadUserData(db *sql.DB, userId string, data []byte, fileName string) (st
 		extension,
 	)
 	if err != nil {
-		return "", errors.New("データベースのエラーです")
+		return "", http.StatusInternalServerError, errors.New("データベースのエラーです")
 	}
-	return id, nil
+	return id, http.StatusCreated, nil
 }
 
 // Upload user data
@@ -108,11 +109,11 @@ func (c Context) UploadUserfile(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, fileUploadErrorResponse{Error: "ファイルのデコードに失敗しました"})
 	}
-	fileId, err := uploadUserData(c.DB, userId, data, fileUpload.Name)
+	fileId, status, err := createUserFile(c.DB, userId, data, fileUpload.Name)
 	if err != nil {
-		return e.JSON(http.StatusInternalServerError, fileUploadErrorResponse{Error: err.Error()})
+		return e.JSON(status, fileUploadErrorResponse{Error: err.Error()})
 	}
 
 	url := getFileURL(fileId, getExtension(fileUpload.Name))
-	return e.JSON(http.StatusOK, fileUploadResponse{ID: fileId, Name: fileUpload.Name, URL: url})
+	return e.JSON(http.StatusCreated, fileUploadResponse{ID: fileId, Name: fileUpload.Name, URL: url})
 }
