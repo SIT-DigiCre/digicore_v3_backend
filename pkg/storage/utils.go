@@ -63,7 +63,7 @@ func httpRequest(method string, url string, body io.Reader, token *string) ([]by
 	}
 	resBody, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("レスポンスボディ取得エラー")
 	}
 	return resBody, nil
 }
