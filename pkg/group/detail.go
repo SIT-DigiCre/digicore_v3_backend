@@ -18,7 +18,7 @@ type ResponseDetail struct {
 // @Security Authorization
 // @Router /group/{id} [GET]
 // @Param id path string true "group id"
-// @Success 200 {object} ResponseJoin
+// @Success 200 {object} ResponseDetail
 func (c Context) Detail(e echo.Context) error {
 	userId, err := user.GetUserId(&e)
 	if err != nil {

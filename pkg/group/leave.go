@@ -11,7 +11,7 @@ type ResponseLeave struct {
 	Error string `json:"error"`
 }
 
-// Get group list
+// Leave group
 // @Accept json
 // @Security Authorization
 // @Router /group/{id} [DELETE]
