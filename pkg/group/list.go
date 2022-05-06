@@ -8,14 +8,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type Group struct {
-	Id          string `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Join        bool   `json:"join"`
-	Joined      bool   `json:"joined"`
-}
-
 type ResponseGroupList struct {
 	Groups []Group `json:"groups"`
 	Error  string  `json:"error"`
