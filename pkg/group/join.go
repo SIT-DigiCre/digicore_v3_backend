@@ -24,6 +24,14 @@ func (c Context) Join(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseGroupList{Error: err.Error()})
 	}
 	id := e.Param("id")
+	join := true
+	err = c.DB.QueryRow("SELECT `join` FROM `Group` WHERE id = UUID_TO_BIN(?)", id).Scan(&join)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseJoin{Error: err.Error()})
+	}
+	if !join {
+		return e.JSON(http.StatusForbidden, ResponseJoin{Error: "参加権限がありません"})
+	}
 	_, err = c.DB.Exec("INSERT INTO GroupUser (group_id, user_id) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?))", id, userId)
 	if mysqlErr, ok := err.(*mysql.MySQLError); ok && mysqlErr.Number == 1062 {
 		return e.JSON(http.StatusForbidden, ResponseJoin{Error: "参加済みです"})
