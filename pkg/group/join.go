@@ -21,7 +21,7 @@ type ResponseJoin struct {
 func (c Context) Join(e echo.Context) error {
 	userId, err := user.GetUserId(&e)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseGroupList{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseJoin{Error: err.Error()})
 	}
 	id := e.Param("id")
 	join := true

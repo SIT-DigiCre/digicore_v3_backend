@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type ResponseGroupList struct {
+type ResponseList struct {
 	Groups []Group `json:"groups"`
 	Error  string  `json:"error"`
 }
@@ -17,11 +17,11 @@ type ResponseGroupList struct {
 // @Accept json
 // @Security Authorization
 // @Router /group [get]
-// @Success 200 {object} ResponseGroupList
+// @Success 200 {object} ResponseList
 func (c Context) GroupList(e echo.Context) error {
 	userId, err := user.GetUserId(&e)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseGroupList{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseList{Error: err.Error()})
 	}
 	rows, err := c.DB.Query("SELECT BIN_TO_UUID(Group.id), name, description, `join`, (CASE WHEN GroupUser.user_id IS NOT NULL THEN true ELSE false END) AS joined  FROM `Group` LEFT JOIN GroupUser ON Group.id = GroupUser.group_id AND GroupUser.user_id = UUID_TO_BIN(?)", userId)
 	var groups []Group
@@ -32,5 +32,5 @@ func (c Context) GroupList(e echo.Context) error {
 		}
 		groups = append(groups, group)
 	}
-	return e.JSON(http.StatusOK, ResponseGroupList{Groups: groups})
+	return e.JSON(http.StatusOK, ResponseList{Groups: groups})
 }

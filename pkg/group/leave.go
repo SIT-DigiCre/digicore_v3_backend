@@ -20,7 +20,7 @@ type ResponseLeave struct {
 func (c Context) Leave(e echo.Context) error {
 	userId, err := user.GetUserId(&e)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseGroupList{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseLeave{Error: err.Error()})
 	}
 	id := e.Param("id")
 	_, err = c.DB.Exec("DELETE FROM GroupUser WHERE group_id = UUID_TO_BIN(?) AND user_id = UUID_TO_BIN(?)", id, userId)

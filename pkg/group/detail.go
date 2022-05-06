@@ -22,7 +22,7 @@ type ResponseDetail struct {
 func (c Context) Detail(e echo.Context) error {
 	userId, err := user.GetUserId(&e)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseGroupList{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseDetail{Error: err.Error()})
 	}
 	id := e.Param("id")
 	group := Group{}
