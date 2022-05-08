@@ -27,6 +27,7 @@ func (c Context) GroupList(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseList{Error: "DBの読み込みに失敗しました"})
 	}
+	defer rows.Close()
 	var groups []Group
 	for rows.Next() {
 		group := Group{}
