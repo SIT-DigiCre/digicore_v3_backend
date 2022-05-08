@@ -31,7 +31,7 @@ func (c Context) Detail(e echo.Context) error {
 	if err == sql.ErrNoRows {
 		return e.JSON(http.StatusBadRequest, ResponseDetail{Error: "グループが存在しません"})
 	} else if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseDetail{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseDetail{Error: "DBの読み込みに失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseDetail{Group: group})
 }

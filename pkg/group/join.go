@@ -27,7 +27,7 @@ func (c Context) Join(e echo.Context) error {
 	join := true
 	err = c.DB.QueryRow("SELECT `join` FROM `Group` WHERE id = UUID_TO_BIN(?)", id).Scan(&join)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseJoin{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseJoin{Error: "DBの読み込みに失敗しました"})
 	}
 	if !join {
 		return e.JSON(http.StatusForbidden, ResponseJoin{Error: "参加権限がありません"})
@@ -37,7 +37,7 @@ func (c Context) Join(e echo.Context) error {
 		return e.JSON(http.StatusForbidden, ResponseJoin{Error: "参加済みです"})
 	}
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseJoin{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseJoin{Error: "DBへの書き込みに失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseJoin{Error: ""})
 }

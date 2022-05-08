@@ -1,7 +1,6 @@
 package group
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
@@ -32,7 +31,7 @@ func (c Context) GroupList(e echo.Context) error {
 	for rows.Next() {
 		group := Group{}
 		if err := rows.Scan(&group.Id, &group.Name, &group.Description, &group.Join, &group.Joined); err != nil {
-			log.Fatal(err)
+			return e.JSON(http.StatusBadRequest, ResponseList{Error: "DBの読み込みに失敗しました"})
 		}
 		groups = append(groups, group)
 	}
