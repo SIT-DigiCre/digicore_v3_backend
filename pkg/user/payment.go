@@ -64,7 +64,7 @@ func (c Context) GetMyPayment(e echo.Context) error {
 	payment := Payment{}
 	err = c.DB.QueryRow("SELECT year, transfer_name, checked, created_at, updated_at FROM UserPayment WHERE year = ? AND user_id = UUID_TO_BIN(?)", util.NowFiscalYear(), userId).Scan(&payment.Year, &payment.TransferName, &payment.Checked, &payment.CreatedAt, &payment.UpdatedAt)
 	if err == sql.ErrNoRows {
-		return e.JSON(http.StatusOK, ResponseGetMyPayment{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseGetMyPayment{Error: err.Error()})
 	} else if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyPayment{Error: err.Error()})
 	}
