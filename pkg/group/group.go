@@ -10,7 +10,7 @@ type Group struct {
 	Id          string `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
-	Join        bool   `json:"join"`
+	Joinable    bool   `json:"joinable"`
 	Joined      bool   `json:"joined"`
 }
 

@@ -24,12 +24,12 @@ func (c Context) Join(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseJoin{Error: err.Error()})
 	}
 	id := e.Param("id")
-	join := true
-	err = c.DB.QueryRow("SELECT `join` FROM `Group` WHERE id = UUID_TO_BIN(?)", id).Scan(&join)
+	joinable := true
+	err = c.DB.QueryRow("SELECT joinable FROM `Group` WHERE id = UUID_TO_BIN(?)", id).Scan(&joinable)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseJoin{Error: "DBの読み込みに失敗しました"})
 	}
-	if !join {
+	if !joinable {
 		return e.JSON(http.StatusForbidden, ResponseJoin{Error: "参加権限がありません"})
 	}
 	_, err = c.DB.Exec("INSERT INTO GroupUser (group_id, user_id) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?))", id, userId)
