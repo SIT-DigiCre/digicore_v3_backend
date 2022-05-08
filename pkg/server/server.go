@@ -8,6 +8,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/google"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/group"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/storage"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
@@ -60,6 +61,14 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	user_group.PUT("/my/discord", user.UpdateDiscordId)
 	user_group.PUT("/my/private", user.UpdateMyPrivateProfile)
 	user_group.GET("/my/private", user.GetMyPrivateProfile)
+	user_group.PUT("/my/payment", user.UpdateMyPayment)
+	user_group.GET("/my/payment", user.GetMyPayment)
+	user_group.GET("/my/payment/history", user.GetMyPaymentHistory)
+
+	s := e.Group("/storage")
+	s.Use(middleware.JWTWithConfig(config))
+	storage, _ := storage.CreateContext(db)
+	s.POST("", storage.UploadUserfile)
 
 	env_group := e.Group("/env")
 	env_group.Use(middleware.JWTWithConfig(config))
