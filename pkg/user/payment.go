@@ -69,6 +69,9 @@ func (c Context) GetMyPaymentHistory(e echo.Context) error {
 	}
 	payments := []Payment{}
 	rows, err := c.DB.Query("SELECT year, transfer_name, checked, created_at, updated_at FROM UserPayment WHERE user_id = UUID_TO_BIN(?)", userId)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPayment{Error: err.Error()})
+	}
 	defer rows.Close()
 	for rows.Next() {
 		payment := Payment{}
