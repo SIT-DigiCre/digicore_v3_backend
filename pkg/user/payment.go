@@ -2,8 +2,11 @@ package user
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
+	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/util"
 	"github.com/labstack/echo/v4"
@@ -22,6 +25,16 @@ type RequestUpdateMyPayment struct {
 }
 
 func (p RequestUpdateMyPayment) validate() error {
+	errorMsg := []string{}
+	if 255 < utf8.RuneCountInString(p.TransferName) {
+		errorMsg = append(errorMsg, "振込依頼人名は255文字未満である必要があります")
+	}
+	if utf8.RuneCountInString(p.TransferName) <= 0 {
+		errorMsg = append(errorMsg, "振込依頼人名は1文字以上ある必要があります")
+	}
+	if len(errorMsg) != 0 {
+		return fmt.Errorf(strings.Join(errorMsg, ","))
+	}
 	return nil
 }
 
