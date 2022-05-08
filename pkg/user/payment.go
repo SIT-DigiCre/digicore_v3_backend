@@ -64,9 +64,9 @@ func (c Context) GetMyPayment(e echo.Context) error {
 	payment := Payment{}
 	err = c.DB.QueryRow("SELECT year, transfer_name, checked, created_at, updated_at FROM UserPayment WHERE year = ? AND user_id = UUID_TO_BIN(?)", util.NowFiscalYear(), userId).Scan(&payment.Year, &payment.TransferName, &payment.Checked, &payment.CreatedAt, &payment.UpdatedAt)
 	if err == sql.ErrNoRows {
-		return e.JSON(http.StatusBadRequest, ResponseGetMyPayment{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseGetMyPayment{Error: "振り込みデータが存在しません"})
 	} else if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseGetMyPayment{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseGetMyPayment{Error: "DBの読み込みに失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseGetMyPayment{Payment: payment})
 }
@@ -83,13 +83,13 @@ func (c Context) GetMyPaymentHistory(e echo.Context) error {
 	payments := []Payment{}
 	rows, err := c.DB.Query("SELECT year, transfer_name, checked, created_at, updated_at FROM UserPayment WHERE user_id = UUID_TO_BIN(?)", userId)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPayment{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPayment{Error: "DBの読み込みに失敗しました"})
 	}
 	defer rows.Close()
 	for rows.Next() {
 		payment := Payment{}
 		if err := rows.Scan(&payment.Year, &payment.TransferName, &payment.Checked, &payment.CreatedAt, &payment.UpdatedAt); err != nil {
-			return e.JSON(http.StatusBadRequest, ResponseGetMyPayment{Error: err.Error()})
+			return e.JSON(http.StatusBadRequest, ResponseGetMyPayment{Error: "DBの読み込みに失敗しました"})
 		}
 		payments = append(payments, payment)
 	}
@@ -109,7 +109,7 @@ func (c Context) UpdateMyPayment(e echo.Context) error {
 	}
 	payment := RequestUpdateMyPayment{}
 	if err := e.Bind(&payment); err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPayment{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPayment{Error: "データの読み込みに失敗しました"})
 	}
 	if err := payment.validate(); err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPayment{Error: err.Error()})
@@ -117,7 +117,7 @@ func (c Context) UpdateMyPayment(e echo.Context) error {
 	_, err = c.DB.Exec(`INSERT INTO UserPayment (user_id, year, transfer_name) VALUES (UUID_TO_BIN(?), ?, ?) ON DUPLICATE KEY UPDATE transfer_name = ?`,
 		userId, util.NowFiscalYear(), payment.TransferName, payment.TransferName)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPayment{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPayment{Error: "データの登録に失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseUpdateMyPayment{})
 }
