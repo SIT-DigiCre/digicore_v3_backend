@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"net/http"
 
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/discord"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/google"
@@ -44,6 +45,10 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 			return echo.NewHTTPError(http.StatusUnauthorized, "invalid or expired jwt")
 		},
 	}
+
+	admin_group := e.Group("/admin")
+	admin_group.Use(middleware.JWTWithConfig(config))
+	admin_group.Use(admin.Middleware(db))
 
 	group_group := e.Group("/group")
 	group_group.Use(middleware.JWTWithConfig(config))

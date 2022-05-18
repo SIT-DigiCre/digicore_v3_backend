@@ -25,6 +25,8 @@ var ConohaAPIUserPassword = os.Getenv("CONOHA_API_USER_PASSWORD")
 var ConohaStorageContainerName = "corev3"
 var ConohaFileUploadMaxSize = 104857600
 
+var AdminGroupID = os.Getenv("ADMIN_GROUP_ID")
+
 type Context struct {
 }
 
