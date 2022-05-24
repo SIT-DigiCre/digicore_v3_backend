@@ -1,0 +1,32 @@
+name: GitHub Pages
+
+
+on:
+  push:
+    branches:
+      - master
+
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go 1.17
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.17
+
+      - name: Get dependencies
+        run: go install github.com/swaggo/swag/cmd/swag@latest
+
+      - name: Build swagger
+        run: swag init
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          force_orphan: true
