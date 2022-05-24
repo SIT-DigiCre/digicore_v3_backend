@@ -29,9 +29,9 @@ func (c Context) Detail(e echo.Context) error {
 	err = c.DB.QueryRow("SELECT BIN_TO_UUID(Group.id), name, description, joinable, (CASE WHEN GroupUser.user_id IS NOT NULL THEN true ELSE false END) AS joined  FROM `Group` LEFT JOIN GroupUser ON Group.id = GroupUser.group_id AND GroupUser.user_id = UUID_TO_BIN(?) WHERE Group.id = UUID_TO_BIN(?)", userId, id).
 		Scan(&group.Id, &group.Name, &group.Description, &group.Joinable, &group.Joined)
 	if err == sql.ErrNoRows {
-		return e.JSON(http.StatusBadRequest, ResponseDetail{Error: "グループが存在しません"})
+		return e.JSON(http.StatusNotFound, ResponseDetail{Error: "グループが存在しません"})
 	} else if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseDetail{Error: "DBの読み込みに失敗しました"})
+		return e.JSON(http.StatusInternalServerError, ResponseDetail{Error: "DBの読み込みに失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseDetail{Group: group})
 }

@@ -68,13 +68,13 @@ func (c Context) GetMyProfile(e echo.Context) error {
 	err = c.DB.QueryRow("SELECT username, school_grade, icon_url, discord_userid, active_limit, short_self_introduction FROM UserProfile WHERE user_id = UUID_TO_BIN(?)", userId).
 		Scan(&profile.Username, &profile.SchoolGrade, &profile.IconURL, &profile.DiscordUserId, &profile.ActiveLimit, &profile.ShortSelfIntroduction)
 	if err == sql.ErrNoRows {
-		return e.JSON(http.StatusOK, ResponseGetMyProfile{Error: "データが登録されていません"})
+		return e.JSON(http.StatusNotFound, ResponseGetMyProfile{Error: "データが登録されていません"})
 	} else if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: "取得に失敗しました"})
+		return e.JSON(http.StatusInternalServerError, ResponseGetMyProfile{Error: "取得に失敗しました"})
 	}
 	profile.StudentNumber, err = GetStudentNumber(c.DB, profile.UserId)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: err.Error()})
+		return e.JSON(http.StatusInternalServerError, ResponseGetMyProfile{Error: err.Error()})
 	}
 	return e.JSON(http.StatusOK, ResponseGetMyProfile{Profile: profile})
 }
@@ -100,7 +100,7 @@ func (c Context) UpdateMyProfile(e echo.Context) error {
 	_, err = c.DB.Exec(`UPDATE UserProfile SET username = ?, school_grade = ?, icon_url = ?, short_self_introduction = ? WHERE user_id = UUID_TO_BIN(?)`,
 		profile.Username, profile.SchoolGrade, profile.IconURL, profile.ShortSelfIntroduction, userId)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateMyProfile{Error: "更新に失敗しました"})
+		return e.JSON(http.StatusInternalServerError, ResponseUpdateMyProfile{Error: "更新に失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseUpdateMyProfile{})
 }
