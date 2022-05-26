@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"database/sql"
 	"net/http"
 	"strconv"
 	"time"
@@ -22,6 +23,11 @@ type Payment struct {
 type ResponseGetAllPayments struct {
 	Payments []Payment `json:"payments"`
 	Error    string    `json:"error"`
+}
+
+type ResponseGetPayment struct {
+	Payment Payment `json:"payment"`
+	Error   string  `json:"error"`
 }
 
 // Get all payments
@@ -48,4 +54,24 @@ func (c Context) GetAllPayments(e echo.Context) error {
 		payments = append(payments, payment)
 	}
 	return e.JSON(http.StatusOK, ResponseGetAllPayments{Payments: payments})
+}
+
+// Get payment
+// @Router /admin/payments/{id} [get]
+// @Param id path string true "payment id"
+// @Security Authorization
+// @Success 200 {object} ResponseGetPayment
+func (c Context) GetPayment(e echo.Context) error {
+	id, err := strconv.Atoi(e.Param("id"))
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseGetPayment{Error: "データの読み込みに失敗しました"})
+	}
+	payment := Payment{}
+	err = c.DB.QueryRow("SELECT BIN_TO_UUID(UserPayment.id), User.student_number, transfer_name, year, checked, created_at, updated_at FROM UserPayment LEFT JOIN User ON UserPayment.user_id = User.id WHERE UserPayment.id = ?", id).Scan(&payment.Id, &payment.StudentNumber, &payment.TransferName, &payment.Year, &payment.Checked, &payment.CreatedAt, &payment.UpdatedAt)
+	if err == sql.ErrNoRows {
+		return e.JSON(http.StatusNotFound, ResponseGetPayment{Error: "データが見つかりませんでした"})
+	} else if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseGetPayment{Error: "DBの読み込みに失敗しました"})
+	}
+	return e.JSON(http.StatusOK, ResponseGetPayment{Payment: payment})
 }
