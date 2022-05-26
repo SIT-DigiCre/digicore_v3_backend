@@ -87,6 +87,7 @@ func (c Context) GetPayment(e echo.Context) error {
 // Update payment
 // @Router /admin/payments/{id} [put]
 // @Param id path string true "payment id"
+// @Param RequestUpdatePayment body RequestUpdatePayment true "payment data"
 // @Security Authorization
 // @Success 200 {object} ResponseUpdatePayment
 func (c Context) UpdatePayment(e echo.Context) error {
