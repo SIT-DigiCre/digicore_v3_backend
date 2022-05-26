@@ -52,6 +52,7 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	admin, _ := admin.CreateContext(db)
 	admin_group.GET("/payments", admin.GetAllPayments)
 	admin_group.GET("/payments/:id", admin.GetPayment)
+	admin_group.PUT("/payments/:id", admin.UpdatePayment)
 
 	group_group := e.Group("/group")
 	group_group.Use(middleware.JWTWithConfig(config))

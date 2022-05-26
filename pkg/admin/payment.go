@@ -30,6 +30,14 @@ type ResponseGetPayment struct {
 	Error   string  `json:"error"`
 }
 
+type ResponseUpdatePayment struct {
+	Error string `json:"error"`
+}
+
+type RequestUpdatePayment struct {
+	Checked bool `json:"checked"`
+}
+
 // Get all payments
 // @Router /admin/payments [get]
 // @Param year query int false "year"
@@ -74,4 +82,25 @@ func (c Context) GetPayment(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseGetPayment{Error: "DBの読み込みに失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseGetPayment{Payment: payment})
+}
+
+// Update payment
+// @Router /admin/payments/{id} [put]
+// @Param id path string true "payment id"
+// @Security Authorization
+// @Success 200 {object} ResponseUpdatePayment
+func (c Context) UpdatePayment(e echo.Context) error {
+	id, err := strconv.Atoi(e.Param("id"))
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseUpdatePayment{Error: "データの読み込みに失敗しました"})
+	}
+	payment := RequestUpdatePayment{}
+	if err := e.Bind(&payment); err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseUpdatePayment{Error: "データの読み込みに失敗しました"})
+	}
+	_, err = c.DB.Exec("UPDATE UserPayment SET checked = ? WHERE id = ?", payment.Checked, id)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseUpdatePayment{Error: "DBの読み込みに失敗しました"})
+	}
+	return e.JSON(http.StatusOK, ResponseUpdatePayment{})
 }
