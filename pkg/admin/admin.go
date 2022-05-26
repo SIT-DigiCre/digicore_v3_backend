@@ -9,6 +9,16 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+type Context struct {
+	DB *sql.DB
+}
+
+func CreateContext(db *sql.DB) (Context, error) {
+	context := Context{DB: db}
+
+	return context, nil
+}
+
 func Middleware(db *sql.DB) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
@@ -16,7 +26,8 @@ func Middleware(db *sql.DB) echo.MiddlewareFunc {
 			if err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest)
 			}
-			err = db.QueryRow("SELECT id FROM GroupUser LEFT JOIN User ON GroupUser.user_id = User.id WHERE User.id = ? AND group_id = ?", id, env.AdminGroupID).Scan()
+			count := 0
+			err = db.QueryRow("SELECT count(*) FROM GroupUser LEFT JOIN User ON GroupUser.user_id = User.id WHERE User.id = ? AND group_id = ?", id, env.AdminGroupID).Scan(&count)
 			if err != nil {
 				return echo.NewHTTPError(http.StatusUnauthorized)
 			}
