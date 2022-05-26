@@ -75,7 +75,7 @@ func (c Context) GetPayment(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseGetPayment{Error: "データの読み込みに失敗しました"})
 	}
 	payment := Payment{}
-	err = c.DB.QueryRow("SELECT BIN_TO_UUID(UserPayment.id), User.student_number, transfer_name, year, checked, created_at, updated_at FROM UserPayment LEFT JOIN User ON UserPayment.user_id = User.id WHERE UserPayment.id = ?", id).Scan(&payment.Id, &payment.StudentNumber, &payment.TransferName, &payment.Year, &payment.Checked, &payment.CreatedAt, &payment.UpdatedAt)
+	err := c.DB.QueryRow("SELECT BIN_TO_UUID(UserPayment.id), User.student_number, transfer_name, year, checked, created_at, updated_at FROM UserPayment LEFT JOIN User ON UserPayment.user_id = User.id WHERE UserPayment.id = UUID_TO_BIN(?)", id).Scan(&payment.Id, &payment.StudentNumber, &payment.TransferName, &payment.Year, &payment.Checked, &payment.CreatedAt, &payment.UpdatedAt)
 	if err == sql.ErrNoRows {
 		return e.JSON(http.StatusNotFound, ResponseGetPayment{Error: "データが見つかりませんでした"})
 	} else if err != nil {
@@ -98,7 +98,7 @@ func (c Context) UpdatePayment(e echo.Context) error {
 	if err := e.Bind(&payment); err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseUpdatePayment{Error: "データの読み込みに失敗しました"})
 	}
-	_, err = c.DB.Exec("UPDATE UserPayment SET checked = ? WHERE id = ?", payment.Checked, id)
+	_, err := c.DB.Exec("UPDATE UserPayment SET checked = ? WHERE id = UUID_TO_BIN(?)", payment.Checked, id)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseUpdatePayment{Error: "DBの読み込みに失敗しました"})
 	}
