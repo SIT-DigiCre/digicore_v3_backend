@@ -70,8 +70,8 @@ func (c Context) GetAllPayments(e echo.Context) error {
 // @Security Authorization
 // @Success 200 {object} ResponseGetPayment
 func (c Context) GetPayment(e echo.Context) error {
-	id, err := strconv.Atoi(e.Param("id"))
-	if err != nil {
+	id := e.Param("id")
+	if id == "" {
 		return e.JSON(http.StatusBadRequest, ResponseGetPayment{Error: "データの読み込みに失敗しました"})
 	}
 	payment := Payment{}
@@ -90,9 +90,9 @@ func (c Context) GetPayment(e echo.Context) error {
 // @Security Authorization
 // @Success 200 {object} ResponseUpdatePayment
 func (c Context) UpdatePayment(e echo.Context) error {
-	id, err := strconv.Atoi(e.Param("id"))
-	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdatePayment{Error: "データの読み込みに失敗しました"})
+	id := e.Param("id")
+	if id == "" {
+		return e.JSON(http.StatusBadRequest, ResponseGetPayment{Error: "データの読み込みに失敗しました"})
 	}
 	payment := RequestUpdatePayment{}
 	if err := e.Bind(&payment); err != nil {
