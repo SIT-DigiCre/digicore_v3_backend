@@ -1,5 +1,6 @@
 digicore_v3_backend
 .env
-docs/
+docs/*
+!docs/index.html
 client_secret.json
 tmp/
