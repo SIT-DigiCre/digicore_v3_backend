@@ -1,4 +1,4 @@
-CREATE TABLE UserFile
+CREATE TABLE user_files
 (
     id         BINARY(16)   NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
     user_id    BINARY(16)   NOT NULL,
@@ -9,5 +9,5 @@ CREATE TABLE UserFile
     created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
-    CONSTRAINT fk_user_id_user_file FOREIGN KEY (user_id) REFERENCES User(id)
+    CONSTRAINT fk_user_files_user_id_users_id  FOREIGN KEY (user_id) REFERENCES users(id)
 );

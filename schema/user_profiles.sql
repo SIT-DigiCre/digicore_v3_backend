@@ -1,4 +1,4 @@
-CREATE TABLE UserProfile
+CREATE TABLE user_profiles
 (
     id                      BINARY(16)   NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
     user_id                 BINARY(16)   NOT NULL UNIQUE,
@@ -10,5 +10,5 @@ CREATE TABLE UserProfile
     short_self_introduction VARCHAR(255) NOT NULL DEFAULT 'デジクリ入りました',
     self_introduction       VARCHAR(255) NOT NULL DEFAULT '',
     PRIMARY KEY (id),
-    CONSTRAINT fk_user_id_user_profile FOREIGN KEY (user_id) REFERENCES User (id)
+    CONSTRAINT CONSTRAINT fk_user_profiles_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id)
 );

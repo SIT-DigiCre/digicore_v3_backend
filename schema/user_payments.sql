@@ -1,4 +1,4 @@
-CREATE TABLE UserPayment
+CREATE TABLE user_payments
 (
     id            BINARY(16)   NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
     user_id       BINARY(16)   NOT NULL,
@@ -9,5 +9,5 @@ CREATE TABLE UserPayment
     updated_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE KEY uq_user_id_year (user_id, `year`),
-    CONSTRAINT fk_user_id_user_payment FOREIGN KEY (user_id) REFERENCES User(id)
+    CONSTRAINT fk_user_payments_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id)
 );
