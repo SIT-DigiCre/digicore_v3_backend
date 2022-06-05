@@ -26,7 +26,7 @@ func (c Context) Detail(e echo.Context) error {
 	}
 	id := e.Param("id")
 	group := Group{}
-	err = c.DB.QueryRow("SELECT BIN_TO_UUID(Group.id), name, description, joinable, (CASE WHEN groups_users.user_id IS NOT NULL THEN true ELSE false END) AS joined  FROM `groups` LEFT JOIN groups_users ON Group.id = groups_users.group_id AND groups_users.user_id = UUID_TO_BIN(?) WHERE Group.id = UUID_TO_BIN(?)", userId, id).
+	err = c.DB.QueryRow("SELECT BIN_TO_UUID(groups.id), name, description, joinable, (CASE WHEN groups_users.user_id IS NOT NULL THEN true ELSE false END) AS joined  FROM `groups` LEFT JOIN groups_users ON groups.id = groups_users.group_id AND groups_users.user_id = UUID_TO_BIN(?) WHERE groups.id = UUID_TO_BIN(?)", userId, id).
 		Scan(&group.Id, &group.Name, &group.Description, &group.Joinable, &group.Joined)
 	if err == sql.ErrNoRows {
 		return e.JSON(http.StatusNotFound, ResponseDetail{Error: "グループが存在しません"})
