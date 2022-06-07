@@ -8,6 +8,5 @@ CREATE TABLE user_files
     extension  VARCHAR(255) NOT NULL,
     created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    CONSTRAINT fk_user_files_user_id_users_id  FOREIGN KEY (user_id) REFERENCES users(id)
+    PRIMARY KEY (id)
 );

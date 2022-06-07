@@ -9,6 +9,5 @@ CREATE TABLE user_profiles
     active_limit            DATE         NOT NULL,
     short_self_introduction VARCHAR(255) NOT NULL DEFAULT 'デジクリ入りました',
     self_introduction       VARCHAR(255) NOT NULL DEFAULT '',
-    PRIMARY KEY (id),
-    CONSTRAINT fk_user_profiles_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id)
+    PRIMARY KEY (id)
 );

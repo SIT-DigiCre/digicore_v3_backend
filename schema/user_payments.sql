@@ -8,6 +8,5 @@ CREATE TABLE user_payments
     created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
-    UNIQUE KEY uq_user_id_year (user_id, `year`),
-    CONSTRAINT fk_user_payments_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id)
+    UNIQUE KEY uq_user_id_year (user_id, `year`)
 );
