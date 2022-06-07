@@ -99,7 +99,7 @@ func (c Context) CheckGooleAccount(code string, redirectURL oauth2.AuthCodeOptio
 }
 
 func (c Context) RegisterUser(studentNumber string) (string, error) {
-	_, err := c.DB.Exec("INSERT INTO User (student_number) VALUES (?)", studentNumber)
+	_, err := c.DB.Exec("INSERT INTO users (student_number) VALUES (?)", studentNumber)
 	if err != nil {
 		return "登録に失敗しました", err
 	}
@@ -115,7 +115,7 @@ func (c Context) RegisterUser(studentNumber string) (string, error) {
 
 func (c Context) GetUserId(studentNumber string) (string, error) {
 	userId := ""
-	err := c.DB.QueryRow("SELECT BIN_TO_UUID(id) FROM User WHERE student_number = ?", studentNumber).Scan(&userId)
+	err := c.DB.QueryRow("SELECT BIN_TO_UUID(id) FROM users WHERE student_number = ?", studentNumber).Scan(&userId)
 	if err == sql.ErrNoRows {
 		return "", fmt.Errorf("ユーザーが存在しません")
 	} else if err != nil {

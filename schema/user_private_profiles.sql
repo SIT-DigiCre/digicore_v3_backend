@@ -1,4 +1,4 @@
-CREATE TABLE UserPrivateProfile
+CREATE TABLE user_private_profiles
 (
     id                      BINARY(16)   NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
     user_id                 BINARY(16)   NOT NULL UNIQUE,
@@ -12,6 +12,5 @@ CREATE TABLE UserPrivateProfile
     parent_cellphone_number VARCHAR(32)  NOT NULL,
     parent_homephone_number VARCHAR(32)  NOT NULL,
     parent_address          VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id),
-    CONSTRAINT fk_user_id_user_private_profile FOREIGN KEY (user_id) REFERENCES User(id)
+    PRIMARY KEY (id)
 );
