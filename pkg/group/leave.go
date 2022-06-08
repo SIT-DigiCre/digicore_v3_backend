@@ -23,7 +23,7 @@ func (c Context) Leave(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseLeave{Error: err.Error()})
 	}
 	id := e.Param("id")
-	_, err = c.DB.Exec("DELETE FROM GroupUser WHERE group_id = UUID_TO_BIN(?) AND user_id = UUID_TO_BIN(?)", id, userId)
+	_, err = c.DB.Exec("DELETE FROM groups_users WHERE group_id = UUID_TO_BIN(?) AND user_id = UUID_TO_BIN(?)", id, userId)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseJoin{Error: err.Error()})
 	}

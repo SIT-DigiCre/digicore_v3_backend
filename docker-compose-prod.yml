@@ -28,6 +28,17 @@ services:
     networks:
       - digicoreapi
 
+  admin:
+    build:
+      context: "./"
+      target: "admin"
+    volumes:
+      - "./:/app"
+    env_file:
+      - ".env"
+    profiles:
+      - admin
+
 volumes:
   db_data:
 

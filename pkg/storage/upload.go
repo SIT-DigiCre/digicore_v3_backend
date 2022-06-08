@@ -60,7 +60,7 @@ func createUserFile(db *sql.DB, userId string, data []byte, fileName string) (st
 	extension := getExtension(fileName)
 	md5Hash := fmt.Sprintf("%x", md5.Sum(data))
 	duplicateFileName := ""
-	err := db.QueryRow(`SELECT name FROM UserFile WHERE user_id = UUID_TO_BIN(?) AND md5_hash = ?`, userId, md5Hash).Scan(&duplicateFileName)
+	err := db.QueryRow(`SELECT name FROM user_files WHERE user_id = UUID_TO_BIN(?) AND md5_hash = ?`, userId, md5Hash).Scan(&duplicateFileName)
 	// エラーがない = 該当するレコードが存在した場合
 	if err == nil {
 		return "", http.StatusBadRequest, errors.New(fmt.Sprintf("アップロードされたファイルは既に%sという名前でアップロードされています", duplicateFileName))
@@ -74,7 +74,7 @@ func createUserFile(db *sql.DB, userId string, data []byte, fileName string) (st
 	}
 	kSize := len(data) / 1024
 	_, err = db.Exec(
-		`INSERT INTO UserFile (id, user_id, name, k_size, md5_hash, extension) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, ?, ?)`,
+		`INSERT INTO user_files (id, user_id, name, k_size, md5_hash, extension) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, ?, ?)`,
 		id,
 		userId,
 		fileName,

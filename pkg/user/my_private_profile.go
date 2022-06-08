@@ -96,12 +96,12 @@ func (c Context) GetMyPrivateProfile(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{Error: err.Error()})
 	}
 	privateProfile := PrivateProfile{}
-	err = c.DB.QueryRow("SELECT first_name, last_name, first_name_kana, last_name_kana, phone_number, address, parent_name, parent_cellphone_number, parent_homephone_number, parent_address FROM UserPrivateProfile WHERE user_id = UUID_TO_BIN(?)", userId).
+	err = c.DB.QueryRow("SELECT first_name, last_name, first_name_kana, last_name_kana, phone_number, address, parent_name, parent_cellphone_number, parent_homephone_number, parent_address FROM user_private_profiles WHERE user_id = UUID_TO_BIN(?)", userId).
 		Scan(&privateProfile.FirstName, &privateProfile.LastName, &privateProfile.FirstNameKana, &privateProfile.LastNameKana, &privateProfile.PhoneNumber, &privateProfile.Address, &privateProfile.ParentName, &privateProfile.ParentCellphoneNumber, &privateProfile.ParentHomephoneNumber, &privateProfile.ParentAddress)
 	if err == sql.ErrNoRows {
-		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{Error: "データが登録されていません"})
+		return e.JSON(http.StatusNotFound, ResponseGetMyPrivateProfile{Error: "データが登録されていません"})
 	} else if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{Error: "取得に失敗しました"})
+		return e.JSON(http.StatusInternalServerError, ResponseGetMyPrivateProfile{Error: "取得に失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseGetMyPrivateProfile{PrivateProfile: privateProfile})
 }
@@ -124,12 +124,12 @@ func (c Context) UpdateMyPrivateProfile(e echo.Context) error {
 	if err := privateProfile.validate(); err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPrivateProfile{Error: err.Error()})
 	}
-	_, err = c.DB.Exec(`INSERT INTO UserPrivateProfile (user_id, first_name, last_name, first_name_kana, last_name_kana, phone_number, address, parent_name, parent_cellphone_number, parent_homephone_number, parent_address) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+	_, err = c.DB.Exec(`INSERT INTO user_private_profiles (user_id, first_name, last_name, first_name_kana, last_name_kana, phone_number, address, parent_name, parent_cellphone_number, parent_homephone_number, parent_address) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 				ON DUPLICATE KEY UPDATE first_name = ?, last_name = ?, first_name_kana = ?, last_name_kana = ?, phone_number = ?, address = ?, parent_name = ?, parent_cellphone_number = ?, parent_homephone_number = ?, parent_address = ?`,
 		userId, privateProfile.FirstName, privateProfile.LastName, privateProfile.FirstNameKana, privateProfile.LastNameKana, privateProfile.PhoneNumber, privateProfile.Address, privateProfile.ParentName, privateProfile.ParentCellphoneNumber, privateProfile.ParentHomephoneNumber, privateProfile.ParentAddress,
 		privateProfile.FirstName, privateProfile.LastName, privateProfile.FirstNameKana, privateProfile.LastNameKana, privateProfile.PhoneNumber, privateProfile.Address, privateProfile.ParentName, privateProfile.ParentCellphoneNumber, privateProfile.ParentHomephoneNumber, privateProfile.ParentAddress)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPrivateProfile{Error: "更新に失敗しました"})
+		return e.JSON(http.StatusInternalServerError, ResponseUpdateMyPrivateProfile{Error: "更新に失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseUpdateMyPrivateProfile{})
 }

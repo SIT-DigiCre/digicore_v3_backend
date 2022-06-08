@@ -32,16 +32,16 @@ func (c Context) UpdateDiscordId(e echo.Context) error {
 	}
 	accessToken, err := discord.GetAccessToken(request.Code)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscordId{Error: err.Error()})
+		return e.JSON(http.StatusInternalServerError, ResponseUpdateDiscordId{Error: err.Error()})
 	}
 	dicordID, err := discord.GetID(accessToken)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscordId{Error: err.Error()})
+		return e.JSON(http.StatusInternalServerError, ResponseUpdateDiscordId{Error: err.Error()})
 	}
-	_, err = c.DB.Exec(`UPDATE UserProfile SET discord_userid = ? WHERE user_id = UUID_TO_BIN(?)`,
+	_, err = c.DB.Exec(`UPDATE user_profiles SET discord_userid = ? WHERE user_id = UUID_TO_BIN(?)`,
 		dicordID, userId)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseUpdateDiscordId{Error: "更新に失敗しました"})
+		return e.JSON(http.StatusInternalServerError, ResponseUpdateDiscordId{Error: "更新に失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseUpdateDiscordId{})
 }
