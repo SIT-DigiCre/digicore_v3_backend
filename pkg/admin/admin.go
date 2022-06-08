@@ -27,7 +27,7 @@ func Middleware(db *sql.DB) echo.MiddlewareFunc {
 				return echo.NewHTTPError(http.StatusBadRequest)
 			}
 			count := 0
-			err = db.QueryRow("SELECT count(*) FROM GroupUser LEFT JOIN User ON GroupUser.user_id = User.id WHERE User.id = ? AND group_id = ?", id, env.AdminGroupID).Scan(&count)
+			err = db.QueryRow("SELECT count(*) FROM groups_users LEFT JOIN users ON groups_users.user_id = users.id WHERE users.id = ? AND group_id = ?", id, env.AdminGroupID).Scan(&count)
 			if err != nil {
 				return echo.NewHTTPError(http.StatusUnauthorized)
 			}
