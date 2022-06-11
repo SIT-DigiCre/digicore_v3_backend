@@ -36,7 +36,7 @@ func (c Context) Reservation(e echo.Context) error {
 		return e.JSON(http.StatusInternalServerError, ResponseReservation{Error: "DBの読み込みに失敗しました"})
 	}
 	nowDate := time.Now()
-	if startDate.Before(nowDate) || finishDate.After(nowDate) {
+	if startDate.After(nowDate) || finishDate.Before(nowDate) {
 		return e.JSON(http.StatusForbidden, ResponseReservation{Error: "予約期間外です"})
 	}
 	myReservatedCount := 0
