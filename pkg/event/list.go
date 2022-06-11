@@ -28,7 +28,7 @@ func (c Context) GetEventsList(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseEventsList{Error: err.Error()})
 	}
-	rows, err := c.DB.Query("SELECT events.id, events.name, events.Description , (CASE WHEN user_id IS NOT NULL THEN true ELSE false END) AS reservated FROM events LEFT JOIN event_reservations ON events.id = event_reservations.event_id LEFT JOIN event_reservation_users ON event_reservations.id = event_reservation_users.reservation_id AND user_id = UUID_TO_BIN(?)", userId)
+	rows, err := c.DB.Query("SELECT BIN_TO_UUID(events.id), events.name, events.Description , (CASE WHEN user_id IS NOT NULL THEN true ELSE false END) AS reservated FROM events LEFT JOIN event_reservations ON events.id = event_reservations.event_id LEFT JOIN event_reservation_users ON event_reservations.id = event_reservation_users.reservation_id AND user_id = UUID_TO_BIN(?)", userId)
 	defer rows.Close()
 	events := []Event{}
 	for rows.Next() {

@@ -30,7 +30,7 @@ func (c Context) GetEventDetail(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseEventDetail{Error: err.Error()})
 	}
 	id := e.Param("id")
-	rows, err := c.DB.Query("SELECT event_reservations.id, event_reservations.name, event_reservations.Description , (CASE WHEN user_id IS NOT NULL THEN true ELSE false END) AS reservated FROM event_reservations LEFT JOIN event_reservation_users ON event_reservations.event_id = ? AND event_reservations.id = event_reservation_users.reservation_id AND user_id = UUID_TO_BIN(?)", id, userId)
+	rows, err := c.DB.Query("SELECT BIN_TO_UUID(event_reservations.id), event_reservations.name, event_reservations.Description , (CASE WHEN user_id IS NOT NULL THEN true ELSE false END) AS reservated FROM event_reservations LEFT JOIN event_reservation_users ON event_reservations.event_id = UUID_TO_BIN(?) AND event_reservations.id = event_reservation_users.reservation_id AND user_id = UUID_TO_BIN(?)", id, userId)
 	defer rows.Close()
 	details := []Detail{}
 	for rows.Next() {
