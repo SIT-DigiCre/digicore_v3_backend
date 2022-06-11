@@ -10,8 +10,7 @@ import (
 )
 
 type ResponseReservation struct {
-	Events []Event `json:"event"`
-	Error  string  `json:"error"`
+	Error string `json:"error"`
 }
 
 // Reservation event
@@ -49,7 +48,7 @@ func (c Context) Reservation(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, ResponseReservation{Error: "DBの読み込みに失敗しました"})
 	}
-	if reservatedCount < reservationLimit {
+	if reservationLimit < reservatedCount+1 {
 		return e.JSON(http.StatusForbidden, ResponseReservation{Error: "予約可能な枠がありません"})
 	}
 	_, err = c.DB.Exec("INSERT INTO event_reservation_users (reservation_id, user_id) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?))", id, userId)
