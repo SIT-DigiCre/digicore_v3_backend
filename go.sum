@@ -175,6 +175,8 @@ github.com/k0kubun/sqldef v0.11.52 h1:tudBU/SPSv3MlcixxN1tvhEEMCYr1W0V8ZbXBYxBHW
 github.com/k0kubun/sqldef v0.11.52/go.mod h1:HTAfnBox3YksYavB4+45xgy8EB+kh5ZDqt13WmMzd3g=
 github.com/k0kubun/sqldef v0.11.53 h1:3BbT2Lf2gZ04CScuY8J7QRwybcov4Khu2CGbC1XGiPE=
 github.com/k0kubun/sqldef v0.11.53/go.mod h1:HTAfnBox3YksYavB4+45xgy8EB+kh5ZDqt13WmMzd3g=
+github.com/k0kubun/sqldef v0.11.59 h1:E+OzDEA2l+7Q00vxoid7pAVvmp2/bMEgnvDnMXArnLI=
+github.com/k0kubun/sqldef v0.11.59/go.mod h1:HTAfnBox3YksYavB4+45xgy8EB+kh5ZDqt13WmMzd3g=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pretty v0.2.1 h1:Fmg33tUaq4/8ym9TJN1x7sLJnHVwhP33CNkpYV/7rwI=
