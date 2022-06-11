@@ -15,5 +15,5 @@ type ResponseAuth struct {
 // @Security Authorization
 // @Success 200 {object} ResponseAuth
 func (c Context) Auth(e echo.Context) error {
-	return e.JSON(http.StatusOK, ResponseAuth{Error: "test"})
+	return e.JSON(http.StatusOK, ResponseAuth{})
 }
