@@ -1,4 +1,4 @@
-FROM golang:1.17.3 as development
+FROM golang:1.18.3 as development
 
 WORKDIR "/app"
 COPY go.mod go.sum ./
@@ -10,7 +10,7 @@ COPY . .
 CMD ["air"]
 
 
-FROM golang:1.17.3 as build
+FROM golang:1.18.3 as build
 
 WORKDIR /work
 COPY . .
@@ -25,7 +25,7 @@ COPY --from=build /work/digicore_v3_backend /
 CMD ["/digicore_v3_backend"]
 
 
-FROM golang:1.17.3 as admin
+FROM golang:1.18.3 as admin
 
 WORKDIR "/app"
 RUN apt-get update && apt-get install -y default-mysql-client-core
