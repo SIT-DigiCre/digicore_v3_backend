@@ -15,7 +15,7 @@ type ResponseReservation struct {
 }
 
 // Reservation event
-// @Router /event/{event_id}/{id} [get]
+// @Router /event/{event_id}/{id} [post]
 // @Param event_id path string true "event id"
 // @Param id path string true "reservation id"
 // @Security Authorization
