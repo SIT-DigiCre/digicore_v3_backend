@@ -69,6 +69,7 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	event_group := e.Group("/event")
 	event_group.Use(middleware.JWTWithConfig(config))
 	event, _ := event.CreateContext(db)
+	event_group.GET("", event.GetEventsList)
 
 	s := e.Group("/storage")
 	s.Use(middleware.JWTWithConfig(config))
