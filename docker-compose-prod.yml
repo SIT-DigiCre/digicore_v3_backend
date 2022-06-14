@@ -39,6 +39,15 @@ services:
     profiles:
       - admin
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.2.0
+    environment:
+      PMA_HOST: db
+    networks:
+      - https_network
+      - digicoreapi
+    restart: always
+
 volumes:
   db_data:
 
