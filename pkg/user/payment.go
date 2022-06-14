@@ -62,7 +62,7 @@ func (c Context) GetMyPayment(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: err.Error()})
 	}
 	payment := Payment{}
-	err = c.DB.QueryRow("SELECT year, transfer_name, checked, created_at, updated_at FROM UserPayment WHERE year = ? AND user_id = UUID_TO_BIN(?)", util.NowFiscalYear(), userId).Scan(&payment.Year, &payment.TransferName, &payment.Checked, &payment.CreatedAt, &payment.UpdatedAt)
+	err = c.DB.QueryRow("SELECT year, transfer_name, checked, created_at, updated_at FROM user_payments WHERE year = ? AND user_id = UUID_TO_BIN(?)", util.NowFiscalYear(), userId).Scan(&payment.Year, &payment.TransferName, &payment.Checked, &payment.CreatedAt, &payment.UpdatedAt)
 	if err == sql.ErrNoRows {
 		return e.JSON(http.StatusNotFound, ResponseGetMyPayment{Error: "振り込みデータが存在しません"})
 	} else if err != nil {
@@ -81,7 +81,7 @@ func (c Context) GetMyPaymentHistory(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyProfile{Error: err.Error()})
 	}
 	payments := []Payment{}
-	rows, err := c.DB.Query("SELECT year, transfer_name, checked, created_at, updated_at FROM UserPayment WHERE user_id = UUID_TO_BIN(?)", userId)
+	rows, err := c.DB.Query("SELECT year, transfer_name, checked, created_at, updated_at FROM user_payments WHERE user_id = UUID_TO_BIN(?)", userId)
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, ResponseUpdateMyPayment{Error: "DBの読み込みに失敗しました"})
 	}
@@ -114,7 +114,7 @@ func (c Context) UpdateMyPayment(e echo.Context) error {
 	if err := payment.validate(); err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPayment{Error: err.Error()})
 	}
-	_, err = c.DB.Exec(`INSERT INTO UserPayment (user_id, year, transfer_name) VALUES (UUID_TO_BIN(?), ?, ?) ON DUPLICATE KEY UPDATE transfer_name = ?`,
+	_, err = c.DB.Exec(`INSERT INTO user_payments (user_id, year, transfer_name) VALUES (UUID_TO_BIN(?), ?, ?) ON DUPLICATE KEY UPDATE transfer_name = ?`,
 		userId, util.NowFiscalYear(), payment.TransferName, payment.TransferName)
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, ResponseUpdateMyPayment{Error: "データの登録に失敗しました"})

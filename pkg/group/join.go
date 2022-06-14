@@ -25,14 +25,14 @@ func (c Context) Join(e echo.Context) error {
 	}
 	id := e.Param("id")
 	joinable := true
-	err = c.DB.QueryRow("SELECT joinable FROM `Group` WHERE id = UUID_TO_BIN(?)", id).Scan(&joinable)
+	err = c.DB.QueryRow("SELECT joinable FROM `groups` WHERE id = UUID_TO_BIN(?)", id).Scan(&joinable)
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, ResponseJoin{Error: "DBの読み込みに失敗しました"})
 	}
 	if !joinable {
 		return e.JSON(http.StatusForbidden, ResponseJoin{Error: "参加権限がありません"})
 	}
-	_, err = c.DB.Exec("INSERT INTO GroupUser (group_id, user_id) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?))", id, userId)
+	_, err = c.DB.Exec("INSERT INTO groups_users (group_id, user_id) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?))", id, userId)
 	if mysqlErr, ok := err.(*mysql.MySQLError); ok && mysqlErr.Number == 1062 {
 		return e.JSON(http.StatusBadRequest, ResponseJoin{Error: "参加済みです"})
 	}
