@@ -6,6 +6,7 @@ import (
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/discord"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/event"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/google"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/group"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/storage"
@@ -64,6 +65,14 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	user_group.PUT("/my/payment", user.UpdateMyPayment)
 	user_group.GET("/my/payment", user.GetMyPayment)
 	user_group.GET("/my/payment/history", user.GetMyPaymentHistory)
+
+	event_group := e.Group("/event")
+	event_group.Use(middleware.JWTWithConfig(config))
+	event, _ := event.CreateContext(db)
+	event_group.GET("", event.GetEventsList)
+	event_group.GET("/:id", event.GetEventDetail)
+	event_group.POST("/:event_id/:id", event.Reservation)
+	event_group.DELETE("/:event_id/:id", event.CancelReservation)
 
 	s := e.Group("/storage")
 	s.Use(middleware.JWTWithConfig(config))
