@@ -8,7 +8,10 @@ import (
 )
 
 type ResponseEventDetail struct {
-	Detail []Detail `json:"event"`
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Detail []Detail `json:"detail"`
 	Error  string   `json:"error"`
 }
 
@@ -40,5 +43,10 @@ func (c Context) GetEventDetail(e echo.Context) error {
 		}
 		details = append(details, detail)
 	}
-	return e.JSON(http.StatusOK, ResponseEventDetail{Detail: details})
+	response := ResponseEventDetail{Detail: details}
+	err = c.DB.QueryRow("SELECT BIN_TO_UUID(id), name, description FROM events WHERE id = UUID_TO_BIN(?)", id).Scan(&response.Id,&response.Name,&response.Description)
+	if err != nil {
+		return e.JSON(http.StatusInternalServerError, ResponseEventsList{Error: "DBの読み込みに失敗しました"})
+	}
+	return e.JSON(http.StatusOK,response )
 }
