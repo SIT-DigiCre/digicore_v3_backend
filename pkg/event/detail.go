@@ -21,6 +21,7 @@ type Detail struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Full        bool   `json:"full"`
+	Reservated  bool   `json:"reservated"`
 }
 
 // Get event detail
@@ -34,12 +35,12 @@ func (c Context) GetEventDetail(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseEventsList{Error: err.Error()})
 	}
 	id := e.Param("id")
-	rows, err := c.DB.Query("SELECT BIN_TO_UUID(event_reservations.id), event_reservations.name, event_reservations.Description, IF(event_reservations.reservation_limit <= count(event_reservation_users.id) ,true ,false) AS full FROM event_reservations LEFT JOIN event_reservation_users ON event_reservations.event_id = UUID_TO_BIN(?) AND event_reservations.id = event_reservation_users.reservation_id GROUP BY event_reservations.id", id)
+	rows, err := c.DB.Query("SELECT BIN_TO_UUID(event_reservations.id), event_reservations.name, event_reservations.Description, IF(event_reservations.reservation_limit <= count(event_reservation_users.id) ,true ,false) AS full, IF(SUM(event_reservation_users.user_id = UUID_TO_BIN(?)) ,true ,false) AS reservated  FROM event_reservations LEFT JOIN event_reservation_users ON event_reservations.event_id = UUID_TO_BIN(?) AND event_reservations.id = event_reservation_users.reservation_id GROUP BY event_reservations.id", userId, id)
 	defer rows.Close()
 	details := []Detail{}
 	for rows.Next() {
 		detail := Detail{}
-		if err := rows.Scan(&detail.Id, &detail.Name, &detail.Description, &detail.Full); err != nil {
+		if err := rows.Scan(&detail.Id, &detail.Name, &detail.Description, &detail.Full, &detail.Reservated); err != nil {
 			return e.JSON(http.StatusInternalServerError, ResponseEventsList{Error: "DBの読み込みに失敗しました"})
 		}
 		details = append(details, detail)
