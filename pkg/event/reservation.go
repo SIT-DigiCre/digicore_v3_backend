@@ -1,13 +1,35 @@
 package event
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
 	"github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
 )
+
+type RequestReservation struct {
+	Comment string `json:"comment"`
+	Url     string `json:"url"`
+}
+
+func (p RequestReservation) validate() error {
+	errorMsg := []string{}
+	if 255 < utf8.RuneCountInString(p.Comment) {
+		errorMsg = append(errorMsg, "コメントは255文字未満である必要があります")
+	}
+	if 255 < utf8.RuneCountInString(p.Url) {
+		errorMsg = append(errorMsg, "URLは255文字未満である必要があります")
+	}
+	if len(errorMsg) != 0 {
+		return fmt.Errorf(strings.Join(errorMsg, ","))
+	}
+	return nil
+}
 
 type ResponseReservation struct {
 	Error string `json:"error"`
@@ -20,13 +42,19 @@ type ResponseReservation struct {
 // @Security Authorization
 // @Success 200 {object} ResponseReservation
 func (c Context) Reservation(e echo.Context) error {
-
 	userId, err := user.GetUserId(&e)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseReservation{Error: err.Error()})
 	}
 	eventId := e.Param("event_id")
 	id := e.Param("id")
+	reservation := RequestReservation{}
+	if err := e.Bind(&reservation); err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseReservation{Error: "データの読み込みに失敗しました"})
+	}
+	if err := reservation.validate(); err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseReservation{Error: err.Error()})
+	}
 	reservationLimit := 0
 	startDate := time.Time{}
 	finishDate := time.Time{}
@@ -51,7 +79,7 @@ func (c Context) Reservation(e echo.Context) error {
 	if reservationLimit < reservatedCount+1 {
 		return e.JSON(http.StatusForbidden, ResponseReservation{Error: "予約可能な枠がありません"})
 	}
-	_, err = c.DB.Exec("INSERT INTO event_reservation_users (reservation_id, user_id) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?))", id, userId)
+	_, err = c.DB.Exec("INSERT INTO event_reservation_users (reservation_id, user_id, comment, url) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?))", id, userId, reservation.Comment, reservation.Url)
 	if mysqlErr, ok := err.(*mysql.MySQLError); ok && mysqlErr.Number == 1062 {
 		return e.JSON(http.StatusBadRequest, ResponseReservation{Error: "予約済みです"})
 	}
