@@ -35,6 +35,10 @@ type ResponseReservation struct {
 	Error string `json:"error"`
 }
 
+type ResponseCancelReservation struct {
+	Error string `json:"error"`
+}
+
 // Reservation event
 // @Router /event/{event_id}/{id} [post]
 // @Param event_id path string true "event id"
@@ -87,4 +91,24 @@ func (c Context) Reservation(e echo.Context) error {
 		return e.JSON(http.StatusInternalServerError, ResponseReservation{Error: "DBへの書き込みに失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseReservation{})
+}
+
+// Cancel reservation
+// @Accept json
+// @Security Authorization
+// @Router /event/{event_id}/{id} [DELETE]
+// @Param event_id path string true "event id"
+// @Param id path string true "reservation id"
+// @Success 200 {object} ResponseCancelReservation
+func (c Context) CancelReservation(e echo.Context) error {
+	userId, err := user.GetUserId(&e)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseCancelReservation{Error: err.Error()})
+	}
+	id := e.Param("id")
+	_, err = c.DB.Exec("DELETE FROM event_reservation_users WHERE reservation_id = UUID_TO_BIN(?) AND user_id = UUID_TO_BIN(?)", id, userId)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseCancelReservation{Error: err.Error()})
+	}
+	return e.JSON(http.StatusOK, ResponseCancelReservation{})
 }
