@@ -35,6 +35,18 @@ type ResponseReservation struct {
 	Error string `json:"error"`
 }
 
+type ResponseReservationInfo struct {
+	ReservationUser []ReservationUser `json::"reservation_user"`
+	Error           string            `json:"error"`
+}
+
+type ReservationUser struct {
+	Id      string `json:"id"`
+	Name    string `json:"name"`
+	Comment string `json:"comment"`
+	Url     string `json:"url"`
+}
+
 type ResponseCancelReservation struct {
 	Error string `json:"error"`
 }

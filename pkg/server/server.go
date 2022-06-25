@@ -71,6 +71,7 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	event, _ := event.CreateContext(db)
 	event_group.GET("", event.GetEventsList)
 	event_group.GET("/:id", event.GetEventDetail)
+	event_group.GET("/:event_id/:id", event.ReservationInfo)
 	event_group.POST("/:event_id/:id", event.Reservation)
 	event_group.DELETE("/:event_id/:id", event.CancelReservation)
 
