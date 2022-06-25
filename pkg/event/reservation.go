@@ -36,7 +36,7 @@ type ResponseReservation struct {
 }
 
 type ResponseReservationInfo struct {
-	ReservationUser []ReservationUser `json::"reservation_user"`
+	ReservationUser []ReservationUser `json:"reservation_user"`
 	Error           string            `json:"error"`
 }
 
