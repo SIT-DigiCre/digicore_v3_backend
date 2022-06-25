@@ -36,8 +36,8 @@ type ResponseReservation struct {
 }
 
 type ResponseReservationInfo struct {
-	ReservationUser []ReservationUser `json:"reservation_user"`
-	Error           string            `json:"error"`
+	ReservationUsers []ReservationUser `json:"reservation_users"`
+	Error            string            `json:"error"`
 }
 
 type ReservationUser struct {
@@ -147,5 +147,5 @@ func (c Context) ReservationInfo(e echo.Context) error {
 		}
 		reservation_users = append(reservation_users, reservation_user)
 	}
-	return e.JSON(http.StatusOK, ResponseReservationInfo{ReservationUser: reservation_users})
+	return e.JSON(http.StatusOK, ResponseReservationInfo{ReservationUsers: reservation_users})
 }

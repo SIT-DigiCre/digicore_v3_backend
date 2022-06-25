@@ -8,7 +8,7 @@ import (
 )
 
 type ResponseEventsList struct {
-	Events []Event `json:"event"`
+	Events []Event `json:"events"`
 	Error  string  `json:"error"`
 }
 

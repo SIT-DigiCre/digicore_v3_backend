@@ -9,12 +9,12 @@ import (
 )
 
 type ResponseEventDetail struct {
-	Id               string             `json:"id"`
-	Name             string             `json:"name"`
-	Description      string             `json:"description"`
-	Reservated       bool               `json:"reservated"`
-	ReservationFrame []ReservationFrame `json:"reservation_frame"`
-	Error            string             `json:"error"`
+	Id                string             `json:"id"`
+	Name              string             `json:"name"`
+	Description       string             `json:"description"`
+	Reservated        bool               `json:"reservated"`
+	ReservationFrames []ReservationFrame `json:"reservation_frames"`
+	Error             string             `json:"error"`
 }
 
 type ReservationFrame struct {
@@ -61,7 +61,7 @@ func (c Context) GetEventDetail(e echo.Context) error {
 		}
 		reservation_frames = append(reservation_frames, reservation_frame)
 	}
-	response := ResponseEventDetail{ReservationFrame: reservation_frames}
+	response := ResponseEventDetail{ReservationFrames: reservation_frames}
 	err = c.DB.QueryRow("SELECT BIN_TO_UUID(events.id), events.name, events.description, (CASE WHEN user_id IS NOT NULL THEN true ELSE false END) AS reservated FROM events LEFT JOIN event_reservations ON events.id = event_reservations.event_id LEFT JOIN event_reservation_users ON event_reservations.id = event_reservation_users.reservation_id AND event_reservation_users.user_id = UUID_TO_BIN(?) WHERE events.id = UUID_TO_BIN(?)", userId, id).Scan(&response.Id, &response.Name, &response.Description, &response.Reservated)
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, ResponseEventsList{Error: "DBの読み込みに失敗しました"})
