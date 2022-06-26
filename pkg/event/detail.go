@@ -1,6 +1,7 @@
 package event
 
 import (
+	"database/sql"
 	"net/http"
 	"time"
 
@@ -63,7 +64,9 @@ func (c Context) GetEventDetail(e echo.Context) error {
 	}
 	response := ResponseEventDetail{ReservationFrames: reservation_frames}
 	err = c.DB.QueryRow("SELECT BIN_TO_UUID(events.id), events.name, events.description, (CASE WHEN user_id IS NOT NULL THEN true ELSE false END) AS reservated FROM events LEFT JOIN event_reservations ON events.id = event_reservations.event_id LEFT JOIN event_reservation_users ON event_reservations.id = event_reservation_users.reservation_id AND event_reservation_users.user_id = UUID_TO_BIN(?) WHERE events.id = UUID_TO_BIN(?)", userId, id).Scan(&response.Id, &response.Name, &response.Description, &response.Reservated)
-	if err != nil {
+	if err == sql.ErrNoRows {
+		return e.JSON(http.StatusNotFound, ResponseEventsList{Error: "イベントが見つかりませんでした"})
+	} else if err != nil {
 		return e.JSON(http.StatusInternalServerError, ResponseEventsList{Error: "DBの読み込みに失敗しました"})
 	}
 	return e.JSON(http.StatusOK, response)
