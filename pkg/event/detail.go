@@ -42,7 +42,7 @@ func (c Context) GetEventDetail(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseEventsList{Error: err.Error()})
 	}
 	id := e.Param("id")
-	rows, err := c.DB.Query("SELECT BIN_TO_UUID(event_reservations.id), event_reservations.name, event_reservations.Description,start_date, finish_date, reservation_start_date, reservation_finish_date, event_reservations.capacity, event_reservations.capacity - count(event_reservation_users.id), IF(SUM(event_reservation_users.user_id = UUID_TO_BIN(?)) ,true ,false) AS reservated  FROM event_reservations LEFT JOIN event_reservation_users ON event_reservations.event_id = UUID_TO_BIN(?) AND event_reservations.id = event_reservation_users.reservation_id GROUP BY event_reservations.id", userId, id)
+	rows, err := c.DB.Query("SELECT BIN_TO_UUID(event_reservations.id), event_reservations.name, event_reservations.Description,start_date, finish_date, reservation_start_date, reservation_finish_date, event_reservations.capacity, event_reservations.capacity - count(event_reservation_users.id), IF(SUM(event_reservation_users.user_id = UUID_TO_BIN(?)) ,true ,false) AS reservated  FROM event_reservations LEFT JOIN event_reservation_users ON event_reservations.id = event_reservation_users.reservation_id WHERE event_reservations.event_id = UUID_TO_BIN(?) GROUP BY event_reservations.id", userId, id)
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, ResponseEventsList{Error: "DBの読み込みに失敗しました"})
 	}
