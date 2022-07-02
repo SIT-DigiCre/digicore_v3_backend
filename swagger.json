@@ -1,0 +1,1107 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "This is digicore backend api",
+        "title": "Digicore",
+        "contact": {},
+        "version": "3.0"
+    },
+    "host": "localhost:8000",
+    "paths": {
+        "/discord/oauth/callback": {
+            "get": {
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "oauth code",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "send oauth code to frontend",
+                        "headers": {
+                            "Location": {
+                                "type": "string",
+                                "description": "/user/discord?code={}"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/discord/oauth/url": {
+            "get": {
+                "responses": {
+                    "302": {
+                        "description": "redirect to oauth page",
+                        "headers": {
+                            "Location": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/env/join": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/env.ResponseJoinURL"
+                        }
+                    }
+                }
+            }
+        },
+        "/event": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/event.ResponseEventsList"
+                        }
+                    }
+                }
+            }
+        },
+        "/event/{event_id}/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "event id",
+                        "name": "event_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "reservation id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/event.ResponseReservationInfo"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "event id",
+                        "name": "event_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "reservation id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "reservation info",
+                        "name": "RequestReservation",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/event.RequestReservation"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/event.ResponseReservation"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "event id",
+                        "name": "event_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "reservation id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/event.ResponseCancelReservation"
+                        }
+                    }
+                }
+            }
+        },
+        "/event/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "group id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/event.ResponseEventDetail"
+                        }
+                    }
+                }
+            }
+        },
+        "/google/oauth/callback/login": {
+            "get": {
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "oauth code",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "send authorization code to frontend",
+                        "headers": {
+                            "Location": {
+                                "type": "string",
+                                "description": "/logined?session={}"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/google/oauth/callback/register": {
+            "get": {
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "oauth code",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "send authorization code to frontend",
+                        "headers": {
+                            "Location": {
+                                "type": "string",
+                                "description": "/registered?session={}"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/google/oauth/url": {
+            "get": {
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "type",
+                        "name": "register",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "redirect to oauth page",
+                        "headers": {
+                            "Location": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/group": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/group.ResponseList"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "group id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/group.ResponseDetail"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "group id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/group.ResponseJoin"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "group id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/group.ResponseLeave"
+                        }
+                    }
+                }
+            }
+        },
+        "/storage": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "base64 encoded file and file name",
+                        "name": "fileUploadRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/storage.fileUploadRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/storage.fileUploadResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/my": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseGetMyProfile"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "my profile",
+                        "name": "RequestUpdateMyProfile",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.RequestUpdateMyProfile"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseUpdateMyProfile"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/my/discord": {
+            "put": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "discord oauth code",
+                        "name": "RequestUpdateDiscordId",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.RequestUpdateDiscordId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseUpdateDiscordId"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/my/payment": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseGetMyPayment"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "my payment",
+                        "name": "RequestUpdateMyPayment",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.RequestUpdateMyPayment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseUpdateMyPayment"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/my/payment/history": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseGetMyPaymentHistory"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/my/private": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseGetMyPrivateProfile"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "my private profile",
+                        "name": "RequestUpdateMyPrivateProfile",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.RequestUpdateMyPrivateProfile"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseUpdateMyPrivateProfile"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "env.ResponseJoinURL": {
+            "type": "object",
+            "properties": {
+                "discord_url": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "slack_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "event.Event": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "reservable": {
+                    "type": "boolean"
+                },
+                "reservated": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "event.RequestReservation": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "event.ReservationFrame": {
+            "type": "object",
+            "properties": {
+                "capacity": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "finish_date": {
+                    "type": "string"
+                },
+                "free_capacity": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "reservable": {
+                    "type": "boolean"
+                },
+                "reservated": {
+                    "type": "boolean"
+                },
+                "reservation_finish_date": {
+                    "type": "string"
+                },
+                "reservation_start_date": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                }
+            }
+        },
+        "event.ReservationUser": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "event.ResponseCancelReservation": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "event.ResponseEventDetail": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "reservated": {
+                    "type": "boolean"
+                },
+                "reservation_frames": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/event.ReservationFrame"
+                    }
+                }
+            }
+        },
+        "event.ResponseEventsList": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/event.Event"
+                    }
+                }
+            }
+        },
+        "event.ResponseReservation": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "event.ResponseReservationInfo": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "reservation_users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/event.ReservationUser"
+                    }
+                }
+            }
+        },
+        "group.Group": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "joinable": {
+                    "type": "boolean"
+                },
+                "joined": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "group.ResponseDetail": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "group": {
+                    "$ref": "#/definitions/group.Group"
+                }
+            }
+        },
+        "group.ResponseJoin": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "group.ResponseLeave": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "group.ResponseList": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/group.Group"
+                    }
+                }
+            }
+        },
+        "storage.fileUploadRequest": {
+            "type": "object",
+            "properties": {
+                "file": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "storage.fileUploadResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.Payment": {
+            "type": "object",
+            "properties": {
+                "checked": {
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "transfer_name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "user.PrivateProfile": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "first_name_kana": {
+                    "type": "string"
+                },
+                "is_male": {
+                    "type": "boolean"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "last_name_kana": {
+                    "type": "string"
+                },
+                "parent_address": {
+                    "type": "string"
+                },
+                "parent_cellphone_number": {
+                    "type": "string"
+                },
+                "parent_homephone_number": {
+                    "type": "string"
+                },
+                "parent_name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.Profile": {
+            "type": "object",
+            "properties": {
+                "active_limit": {
+                    "type": "string"
+                },
+                "discord_userid": {
+                    "type": "string"
+                },
+                "icon_url": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "school_grade": {
+                    "type": "integer"
+                },
+                "short_self_introduction": {
+                    "type": "string"
+                },
+                "student_number": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.RequestUpdateDiscordId": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.RequestUpdateMyPayment": {
+            "type": "object",
+            "properties": {
+                "transfer_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.RequestUpdateMyPrivateProfile": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "first_name_kana": {
+                    "type": "string"
+                },
+                "is_male": {
+                    "type": "boolean"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "last_name_kana": {
+                    "type": "string"
+                },
+                "parent_address": {
+                    "type": "string"
+                },
+                "parent_cellphone_number": {
+                    "type": "string"
+                },
+                "parent_homephone_number": {
+                    "type": "string"
+                },
+                "parent_name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.RequestUpdateMyProfile": {
+            "type": "object",
+            "properties": {
+                "icon_url": {
+                    "type": "string"
+                },
+                "school_grade": {
+                    "type": "integer"
+                },
+                "short_self_introduction": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.ResponseGetMyPayment": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "payment": {
+                    "$ref": "#/definitions/user.Payment"
+                }
+            }
+        },
+        "user.ResponseGetMyPaymentHistory": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "payments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user.Payment"
+                    }
+                }
+            }
+        },
+        "user.ResponseGetMyPrivateProfile": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "private_profile": {
+                    "$ref": "#/definitions/user.PrivateProfile"
+                }
+            }
+        },
+        "user.ResponseGetMyProfile": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "profile": {
+                    "$ref": "#/definitions/user.Profile"
+                }
+            }
+        },
+        "user.ResponseUpdateDiscordId": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.ResponseUpdateMyPayment": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.ResponseUpdateMyPrivateProfile": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.ResponseUpdateMyProfile": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "Authorization": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

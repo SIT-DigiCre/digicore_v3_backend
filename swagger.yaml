@@ -1,0 +1,680 @@
+definitions:
+  env.ResponseJoinURL:
+    properties:
+      discord_url:
+        type: string
+      error:
+        type: string
+      slack_url:
+        type: string
+    type: object
+  event.Event:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      reservable:
+        type: boolean
+      reservated:
+        type: boolean
+    type: object
+  event.RequestReservation:
+    properties:
+      comment:
+        type: string
+      url:
+        type: string
+    type: object
+  event.ReservationFrame:
+    properties:
+      capacity:
+        type: integer
+      description:
+        type: string
+      finish_date:
+        type: string
+      free_capacity:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+      reservable:
+        type: boolean
+      reservated:
+        type: boolean
+      reservation_finish_date:
+        type: string
+      reservation_start_date:
+        type: string
+      start_date:
+        type: string
+    type: object
+  event.ReservationUser:
+    properties:
+      comment:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      url:
+        type: string
+    type: object
+  event.ResponseCancelReservation:
+    properties:
+      error:
+        type: string
+    type: object
+  event.ResponseEventDetail:
+    properties:
+      description:
+        type: string
+      error:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      reservated:
+        type: boolean
+      reservation_frames:
+        items:
+          $ref: '#/definitions/event.ReservationFrame'
+        type: array
+    type: object
+  event.ResponseEventsList:
+    properties:
+      error:
+        type: string
+      events:
+        items:
+          $ref: '#/definitions/event.Event'
+        type: array
+    type: object
+  event.ResponseReservation:
+    properties:
+      error:
+        type: string
+    type: object
+  event.ResponseReservationInfo:
+    properties:
+      error:
+        type: string
+      reservation_users:
+        items:
+          $ref: '#/definitions/event.ReservationUser'
+        type: array
+    type: object
+  group.Group:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      joinable:
+        type: boolean
+      joined:
+        type: boolean
+      name:
+        type: string
+    type: object
+  group.ResponseDetail:
+    properties:
+      error:
+        type: string
+      group:
+        $ref: '#/definitions/group.Group'
+    type: object
+  group.ResponseJoin:
+    properties:
+      error:
+        type: string
+    type: object
+  group.ResponseLeave:
+    properties:
+      error:
+        type: string
+    type: object
+  group.ResponseList:
+    properties:
+      error:
+        type: string
+      groups:
+        items:
+          $ref: '#/definitions/group.Group'
+        type: array
+    type: object
+  storage.fileUploadRequest:
+    properties:
+      file:
+        type: string
+      name:
+        type: string
+    type: object
+  storage.fileUploadResponse:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      url:
+        type: string
+    type: object
+  user.Payment:
+    properties:
+      checked:
+        type: boolean
+      created_at:
+        type: string
+      transfer_name:
+        type: string
+      updated_at:
+        type: string
+      year:
+        type: integer
+    type: object
+  user.PrivateProfile:
+    properties:
+      address:
+        type: string
+      first_name:
+        type: string
+      first_name_kana:
+        type: string
+      is_male:
+        type: boolean
+      last_name:
+        type: string
+      last_name_kana:
+        type: string
+      parent_address:
+        type: string
+      parent_cellphone_number:
+        type: string
+      parent_homephone_number:
+        type: string
+      parent_name:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  user.Profile:
+    properties:
+      active_limit:
+        type: string
+      discord_userid:
+        type: string
+      icon_url:
+        type: string
+      id:
+        type: string
+      school_grade:
+        type: integer
+      short_self_introduction:
+        type: string
+      student_number:
+        type: string
+      username:
+        type: string
+    type: object
+  user.RequestUpdateDiscordId:
+    properties:
+      code:
+        type: string
+    type: object
+  user.RequestUpdateMyPayment:
+    properties:
+      transfer_name:
+        type: string
+    type: object
+  user.RequestUpdateMyPrivateProfile:
+    properties:
+      address:
+        type: string
+      first_name:
+        type: string
+      first_name_kana:
+        type: string
+      is_male:
+        type: boolean
+      last_name:
+        type: string
+      last_name_kana:
+        type: string
+      parent_address:
+        type: string
+      parent_cellphone_number:
+        type: string
+      parent_homephone_number:
+        type: string
+      parent_name:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  user.RequestUpdateMyProfile:
+    properties:
+      icon_url:
+        type: string
+      school_grade:
+        type: integer
+      short_self_introduction:
+        type: string
+      username:
+        type: string
+    type: object
+  user.ResponseGetMyPayment:
+    properties:
+      error:
+        type: string
+      payment:
+        $ref: '#/definitions/user.Payment'
+    type: object
+  user.ResponseGetMyPaymentHistory:
+    properties:
+      error:
+        type: string
+      payments:
+        items:
+          $ref: '#/definitions/user.Payment'
+        type: array
+    type: object
+  user.ResponseGetMyPrivateProfile:
+    properties:
+      error:
+        type: string
+      private_profile:
+        $ref: '#/definitions/user.PrivateProfile'
+    type: object
+  user.ResponseGetMyProfile:
+    properties:
+      error:
+        type: string
+      profile:
+        $ref: '#/definitions/user.Profile'
+    type: object
+  user.ResponseUpdateDiscordId:
+    properties:
+      error:
+        type: string
+    type: object
+  user.ResponseUpdateMyPayment:
+    properties:
+      error:
+        type: string
+    type: object
+  user.ResponseUpdateMyPrivateProfile:
+    properties:
+      error:
+        type: string
+    type: object
+  user.ResponseUpdateMyProfile:
+    properties:
+      error:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: This is digicore backend api
+  title: Digicore
+  version: "3.0"
+paths:
+  /discord/oauth/callback:
+    get:
+      parameters:
+      - description: oauth code
+        in: query
+        name: code
+        required: true
+        type: string
+      responses:
+        "302":
+          description: send oauth code to frontend
+          headers:
+            Location:
+              description: /user/discord?code={}
+              type: string
+  /discord/oauth/url:
+    get:
+      responses:
+        "302":
+          description: redirect to oauth page
+          headers:
+            Location:
+              type: string
+  /env/join:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/env.ResponseJoinURL'
+      security:
+      - Authorization: []
+  /event:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/event.ResponseEventsList'
+      security:
+      - Authorization: []
+  /event/{event_id}/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: event id
+        in: path
+        name: event_id
+        required: true
+        type: string
+      - description: reservation id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/event.ResponseCancelReservation'
+      security:
+      - Authorization: []
+    get:
+      parameters:
+      - description: event id
+        in: path
+        name: event_id
+        required: true
+        type: string
+      - description: reservation id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/event.ResponseReservationInfo'
+      security:
+      - Authorization: []
+    post:
+      parameters:
+      - description: event id
+        in: path
+        name: event_id
+        required: true
+        type: string
+      - description: reservation id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: reservation info
+        in: body
+        name: RequestReservation
+        required: true
+        schema:
+          $ref: '#/definitions/event.RequestReservation'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/event.ResponseReservation'
+      security:
+      - Authorization: []
+  /event/{id}:
+    get:
+      parameters:
+      - description: group id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/event.ResponseEventDetail'
+      security:
+      - Authorization: []
+  /google/oauth/callback/login:
+    get:
+      parameters:
+      - description: oauth code
+        in: query
+        name: code
+        required: true
+        type: string
+      responses:
+        "302":
+          description: send authorization code to frontend
+          headers:
+            Location:
+              description: /logined?session={}
+              type: string
+  /google/oauth/callback/register:
+    get:
+      parameters:
+      - description: oauth code
+        in: query
+        name: code
+        required: true
+        type: string
+      responses:
+        "302":
+          description: send authorization code to frontend
+          headers:
+            Location:
+              description: /registered?session={}
+              type: string
+  /google/oauth/url:
+    get:
+      parameters:
+      - description: type
+        in: query
+        name: register
+        type: string
+      responses:
+        "302":
+          description: redirect to oauth page
+          headers:
+            Location:
+              type: string
+  /group:
+    get:
+      consumes:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/group.ResponseList'
+      security:
+      - Authorization: []
+  /group/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: group id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/group.ResponseLeave'
+      security:
+      - Authorization: []
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: group id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/group.ResponseDetail'
+      security:
+      - Authorization: []
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: group id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/group.ResponseJoin'
+      security:
+      - Authorization: []
+  /storage:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: base64 encoded file and file name
+        in: body
+        name: fileUploadRequest
+        required: true
+        schema:
+          $ref: '#/definitions/storage.fileUploadRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/storage.fileUploadResponse'
+  /user/my:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ResponseGetMyProfile'
+      security:
+      - Authorization: []
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: my profile
+        in: body
+        name: RequestUpdateMyProfile
+        required: true
+        schema:
+          $ref: '#/definitions/user.RequestUpdateMyProfile'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ResponseUpdateMyProfile'
+      security:
+      - Authorization: []
+  /user/my/discord:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: discord oauth code
+        in: body
+        name: RequestUpdateDiscordId
+        required: true
+        schema:
+          $ref: '#/definitions/user.RequestUpdateDiscordId'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ResponseUpdateDiscordId'
+      security:
+      - Authorization: []
+  /user/my/payment:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ResponseGetMyPayment'
+      security:
+      - Authorization: []
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: my payment
+        in: body
+        name: RequestUpdateMyPayment
+        required: true
+        schema:
+          $ref: '#/definitions/user.RequestUpdateMyPayment'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ResponseUpdateMyPayment'
+      security:
+      - Authorization: []
+  /user/my/payment/history:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ResponseGetMyPaymentHistory'
+      security:
+      - Authorization: []
+  /user/my/private:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ResponseGetMyPrivateProfile'
+      security:
+      - Authorization: []
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: my private profile
+        in: body
+        name: RequestUpdateMyPrivateProfile
+        required: true
+        schema:
+          $ref: '#/definitions/user.RequestUpdateMyPrivateProfile'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ResponseUpdateMyPrivateProfile'
+      security:
+      - Authorization: []
+schemes:
+- http
+securityDefinitions:
+  Authorization:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
