@@ -16,6 +16,7 @@ type PrivateProfile struct {
 	LastName              string `json:"last_name"`
 	FirstNameKana         string `json:"first_name_kana"`
 	LastNameKana          string `json:"last_name_kana"`
+	IsMale                bool   `json:"is_male"`
 	PhoneNumber           string `json:"phone_number"`
 	Address               string `json:"address"`
 	ParentName            string `json:"parent_name"`
@@ -34,6 +35,7 @@ type RequestUpdateMyPrivateProfile struct {
 	LastName              string `json:"last_name"`
 	FirstNameKana         string `json:"first_name_kana"`
 	LastNameKana          string `json:"last_name_kana"`
+	IsMale                bool   `json:"is_male"`
 	PhoneNumber           string `json:"phone_number"`
 	Address               string `json:"address"`
 	ParentName            string `json:"parent_name"`
@@ -57,6 +59,9 @@ func (p RequestUpdateMyPrivateProfile) validate() error {
 	}
 	if 255 < utf8.RuneCountInString(p.LastNameKana) {
 		errorMsg = append(errorMsg, "名字のカナは255文字未満である必要があります")
+	}
+	if !p.IsMale && p.IsMale {
+		errorMsg = append(errorMsg, "性別を選択する必要があります")
 	}
 	if !phoneNumberRegex.MatchString(p.PhoneNumber) {
 		errorMsg = append(errorMsg, "電話番号はハイフン無し数字のみの32文字未満である必要があります")
@@ -96,8 +101,8 @@ func (c Context) GetMyPrivateProfile(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseGetMyPrivateProfile{Error: err.Error()})
 	}
 	privateProfile := PrivateProfile{}
-	err = c.DB.QueryRow("SELECT first_name, last_name, first_name_kana, last_name_kana, phone_number, address, parent_name, parent_cellphone_number, parent_homephone_number, parent_address FROM user_private_profiles WHERE user_id = UUID_TO_BIN(?)", userId).
-		Scan(&privateProfile.FirstName, &privateProfile.LastName, &privateProfile.FirstNameKana, &privateProfile.LastNameKana, &privateProfile.PhoneNumber, &privateProfile.Address, &privateProfile.ParentName, &privateProfile.ParentCellphoneNumber, &privateProfile.ParentHomephoneNumber, &privateProfile.ParentAddress)
+	err = c.DB.QueryRow("SELECT first_name, last_name, first_name_kana, last_name_kana, is_male, phone_number, address, parent_name, parent_cellphone_number, parent_homephone_number, parent_address FROM user_private_profiles WHERE user_id = UUID_TO_BIN(?)", userId).
+		Scan(&privateProfile.FirstName, &privateProfile.LastName, &privateProfile.FirstNameKana, &privateProfile.LastNameKana, &privateProfile.IsMale, &privateProfile.PhoneNumber, &privateProfile.Address, &privateProfile.ParentName, &privateProfile.ParentCellphoneNumber, &privateProfile.ParentHomephoneNumber, &privateProfile.ParentAddress)
 	if err == sql.ErrNoRows {
 		return e.JSON(http.StatusNotFound, ResponseGetMyPrivateProfile{Error: "データが登録されていません"})
 	} else if err != nil {
@@ -124,10 +129,10 @@ func (c Context) UpdateMyPrivateProfile(e echo.Context) error {
 	if err := privateProfile.validate(); err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseUpdateMyPrivateProfile{Error: err.Error()})
 	}
-	_, err = c.DB.Exec(`INSERT INTO user_private_profiles (user_id, first_name, last_name, first_name_kana, last_name_kana, phone_number, address, parent_name, parent_cellphone_number, parent_homephone_number, parent_address) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-				ON DUPLICATE KEY UPDATE first_name = ?, last_name = ?, first_name_kana = ?, last_name_kana = ?, phone_number = ?, address = ?, parent_name = ?, parent_cellphone_number = ?, parent_homephone_number = ?, parent_address = ?`,
-		userId, privateProfile.FirstName, privateProfile.LastName, privateProfile.FirstNameKana, privateProfile.LastNameKana, privateProfile.PhoneNumber, privateProfile.Address, privateProfile.ParentName, privateProfile.ParentCellphoneNumber, privateProfile.ParentHomephoneNumber, privateProfile.ParentAddress,
-		privateProfile.FirstName, privateProfile.LastName, privateProfile.FirstNameKana, privateProfile.LastNameKana, privateProfile.PhoneNumber, privateProfile.Address, privateProfile.ParentName, privateProfile.ParentCellphoneNumber, privateProfile.ParentHomephoneNumber, privateProfile.ParentAddress)
+	_, err = c.DB.Exec(`INSERT INTO user_private_profiles (user_id, first_name, last_name, first_name_kana, last_name_kana, is_male, phone_number, address, parent_name, parent_cellphone_number, parent_homephone_number, parent_address) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+				ON DUPLICATE KEY UPDATE first_name = ?, last_name = ?, first_name_kana = ?, last_name_kana = ?, is_male = ?, phone_number = ?, address = ?, parent_name = ?, parent_cellphone_number = ?, parent_homephone_number = ?, parent_address = ?`,
+		userId, privateProfile.FirstName, privateProfile.LastName, privateProfile.FirstNameKana, privateProfile.LastNameKana, privateProfile.IsMale, privateProfile.PhoneNumber, privateProfile.Address, privateProfile.ParentName, privateProfile.ParentCellphoneNumber, privateProfile.ParentHomephoneNumber, privateProfile.ParentAddress,
+		privateProfile.FirstName, privateProfile.LastName, privateProfile.FirstNameKana, privateProfile.LastNameKana, privateProfile.IsMale, privateProfile.PhoneNumber, privateProfile.Address, privateProfile.ParentName, privateProfile.ParentCellphoneNumber, privateProfile.ParentHomephoneNumber, privateProfile.ParentAddress)
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, ResponseUpdateMyPrivateProfile{Error: "更新に失敗しました"})
 	}
