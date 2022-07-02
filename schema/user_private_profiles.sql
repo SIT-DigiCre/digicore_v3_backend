@@ -6,6 +6,7 @@ CREATE TABLE user_private_profiles
     last_name               VARCHAR(255) NOT NULL,
     first_name_kana         VARCHAR(255) NOT NULL,
     last_name_kana          VARCHAR(255) NOT NULL,
+    is_male                 BOOLEAN      NOT NULL DEFAULT true,
     phone_number            VARCHAR(32)  NOT NULL,
     address                 VARCHAR(255) NOT NULL,
     parent_name             VARCHAR(255) NOT NULL,
