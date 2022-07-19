@@ -8,7 +8,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/k0kubun/sqldef v0.11.62
 	github.com/labstack/echo/v4 v4.7.2
-	github.com/swaggo/swag v1.8.3
+	github.com/swaggo/swag v1.8.4
 	golang.org/x/oauth2 v0.0.0-20220608161450-d0670ef3b1eb
 )
 
