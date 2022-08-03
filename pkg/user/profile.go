@@ -12,6 +12,10 @@ type ResponseGetProfile struct {
 	Error   string  `json:"error"`
 }
 
+type SelfIntroduction struct {
+	SelfIntroduction string `json:"self_introduction"`
+}
+
 type ResponseGetSelfIntroduction struct {
 	SelfIntroduction SelfIntroduction `json:"self_introduction"`
 	Error            string           `json:"error"`
