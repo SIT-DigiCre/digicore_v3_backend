@@ -127,7 +127,7 @@ func (c Context) UpdateMyProfile(e echo.Context) error {
 }
 
 // Get my self introduction
-// @Router /user/my/intro [get]
+// @Router /user/my/introduction [get]
 // @Security Authorization
 // @Success 200 {object} ResponseGetMySelfIntroduction
 func (c Context) GetMySelfIntroduction(e echo.Context) error {
@@ -153,7 +153,7 @@ func (c Context) GetMySelfIntroduction(e echo.Context) error {
 // @Accept json
 // @Param RequestUpdateMyProfile body RequestUpdateMySelfIntroduction true "my self introduction"
 // @Security Authorization
-// @Router /user/my [put]
+// @Router /user/my/introduction [put]
 // @Success 200 {object} ResponseUpdateMyProfile
 func (c Context) UpdateMySelfIntroduction(e echo.Context) error {
 	userId, err := GetUserId(&e)
