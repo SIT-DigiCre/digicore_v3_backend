@@ -65,7 +65,7 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	user_group.PUT("/my/payment", user.UpdateMyPayment)
 	user_group.GET("/my/payment", user.GetMyPayment)
 	user_group.GET("/my/payment/history", user.GetMyPaymentHistory)
-	user_group.GET("/:id", user.GetMyProfile)
+	user_group.GET("/:id", user.GetProfile)
 	user_group.GET("/:id/introduction", user.GetSelfIntroduction)
 
 	event_group := e.Group("/event")
