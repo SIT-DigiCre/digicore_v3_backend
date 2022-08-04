@@ -8,6 +8,6 @@ CREATE TABLE user_profiles
     discord_userid          VARCHAR(255) NOT NULL DEFAULT '',
     active_limit            DATE         NOT NULL,
     short_self_introduction VARCHAR(255) NOT NULL DEFAULT 'デジクリ入りました',
-    self_introduction       TEXT         NOT NULL DEFAULT '',
+    self_introduction       TEXT         NOT NULL,
     PRIMARY KEY (id)
 );
