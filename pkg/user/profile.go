@@ -44,7 +44,7 @@ func (c Context) GetProfile(e echo.Context) error {
 }
 
 // Get self introduction
-// @Router /user/{id}/intro [get]
+// @Router /user/{id}/introduction [get]
 // @Param id path string true "user id"
 // @Security Authorization
 // @Success 200 {object} ResponseGetSelfIntroduction
