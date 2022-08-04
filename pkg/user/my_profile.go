@@ -55,10 +55,6 @@ type ResponseUpdateMyProfile struct {
 	Error string `json:"error"`
 }
 
-type SelfIntroduction struct {
-	SelfIntroduction string `json:"self_introduction"`
-}
-
 type RequestUpdateMySelfIntroduction struct {
 	SelfIntroduction string `json:"self_introduction"`
 }
@@ -68,8 +64,8 @@ func (p RequestUpdateMySelfIntroduction) validate() error {
 }
 
 type ResponseGetMySelfIntroduction struct {
-	SelfIntroduction SelfIntroduction `json:"self_introduction"`
-	Error            string           `json:"error"`
+	SelfIntroduction string `json:"self_introduction"`
+	Error            string `json:"error"`
 }
 
 type ResponseUpdateMySelfIntroduction struct {
@@ -135,9 +131,9 @@ func (c Context) GetMySelfIntroduction(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseGetMySelfIntroduction{Error: err.Error()})
 	}
-	self_introduction := SelfIntroduction{}
+	self_introduction := ""
 	err = c.DB.QueryRow("SELECT self_introduction FROM user_profiles WHERE user_id = UUID_TO_BIN(?)", userId).
-		Scan(&self_introduction.SelfIntroduction)
+		Scan(&self_introduction)
 	if err == sql.ErrNoRows {
 		return e.JSON(http.StatusNotFound, ResponseGetMySelfIntroduction{Error: "データが登録されていません"})
 	} else if err != nil {
