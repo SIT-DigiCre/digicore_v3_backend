@@ -60,6 +60,8 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	user_group.GET("", user.GetList)
 	user_group.PUT("/my", user.UpdateMyProfile)
 	user_group.GET("/my", user.GetMyProfile)
+	user_group.PUT("/my/introduction", user.UpdateMySelfIntroduction)
+	user_group.GET("/my/introduction", user.GetMySelfIntroduction)
 	user_group.PUT("/my/discord", user.UpdateDiscordId)
 	user_group.PUT("/my/private", user.UpdateMyPrivateProfile)
 	user_group.GET("/my/private", user.GetMyPrivateProfile)
