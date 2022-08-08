@@ -57,6 +57,7 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	user_group := e.Group("/user")
 	user_group.Use(middleware.JWTWithConfig(config))
 	user, _ := user.CreateContext(db)
+	user_group.GET("", user.GetList)
 	user_group.PUT("/my", user.UpdateMyProfile)
 	user_group.GET("/my", user.GetMyProfile)
 	user_group.PUT("/my/discord", user.UpdateDiscordId)
