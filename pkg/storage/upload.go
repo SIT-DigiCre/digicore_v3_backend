@@ -1,7 +1,6 @@
 package storage
 
 import (
-	"bytes"
 	"crypto/md5"
 	"database/sql"
 	"encoding/base64"
@@ -17,13 +16,13 @@ import (
 )
 
 type fileUploadRequest struct {
-	Name string `json:"name"`
-	File string `json:"file"`
+	Name     string `json:"name"`
+	File     string `json:"file"`
+	IsPublic *bool  `json:"is_public"`
 }
 type fileUploadResponse struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
-	URL  string `json:"url"`
 }
 type fileUploadErrorResponse struct {
 	Error string `json:"error"`
@@ -39,23 +38,24 @@ func (f fileUploadRequest) validate() error {
 	return nil
 }
 
-func uploadBytes(data []byte, fileId string, extension string) (int, error) {
+func uploadBytes(data []byte, fileId string, extension string, isPublic bool) (int, error) {
 	if env.ConohaFileUploadMaxSize < len(data) {
 		return http.StatusBadRequest, errors.New("ファイルサイズが大きすぎます")
 	}
-	token, err := GetToken()
+	s3Client, err := getS3Client()
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}
-	url := getFileURL(fileId, extension)
-	_, err = httpRequest(http.MethodPut, url, bytes.NewReader(data), &token)
+	putObjectInput := createPutObjectInput(data, getFileNameFromIDandExt(fileId, extension))
+	_, err = s3Client.PutObject(putObjectInput)
+	//s3Client.PutObjectAcl()
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return http.StatusInternalServerError, errors.New("オブジェクトストレージへのアップロードエラーです")
 	}
 	return http.StatusOK, nil
 }
 
-func createUserFile(db *sql.DB, userId string, data []byte, fileName string) (string, int, error) {
+func createUserFile(db *sql.DB, userId string, data []byte, fileName string, isPublic bool) (string, int, error) {
 	id := uuid.New().String()
 	extension := getExtension(fileName)
 	md5Hash := fmt.Sprintf("%x", md5.Sum(data))
@@ -68,19 +68,20 @@ func createUserFile(db *sql.DB, userId string, data []byte, fileName string) (st
 	if err != sql.ErrNoRows {
 		return "", http.StatusInternalServerError, errors.New("データベースのエラーです")
 	}
-	status, err := uploadBytes(data, id, extension)
+	status, err := uploadBytes(data, id, extension, isPublic)
 	if err != nil {
 		return "", status, err
 	}
 	kSize := len(data) / 1024
 	_, err = db.Exec(
-		`INSERT INTO user_files (id, user_id, name, k_size, md5_hash, extension) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, ?, ?)`,
+		`INSERT INTO user_files (id, user_id, name, k_size, md5_hash, extension, is_public) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, ?, ?, ?)`,
 		id,
 		userId,
 		fileName,
 		kSize,
 		md5Hash,
 		extension,
+		isPublic,
 	)
 	if err != nil {
 		return "", http.StatusInternalServerError, errors.New("データベースのエラーです")
@@ -109,11 +110,14 @@ func (c Context) UploadUserfile(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, fileUploadErrorResponse{Error: "ファイルのデコードに失敗しました"})
 	}
-	fileId, status, err := createUserFile(c.DB, userId, data, fileUpload.Name)
+	isPublic := false
+	if fileUpload.IsPublic != nil {
+		isPublic = *fileUpload.IsPublic
+	}
+	fileId, status, err := createUserFile(c.DB, userId, data, fileUpload.Name, isPublic)
 	if err != nil {
 		return e.JSON(status, fileUploadErrorResponse{Error: err.Error()})
 	}
 
-	url := getFileURL(fileId, getExtension(fileUpload.Name))
-	return e.JSON(http.StatusCreated, fileUploadResponse{ID: fileId, Name: fileUpload.Name, URL: url})
+	return e.JSON(status, fileUploadResponse{ID: fileId, Name: fileUpload.Name})
 }

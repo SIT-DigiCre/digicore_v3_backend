@@ -29,6 +29,12 @@ func getExtension(fileName string) string {
 	}
 	return dot_ext[1:]
 }
+func getFileNameFromIDandExt(fileID string, extension string) string {
+	if len(extension) == 0 {
+		return fileID
+	}
+	return fmt.Sprintf("%s.%s", fileID, extension)
+}
 
 func getFileURL(fileId string, extension string) string {
 	url := fmt.Sprintf(
