@@ -9,10 +9,31 @@ type Error struct {
 	Message string `json:"message"`
 }
 
+// ReqPostSignupCallback defines model for ReqPostSignupCallback.
+type ReqPostSignupCallback struct {
+	Code string `json:"code"`
+}
+
+// ResGetSignup defines model for ResGetSignup.
+type ResGetSignup struct {
+	Url string `json:"url"`
+}
+
 // ResGetStatus defines model for ResGetStatus.
 type ResGetStatus struct {
 	Status bool `json:"status"`
 }
 
+// ResPostSignupCallback defines model for ResPostSignupCallback.
+type ResPostSignupCallback struct {
+	Jwt string `json:"jwt"`
+}
+
 // InternalServer defines model for InternalServer.
 type InternalServer = Error
+
+// PostSignupCallbackJSONBody defines parameters for PostSignupCallback.
+type PostSignupCallbackJSONBody = ReqPostSignupCallback
+
+// PostSignupCallbackJSONRequestBody defines body for PostSignupCallback for application/json ContentType.
+type PostSignupCallbackJSONRequestBody = PostSignupCallbackJSONBody

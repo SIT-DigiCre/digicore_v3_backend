@@ -10,6 +10,12 @@ import (
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
+	// (GET /signup)
+	GetSignup(ctx echo.Context) error
+
+	// (POST /signup/callback)
+	PostSignupCallback(ctx echo.Context) error
+
 	// (GET /status)
 	GetStatus(ctx echo.Context) error
 }
@@ -17,6 +23,24 @@ type ServerInterface interface {
 // ServerInterfaceWrapper converts echo contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler ServerInterface
+}
+
+// GetSignup converts echo context to params.
+func (w *ServerInterfaceWrapper) GetSignup(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetSignup(ctx)
+	return err
+}
+
+// PostSignupCallback converts echo context to params.
+func (w *ServerInterfaceWrapper) PostSignupCallback(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostSignupCallback(ctx)
+	return err
 }
 
 // GetStatus converts echo context to params.
@@ -56,6 +80,8 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
+	router.GET(baseURL+"/signup", wrapper.GetSignup)
+	router.POST(baseURL+"/signup/callback", wrapper.PostSignupCallback)
 	router.GET(baseURL+"/status", wrapper.GetStatus)
 
 }
