@@ -1,0 +1,67 @@
+openapi: "3.0.0"
+info:
+  version: "3.1.0"
+  title: "Digicore"
+servers:
+  - url: "http://{host}:{port}/"
+    description: "develop"
+    variables:
+      host:
+        default: "localhost"
+      port:
+        default: "8000"
+paths:
+  /status:
+    get:
+      description: "Server status check"
+      responses:
+        200:
+          description: "All Systems Operational"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetStatus'
+        500:
+          $ref: '#/components/responses/InternalServer'
+components:
+  schemas:
+    ResGetStatus:
+      required:
+        - status
+      properties:
+        status:
+          type: boolean
+    Error:
+      required:
+        - level
+        - message
+      properties:
+        level:
+          type: string
+        message:
+          type: string
+  responses:
+    BadRequest:
+      description: "Validation error, etc."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Unauthorized:
+      description: "Authentication error, etc."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: "Resource does not exist, etc."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    InternalServer:
+      description: "System error, etc."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"

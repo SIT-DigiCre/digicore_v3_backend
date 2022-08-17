@@ -1,0 +1,4 @@
+package: api
+generate:
+  echo-server: true
+output: ./pkg/api/server.gen.go
