@@ -55,10 +55,6 @@ type ResponseUpdateMyProfile struct {
 	Error string `json:"error"`
 }
 
-type SelfIntroduction struct {
-	SelfIntroduction string `json:"self_introduction"`
-}
-
 type RequestUpdateMySelfIntroduction struct {
 	SelfIntroduction string `json:"self_introduction"`
 }
