@@ -9,7 +9,7 @@
 1. 上記で作成したAppのclient_secret_*.jsonをダウンロードし、client_secret.jsonに名前を書き換えこのファイルが有る階層に配置する。
 1. [build env](#build-env)を行う
 1. [run env](#run-env)を行う
-1. [db migration](#db-migration)を行う
+<!-- 1. [db migration](#db-migration)を行う -->
 
 ## build env
 
@@ -23,16 +23,9 @@ docker compose build
 docker compose up
 ```
 
-## db migration
+## apiパッケージの更新
 
 ```sh
-docker compose run --rm -w /app/schema admin bash -c 'cat `ls | grep -v foreign_key.sql` | go run github.com/k0kubun/sqldef/cmd/mysqldef@v0.11.50 --user=${DB_USER} --password=${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} --dry-run'
-docker compose run --rm -w /app/schema admin bash -c 'cat `ls | grep -v foreign_key.sql` | go run github.com/k0kubun/sqldef/cmd/mysqldef@v0.11.50 --user=${DB_USER} --password=${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE}'
-docker compose run --rm -w /app/schema admin bash -c 'mysql -u ${DB_USER} -p${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} < foreign_key.sql'
-```
-
-## generate swagger docs
-
-```sh
-swag init
+go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest # Add "${HOME}"/go/bin to PATH
+make generate_api
 ```
