@@ -79,6 +79,7 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	s.Use(middleware.JWTWithConfig(config))
 	storage, _ := storage.CreateContext(db)
 	s.POST("", storage.UploadUserfile)
+	s.GET("/:fileId", storage.GetUserFileUrl)
 
 	env_group := e.Group("/env")
 	env_group.Use(middleware.JWTWithConfig(config))

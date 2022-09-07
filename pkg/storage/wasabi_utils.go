@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"fmt"
 	"bytes"
 	"errors"
 	"time"
@@ -39,24 +40,37 @@ func getS3Client() (*s3.S3, error) {
 	return s3.New(goSession), nil
 }
 
-func createPutObjectInput(data []byte, key string) *s3.PutObjectInput {
+func getBucketName(isPublic bool) string {
+	if isPublic {
+		return env.WasabiPublicBucket
+	} else {
+		return env.WasabiPrivateBucket
+	}
+}
+
+func createPutObjectInput(data []byte, key string, isPublic bool) *s3.PutObjectInput {
+	bucketName := getBucketName(isPublic)
 	return &s3.PutObjectInput{
 		Body:   bytes.NewReader(data),
-		Bucket: aws.String(env.WasabiBucket),
+		Bucket: aws.String(bucketName),
 		Key:    aws.String(key),
 	}
 }
 
-func getPresignedFileURL(key string) (string, error) {
+func getFileURL(key string, isPublic bool) (string, error) {
+	bucketName := getBucketName(isPublic)
+	if isPublic {
+		return fmt.Sprintf("https://%s/%s/%s", env.WasabiDirectURLDomain, bucketName, key), nil
+	}
 	s3Client, err := getS3Client()
 	if err != nil {
 		return "", err
 	}
 	req, _ := s3Client.GetObjectRequest(&s3.GetObjectInput{
-		Bucket: aws.String(env.WasabiBucket),
+		Bucket: aws.String(bucketName),
 		Key:    aws.String(key),
 	})
-	url, err := req.Presign(3 * time.Minute)
+	url, err := req.Presign(time.Hour)
 	if err != nil {
 		return "", errors.New("Pre-signed URL発行エラーです")
 	}

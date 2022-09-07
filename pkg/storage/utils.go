@@ -8,8 +8,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
-
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 )
 
 type Context struct {
@@ -34,19 +32,6 @@ func getFileNameFromIDandExt(fileID string, extension string) string {
 		return fileID
 	}
 	return fmt.Sprintf("%s.%s", fileID, extension)
-}
-
-func getFileURL(fileId string, extension string) string {
-	url := fmt.Sprintf(
-		"%s/%s/%s",
-		env.ConohaObjectStorageServerURL,
-		env.ConohaStorageContainerName,
-		fileId,
-	)
-	if len(extension) == 0 {
-		return url
-	}
-	return fmt.Sprintf("%s.%s", url, extension)
 }
 
 func httpRequest(method string, url string, body io.Reader, token *string) ([]byte, error) {

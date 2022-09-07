@@ -46,9 +46,8 @@ func uploadBytes(data []byte, fileId string, extension string, isPublic bool) (i
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}
-	putObjectInput := createPutObjectInput(data, getFileNameFromIDandExt(fileId, extension))
+	putObjectInput := createPutObjectInput(data, getFileNameFromIDandExt(fileId, extension), isPublic)
 	_, err = s3Client.PutObject(putObjectInput)
-	//s3Client.PutObjectAcl()
 	if err != nil {
 		return http.StatusInternalServerError, errors.New("オブジェクトストレージへのアップロードエラーです")
 	}
@@ -60,7 +59,7 @@ func createUserFile(db *sql.DB, userId string, data []byte, fileName string, isP
 	extension := getExtension(fileName)
 	md5Hash := fmt.Sprintf("%x", md5.Sum(data))
 	duplicateFileName := ""
-	err := db.QueryRow(`SELECT name FROM user_files WHERE user_id = UUID_TO_BIN(?) AND md5_hash = ?`, userId, md5Hash).Scan(&duplicateFileName)
+	err := db.QueryRow(`SELECT name FROM user_files WHERE user_id = UUID_TO_BIN(?) AND md5_hash = ? AND is_public = ?`, userId, md5Hash, isPublic).Scan(&duplicateFileName)
 	// エラーがない = 該当するレコードが存在した場合
 	if err == nil {
 		return "", http.StatusBadRequest, errors.New(fmt.Sprintf("アップロードされたファイルは既に%sという名前でアップロードされています", duplicateFileName))
@@ -93,7 +92,7 @@ func createUserFile(db *sql.DB, userId string, data []byte, fileName string, isP
 // @Accept json
 // @Param fileUploadRequest body fileUploadRequest true "base64 encoded file and file name"
 // @Router /storage [post]
-// @Success 200 {object} fileUploadResponse
+// @Success 201 {object} fileUploadResponse
 func (c Context) UploadUserfile(e echo.Context) error {
 	userId, err := user.GetUserId(&e)
 	if err != nil {
