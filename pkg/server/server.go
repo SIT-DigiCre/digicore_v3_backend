@@ -11,6 +11,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/group"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/storage"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/article"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -89,6 +90,11 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	env_group.Use(middleware.JWTWithConfig(config))
 	env, _ := env.CreateContext()
 	env_group.GET("/join", env.GetJoinURL)
+
+	a := e.Group("/articles")
+	a.Use(middleware.JWTWithConfig(config))
+	article, _ := article.CreateContext(db)
+	a.POST("", article.CreateArticle)
 }
 
 func CreateDbConnection(address string) (*sql.DB, error) {
