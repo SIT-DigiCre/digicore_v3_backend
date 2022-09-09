@@ -3,6 +3,7 @@ package blog
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
 	"github.com/google/uuid"
@@ -14,6 +15,8 @@ type Article struct {
 	UserId	string	`json:"user_id"`
 	Title	string	`json:"title"`
 	Body	string	`json:"body"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type RequestCreateArticle struct {
@@ -30,7 +33,8 @@ type ArticleItem struct {
 	Id      string  `json:"id"`
 	UserId  string  `json:"user_id"`
 	Title   string  `json:"title"`
-	Body    string  `json:"body"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type ResponseArticleList struct {
@@ -68,7 +72,7 @@ func (c Context) GetArticleList(e echo.Context) error {
 	articles := []ArticleItem{}
 	for rows.Next() {
 		article := ArticleItem{}
-		if err := rows.Scan(&article.Id, &article.UserId, &article.Title, &article.Body); err != nil {
+		if err := rows.Scan(&article.Id, &article.UserId, &article.Title, &article.CreatedAt, &article.UpdatedAt); err != nil {
 			return e.JSON(http.StatusInternalServerError, ResponseArticleList{Error: "DBの読み込みに失敗しました"})
 		}
 		articles = append(articles, article)
