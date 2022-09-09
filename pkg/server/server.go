@@ -95,7 +95,7 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	b.Use(middleware.JWTWithConfig(config))
 	blog, _ := blog.CreateContext(db)
 	b.POST("/articles", blog.CreateArticle)
-	b.GET("/articles", blog.GetList)
+	b.GET("/articles", blog.GetArticleList)
 }
 
 func CreateDbConnection(address string) (*sql.DB, error) {
