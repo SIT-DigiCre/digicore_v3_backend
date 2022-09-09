@@ -1,4 +1,4 @@
-package article
+package blog
 
 import (
 	"database/sql"
@@ -8,7 +8,7 @@ type Context struct {
 	DB *sql.DB
 }
 
-type Blog struct {
+type Article struct {
 	Id	string	`json:"id"`
 	UserId	string	`json:"user_id"`
 	Title	string	`json:"title"`

@@ -1,4 +1,4 @@
-package article
+package blog
 
 import (
 	"net/http"
