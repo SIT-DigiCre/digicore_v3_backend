@@ -64,7 +64,7 @@ func (c Context) GetArticleList(e echo.Context) error {
 	pagesNum, _ := strconv.Atoi(pages)
 	seed := e.QueryParam("seed")
 	seedNum, _ := strconv.Atoi(seed)
-	rows, err := c.DB.Query("SELECT BIN_TO_UUID(id), BIN_TO_UUID(user_id), title, body FROM `blog_posts` ORDER BY rand(?) LIMIT 100 OFFSET ?", seedNum, pagesNum)
+	rows, err := c.DB.Query("SELECT BIN_TO_UUID(id), BIN_TO_UUID(user_id), title, created_at, updated_at FROM `blog_posts` ORDER BY rand(?) LIMIT 100 OFFSET ?", seedNum, pagesNum)
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, ResponseArticleList{Error: "DBの読み込みに失敗しました"})
 	}
