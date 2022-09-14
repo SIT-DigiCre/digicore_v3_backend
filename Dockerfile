@@ -28,6 +28,6 @@ CMD ["/digicore_v3_backend"]
 FROM golang:1.19.0 as admin
 
 WORKDIR "/app"
-RUN apt-get update && apt-get install -y default-mysql-client-core
+RUN go install github.com/rubenv/sql-migrate/...@v1.2.0
 
 COPY . .
