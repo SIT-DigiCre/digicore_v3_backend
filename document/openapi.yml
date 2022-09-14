@@ -52,6 +52,20 @@ paths:
                 $ref: '#/components/schemas/ResPostSignupCallback'
         500:
           $ref: '#/components/responses/InternalServer'
+  /user/me:
+    get:
+      description: "Get my profile"
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: "Success signup"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMe'
+        403:
+          $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
     ResGetStatus:
@@ -77,6 +91,12 @@ components:
         - jwt
       properties:
         jwt:
+          type: string
+    ResGetUserMe:
+      required:
+        - id
+      properties:
+        id:
           type: string
     Error:
       required:
@@ -112,3 +132,8 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/Error"
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
