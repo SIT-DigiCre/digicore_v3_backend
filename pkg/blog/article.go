@@ -124,6 +124,29 @@ func (c Context) GetArticleList(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseArticleList{Articles: articles})
 }
 
+func (c Context) GetMyArticles(e echo.Context) error {
+	pages := e.QueryParam("pages")
+	pagesNum, _ := strconv.Atoi(pages)
+	userId, err := user.GetUserId(&e)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseArticleList{Error: err.Error()})
+	}
+	rows, err := c.DB.Query("SELECT BIN_TO_UUID(id), title, is_public, published_at, created_at, updated_at FROM `blog_posts` WHERE user_id = UUID_TO_BIN(?) ORDER BY published_at LIMIT 100 OFFSET ?", userId, pagesNum)
+	if err != nil {
+		return e.JSON(http.StatusInternalServerError, ResponseArticleList{Error: "DBの読み込みに失敗しました"})
+	}
+	defer rows.Close()
+	articles := []ArticleItem{}
+	for rows.Next() {
+		article := ArticleItem{UserId: userId}
+		if err := rows.Scan(&article.Id, &article.Title, &article.IsPublic, &article.PublishedAt, &article.CreatedAt, &article.UpdatedAt); err != nil {
+			return e.JSON(http.StatusInternalServerError, ResponseArticleList{Error: "DBの読み込みに失敗しました"})
+		}
+		articles = append(articles, article)
+	}
+	return e.JSON(http.StatusOK, ResponseArticleList{Articles: articles})
+}
+
 func (c Context) GetArticle(e echo.Context) error {
 	id := e.Param("id")
 	article := Article{Id: id}
