@@ -16,10 +16,10 @@ type Article struct {
 	UserId      string      	`json:"user_id"`
 	Title       string      	`json:"title"`
 	Body	    string      	`json:"body"`
-	CreatedAt   time.Time   	`json:"created_at"`
-	UpdatedAt   time.Time   	`json:"updated_at"`
 	IsPublic    bool        	`json:"is_public"`
 	PublishedAt	sql.NullTime	`json:"published_at"`
+	CreatedAt   time.Time   	`json:"created_at"`
+	UpdatedAt   time.Time   	`json:"updated_at"`
 }
 
 type RequestCreateArticle struct {
@@ -93,8 +93,8 @@ func (c Context) GetArticleList(e echo.Context) error {
 func (c Context) GetArticle(e echo.Context) error {
 	id := e.Param("id")
 	article := Article{Id: id}
-	err := c.DB.QueryRow("SELECT BIN_TO_UUID(user_id), title, body, created_at, updated_at, is_public, published_at FROM blog_posts WHERE id = UUID_TO_BIN(?)", id).
-		Scan(&article.UserId, &article.Title, &article.Body, &article.CreatedAt, &article.UpdatedAt, &article.IsPublic, &article.PublishedAt)
+	err := c.DB.QueryRow("SELECT BIN_TO_UUID(user_id), title, body, is_public, published_at, created_at, updated_at FROM blog_posts WHERE id = UUID_TO_BIN(?)", id).
+		Scan(&article.UserId, &article.Title, &article.Body, &article.IsPublic, &article.PublishedAt, &article.CreatedAt, &article.UpdatedAt)
 	if err == sql.ErrNoRows {
 		return e.JSON(http.StatusNotFound, ResponseGetArticle{Error: "データが登録されていません"})
 	} else if err != nil {
