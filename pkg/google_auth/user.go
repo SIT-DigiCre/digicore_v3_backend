@@ -41,7 +41,7 @@ func getStudentNumberfromGoogle(code string, redirectURL string) (string, *respo
 }
 
 func createUser(studentNumber string, db db.DBClient) *response.Error {
-	query, err := db.Query.ReadFile("sql/users/create_users.sql")
+	query, err := db.Query.ReadFile("sql/users/insert_users.sql")
 	if err != nil {
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}
 	}

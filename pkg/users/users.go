@@ -8,7 +8,7 @@ import (
 )
 
 func IDFromStudentNumber(studentNumber string, db db.DBClient) (string, *response.Error) {
-	query, err := db.Query.ReadFile("sql/users/id_from_student_number.sql")
+	query, err := db.Query.ReadFile("sql/users/select_id_from_student_number.sql")
 	if err != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}
 	}
