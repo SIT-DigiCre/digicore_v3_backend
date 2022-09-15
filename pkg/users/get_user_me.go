@@ -8,5 +8,20 @@ import (
 )
 
 func GetUserMe(ctx echo.Context, db db.DBClient) (api.ResGetUserMe, *response.Error) {
-	return api.ResGetUserMe{}, nil
+	userID := ctx.Get("user_id").(string)
+	profile, err := GetUserProfileFromUserID(userID, db)
+	if err != nil {
+		return api.ResGetUserMe{}, err
+	}
+	myProfile := api.ResGetUserMe{
+		ActiveLimit:           profile.ActiveLimit,
+		DiscordUserid:         profile.DiscordUserID,
+		IconUrl:               profile.IconUrl,
+		SchoolGrade:           profile.SchoolGrade,
+		ShortSelfIntroduction: profile.ShortSelfIntroduction,
+		StudentNumber:         profile.StudentNumber,
+		UserId:                profile.UserId,
+		Username:              profile.Username,
+	}
+	return myProfile, nil
 }

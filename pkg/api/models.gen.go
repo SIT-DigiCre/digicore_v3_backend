@@ -49,11 +49,12 @@ type ResGetStatus struct {
 // ResGetUserMe defines model for ResGetUserMe.
 type ResGetUserMe struct {
 	ActiveLimit           string `json:"active_limit"`
+	DiscordUserid         string `json:"discord_userid"`
 	IconUrl               string `json:"icon_url"`
-	Id                    string `json:"id"`
 	SchoolGrade           int    `json:"school_grade"`
 	ShortSelfIntroduction string `json:"short_self_introduction"`
 	StudentNumber         string `json:"student_number"`
+	UserId                string `json:"user_id"`
 	Username              string `json:"username"`
 }
 

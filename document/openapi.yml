@@ -186,15 +186,16 @@ components:
           type: string
     ResGetUserMe:
       required:
-        - id
+        - user_id
         - username
         - student_number
         - icon_url
         - school_grade
+        - discord_userid
         - short_self_introduction
         - active_limit
       properties:
-        id:
+        user_id:
           type: string
         username:
           type: string
@@ -204,6 +205,8 @@ components:
           type: string
         school_grade:
           type: integer
+        discord_userid:
+          type: string
         short_self_introduction:
           type: string
         active_limit:
