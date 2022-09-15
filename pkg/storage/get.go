@@ -12,7 +12,7 @@ import (
 
 type fileGetResponse struct {
 	ID        string    `json:"id"`
-	UserID    string    `json:"id"`
+	UserID    string    `json:"user_id"`
 	Name      string    `json:"name"`
 	KSize     string    `json:"k_size"`
 	Extension string    `json:"extension"`
