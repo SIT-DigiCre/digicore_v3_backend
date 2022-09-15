@@ -55,6 +55,23 @@ type ResponseUpdateMyProfile struct {
 	Error string `json:"error"`
 }
 
+type RequestUpdateMySelfIntroduction struct {
+	SelfIntroduction string `json:"self_introduction"`
+}
+
+func (p RequestUpdateMySelfIntroduction) validate() error {
+	return nil
+}
+
+type ResponseGetMySelfIntroduction struct {
+	SelfIntroduction SelfIntroduction `json:"self_introduction"`
+	Error            string           `json:"error"`
+}
+
+type ResponseUpdateMySelfIntroduction struct {
+	Error string `json:"error"`
+}
+
 // Get my prodile
 // @Router /user/my [get]
 // @Security Authorization
@@ -103,4 +120,53 @@ func (c Context) UpdateMyProfile(e echo.Context) error {
 		return e.JSON(http.StatusInternalServerError, ResponseUpdateMyProfile{Error: "更新に失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseUpdateMyProfile{})
+}
+
+// Get my self introduction
+// @Router /user/my/introduction [get]
+// @Security Authorization
+// @Success 200 {object} ResponseGetMySelfIntroduction
+func (c Context) GetMySelfIntroduction(e echo.Context) error {
+	userId, err := GetUserId(&e)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseGetMySelfIntroduction{Error: err.Error()})
+	}
+	self_introduction := SelfIntroduction{}
+	err = c.DB.QueryRow("SELECT self_introduction FROM user_profiles WHERE user_id = UUID_TO_BIN(?)", userId).
+		Scan(&self_introduction.SelfIntroduction)
+	if err == sql.ErrNoRows {
+		return e.JSON(http.StatusNotFound, ResponseGetMySelfIntroduction{Error: "データが登録されていません"})
+	} else if err != nil {
+		return e.JSON(http.StatusInternalServerError, ResponseGetMySelfIntroduction{Error: "取得に失敗しました"})
+	}
+	if err != nil {
+		return e.JSON(http.StatusInternalServerError, ResponseGetMySelfIntroduction{Error: err.Error()})
+	}
+	return e.JSON(http.StatusOK, ResponseGetMySelfIntroduction{SelfIntroduction: self_introduction})
+}
+
+// Update my self introduction
+// @Accept json
+// @Param RequestUpdateMyProfile body RequestUpdateMySelfIntroduction true "my self introduction"
+// @Security Authorization
+// @Router /user/my/introduction [put]
+// @Success 200 {object} ResponseUpdateMyProfile
+func (c Context) UpdateMySelfIntroduction(e echo.Context) error {
+	userId, err := GetUserId(&e)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseUpdateMySelfIntroduction{Error: err.Error()})
+	}
+	self_introduction := RequestUpdateMySelfIntroduction{}
+	if err := e.Bind(&self_introduction); err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseUpdateMySelfIntroduction{Error: "データの読み込みに失敗しました"})
+	}
+	if err := self_introduction.validate(); err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseUpdateMySelfIntroduction{Error: err.Error()})
+	}
+	_, err = c.DB.Exec(`UPDATE user_profiles SET self_introduction = ? WHERE user_id = UUID_TO_BIN(?)`,
+		self_introduction.SelfIntroduction, userId)
+	if err != nil {
+		return e.JSON(http.StatusInternalServerError, ResponseUpdateMySelfIntroduction{Error: "更新に失敗しました"})
+	}
+	return e.JSON(http.StatusOK, ResponseUpdateMySelfIntroduction{})
 }

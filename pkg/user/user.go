@@ -53,7 +53,7 @@ func CreateDefault(db *sql.DB, id string, name string) error {
 	} else if name[0] == 'n' {
 		schoolGrade += 6
 	}
-	_, err = db.Exec(`INSERT INTO user_profiles (user_id, username, school_grade, icon_url, active_limit) VALUES (UUID_TO_BIN(?), ?, ?, ?, (CURRENT_DATE + INTERVAL 1 MONTH))`, id, name, schoolGrade, env.DefaultIconURL)
+	_, err = db.Exec(`INSERT INTO user_profiles (user_id, username, school_grade, icon_url, active_limit, self_introduction) VALUES (UUID_TO_BIN(?), ?, ?, ?, (CURRENT_DATE + INTERVAL 1 MONTH), ?)`, id, name, schoolGrade, env.DefaultIconURL, "")
 	if err != nil {
 		return fmt.Errorf("登録に失敗しました")
 	}
