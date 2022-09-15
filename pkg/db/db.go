@@ -33,10 +33,10 @@ func init() {
 		os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_DATABASE"))
 	sdb, err := sqlx.Open("mysql", dsn)
 	if err != nil {
-		logrus.Error(err.Error())
+		logrus.Fatal(err.Error())
 	}
 	if sdb.Ping() != nil {
-		logrus.Error(err.Error())
+		logrus.Fatal(err.Error())
 	}
 	DB.Client = &client{tw: twowaysql.New(sdb)}
 	DB.Query = query

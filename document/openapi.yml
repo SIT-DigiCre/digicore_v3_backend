@@ -52,6 +52,35 @@ paths:
                 $ref: '#/components/schemas/ResPostSignupCallback'
         500:
           $ref: '#/components/responses/InternalServer'
+  /login:
+    get:
+      description: "Get login URL"
+      responses:
+        200:
+          description: "Login URL"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetLogin'
+  /login/callback:
+    post:
+      description: "Verify auth"
+      requestBody:
+        description: "Auth information"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostLoginCallback'
+      responses:
+        200:
+          description: "Success signup"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostLoginCallback'
+        500:
+          $ref: '#/components/responses/InternalServer'
   /user/me:
     get:
       description: "Get my profile"
@@ -87,6 +116,24 @@ components:
         code:
           type: string
     ResPostSignupCallback:
+      required:
+        - jwt
+      properties:
+        jwt:
+          type: string
+    ResGetLogin:
+      required:
+        - url
+      properties:
+        url:
+          type: string
+    ReqPostLoginCallback:
+      required:
+        - code
+      properties:
+        code:
+          type: string
+    ResPostLoginCallback:
       required:
         - jwt
       properties:

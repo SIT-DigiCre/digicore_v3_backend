@@ -44,7 +44,7 @@ func handler(c echo.Context, err *echo.HTTPError) error {
 	return response.ErrorResponse(c, &res)
 }
 
-func CreateToken(user_id string) (string, error) {
+func CreateToken(user_id string) (string, *response.Error) {
 	t := jwt.New()
 	t.Set(jwt.SubjectKey, user_id)
 	t.Set(jwt.ExpirationKey, time.Now().Add(time.Hour*72).Unix())
@@ -52,7 +52,7 @@ func CreateToken(user_id string) (string, error) {
 	signed, err := jwt.Sign(t, jwt.WithKey(jwa.RS256, key))
 	if err != nil {
 		fmt.Printf("failed to sign token: %s", err)
-		return "", err
+		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "JWTの生成に失敗しました", Log: err.Error()}
 	}
 	token := string(signed)
 	return token, nil

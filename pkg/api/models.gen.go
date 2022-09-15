@@ -13,9 +13,19 @@ type Error struct {
 	Message string `json:"message"`
 }
 
+// ReqPostLoginCallback defines model for ReqPostLoginCallback.
+type ReqPostLoginCallback struct {
+	Code string `json:"code"`
+}
+
 // ReqPostSignupCallback defines model for ReqPostSignupCallback.
 type ReqPostSignupCallback struct {
 	Code string `json:"code"`
+}
+
+// ResGetLogin defines model for ResGetLogin.
+type ResGetLogin struct {
+	Url string `json:"url"`
 }
 
 // ResGetSignup defines model for ResGetSignup.
@@ -33,6 +43,11 @@ type ResGetUserMe struct {
 	Id string `json:"id"`
 }
 
+// ResPostLoginCallback defines model for ResPostLoginCallback.
+type ResPostLoginCallback struct {
+	Jwt string `json:"jwt"`
+}
+
 // ResPostSignupCallback defines model for ResPostSignupCallback.
 type ResPostSignupCallback struct {
 	Jwt string `json:"jwt"`
@@ -44,8 +59,14 @@ type InternalServer = Error
 // Unauthorized defines model for Unauthorized.
 type Unauthorized = Error
 
+// PostLoginCallbackJSONBody defines parameters for PostLoginCallback.
+type PostLoginCallbackJSONBody = ReqPostLoginCallback
+
 // PostSignupCallbackJSONBody defines parameters for PostSignupCallback.
 type PostSignupCallbackJSONBody = ReqPostSignupCallback
+
+// PostLoginCallbackJSONRequestBody defines body for PostLoginCallback for application/json ContentType.
+type PostLoginCallbackJSONRequestBody = PostLoginCallbackJSONBody
 
 // PostSignupCallbackJSONRequestBody defines body for PostSignupCallback for application/json ContentType.
 type PostSignupCallbackJSONRequestBody = PostSignupCallbackJSONBody
