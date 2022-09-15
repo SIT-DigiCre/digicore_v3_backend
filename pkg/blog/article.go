@@ -80,6 +80,10 @@ type ResponseUpdateArticle struct {
 	Error	string	`json:"error"`
 }
 
+type ResponseDeleteArticle struct {
+	Error	string	`json:"error"`
+}
+
 func (c Context) CreateArticle(e echo.Context) error {
 	userId, err := user.GetUserId(&e)
 	if err != nil {
@@ -173,4 +177,27 @@ func (c Context) UpdateArticle(e echo.Context) error {
 		return e.JSON(http.StatusInternalServerError, ResponseUpdateArticle{Error: "更新に失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseUpdateArticle{})
+}
+
+func (c Context) DeleteArticle(e echo.Context) error {
+	id := e.Param("id")
+	article := Article{}
+	err := c.DB.QueryRow("SELECT BIN_TO_UUID(user_id) FROM blog_posts WHERE id = UUID_TO_BIN(?)", id).
+		Scan(&article.UserId)
+	if err == sql.ErrNoRows {
+		return e.JSON(http.StatusNotFound, ResponseDeleteArticle{Error: "データが登録されていません"})
+	} else if err != nil {
+		return e.JSON(http.StatusInternalServerError, ResponseDeleteArticle{Error: "取得に失敗しました"})
+	}
+	u, err := user.GetUserId(&e)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseDeleteArticle{Error: err.Error()})
+	} else if !article.IsPublic && u != article.UserId {
+		return e.JSON(http.StatusForbidden, ResponseDeleteArticle{Error: "アクセスが許可されていません"})
+	}
+	_, err = c.DB.Exec(`DELETE FROM blog_posts WHERE id = UUID_TO_BIN(?)`, id)
+	if err != nil {
+		return e.JSON(http.StatusInternalServerError, ResponseDeleteArticle{Error: "削除に失敗しました"})
+	}
+	return e.JSON(http.StatusOK, ResponseDeleteArticle{})
 }
