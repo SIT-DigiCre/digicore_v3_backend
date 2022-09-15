@@ -15,8 +15,6 @@ import (
 
 func getStudentNumberfromGoogle(code string, redirectURL string) (string, *response.Error) {
 	redirectParam := oauth2.SetAuthURLParam("redirect_uri", redirectURL)
-	fmt.Print(redirectURL)
-	fmt.Print(redirectParam)
 	token, err := gcpConfig.Exchange(context.Background(), code, redirectParam)
 	if err != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "認証でエラーが発生しました", Log: err.Error()}
