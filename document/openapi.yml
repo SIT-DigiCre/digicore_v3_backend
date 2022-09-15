@@ -20,9 +20,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResGetStatus'
+                $ref: "#/components/schemas/ResGetStatus"
         500:
-          $ref: '#/components/responses/InternalServer'
+          $ref: "#/components/responses/InternalServer"
   /signup:
     get:
       description: "Get signup URL"
@@ -32,7 +32,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResGetSignup'
+                $ref: "#/components/schemas/ResGetSignup"
   /signup/callback:
     post:
       description: "Verify auth"
@@ -42,16 +42,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReqPostSignupCallback'
+              $ref: "#/components/schemas/ReqPostSignupCallback"
       responses:
         200:
           description: "Success signup"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResPostSignupCallback'
+                $ref: "#/components/schemas/ResPostSignupCallback"
         500:
-          $ref: '#/components/responses/InternalServer'
+          $ref: "#/components/responses/InternalServer"
   /login:
     get:
       description: "Get login URL"
@@ -61,7 +61,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResGetLogin'
+                $ref: "#/components/schemas/ResGetLogin"
   /login/callback:
     post:
       description: "Verify auth"
@@ -71,16 +71,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReqPostLoginCallback'
+              $ref: "#/components/schemas/ReqPostLoginCallback"
       responses:
         200:
           description: "Success signup"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResPostLoginCallback'
+                $ref: "#/components/schemas/ResPostLoginCallback"
         500:
-          $ref: '#/components/responses/InternalServer'
+          $ref: "#/components/responses/InternalServer"
   /user/me:
     get:
       description: "Get my profile"
@@ -92,9 +92,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResGetUserMe'
+                $ref: "#/components/schemas/ResGetUserMe"
         403:
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
 components:
   schemas:
     ResGetStatus:
