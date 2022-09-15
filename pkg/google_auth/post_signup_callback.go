@@ -9,10 +9,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GetSignup(ctx echo.Context) (api.ResGetSignup, *response.Error) {
-	return api.ResGetSignup{Url: signupUrl}, nil
-}
-
 func PostSignupCallback(ctx echo.Context, db db.DBClient) (api.ResPostSignupCallback, *response.Error) {
 	var req api.ReqPostSignupCallback
 	ctx.Bind(&req)
