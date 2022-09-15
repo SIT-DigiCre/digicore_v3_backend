@@ -1,6 +1,7 @@
 package blog
 
 import (
+	"database/sql"
 	"net/http"
 	"strconv"
 	"time"
@@ -45,6 +46,11 @@ type ResponseArticleList struct {
 	Articles    []ArticleItem   `json:"articles"`
 }
 
+type ResponseGetArticle struct {
+	Error	string	`json:"error"`
+	Article	Article	`json:"article"`
+}
+
 func (c Context) CreateArticle(e echo.Context) error {
 	userId, err := user.GetUserId(&e)
 	if err != nil {
@@ -84,4 +90,23 @@ func (c Context) GetArticleList(e echo.Context) error {
 		articles = append(articles, article)
 	}
 	return e.JSON(http.StatusOK, ResponseArticleList{Articles: articles})
+}
+
+func (c Context) GetArticle(e echo.Context) error {
+	id := e.Param("id")
+	article := Article{Id: id}
+	err := c.DB.QueryRow("SELECT BIN_TO_UUID(user_id), title, body, created_at, updated_at, is_public FROM blog_posts WHERE id = UUID_TO_BIN(?)", id).
+		Scan(&article.UserId, &article.Title, &article.Body, &article.CreatedAt, &article.UpdatedAt, &article.IsPublic)
+	if err == sql.ErrNoRows {
+		return e.JSON(http.StatusNotFound, ResponseGetArticle{Error: "データが登録されていません"})
+	} else if err != nil {
+		return e.JSON(http.StatusInternalServerError, ResponseGetArticle{Error: "取得に失敗しました"})
+	} 
+	u, err := user.GetUserId(&e)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, ResponseCreateArticle{Error: err.Error()})
+	} else if !article.IsPublic && u != article.UserId {
+		return e.JSON(http.StatusForbidden, ResponseGetArticle{Error: "アクセスが許可されていません"})
+	}
+	return e.JSON(http.StatusOK, ResponseGetArticle{Article: article})
 }
