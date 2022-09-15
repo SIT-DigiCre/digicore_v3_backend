@@ -47,7 +47,7 @@ func (c Context) GetUserFileUrl(e echo.Context) error {
 func getUserFileMetadata(db *sql.DB, fileId string) (fileGetResponse, int, error) {
 	var meta fileGetResponse
 	meta.ID = fileId
-	err := db.QueryRow(`SELECT user_id, name, k_size, extension, is_public, created_at, updated_at FROM user_files WHERE id = UUID_TO_BIN(?)`, fileId).Scan(&meta.UserID, &meta.Name, &meta.KSize, &meta.Extension, &meta.IsPublic, &meta.CreatedAt, &meta.UpdatedAt)
+	err := db.QueryRow(`SELECT BIN_TO_UUID(user_id), name, k_size, extension, is_public, created_at, updated_at FROM user_files WHERE id = UUID_TO_BIN(?)`, fileId).Scan(&meta.UserID, &meta.Name, &meta.KSize, &meta.Extension, &meta.IsPublic, &meta.CreatedAt, &meta.UpdatedAt)
 	if err == sql.ErrNoRows {
 		return meta, http.StatusNotFound, errors.New("指定されたファイルは見つかりませんでした")
 	} else if err != nil {
