@@ -6,21 +6,19 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// Update discord id
+// Get work list
 // @Accept json
-// @Param RequestUpdateDiscordId body RequestUpdateDiscordId true "discord oauth code"
 // @Security Authorization
-// @Router /user/my/discord [put]
+// @Router /work/work [get]
 // @Success 200 {object} ResponseUpdateDiscordId
 func (c Context) WorkList(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseUpdateDiscordId{})
 }
 
-// Update discord id
+// Get tag list
 // @Accept json
-// @Param RequestUpdateDiscordId body RequestUpdateDiscordId true "discord oauth code"
 // @Security Authorization
-// @Router /user/my/discord [put]
+// @Router /work/tag [get]
 // @Success 200 {object} ResponseUpdateDiscordId
 func (c Context) TagList(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseUpdateDiscordId{})

@@ -6,41 +6,44 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// Update discord id
+type ResGetWork struct {
+	ID          string   `json:"id"`
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Authers     []string `json:"authers"`
+}
+
+// Create work
 // @Accept json
-// @Param RequestUpdateDiscordId body RequestUpdateDiscordId true "discord oauth code"
 // @Security Authorization
-// @Router /user/my/discord [put]
+// @Router /work/work [post]
 // @Success 200 {object} ResponseUpdateDiscordId
 func (c Context) CreateWork(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseUpdateDiscordId{})
 }
 
-// Update discord id
+// Update work
 // @Accept json
-// @Param RequestUpdateDiscordId body RequestUpdateDiscordId true "discord oauth code"
 // @Security Authorization
-// @Router /user/my/discord [put]
+// @Router /work/work/{id} [post]
 // @Success 200 {object} ResponseUpdateDiscordId
 func (c Context) UpdateWork(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseUpdateDiscordId{})
 }
 
-// Update discord id
+// Get work
 // @Accept json
-// @Param RequestUpdateDiscordId body RequestUpdateDiscordId true "discord oauth code"
 // @Security Authorization
-// @Router /user/my/discord [put]
+// @Router /work/work/{id} [get]
 // @Success 200 {object} ResponseUpdateDiscordId
 func (c Context) GetWork(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseUpdateDiscordId{})
 }
 
-// Update discord id
+// Delete work
 // @Accept json
-// @Param RequestUpdateDiscordId body RequestUpdateDiscordId true "discord oauth code"
 // @Security Authorization
-// @Router /user/my/discord [put]
+// @Router /work/work/{id} [delete]
 // @Success 200 {object} ResponseUpdateDiscordId
 func (c Context) DeleteWork(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseUpdateDiscordId{})
