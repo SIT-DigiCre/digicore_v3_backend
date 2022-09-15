@@ -11,6 +11,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/group"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/storage"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/work"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -70,6 +71,20 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	user_group.GET("/my/payment/history", user.GetMyPaymentHistory)
 	user_group.GET("/:id", user.GetProfile)
 	user_group.GET("/:id/introduction", user.GetSelfIntroduction)
+
+	work_group := e.Group("/work")
+	work_group.Use(middleware.JWTWithConfig(config))
+	work, _ := work.CreateContext(db)
+	work_group.GET("/work", work.WorkList)
+	work_group.POST("/work", work.CreateWork)
+	work_group.GET("/work/:id", work.GetWork)
+	work_group.PUT("/work/:id", work.UpdateWork)
+	work_group.DELETE("/work/:id", work.DeleteWork)
+	work_group.GET("/tag", work.TagList)
+	work_group.POST("/tag", work.CreateTag)
+	work_group.GET("/tag/:id", work.GetTag)
+	work_group.PUT("/tag/:id", work.UpdateTag)
+	work_group.DELETE("/tag/:id", work.DeleteTag)
 
 	event_group := e.Group("/event")
 	event_group.Use(middleware.JWTWithConfig(config))
