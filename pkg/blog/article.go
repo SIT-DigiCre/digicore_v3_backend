@@ -12,13 +12,14 @@ import (
 )
 
 type Article struct {
-	Id          string      `json:"id"`
-	UserId      string      `json:"user_id"`
-	Title       string      `json:"title"`
-	Body	    string      `json:"body"`
-	CreatedAt   time.Time   `json:"created_at"`
-	UpdatedAt   time.Time   `json:"updated_at"`
-	IsPublic    bool        `json:"is_public"`
+	Id          string      	`json:"id"`
+	UserId      string      	`json:"user_id"`
+	Title       string      	`json:"title"`
+	Body	    string      	`json:"body"`
+	CreatedAt   time.Time   	`json:"created_at"`
+	UpdatedAt   time.Time   	`json:"updated_at"`
+	IsPublic    bool        	`json:"is_public"`
+	PublishedAt	sql.NullTime	`json:"published_at"`
 }
 
 type RequestCreateArticle struct {
@@ -33,12 +34,13 @@ type ResponseCreateArticle struct {
 }
 
 type ArticleItem struct {
-	Id			string		`json:"id"`
-	UserId		string		`json:"user_id"`
-	Title		string		`json:"title"`
-	IsPublic	bool		`json:"is_public"`
-	CreatedAt	time.Time	`json:"created_at"`
-	UpdatedAt	time.Time	`json:"updated_at"`
+	Id			string			`json:"id"`
+	UserId		string			`json:"user_id"`
+	Title		string			`json:"title"`
+	IsPublic	bool			`json:"is_public"`
+	PublishedAt	sql.NullTime	`json:"published_at"`
+	CreatedAt	time.Time		`json:"created_at"`
+	UpdatedAt	time.Time		`json:"updated_at"`
 }
 
 type ResponseArticleList struct {
@@ -61,12 +63,8 @@ func (c Context) CreateArticle(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseCreateArticle{Error: "データの読み込みに失敗しました"})
 	}
 	id := uuid.New().String()
-	published_at := time.Now()
-	if postCreate.IsPublic == true {
-		_, err = c.DB.Exec("INSERT INTO blog_posts (id, user_id, title, body, is_public, published_at) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, true, ?)", id, userId, postCreate.Title, postCreate.Body, published_at)
-	} else {
-		_, err = c.DB.Exec("INSERT INTO blog_posts (id, user_id, title, body, is_public, published_at) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, false, ?)", id, userId, postCreate.Title, postCreate.Body, nil)
-	}
+	published_at := sql.NullTime{Time: time.Now(), Valid: postCreate.IsPublic}
+	_, err = c.DB.Exec("INSERT INTO blog_posts (id, user_id, title, body, is_public, published_at) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, true, ?)", id, userId, postCreate.Title, postCreate.Body, published_at)
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, ResponseCreateArticle{Error: "データベースの書き込み中にエラーが発生しました:\n" + err.Error()})	//	TODO: err.Error()は検証用なので消しておく
 	}
@@ -76,7 +74,7 @@ func (c Context) CreateArticle(e echo.Context) error {
 func (c Context) GetArticleList(e echo.Context) error {
 	pages := e.QueryParam("pages")
 	pagesNum, _ := strconv.Atoi(pages)
-	rows, err := c.DB.Query("SELECT BIN_TO_UUID(id), BIN_TO_UUID(user_id), title, is_public, created_at, updated_at FROM `blog_posts` WHERE is_public = true ORDER BY published_at LIMIT 100 OFFSET ?", pagesNum)
+	rows, err := c.DB.Query("SELECT BIN_TO_UUID(id), BIN_TO_UUID(user_id), title, is_public, published_at, created_at, updated_at FROM `blog_posts` WHERE is_public = true ORDER BY published_at LIMIT 100 OFFSET ?", pagesNum)
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, ResponseArticleList{Error: "DBの読み込みに失敗しました"})
 	}
@@ -84,7 +82,7 @@ func (c Context) GetArticleList(e echo.Context) error {
 	articles := []ArticleItem{}
 	for rows.Next() {
 		article := ArticleItem{}
-		if err := rows.Scan(&article.Id, &article.UserId, &article.Title, &article.IsPublic, &article.CreatedAt, &article.UpdatedAt); err != nil {
+		if err := rows.Scan(&article.Id, &article.UserId, &article.Title, &article.IsPublic, &article.PublishedAt, &article.CreatedAt, &article.UpdatedAt); err != nil {
 			return e.JSON(http.StatusInternalServerError, ResponseArticleList{Error: "DBの読み込みに失敗しました"})
 		}
 		articles = append(articles, article)
@@ -95,8 +93,8 @@ func (c Context) GetArticleList(e echo.Context) error {
 func (c Context) GetArticle(e echo.Context) error {
 	id := e.Param("id")
 	article := Article{Id: id}
-	err := c.DB.QueryRow("SELECT BIN_TO_UUID(user_id), title, body, created_at, updated_at, is_public FROM blog_posts WHERE id = UUID_TO_BIN(?)", id).
-		Scan(&article.UserId, &article.Title, &article.Body, &article.CreatedAt, &article.UpdatedAt, &article.IsPublic)
+	err := c.DB.QueryRow("SELECT BIN_TO_UUID(user_id), title, body, created_at, updated_at, is_public, published_at FROM blog_posts WHERE id = UUID_TO_BIN(?)", id).
+		Scan(&article.UserId, &article.Title, &article.Body, &article.CreatedAt, &article.UpdatedAt, &article.IsPublic, &article.PublishedAt)
 	if err == sql.ErrNoRows {
 		return e.JSON(http.StatusNotFound, ResponseGetArticle{Error: "データが登録されていません"})
 	} else if err != nil {
