@@ -31,12 +31,6 @@ func CreateValidator() ([]echo.MiddlewareFunc, error) {
 				AuthenticationFunc: Authenticate,
 			},
 		})
-	t, err := CreateToken("23876862-33ef-11ed-a261-0242ac120002")
-	if err != nil {
-		return nil, fmt.Errorf("loading spec: %w", err)
-	}
-	fmt.Printf("%s", string(t))
-
 	return []echo.MiddlewareFunc{validator, Login}, nil
 }
 
@@ -50,7 +44,7 @@ func handler(c echo.Context, err *echo.HTTPError) error {
 	return response.ErrorResponse(c, &res)
 }
 
-func CreateToken(user_id string) ([]byte, error) {
+func CreateToken(user_id string) (string, error) {
 	t := jwt.New()
 	t.Set(jwt.SubjectKey, user_id)
 	t.Set(jwt.ExpirationKey, time.Now().Add(time.Hour*72).Unix())
@@ -58,7 +52,8 @@ func CreateToken(user_id string) ([]byte, error) {
 	signed, err := jwt.Sign(t, jwt.WithKey(jwa.RS256, key))
 	if err != nil {
 		fmt.Printf("failed to sign token: %s", err)
-		return []byte{}, err
+		return "", err
 	}
-	return signed, nil
+	token := string(signed)
+	return token, nil
 }
