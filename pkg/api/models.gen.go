@@ -23,6 +23,14 @@ type ReqPostSignupCallback struct {
 	Code string `json:"code"`
 }
 
+// ReqPostUserMe defines model for ReqPostUserMe.
+type ReqPostUserMe struct {
+	IconUrl               string `json:"icon_url"`
+	SchoolGrade           int    `json:"school_grade"`
+	ShortSelfIntroduction string `json:"short_self_introduction"`
+	Username              string `json:"username"`
+}
+
 // ResGetLogin defines model for ResGetLogin.
 type ResGetLogin struct {
 	Url string `json:"url"`
@@ -40,7 +48,13 @@ type ResGetStatus struct {
 
 // ResGetUserMe defines model for ResGetUserMe.
 type ResGetUserMe struct {
-	Id string `json:"id"`
+	ActiveLimit           string `json:"active_limit"`
+	IconUrl               string `json:"icon_url"`
+	Id                    string `json:"id"`
+	SchoolGrade           int    `json:"school_grade"`
+	ShortSelfIntroduction string `json:"short_self_introduction"`
+	StudentNumber         string `json:"student_number"`
+	Username              string `json:"username"`
 }
 
 // ResPostLoginCallback defines model for ResPostLoginCallback.
@@ -53,8 +67,19 @@ type ResPostSignupCallback struct {
 	Jwt string `json:"jwt"`
 }
 
+// ResPostUserMe defines model for ResPostUserMe.
+type ResPostUserMe struct {
+	Success bool `json:"success"`
+}
+
+// BadRequest defines model for BadRequest.
+type BadRequest = Error
+
 // InternalServer defines model for InternalServer.
 type InternalServer = Error
+
+// NotFound defines model for NotFound.
+type NotFound = Error
 
 // Unauthorized defines model for Unauthorized.
 type Unauthorized = Error
@@ -65,8 +90,14 @@ type PostLoginCallbackJSONBody = ReqPostLoginCallback
 // PostSignupCallbackJSONBody defines parameters for PostSignupCallback.
 type PostSignupCallbackJSONBody = ReqPostSignupCallback
 
+// PostUserMeJSONBody defines parameters for PostUserMe.
+type PostUserMeJSONBody = ReqPostUserMe
+
 // PostLoginCallbackJSONRequestBody defines body for PostLoginCallback for application/json ContentType.
 type PostLoginCallbackJSONRequestBody = PostLoginCallbackJSONBody
 
 // PostSignupCallbackJSONRequestBody defines body for PostSignupCallback for application/json ContentType.
 type PostSignupCallbackJSONRequestBody = PostSignupCallbackJSONBody
+
+// PostUserMeJSONRequestBody defines body for PostUserMe for application/json ContentType.
+type PostUserMeJSONRequestBody = PostUserMeJSONBody

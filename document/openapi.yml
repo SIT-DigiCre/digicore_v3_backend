@@ -10,6 +10,11 @@ servers:
         default: "localhost"
       port:
         default: "8000"
+tags:
+  - name: auth
+    description: Authentication system
+  - name: user
+    description: User system
 paths:
   /status:
     get:
@@ -25,6 +30,8 @@ paths:
           $ref: "#/components/responses/InternalServer"
   /signup:
     get:
+      tags:
+        - auth
       description: "Get signup URL"
       responses:
         200:
@@ -35,6 +42,8 @@ paths:
                 $ref: "#/components/schemas/ResGetSignup"
   /signup/callback:
     post:
+      tags:
+        - auth
       description: "Verify auth"
       requestBody:
         description: "Auth information"
@@ -54,6 +63,8 @@ paths:
           $ref: "#/components/responses/InternalServer"
   /login:
     get:
+      tags:
+        - auth
       description: "Get login URL"
       responses:
         200:
@@ -64,6 +75,8 @@ paths:
                 $ref: "#/components/schemas/ResGetLogin"
   /login/callback:
     post:
+      tags:
+        - auth
       description: "Verify auth"
       requestBody:
         description: "Auth information"
@@ -83,18 +96,50 @@ paths:
           $ref: "#/components/responses/InternalServer"
   /user/me:
     get:
+      tags:
+        - user
       description: "Get my profile"
       security:
         - BearerAuth: []
       responses:
         200:
-          description: "Success signup"
+          description: "Success get my profile"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ResGetUserMe"
         403:
           $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServer"
+    post:
+      tags:
+        - user
+      description: "Update my profile"
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: "My profile"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReqPostUserMe"
+      responses:
+        200:
+          description: "Success update my profile"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResPostUserMe"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        403:
+          $ref: "#/components/responses/Unauthorized"
+        500:
+          $ref: "#/components/responses/InternalServer"
 components:
   schemas:
     ResGetStatus:
@@ -142,9 +187,48 @@ components:
     ResGetUserMe:
       required:
         - id
+        - username
+        - student_number
+        - icon_url
+        - school_grade
+        - short_self_introduction
+        - active_limit
       properties:
         id:
           type: string
+        username:
+          type: string
+        student_number:
+          type: string
+        icon_url:
+          type: string
+        school_grade:
+          type: integer
+        short_self_introduction:
+          type: string
+        active_limit:
+          type: string
+    ReqPostUserMe:
+      required:
+        - username
+        - icon_url
+        - school_grade
+        - short_self_introduction
+      properties:
+        username:
+          type: string
+        icon_url:
+          type: string
+        school_grade:
+          type: integer
+        short_self_introduction:
+          type: string
+    ResPostUserMe:
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
     Error:
       required:
         - level

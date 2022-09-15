@@ -7,8 +7,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *server) GetUserMe(ctx echo.Context) error {
-	res, err := users.GetUserMe(ctx, db.DB)
+func (s *server) PostUserMe(ctx echo.Context) error {
+	res, err := users.PostUserMe(ctx, db.DB)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

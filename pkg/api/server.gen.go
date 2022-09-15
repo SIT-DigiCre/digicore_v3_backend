@@ -27,6 +27,9 @@ type ServerInterface interface {
 
 	// (GET /user/me)
 	GetUserMe(ctx echo.Context) error
+
+	// (POST /user/me)
+	PostUserMe(ctx echo.Context) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
@@ -90,6 +93,17 @@ func (w *ServerInterfaceWrapper) GetUserMe(ctx echo.Context) error {
 	return err
 }
 
+// PostUserMe converts echo context to params.
+func (w *ServerInterfaceWrapper) PostUserMe(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostUserMe(ctx)
+	return err
+}
+
 // This is a simple interface which specifies echo.Route addition functions which
 // are present on both echo.Echo and echo.Group, since we want to allow using
 // either of them for path registration
@@ -124,5 +138,6 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.POST(baseURL+"/signup/callback", wrapper.PostSignupCallback)
 	router.GET(baseURL+"/status", wrapper.GetStatus)
 	router.GET(baseURL+"/user/me", wrapper.GetUserMe)
+	router.POST(baseURL+"/user/me", wrapper.PostUserMe)
 
 }
