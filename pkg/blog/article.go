@@ -20,7 +20,7 @@ type Article struct {
 	Title       string      	`json:"title"`
 	Body	    string      	`json:"body"`
 	IsPublic    bool        	`json:"is_public"`
-	PublishedAt	sql.NullTime	`json:"published_at"`
+	PublishedAt	time.Time		`json:"published_at"`
 	CreatedAt   time.Time   	`json:"created_at"`
 	UpdatedAt   time.Time   	`json:"updated_at"`
 }
@@ -41,7 +41,7 @@ type ArticleItem struct {
 	UserId		string			`json:"user_id"`
 	Title		string			`json:"title"`
 	IsPublic	bool			`json:"is_public"`
-	PublishedAt	sql.NullTime	`json:"published_at"`
+	PublishedAt	time.Time		`json:"published_at"`
 	CreatedAt	time.Time		`json:"created_at"`
 	UpdatedAt	time.Time		`json:"updated_at"`
 }
@@ -90,8 +90,11 @@ func (c Context) CreateArticle(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, ResponseCreateArticle{Error: "データの読み込みに失敗しました"})
 	}
 	id := uuid.New().String()
-	published_at := sql.NullTime{Time: time.Now(), Valid: postCreate.IsPublic}
-	_, err = c.DB.Exec("INSERT INTO blog_posts (id, user_id, title, body, is_public, published_at) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, true, ?)", id, userId, postCreate.Title, postCreate.Body, published_at)
+	published_at := "2000-01-01T00:00:00+00:00"
+	if postCreate.IsPublic {
+		published_at = "CURRENT_TIMESTAMP"
+	}
+	_, err = c.DB.Exec("INSERT INTO blog_posts (id, user_id, title, body, is_public, published_at) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, ?, ?)", id, userId, postCreate.Title, postCreate.Body, postCreate.IsPublic, published_at)
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, ResponseCreateArticle{Error: "データベースの書き込み中にエラーが発生しました:\n" + err.Error()})	//	TODO: err.Error()は検証用なので消しておく
 	}
@@ -159,7 +162,7 @@ func (c Context) UpdateArticle(e echo.Context) error {
 	} else if !article.IsPublic && u != original.UserId {
 		return e.JSON(http.StatusForbidden, ResponseUpdateArticle{Error: "アクセスが許可されていません"})
 	}
-	if article.IsPublic == true && original.PublishedAt.Valid == false {
+	if article.IsPublic && original.PublishedAt.Equal(time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC)) {
 		_, err = c.DB.Exec(`UPDATE blog_posts SET title = ?, body = ?, is_public = ?, published_at = CURRENT_TIMESTAMP WHERE id = UUID_TO_BIN(?)`,
 			article.Title, article.Body, article.IsPublic, id)
 	} else {
