@@ -129,7 +129,7 @@ func (c Context) GetArticle(e echo.Context) error {
 	} 
 	u, err := user.GetUserId(&e)
 	if err != nil {
-		return e.JSON(http.StatusBadRequest, ResponseCreateArticle{Error: err.Error()})
+		return e.JSON(http.StatusBadRequest, ResponseGetArticle{Error: err.Error()})
 	} else if !article.IsPublic && u != article.UserId {
 		return e.JSON(http.StatusForbidden, ResponseGetArticle{Error: "アクセスが許可されていません"})
 	}
