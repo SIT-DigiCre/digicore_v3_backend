@@ -97,6 +97,7 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	b.POST("/articles", blog.CreateArticle)
 	b.GET("/articles", blog.GetArticleList)
 	b.GET("/articles/:id", blog.GetArticle)
+	b.PUT("/articles/:id", blog.UpdateArticle)
 }
 
 func CreateDbConnection(address string) (*sql.DB, error) {
