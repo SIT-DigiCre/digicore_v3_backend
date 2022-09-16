@@ -83,5 +83,19 @@ func (c Context) WorkList(e echo.Context) error {
 // @Router /work/tag [get]
 // @Success 200 {object} ResponseGetTagList
 func (c Context) TagList(e echo.Context) error {
-	return e.JSON(http.StatusOK, ResponseGetTagList{})
+	pages := e.QueryParam("pages")
+	pagesNum, _ := strconv.Atoi(pages)
+	rows, err := c.DB.Query("SELECT BIN_TO_UUID(id), name FROM work_tags LIMIT 100 OFFSET ?", pagesNum)
+	if err != nil {
+		e.JSON(http.StatusOK, Error{Message: "作品一覧の取得に失敗しました"})
+	}
+	tags := []Tag{}
+	for rows.Next() {
+		tag := Tag{}
+		if err := rows.Scan(&tag.ID, &tag.Name); err != nil {
+			return e.JSON(http.StatusInternalServerError, Error{Message: "タグ一覧の取得に失敗しました"})
+		}
+		tags = append(tags, tag)
+	}
+	return e.JSON(http.StatusOK, ResponseGetTagList{Tags: tags})
 }
