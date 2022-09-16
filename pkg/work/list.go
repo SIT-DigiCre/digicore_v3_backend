@@ -81,6 +81,7 @@ func (c Context) WorkList(e echo.Context) error {
 // @Accept json
 // @Security Authorization
 // @Router /work/tag [get]
+// @Param pages query int false "pages"
 // @Success 200 {object} ResponseGetTagList
 func (c Context) TagList(e echo.Context) error {
 	pages := e.QueryParam("pages")
