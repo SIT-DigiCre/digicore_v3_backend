@@ -6,7 +6,7 @@ type Context struct {
 	DB *sql.DB
 }
 
-func CreateContext(db *sql.DB) (Context, error){
+func CreateContext(db *sql.DB) (Context, error) {
 	context := Context{DB: db}
 
 	return context, nil

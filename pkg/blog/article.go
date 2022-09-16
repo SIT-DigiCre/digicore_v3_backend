@@ -15,51 +15,51 @@ import (
 )
 
 type Article struct {
-	Id          string      	`json:"id"`
-	UserId      string      	`json:"user_id"`
-	Title       string      	`json:"title"`
-	Body	    string      	`json:"body"`
-	IsPublic    bool        	`json:"is_public"`
-	PublishedAt	time.Time		`json:"published_at"`
-	CreatedAt   time.Time   	`json:"created_at"`
-	UpdatedAt   time.Time   	`json:"updated_at"`
+	Id          string    `json:"id"`
+	UserId      string    `json:"user_id"`
+	Title       string    `json:"title"`
+	Body        string    `json:"body"`
+	IsPublic    bool      `json:"is_public"`
+	PublishedAt time.Time `json:"published_at"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
 type RequestCreateArticle struct {
-	Title 	    string 	`json:"title"`
-	Body 	    string	`json:"body"`
-	IsPublic    bool    `json:"is_public"`
+	Title    string `json:"title"`
+	Body     string `json:"body"`
+	IsPublic bool   `json:"is_public"`
 }
 
 type ResponseCreateArticle struct {
-	ID		string	`json:"id"`
-	Error	string	`json:"error"`
+	ID    string `json:"id"`
+	Error string `json:"error"`
 }
 
 type ArticleItem struct {
-	Id			string			`json:"id"`
-	UserId		string			`json:"user_id"`
-	Title		string			`json:"title"`
-	IsPublic	bool			`json:"is_public"`
-	PublishedAt	time.Time		`json:"published_at"`
-	CreatedAt	time.Time		`json:"created_at"`
-	UpdatedAt	time.Time		`json:"updated_at"`
+	Id          string    `json:"id"`
+	UserId      string    `json:"user_id"`
+	Title       string    `json:"title"`
+	IsPublic    bool      `json:"is_public"`
+	PublishedAt time.Time `json:"published_at"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
 type ResponseArticleList struct {
-	Error       string          `json:"error"`
-	Articles    []ArticleItem   `json:"articles"`
+	Error    string        `json:"error"`
+	Articles []ArticleItem `json:"articles"`
 }
 
 type ResponseGetArticle struct {
-	Error	string	`json:"error"`
-	Article	Article	`json:"article"`
+	Error   string  `json:"error"`
+	Article Article `json:"article"`
 }
 
 type RequestUpdateArticle struct {
-	Title 	    string 	`json:"title"`
-	Body 	    string	`json:"body"`
-	IsPublic    bool    `json:"is_public"`
+	Title    string `json:"title"`
+	Body     string `json:"body"`
+	IsPublic bool   `json:"is_public"`
 }
 
 func (a RequestUpdateArticle) validate() error {
@@ -77,19 +77,19 @@ func (a RequestUpdateArticle) validate() error {
 }
 
 type ResponseUpdateArticle struct {
-	Error	string	`json:"error"`
+	Error string `json:"error"`
 }
 
 type ResponseDeleteArticle struct {
-	Error	string	`json:"error"`
+	Error string `json:"error"`
 }
 
-//	Create article
-//	@Accept json
-//	@Param RequestCreateArticle body RequestCreateArticle true "article data"
-//	@Security Authorization
-//	@Router /blog/article [post]
-//	@Success 200 {object} ResponseCreateArticle
+// Create article
+// @Accept json
+// @Param RequestCreateArticle body RequestCreateArticle true "article data"
+// @Security Authorization
+// @Router /blog/article [post]
+// @Success 200 {object} ResponseCreateArticle
 func (c Context) CreateArticle(e echo.Context) error {
 	userId, err := user.GetUserId(&e)
 	if err != nil {
@@ -106,16 +106,16 @@ func (c Context) CreateArticle(e echo.Context) error {
 	}
 	_, err = c.DB.Exec("INSERT INTO blog_posts (id, user_id, title, body, is_public, published_at) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, ?, ?)", id, userId, postCreate.Title, postCreate.Body, postCreate.IsPublic, published_at)
 	if err != nil {
-		return e.JSON(http.StatusInternalServerError, ResponseCreateArticle{Error: "データベースの書き込み中にエラーが発生しました:\n" + err.Error()})	//	TODO: err.Error()は検証用なので消しておく
+		return e.JSON(http.StatusInternalServerError, ResponseCreateArticle{Error: "データベースの書き込み中にエラーが発生しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseCreateArticle{ID: id})
 }
 
-//	Get public article list
-//	@Router /blog/articles [get]
-//	@Param pages query int false "pages"
-//	@Security Authorization
-//	@Success 200 {object} ResponseArticleList
+// Get public article list
+// @Router /blog/articles [get]
+// @Param pages query int false "pages"
+// @Security Authorization
+// @Success 200 {object} ResponseArticleList
 func (c Context) GetArticleList(e echo.Context) error {
 	pages := e.QueryParam("pages")
 	pagesNum, _ := strconv.Atoi(pages)
@@ -135,11 +135,11 @@ func (c Context) GetArticleList(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseArticleList{Articles: articles})
 }
 
-//	Get list of my articles
-//	@Router /blog/articles/my [get]
-//	@Param pages query int false "pages"
-//	@Security Authorization
-//	@Success 200 {object} ResponseArticleList
+// Get list of my articles
+// @Router /blog/articles/my [get]
+// @Param pages query int false "pages"
+// @Security Authorization
+// @Success 200 {object} ResponseArticleList
 func (c Context) GetMyArticles(e echo.Context) error {
 	pages := e.QueryParam("pages")
 	pagesNum, _ := strconv.Atoi(pages)
@@ -163,11 +163,11 @@ func (c Context) GetMyArticles(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseArticleList{Articles: articles})
 }
 
-//	Get article
-//	@Router /blog/articles/{id} [get]
-//	@Param id path string true "article id"
-//	@Security Authorization
-//	@Success 200 {object} ResponseGetArticle
+// Get article
+// @Router /blog/articles/{id} [get]
+// @Param id path string true "article id"
+// @Security Authorization
+// @Success 200 {object} ResponseGetArticle
 func (c Context) GetArticle(e echo.Context) error {
 	id := e.Param("id")
 	article := Article{Id: id}
@@ -177,7 +177,7 @@ func (c Context) GetArticle(e echo.Context) error {
 		return e.JSON(http.StatusNotFound, ResponseGetArticle{Error: "データが登録されていません"})
 	} else if err != nil {
 		return e.JSON(http.StatusInternalServerError, ResponseGetArticle{Error: "取得に失敗しました"})
-	} 
+	}
 	u, err := user.GetUserId(&e)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, ResponseGetArticle{Error: err.Error()})
@@ -187,13 +187,13 @@ func (c Context) GetArticle(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseGetArticle{Article: article})
 }
 
-//	Update article
-//	@Accept json
-//	@Router /blog/articles/{id} [put]
-//	@Param id path string true "article id"
-//	@Param RequestUpdateArticle body RequestUpdateArticle true "article data"
-//	@Security Authorization
-//	@Success 200 {object} ResponseUpdateArticle
+// Update article
+// @Accept json
+// @Router /blog/articles/{id} [put]
+// @Param id path string true "article id"
+// @Param RequestUpdateArticle body RequestUpdateArticle true "article data"
+// @Security Authorization
+// @Success 200 {object} ResponseUpdateArticle
 func (c Context) UpdateArticle(e echo.Context) error {
 	id := e.Param("id")
 	article := RequestUpdateArticle{}
@@ -230,11 +230,11 @@ func (c Context) UpdateArticle(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseUpdateArticle{})
 }
 
-//	Delete article
-//	@Router /blog/articles/{id} [delete]
-//	@Param id path string true "article id"
-//	@Security Authorization
-//	@Success 200 {object} ResponseDeleteArticle
+// Delete article
+// @Router /blog/articles/{id} [delete]
+// @Param id path string true "article id"
+// @Security Authorization
+// @Success 200 {object} ResponseDeleteArticle
 func (c Context) DeleteArticle(e echo.Context) error {
 	id := e.Param("id")
 	article := Article{}
