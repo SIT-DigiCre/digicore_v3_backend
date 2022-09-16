@@ -84,6 +84,12 @@ type ResponseDeleteArticle struct {
 	Error	string	`json:"error"`
 }
 
+//	Create article
+//	@Accept json
+//	@Param RequestCreateArticle body RequestCreateArticle true "article data"
+//	@Security Authorization
+//	@Router /blog/article [post]
+//	@Success 200 {object} ResponseCreateArticle
 func (c Context) CreateArticle(e echo.Context) error {
 	userId, err := user.GetUserId(&e)
 	if err != nil {
@@ -105,6 +111,11 @@ func (c Context) CreateArticle(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseCreateArticle{ID: id})
 }
 
+//	Get public article list
+//	@Router /blog/articles [get]
+//	@Param pages query int false "pages"
+//	@Security Authorization
+//	@Success 200 {object} ResponseArticleList
 func (c Context) GetArticleList(e echo.Context) error {
 	pages := e.QueryParam("pages")
 	pagesNum, _ := strconv.Atoi(pages)
@@ -124,6 +135,11 @@ func (c Context) GetArticleList(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseArticleList{Articles: articles})
 }
 
+//	Get list of my articles
+//	@Router /blog/articles/my [get]
+//	@Param pages query int false "pages"
+//	@Security Authorization
+//	@Success 200 {object} ResponseArticleList
 func (c Context) GetMyArticles(e echo.Context) error {
 	pages := e.QueryParam("pages")
 	pagesNum, _ := strconv.Atoi(pages)
@@ -147,6 +163,11 @@ func (c Context) GetMyArticles(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseArticleList{Articles: articles})
 }
 
+//	Get article
+//	@Router /blog/articles/{id} [get]
+//	@Param id path string true "article id"
+//	@Security Authorization
+//	@Success 200 {object} ResponseGetArticle
 func (c Context) GetArticle(e echo.Context) error {
 	id := e.Param("id")
 	article := Article{Id: id}
@@ -166,6 +187,13 @@ func (c Context) GetArticle(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseGetArticle{Article: article})
 }
 
+//	Update article
+//	@Accept json
+//	@Router /blog/articles/{id} [put]
+//	@Param id path string true "article id"
+//	@Param RequestUpdateArticle body RequestUpdateArticle true "article data"
+//	@Security Authorization
+//	@Success 200 {object} ResponseUpdateArticle
 func (c Context) UpdateArticle(e echo.Context) error {
 	id := e.Param("id")
 	article := RequestUpdateArticle{}
@@ -202,6 +230,11 @@ func (c Context) UpdateArticle(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseUpdateArticle{})
 }
 
+//	Delete article
+//	@Router /blog/articles/{id} [delete]
+//	@Param id path string true "article id"
+//	@Security Authorization
+//	@Success 200 {object} ResponseDeleteArticle
 func (c Context) DeleteArticle(e echo.Context) error {
 	id := e.Param("id")
 	article := Article{}
