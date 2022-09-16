@@ -153,6 +153,7 @@ func (c Context) GetWork(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, Error{Message: "製作者の読み込みに失敗しました"})
 	}
+	defer rows.Close()
 	for rows.Next() {
 		auther := Auther{}
 		if err := rows.Scan(&auther.ID, &auther.Name, &auther.IconURL); err != nil {
@@ -166,6 +167,7 @@ func (c Context) GetWork(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, Error{Message: "タグの読み込みに失敗しました"})
 	}
+	defer rows.Close()
 	for rows.Next() {
 		tag := Tag{}
 		if err := rows.Scan(&tag.ID, &tag.Name); err != nil {
@@ -179,6 +181,7 @@ func (c Context) GetWork(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, Error{Message: "ファイルの読み込みに失敗しました"})
 	}
+	defer rows.Close()
 	for rows.Next() {
 		file := File{}
 		if err := rows.Scan(&file.ID, &file.Name); err != nil {

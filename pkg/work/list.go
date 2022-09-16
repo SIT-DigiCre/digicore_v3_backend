@@ -40,6 +40,7 @@ func (c Context) WorkList(e echo.Context) error {
 	if err != nil {
 		e.JSON(http.StatusOK, Error{Message: "作品一覧の取得に失敗しました"})
 	}
+	defer rows.Close()
 	works := []Work{}
 	for rows.Next() {
 		work := Work{}
@@ -51,6 +52,7 @@ func (c Context) WorkList(e echo.Context) error {
 		if err != nil {
 			return e.JSON(http.StatusInternalServerError, Error{Message: "製作者の読み込みに失敗しました"})
 		}
+		defer authers_rows.Close()
 		for authers_rows.Next() {
 			auther := Auther{}
 			if err := authers_rows.Scan(&auther.ID, &auther.Name, &auther.IconURL); err != nil {
@@ -64,6 +66,7 @@ func (c Context) WorkList(e echo.Context) error {
 		if err != nil {
 			return e.JSON(http.StatusInternalServerError, Error{Message: "タグの読み込みに失敗しました"})
 		}
+		defer tags_rows.Close()
 		for tags_rows.Next() {
 			tag := Tag{}
 			if err := tags_rows.Scan(&tag.ID, &tag.Name); err != nil {
@@ -90,6 +93,7 @@ func (c Context) TagList(e echo.Context) error {
 	if err != nil {
 		e.JSON(http.StatusOK, Error{Message: "タグ一覧の取得に失敗しました"})
 	}
+	defer rows.Close()
 	tags := []Tag{}
 	for rows.Next() {
 		tag := Tag{}
