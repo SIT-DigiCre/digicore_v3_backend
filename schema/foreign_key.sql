@@ -12,3 +12,12 @@ ALTER TABLE user_payments ADD CONSTRAINT fk_user_payments_user_id_users_id FOREI
 
 ALTER TABLE user_private_profiles ADD CONSTRAINT fk_user_private_profiles_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id);
 ALTER TABLE user_private_profiles ADD CONSTRAINT fk_user_profiles_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id);
+
+ALTER TABLE work_work_tags ADD CONSTRAINT fk_work_work_tags_tag_id_work_tags_id FOREIGN KEY (tag_id) REFERENCES work_tags(id);
+ALTER TABLE work_work_tags ADD CONSTRAINT fk_work_work_tags_work_id_works_id FOREIGN KEY (work_id) REFERENCES works(id);
+
+ALTER TABLE work_users ADD CONSTRAINT fk_work_users_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE work_users ADD CONSTRAINT fk_work_users_work_id_works_id FOREIGN KEY (work_id) REFERENCES works(id);
+
+ALTER TABLE work_files ADD CONSTRAINT fk_work_files_file_id_user_files_id FOREIGN KEY (file_id) REFERENCES user_files(id);
+ALTER TABLE work_files ADD CONSTRAINT fk_work_files_work_id_works_id FOREIGN KEY (work_id) REFERENCES works(id);
