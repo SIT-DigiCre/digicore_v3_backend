@@ -72,18 +72,26 @@ func (c Context) CreateWork(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: "作品の追加に失敗しました"})
 	}
-	_, err = c.DB.Exec("INSERT INTO works (name, description) VALUES (?, ?)", randomName.String(), "")
+	tx, err := c.DB.Begin()
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, Error{Message: "作品の追加に失敗しました"})
+	}
+	_, err = tx.Exec("INSERT INTO works (name, description) VALUES (?, ?)", randomName.String(), "")
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: "作品の追加に失敗しました"})
 	}
 	id := ""
-	err = c.DB.QueryRow("SELECT BIN_TO_UUID(id) FROM works WHERE name = ?", randomName.String()).Scan(&id)
+	err = tx.QueryRow("SELECT BIN_TO_UUID(id) FROM works WHERE name = ?", randomName.String()).Scan(&id)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: "作品の追加に失敗しました"})
 	}
-	err = updateWork(c.DB, id, work, userID)
+	err = updateWork(tx, id, work, userID)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: err.Error()})
+	}
+	err = tx.Commit()
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, Error{Message: "作品の追加に失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseCreateWork{Success: true, ID: id})
 }
@@ -109,9 +117,17 @@ func (c Context) UpdateWork(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: err.Error()})
 	}
-	err = updateWork(c.DB, id, work, userID)
+	tx, err := c.DB.Begin()
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, Error{Message: "作品の追加に失敗しました"})
+	}
+	err = updateWork(tx, id, work, userID)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: err.Error()})
+	}
+	err = tx.Commit()
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, Error{Message: "作品の追加に失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseUpdatgeWork{Success: true})
 }
@@ -202,7 +218,7 @@ func (c Context) DeleteWork(e echo.Context) error {
 	return e.JSON(http.StatusOK, ResponseDeleteWork{Success: true})
 }
 
-func updateWork(db *sql.DB, id string, work UpdateWork, userID string) error {
+func updateWork(db *sql.Tx, id string, work UpdateWork, userID string) error {
 	_, err := db.Exec("UPDATE works SET name = ?, description = ? WHERE id = UUID_TO_BIN(?)", work.Name, work.Description, id)
 	if err != nil {
 		return fmt.Errorf("作品情報の編集に失敗しました")
