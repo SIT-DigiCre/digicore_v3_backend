@@ -13,3 +13,7 @@ func CreateContext(db *sql.DB) (Context, error) {
 
 	return context, nil
 }
+
+type Error struct {
+	Message string `json:"message"`
+}
