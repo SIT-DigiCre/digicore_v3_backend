@@ -167,17 +167,17 @@ func (c Context) DeleteWork(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: err.Error()})
 	}
-	_, err = c.DB.Exec("DELETE FROM works_users WHERE work_id = UUID_TO_BIN(?)", id)
+	_, err = c.DB.Exec("DELETE FROM work_users WHERE work_id = UUID_TO_BIN(?)", id)
 	if err != nil {
-		return fmt.Errorf("作品の削除に失敗しました")
+		return e.JSON(http.StatusBadRequest, Error{Message: "作品の削除に失敗しました"})
 	}
-	_, err = c.DB.Exec("DELETE FROM works_tags WHERE work_id = UUID_TO_BIN(?)", id)
+	_, err = c.DB.Exec("DELETE FROM work_work_tags WHERE work_id = UUID_TO_BIN(?)", id)
 	if err != nil {
-		return fmt.Errorf("作品の削除に失敗しました")
+		return e.JSON(http.StatusBadRequest, Error{Message: "作品の削除に失敗しました"})
 	}
 	_, err = c.DB.Exec("DELETE FROM works WHERE id = UUID_TO_BIN(?)", id)
 	if err != nil {
-		return fmt.Errorf("作品の削除に失敗しました")
+		return e.JSON(http.StatusBadRequest, Error{Message: "作品の削除に失敗しました"})
 	}
 	return e.JSON(http.StatusOK, ResponseDeleteWork{Success: true})
 }
