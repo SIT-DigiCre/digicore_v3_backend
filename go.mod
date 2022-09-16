@@ -6,7 +6,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
-	github.com/k0kubun/sqldef v0.13.4
+	github.com/k0kubun/sqldef v0.13.9
 	github.com/labstack/echo/v4 v4.7.2
 	github.com/swaggo/swag v1.8.4
 	golang.org/x/oauth2 v0.0.0-20220808172628-8227340efae7
