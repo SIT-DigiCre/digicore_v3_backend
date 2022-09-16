@@ -29,8 +29,8 @@ var WasabiAccessKey = os.Getenv("WASABI_ACCESS_KEY")
 var WasabiSecretKey = os.Getenv("WASABI_SECRET_KEY")
 var WasabiEndpoint = "s3.ap-northeast-1-ntt.wasabisys.com"
 var WasabiRegion = "ap-northeast-1"
-var WasabiPrivateBucket = "corev3private"
-var WasabiPublicBucket = "corev3public"
+var WasabiPrivateBucket = os.Getenv("WASABI_PRIVATE_BUCKET")
+var WasabiPublicBucket = os.Getenv("WASABI_PUBLIC_BUCKET")
 var WasabiDirectURLDomain = "s3.ap-northeast-1.wasabisys.com"
 
 type Context struct {
