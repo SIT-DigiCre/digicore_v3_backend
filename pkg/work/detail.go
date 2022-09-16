@@ -22,6 +22,7 @@ type UpdateWork struct {
 	Description string   `json:"description"`
 	Authers     []string `json:"authers"`
 	Tags        []string `json:"tags"`
+	Files       []string `json:"files"`
 }
 
 type RequestUpdatgeWork = UpdateWork
@@ -35,11 +36,17 @@ type Auther struct {
 	Name string `json:"name"`
 }
 
+type File struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
 type ResponseGetWork struct {
 	Name        string   `json:"name"`
 	Description string   `json:"description"`
 	Authers     []Auther `json:"authers"`
 	Tags        []Tag    `json:"tags"`
+	Files       []File   `json:"files"`
 }
 
 type ResponseDeleteWork struct {
@@ -148,6 +155,19 @@ func (c Context) GetWork(e echo.Context) error {
 		tags = append(tags, tag)
 	}
 	work.Tags = tags
+	files := []File{}
+	rows, err = c.DB.Query("SELECT BIN_TO_UUID(file_id), name FROM work_files LEFT JOIN user_files ON user_files.id = work_files.file_id WHERE work_id = UUID_TO_BIN(?)", id)
+	if err != nil {
+		return e.JSON(http.StatusInternalServerError, Error{Message: "ファイルの読み込みに失敗しました"})
+	}
+	for rows.Next() {
+		file := File{}
+		if err := rows.Scan(&file.ID, &file.Name); err != nil {
+			return e.JSON(http.StatusInternalServerError, Error{Message: "ファイルの読み込みに失敗しました"})
+		}
+		files = append(files, file)
+	}
+	work.Files = files
 	return e.JSON(http.StatusOK, work)
 }
 
@@ -222,6 +242,24 @@ func updateWork(db *sql.DB, id string, work UpdateWork, userID string) error {
 		_, err = db.Exec("INSERT INTO work_work_tags (work_id, tag_id) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?))", id, e)
 		if err != nil {
 			return fmt.Errorf("タグの編集に失敗しました")
+		}
+	}
+	uniqueFlag = make(map[string]bool)
+	files := []string{}
+	for _, e := range work.Files {
+		if !uniqueFlag[e] {
+			uniqueFlag[e] = true
+			files = append(files, e)
+		}
+	}
+	_, err = db.Exec("DELETE FROM work_files WHERE work_id = UUID_TO_BIN(?)", id)
+	if err != nil {
+		return fmt.Errorf("ファイルの編集に失敗しました")
+	}
+	for _, e := range files {
+		_, err = db.Exec("INSERT INTO work_files (work_id, file_id) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?))", id, e)
+		if err != nil {
+			return fmt.Errorf("ファイルの編集に失敗しました")
 		}
 	}
 	return nil
