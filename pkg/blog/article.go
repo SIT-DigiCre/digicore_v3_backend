@@ -88,7 +88,7 @@ type ResponseDeleteArticle struct {
 // @Accept json
 // @Param RequestCreateArticle body RequestCreateArticle true "article data"
 // @Security Authorization
-// @Router /blog/article [post]
+// @Router /blog/articles [post]
 // @Success 200 {object} ResponseCreateArticle
 func (c Context) CreateArticle(e echo.Context) error {
 	userId, err := user.GetUserId(&e)
