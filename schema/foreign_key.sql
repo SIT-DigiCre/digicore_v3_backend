@@ -12,3 +12,5 @@ ALTER TABLE user_payments ADD CONSTRAINT fk_user_payments_user_id_users_id FOREI
 
 ALTER TABLE user_private_profiles ADD CONSTRAINT fk_user_private_profiles_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id);
 ALTER TABLE user_private_profiles ADD CONSTRAINT fk_user_profiles_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id);
+
+ALTER TABLE blog_posts ADD CONSTRAINT fk_blog_posts_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id);
