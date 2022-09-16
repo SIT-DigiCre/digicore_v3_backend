@@ -32,8 +32,9 @@ type ResponseUpdatgeWork struct {
 }
 
 type Auther struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID      string `json:"id"`
+	Name    string `json:"name"`
+	IconURL string `json:"icon_url"`
 }
 
 type File struct {
@@ -148,13 +149,13 @@ func (c Context) GetWork(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, Error{Message: "作品の取得に失敗しました"})
 	}
 	authers := []Auther{}
-	rows, err := c.DB.Query("SELECT BIN_TO_UUID(work_users.user_id), username FROM work_users LEFT JOIN user_profiles ON user_profiles.user_id = work_users.user_id WHERE work_id = UUID_TO_BIN(?)", id)
+	rows, err := c.DB.Query("SELECT BIN_TO_UUID(work_users.user_id), username, icon_url FROM work_users LEFT JOIN user_profiles ON user_profiles.user_id = work_users.user_id WHERE work_id = UUID_TO_BIN(?)", id)
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, Error{Message: "製作者の読み込みに失敗しました"})
 	}
 	for rows.Next() {
 		auther := Auther{}
-		if err := rows.Scan(&auther.ID, &auther.Name); err != nil {
+		if err := rows.Scan(&auther.ID, &auther.Name, &auther.IconURL); err != nil {
 			return e.JSON(http.StatusInternalServerError, Error{Message: "製作者の読み込みに失敗しました"})
 		}
 		authers = append(authers, auther)

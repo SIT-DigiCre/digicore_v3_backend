@@ -47,13 +47,13 @@ func (c Context) WorkList(e echo.Context) error {
 			return e.JSON(http.StatusInternalServerError, Error{Message: "作品一覧の取得に失敗しました"})
 		}
 		authers := []Auther{}
-		authers_rows, err := c.DB.Query("SELECT BIN_TO_UUID(work_users.user_id), username FROM work_users LEFT JOIN user_profiles ON user_profiles.user_id = work_users.user_id WHERE work_id = UUID_TO_BIN(?)", work.ID)
+		authers_rows, err := c.DB.Query("SELECT BIN_TO_UUID(work_users.user_id), username, icon_url FROM work_users LEFT JOIN user_profiles ON user_profiles.user_id = work_users.user_id WHERE work_id = UUID_TO_BIN(?)", work.ID)
 		if err != nil {
 			return e.JSON(http.StatusInternalServerError, Error{Message: "製作者の読み込みに失敗しました"})
 		}
 		for authers_rows.Next() {
 			auther := Auther{}
-			if err := authers_rows.Scan(&auther.ID, &auther.Name); err != nil {
+			if err := authers_rows.Scan(&auther.ID, &auther.Name, &auther.IconURL); err != nil {
 				return e.JSON(http.StatusInternalServerError, Error{Message: "製作者の読み込みに失敗しました"})
 			}
 			authers = append(authers, auther)
