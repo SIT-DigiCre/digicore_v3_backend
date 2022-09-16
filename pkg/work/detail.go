@@ -43,6 +43,7 @@ type File struct {
 }
 
 type ResponseGetWork struct {
+	ID          string   `json:"id"`
 	Name        string   `json:"name"`
 	Description string   `json:"description"`
 	Authers     []Auther `json:"authers"`
@@ -144,7 +145,7 @@ func (c Context) UpdateWork(e echo.Context) error {
 func (c Context) GetWork(e echo.Context) error {
 	id := e.Param("id")
 	work := ResponseGetWork{}
-	err := c.DB.QueryRow("SELECT name, description FROM works WHERE id = UUID_TO_BIN(?)", id).Scan(&work.Name, &work.Description)
+	err := c.DB.QueryRow("SELECT  BIN_TO_UUID(id), name, description FROM works WHERE id = UUID_TO_BIN(?)", id).Scan(&work.ID, &work.Name, &work.Description)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: "作品の取得に失敗しました"})
 	}

@@ -28,6 +28,7 @@ type ResponseUpdatgeTag struct {
 }
 
 type ResponseGetTag struct {
+	ID          string `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
@@ -96,14 +97,14 @@ func (c Context) UpdateTag(e echo.Context) error {
 func (c Context) GetTag(e echo.Context) error {
 	id := e.Param("id")
 	tag := ResponseGetTag{}
-	err := c.DB.QueryRow("SELECT name, description FROM work_tags WHERE id = UUID_TO_BIN(?)", id).Scan(&tag.Name, &tag.Description)
+	err := c.DB.QueryRow("SELECT BIN_TO_UUID(id), name, description FROM work_tags WHERE id = UUID_TO_BIN(?)", id).Scan(&tag.ID, &tag.Name, &tag.Description)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: err.Error()})
 	}
 	return e.JSON(http.StatusOK, tag)
 }
 
-// Get tag
+// Delete tag
 // @Accept json
 // @Security Authorization
 // @Router /work/tag/{id} [delete]
