@@ -76,6 +76,7 @@ func (c Context) CreateWork(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: "作品の追加に失敗しました"})
 	}
+	defer tx.Rollback()
 	_, err = tx.Exec("INSERT INTO works (name, description) VALUES (?, ?)", randomName.String(), "")
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: "作品の追加に失敗しました"})
@@ -121,6 +122,7 @@ func (c Context) UpdateWork(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: "作品の追加に失敗しました"})
 	}
+	defer tx.Rollback()
 	err = updateWork(tx, id, work, userID)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: err.Error()})
