@@ -6,42 +6,70 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type ResponseUpdateDiscordId struct {
-	Error string `json:"error"`
+type RequestCreateTag struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type ResponseCreateTag struct {
+	Success bool `json:"success"`
+}
+
+type RequestUpdatgeTag struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type ResponseUpdatgeTag struct {
+	Success bool `json:"success"`
+}
+
+type ResponseGetTag struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type ResponseDeleteTag struct {
+	Success bool `json:"success"`
 }
 
 // Create tag
 // @Accept json
 // @Security Authorization
 // @Router /work/tag [post]
-// @Success 200 {object} ResponseUpdateDiscordId
+// @Param RequestCreateTag body RequestCreateTag true "update work"
+// @Success 200 {object} ResponseCreateTag
 func (c Context) CreateTag(e echo.Context) error {
-	return e.JSON(http.StatusOK, ResponseUpdateDiscordId{})
+	return e.JSON(http.StatusOK, ResponseCreateTag{})
 }
 
 // Update tag
 // @Accept json
 // @Security Authorization
 // @Router /work/tag/{id} [put]
-// @Success 200 {object} ResponseUpdateDiscordId
+// @Param id path string true "tag id"
+// @Param RequestUpdatgeTag body RequestUpdatgeTag true "update work"
+// @Success 200 {object} ResponseUpdatgeTag
 func (c Context) UpdateTag(e echo.Context) error {
-	return e.JSON(http.StatusOK, ResponseUpdateDiscordId{})
+	return e.JSON(http.StatusOK, ResponseUpdatgeTag{})
 }
 
 // Get tag
 // @Accept json
 // @Security Authorization
 // @Router /work/tag/{id} [get]
-// @Success 200 {object} ResponseUpdateDiscordId
+// @Param id path string true "tag id"
+// @Success 200 {object} ResponseGetTag
 func (c Context) GetTag(e echo.Context) error {
-	return e.JSON(http.StatusOK, ResponseUpdateDiscordId{})
+	return e.JSON(http.StatusOK, ResponseGetTag{})
 }
 
 // Get tag
 // @Accept json
 // @Security Authorization
 // @Router /work/tag/{id} [delete]
-// @Success 200 {object} ResponseUpdateDiscordId
+// @Param id path string true "tag id"
+// @Success 200 {object} ResponseDeleteTag
 func (c Context) DeleteTag(e echo.Context) error {
-	return e.JSON(http.StatusOK, ResponseUpdateDiscordId{})
+	return e.JSON(http.StatusOK, ResponseDeleteTag{})
 }

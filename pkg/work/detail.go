@@ -36,7 +36,6 @@ type Auther struct {
 }
 
 type ResponseGetWork struct {
-	ID          string   `json:"id"`
 	Name        string   `json:"name"`
 	Description string   `json:"description"`
 	Authers     []Auther `json:"authers"`
@@ -55,7 +54,7 @@ type ResponseDeleteWork struct {
 // @Success 200 {object} ResponseCreateWork
 func (c Context) CreateWork(e echo.Context) error {
 	userID, err := user.GetUserId(&e)
-	if e != nil {
+	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: err.Error()})
 	}
 	work := UpdateWork{}
@@ -71,7 +70,7 @@ func (c Context) CreateWork(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, Error{Message: "作品の追加に失敗しました"})
 	}
 	id := ""
-	err = c.DB.QueryRow("SELECT id FROM works WHERE name = ?", randomName.String()).Scan(&id)
+	err = c.DB.QueryRow("SELECT BIN_TO_UUID(id) FROM works WHERE name = ?", randomName.String()).Scan(&id)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: "作品の追加に失敗しました"})
 	}
@@ -85,12 +84,13 @@ func (c Context) CreateWork(e echo.Context) error {
 // Update work
 // @Accept json
 // @Security Authorization
-// @Router /work/work/{id} [post]
+// @Router /work/work/{id} [put]
+// @Param id path string true "work id"
 // @Param RequestUpdatgeWork body RequestUpdatgeWork true "update work"
 // @Success 200 {object} ResponseUpdatgeWork
 func (c Context) UpdateWork(e echo.Context) error {
 	userID, err := user.GetUserId(&e)
-	if e != nil {
+	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: err.Error()})
 	}
 	work := UpdateWork{}
@@ -113,16 +113,17 @@ func (c Context) UpdateWork(e echo.Context) error {
 // @Accept json
 // @Security Authorization
 // @Router /work/work/{id} [get]
+// @Param id path string true "work id"
 // @Success 200 {object} ResponseGetWork
 func (c Context) GetWork(e echo.Context) error {
 	id := e.Param("id")
 	work := ResponseGetWork{}
-	err := c.DB.QueryRow("SELECT name, description FROM works WHERE id = ?", id).Scan(&work.Name, &work.Description)
+	err := c.DB.QueryRow("SELECT name, description FROM works WHERE id = UUID_TO_BIN(?)", id).Scan(&work.Name, &work.Description)
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: "作品の取得に失敗しました"})
 	}
 	authers := []Auther{}
-	rows, err := c.DB.Query("SELECT user_id, name FROM works_users WHERE work_id = ?", id)
+	rows, err := c.DB.Query("SELECT BIN_TO_UUID(work_users.user_id), username FROM work_users LEFT JOIN user_profiles ON user_profiles.user_id = work_users.user_id WHERE work_id = UUID_TO_BIN(?)", id)
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, Error{Message: "製作者の読み込みに失敗しました"})
 	}
@@ -135,7 +136,7 @@ func (c Context) GetWork(e echo.Context) error {
 	}
 	work.Authers = authers
 	tags := []Tag{}
-	rows, err = c.DB.Query("SELECT user_id, name FROM works_users WHERE work_id = ?", id)
+	rows, err = c.DB.Query("SELECT BIN_TO_UUID(tag_id), name FROM work_work_tags LEFT JOIN work_tags ON work_tags.id = work_work_tags.tag_id WHERE work_id = UUID_TO_BIN(?)", id)
 	if err != nil {
 		return e.JSON(http.StatusInternalServerError, Error{Message: "タグの読み込みに失敗しました"})
 	}
@@ -147,17 +148,18 @@ func (c Context) GetWork(e echo.Context) error {
 		tags = append(tags, tag)
 	}
 	work.Tags = tags
-	return e.JSON(http.StatusOK, ResponseGetWork{})
+	return e.JSON(http.StatusOK, work)
 }
 
 // Delete work
 // @Accept json
 // @Security Authorization
 // @Router /work/work/{id} [delete]
+// @Param id path string true "work id"
 // @Success 200 {object} ResponseDeleteWork
 func (c Context) DeleteWork(e echo.Context) error {
 	userID, err := user.GetUserId(&e)
-	if e != nil {
+	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: err.Error()})
 	}
 	id := e.Param("id")
@@ -165,15 +167,15 @@ func (c Context) DeleteWork(e echo.Context) error {
 	if err != nil {
 		return e.JSON(http.StatusBadRequest, Error{Message: err.Error()})
 	}
-	_, err = c.DB.Exec("DELETE FROM works_users WHERE work_id = ?", id)
+	_, err = c.DB.Exec("DELETE FROM works_users WHERE work_id = UUID_TO_BIN(?)", id)
 	if err != nil {
 		return fmt.Errorf("作品の削除に失敗しました")
 	}
-	_, err = c.DB.Exec("DELETE FROM works_tags WHERE work_id = ?", id)
+	_, err = c.DB.Exec("DELETE FROM works_tags WHERE work_id = UUID_TO_BIN(?)", id)
 	if err != nil {
 		return fmt.Errorf("作品の削除に失敗しました")
 	}
-	_, err = c.DB.Exec("DELETE FROM works WHERE id = ?", id)
+	_, err = c.DB.Exec("DELETE FROM works WHERE id = UUID_TO_BIN(?)", id)
 	if err != nil {
 		return fmt.Errorf("作品の削除に失敗しました")
 	}
@@ -181,7 +183,7 @@ func (c Context) DeleteWork(e echo.Context) error {
 }
 
 func updateWork(db *sql.DB, id string, work UpdateWork, userID string) error {
-	_, err := db.Exec("UPDATE works SET name = ?, description = ? WHERE id = ?", work.Name, work.Description, id)
+	_, err := db.Exec("UPDATE works SET name = ?, description = ? WHERE id = UUID_TO_BIN(?)", work.Name, work.Description, id)
 	if err != nil {
 		return fmt.Errorf("作品情報の編集に失敗しました")
 	}
@@ -194,14 +196,14 @@ func updateWork(db *sql.DB, id string, work UpdateWork, userID string) error {
 			authers = append(authers, e)
 		}
 	}
-	_, err = db.Exec("DELETE FROM works_users WHERE work_id = ?", id)
+	_, err = db.Exec("DELETE FROM work_users WHERE work_id = UUID_TO_BIN(?)", id)
 	if err != nil {
 		return fmt.Errorf("製作者の編集に失敗しました")
 	}
 	for _, e := range authers {
 		_, err = db.Exec("INSERT INTO work_users (work_id, user_id) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?))", id, e)
 		if err != nil {
-			return fmt.Errorf("製作者の編集に失敗しました")
+			return fmt.Errorf(err.Error())
 		}
 	}
 	uniqueFlag = make(map[string]bool)
@@ -212,14 +214,14 @@ func updateWork(db *sql.DB, id string, work UpdateWork, userID string) error {
 			tags = append(tags, e)
 		}
 	}
-	_, err = db.Exec("DELETE FROM work_tags WHERE work_id = ?", id)
+	_, err = db.Exec("DELETE FROM work_work_tags WHERE work_id = UUID_TO_BIN(?)", id)
 	if err != nil {
-		return fmt.Errorf("タグの編集に失敗しました")
+		return fmt.Errorf(err.Error())
 	}
 	for _, e := range tags {
-		_, err = db.Exec("INSERT INTO work_tags (work_id, tag_id) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?))", id, e)
+		_, err = db.Exec("INSERT INTO work_work_tags (work_id, tag_id) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?))", id, e)
 		if err != nil {
-			return fmt.Errorf("製作者の編集に失敗しました")
+			return fmt.Errorf("タグの編集に失敗しました")
 		}
 	}
 	return nil
@@ -227,7 +229,7 @@ func updateWork(db *sql.DB, id string, work UpdateWork, userID string) error {
 
 func checkWorkUpdateAuthority(db *sql.DB, workID string, userID string) error {
 	tmp := ""
-	err := db.QueryRow("SELECT work_id, user_id FROM work_users WHERE work_id = ? AND user_id = ?", workID, userID).Scan(&tmp, &tmp)
+	err := db.QueryRow("SELECT work_id, user_id FROM work_users WHERE work_id = UUID_TO_BIN(?) AND user_id = UUID_TO_BIN(?)", workID, userID).Scan(&tmp, &tmp)
 	if err == sql.ErrNoRows {
 		return fmt.Errorf("作品情報の編集の権限がありません")
 	}
