@@ -25,6 +25,14 @@ var ConohaAPIUserPassword = os.Getenv("CONOHA_API_USER_PASSWORD")
 var ConohaStorageContainerName = "corev3"
 var ConohaFileUploadMaxSize = 104857600
 
+var WasabiAccessKey = os.Getenv("WASABI_ACCESS_KEY")
+var WasabiSecretKey = os.Getenv("WASABI_SECRET_KEY")
+var WasabiEndpoint = "s3.ap-northeast-1-ntt.wasabisys.com"
+var WasabiRegion = "ap-northeast-1"
+var WasabiPrivateBucket = "corev3private"
+var WasabiPublicBucket = "corev3public"
+var WasabiDirectURLDomain = "s3.ap-northeast-1.wasabisys.com"
+
 type Context struct {
 }
 
