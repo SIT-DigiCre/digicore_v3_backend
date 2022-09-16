@@ -88,7 +88,7 @@ func (c Context) TagList(e echo.Context) error {
 	pagesNum, _ := strconv.Atoi(pages)
 	rows, err := c.DB.Query("SELECT BIN_TO_UUID(id), name FROM work_tags ORDER BY updated_at DESC LIMIT 100 OFFSET ?", pagesNum)
 	if err != nil {
-		e.JSON(http.StatusOK, Error{Message: "作品一覧の取得に失敗しました"})
+		e.JSON(http.StatusOK, Error{Message: "タグ一覧の取得に失敗しました"})
 	}
 	tags := []Tag{}
 	for rows.Next() {
