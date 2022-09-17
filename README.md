@@ -38,4 +38,8 @@ go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest # Add "${HOME
 make generate_api
 ```
 
+## 開発時のJWT検証の無効化
+
+.envのAUTHをdisableに書き換えてください。
+
 TODO: 後で書く

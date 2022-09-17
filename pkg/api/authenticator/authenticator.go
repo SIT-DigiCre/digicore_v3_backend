@@ -31,6 +31,10 @@ func CreateAuthenticator() ([]echo.MiddlewareFunc, error) {
 	return []echo.MiddlewareFunc{authenticator, Login}, nil
 }
 
+func CreateDebugAuthenticator() ([]echo.MiddlewareFunc, error) {
+	return []echo.MiddlewareFunc{Login}, nil
+}
+
 func init() {
 	key, _ = rsa.GenerateKey(rand.Reader, 2048)
 }
