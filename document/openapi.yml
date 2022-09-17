@@ -114,7 +114,7 @@ paths:
           $ref: "#/components/responses/NotFound"
         500:
           $ref: "#/components/responses/InternalServer"
-    post:
+    put:
       tags:
         - user
       description: "Update my profile"
@@ -126,14 +126,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPostUserMe"
+              $ref: "#/components/schemas/ReqPutUserMe"
       responses:
         200:
           description: "Success update my profile"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResPostUserMe"
+                $ref: "#/components/schemas/ResGetUserMe"
         400:
           $ref: "#/components/responses/BadRequest"
         403:
@@ -215,7 +215,7 @@ components:
           type: string
         active_limit:
           type: string
-    ReqPostUserMe:
+    ReqPutUserMe:
       required:
         - username
         - icon_url
@@ -238,12 +238,6 @@ components:
           type: string
           x-oapi-codegen-extra-tags:
             validate: required,min=1,max=255
-    ResPostUserMe:
-      required:
-        - success
-      properties:
-        success:
-          type: boolean
     Error:
       required:
         - level

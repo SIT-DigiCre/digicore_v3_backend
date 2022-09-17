@@ -9,15 +9,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *server) PostUserMe(ctx echo.Context) error {
-	var requestBody api.ReqPostUserMe
+func (s *server) PutUserMe(ctx echo.Context) error {
+	var requestBody api.ReqPutUserMe
 	ctx.Bind(&requestBody)
 	err := validator.Check(requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}
 
-	res, err := users.PostUserMe(ctx, db.DB, requestBody)
+	res, err := users.PutUserMe(ctx, db.DB, requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

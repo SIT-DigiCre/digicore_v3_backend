@@ -28,8 +28,8 @@ type ServerInterface interface {
 	// (GET /user/me)
 	GetUserMe(ctx echo.Context) error
 
-	// (POST /user/me)
-	PostUserMe(ctx echo.Context) error
+	// (PUT /user/me)
+	PutUserMe(ctx echo.Context) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
@@ -93,14 +93,14 @@ func (w *ServerInterfaceWrapper) GetUserMe(ctx echo.Context) error {
 	return err
 }
 
-// PostUserMe converts echo context to params.
-func (w *ServerInterfaceWrapper) PostUserMe(ctx echo.Context) error {
+// PutUserMe converts echo context to params.
+func (w *ServerInterfaceWrapper) PutUserMe(ctx echo.Context) error {
 	var err error
 
 	ctx.Set(BearerAuthScopes, []string{""})
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.PostUserMe(ctx)
+	err = w.Handler.PutUserMe(ctx)
 	return err
 }
 
@@ -138,6 +138,6 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.POST(baseURL+"/signup/callback", wrapper.PostSignupCallback)
 	router.GET(baseURL+"/status", wrapper.GetStatus)
 	router.GET(baseURL+"/user/me", wrapper.GetUserMe)
-	router.POST(baseURL+"/user/me", wrapper.PostUserMe)
+	router.PUT(baseURL+"/user/me", wrapper.PutUserMe)
 
 }

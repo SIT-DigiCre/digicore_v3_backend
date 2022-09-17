@@ -23,8 +23,8 @@ type ReqPostSignupCallback struct {
 	Code string `json:"code" validate:"required"`
 }
 
-// ReqPostUserMe defines model for ReqPostUserMe.
-type ReqPostUserMe struct {
+// ReqPutUserMe defines model for ReqPutUserMe.
+type ReqPutUserMe struct {
 	IconUrl               string `json:"icon_url" validate:"required,min=1,max=255"`
 	SchoolGrade           int    `json:"school_grade" validate:"required,min=1,max=9"`
 	ShortSelfIntroduction string `json:"short_self_introduction" validate:"required,min=1,max=255"`
@@ -68,11 +68,6 @@ type ResPostSignupCallback struct {
 	Jwt string `json:"jwt"`
 }
 
-// ResPostUserMe defines model for ResPostUserMe.
-type ResPostUserMe struct {
-	Success bool `json:"success"`
-}
-
 // BadRequest defines model for BadRequest.
 type BadRequest = Error
 
@@ -91,8 +86,8 @@ type PostLoginCallbackJSONBody = ReqPostLoginCallback
 // PostSignupCallbackJSONBody defines parameters for PostSignupCallback.
 type PostSignupCallbackJSONBody = ReqPostSignupCallback
 
-// PostUserMeJSONBody defines parameters for PostUserMe.
-type PostUserMeJSONBody = ReqPostUserMe
+// PutUserMeJSONBody defines parameters for PutUserMe.
+type PutUserMeJSONBody = ReqPutUserMe
 
 // PostLoginCallbackJSONRequestBody defines body for PostLoginCallback for application/json ContentType.
 type PostLoginCallbackJSONRequestBody = PostLoginCallbackJSONBody
@@ -100,5 +95,5 @@ type PostLoginCallbackJSONRequestBody = PostLoginCallbackJSONBody
 // PostSignupCallbackJSONRequestBody defines body for PostSignupCallback for application/json ContentType.
 type PostSignupCallbackJSONRequestBody = PostSignupCallbackJSONBody
 
-// PostUserMeJSONRequestBody defines body for PostUserMe for application/json ContentType.
-type PostUserMeJSONRequestBody = PostUserMeJSONBody
+// PutUserMeJSONRequestBody defines body for PutUserMe for application/json ContentType.
+type PutUserMeJSONRequestBody = PutUserMeJSONBody

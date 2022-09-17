@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func PostUserMe(ctx echo.Context, db db.DBClient, requestBody api.ReqPostUserMe) (api.ResPostUserMe, *response.Error) {
+func PutUserMe(ctx echo.Context, db db.DBClient, requestBody api.ReqPutUserMe) (api.ResGetUserMe, *response.Error) {
 
-	return api.ResPostUserMe{}, nil
+	return api.ResGetUserMe{}, nil
 }
