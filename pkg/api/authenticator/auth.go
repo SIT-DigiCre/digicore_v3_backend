@@ -1,11 +1,13 @@
-package validator
+package authenticator
 
 import (
 	"context"
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/deepmap/oapi-codegen/examples/petstore-expanded/echo/api"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/labstack/echo/v4"
@@ -100,4 +102,18 @@ func Login(next echo.HandlerFunc) echo.HandlerFunc {
 		c.Set("user_id", subjectKey)
 		return next(c)
 	}
+}
+
+func CreateToken(user_id string) (string, *response.Error) {
+	t := jwt.New()
+	t.Set(jwt.SubjectKey, user_id)
+	t.Set(jwt.ExpirationKey, time.Now().Add(time.Hour*72).Unix())
+
+	signed, err := jwt.Sign(t, jwt.WithKey(jwa.RS256, key))
+	if err != nil {
+		fmt.Printf("failed to sign token: %s", err)
+		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "JWTの生成に失敗しました", Log: err.Error()}
+	}
+	token := string(signed)
+	return token, nil
 }
