@@ -25,10 +25,10 @@ type ReqPostSignupCallback struct {
 
 // ReqPostUserMe defines model for ReqPostUserMe.
 type ReqPostUserMe struct {
-	IconUrl               string `json:"icon_url"`
-	SchoolGrade           int    `json:"school_grade"`
-	ShortSelfIntroduction string `json:"short_self_introduction"`
-	Username              string `json:"username"`
+	IconUrl               string `json:"icon_url" validate:"min=1,max=255"`
+	SchoolGrade           int    `json:"school_grade" validate:"min=1,max=9"`
+	ShortSelfIntroduction string `json:"short_self_introduction" validate:"min=1,max=255"`
+	Username              string `json:"username" validate:"min=1,max=255"`
 }
 
 // ResGetLogin defines model for ResGetLogin.

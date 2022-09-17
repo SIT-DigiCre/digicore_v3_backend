@@ -220,12 +220,20 @@ components:
       properties:
         username:
           type: string
+          x-oapi-codegen-extra-tags:
+            validate: min=1,max=255
         icon_url:
           type: string
+          x-oapi-codegen-extra-tags:
+            validate: min=1,max=255
         school_grade:
           type: integer
+          x-oapi-codegen-extra-tags:
+            validate: min=1,max=9
         short_self_introduction:
           type: string
+          x-oapi-codegen-extra-tags:
+            validate: min=1,max=255
     ResPostUserMe:
       required:
         - success

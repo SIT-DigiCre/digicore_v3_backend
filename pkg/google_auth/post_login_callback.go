@@ -9,10 +9,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func PostLoginCallback(ctx echo.Context, db db.DBClient) (api.ResPostLoginCallback, *response.Error) {
-	var req api.ReqPostSignupCallback
-	ctx.Bind(&req)
-	studentNumber, err := getStudentNumberfromGoogle(req.Code, loginRedirectUrl)
+func PostLoginCallback(ctx echo.Context, db db.DBClient, requestBody api.ReqPostLoginCallback) (api.ResPostLoginCallback, *response.Error) {
+	studentNumber, err := getStudentNumberfromGoogle(requestBody.Code, loginRedirectUrl)
 	if err != nil {
 		return api.ResPostLoginCallback{}, err
 	}
