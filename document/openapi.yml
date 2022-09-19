@@ -162,6 +162,7 @@ components:
           type: string
           x-oapi-codegen-extra-tags:
             validate: required
+            ja: 認証コード
     ResPostSignupCallback:
       required:
         - jwt
@@ -182,6 +183,7 @@ components:
           type: string
           x-oapi-codegen-extra-tags:
             validate: required
+            ja: 認証コード
     ResPostLoginCallback:
       required:
         - jwt
@@ -226,18 +228,22 @@ components:
           type: string
           x-oapi-codegen-extra-tags:
             validate: required,min=1,max=255
+            ja: ユーザー名
         icon_url:
           type: string
           x-oapi-codegen-extra-tags:
             validate: required,min=1,max=255
+            ja: アイコンURL
         school_grade:
           type: integer
           x-oapi-codegen-extra-tags:
             validate: required,min=1,max=9
+            ja: 学年
         short_self_introduction:
           type: string
           x-oapi-codegen-extra-tags:
             validate: required,min=1,max=255
+            ja: 短い自己紹介
     Error:
       required:
         - level

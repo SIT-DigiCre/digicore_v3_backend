@@ -12,7 +12,7 @@ import (
 func (s *server) PutUserMe(ctx echo.Context) error {
 	var requestBody api.ReqPutUserMe
 	ctx.Bind(&requestBody)
-	err := validator.Check(requestBody)
+	err := validator.Validate(requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

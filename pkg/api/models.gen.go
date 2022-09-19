@@ -15,20 +15,20 @@ type Error struct {
 
 // ReqPostLoginCallback defines model for ReqPostLoginCallback.
 type ReqPostLoginCallback struct {
-	Code string `json:"code" validate:"required"`
+	Code string `ja:"認証コード" json:"code" validate:"required"`
 }
 
 // ReqPostSignupCallback defines model for ReqPostSignupCallback.
 type ReqPostSignupCallback struct {
-	Code string `json:"code" validate:"required"`
+	Code string `ja:"認証コード" json:"code" validate:"required"`
 }
 
 // ReqPutUserMe defines model for ReqPutUserMe.
 type ReqPutUserMe struct {
-	IconUrl               string `json:"icon_url" validate:"required,min=1,max=255"`
-	SchoolGrade           int    `json:"school_grade" validate:"required,min=1,max=9"`
-	ShortSelfIntroduction string `json:"short_self_introduction" validate:"required,min=1,max=255"`
-	Username              string `json:"username" validate:"required,min=1,max=255"`
+	IconUrl               string `ja:"アイコンURL" json:"icon_url" validate:"required,min=1,max=255"`
+	SchoolGrade           int    `ja:"学年" json:"school_grade" validate:"required,min=1,max=9"`
+	ShortSelfIntroduction string `ja:"短い自己紹介" json:"short_self_introduction" validate:"required,min=1,max=255"`
+	Username              string `ja:"ユーザー名" json:"username" validate:"required,min=1,max=255"`
 }
 
 // ResGetLogin defines model for ResGetLogin.

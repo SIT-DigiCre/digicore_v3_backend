@@ -12,7 +12,7 @@ import (
 func (s *server) PostLoginCallback(ctx echo.Context) error {
 	var requestBody api.ReqPostLoginCallback
 	ctx.Bind(&requestBody)
-	err := validator.Check(requestBody)
+	err := validator.Validate(requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}
