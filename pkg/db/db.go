@@ -44,6 +44,6 @@ func OpenTransaction() (TransactionClient, *response.Error) {
 	return TransactionClient{tx: txClient, query: query}, nil
 }
 
-func GenerateID() {
-
+type CommonClient interface {
+	Select(dest interface{}, queryFile string, params interface{}) error
 }

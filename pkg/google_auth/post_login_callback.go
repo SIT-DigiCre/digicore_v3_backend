@@ -14,7 +14,7 @@ func PostLoginCallback(ctx echo.Context, dbClient db.Client, requestBody api.Req
 	if err != nil {
 		return api.ResPostLoginCallback{}, err
 	}
-	userID, err := users.IDFromStudentNumber(studentNumber, dbClient)
+	userID, err := users.IDFromStudentNumber(studentNumber, &dbClient)
 	if err != nil {
 		return api.ResPostLoginCallback{}, err
 	}

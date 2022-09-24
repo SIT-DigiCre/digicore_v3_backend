@@ -8,7 +8,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 )
 
-func IDFromStudentNumber(studentNumber string, dbClient db.Client) (string, *response.Error) {
+func IDFromStudentNumber(studentNumber string, dbClient db.CommonClient) (string, *response.Error) {
 	params := struct {
 		StudentNumber string `twowaysql:"studentNumber"`
 	}{
@@ -38,7 +38,7 @@ type Profile struct {
 	ShortSelfIntroduction string `db:"short_self_introduction"`
 }
 
-func getUserProfileFromUserID(userID string, dbClient db.Client) (Profile, *response.Error) {
+func getUserProfileFromUserID(userID string, dbClient db.CommonClient) (Profile, *response.Error) {
 	params := struct {
 		UserID string `twowaysql:"userID"`
 	}{

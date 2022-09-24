@@ -9,11 +9,11 @@ import (
 
 func GetUserMe(ctx echo.Context, dbClient db.Client) (api.ResGetUserMe, *response.Error) {
 	userID := ctx.Get("user_id").(string)
-	profile, err := getUserProfileFromUserID(userID, dbClient)
+	profile, err := getUserProfileFromUserID(userID, &dbClient)
 	if err != nil {
 		return api.ResGetUserMe{}, err
 	}
-	myProfile := api.ResGetUserMe{
+	res := api.ResGetUserMe{
 		ActiveLimit:           profile.ActiveLimit,
 		DiscordUserid:         profile.DiscordUserID,
 		IconUrl:               profile.IconUrl,
@@ -23,5 +23,5 @@ func GetUserMe(ctx echo.Context, dbClient db.Client) (api.ResGetUserMe, *respons
 		UserId:                profile.UserId,
 		Username:              profile.Username,
 	}
-	return myProfile, nil
+	return res, nil
 }

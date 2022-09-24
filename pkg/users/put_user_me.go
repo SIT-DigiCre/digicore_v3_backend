@@ -8,6 +8,20 @@ import (
 )
 
 func PutUserMe(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPutUserMe) (api.ResGetUserMe, *response.Error) {
-
-	return api.ResGetUserMe{}, nil
+	userID := ctx.Get("user_id").(string)
+	profile, err := getUserProfileFromUserID(userID, &dbClient)
+	if err != nil {
+		return api.ResGetUserMe{}, err
+	}
+	res := api.ResGetUserMe{
+		ActiveLimit:           profile.ActiveLimit,
+		DiscordUserid:         profile.DiscordUserID,
+		IconUrl:               profile.IconUrl,
+		SchoolGrade:           profile.SchoolGrade,
+		ShortSelfIntroduction: profile.ShortSelfIntroduction,
+		StudentNumber:         profile.StudentNumber,
+		UserId:                profile.UserId,
+		Username:              profile.Username,
+	}
+	return res, nil
 }
