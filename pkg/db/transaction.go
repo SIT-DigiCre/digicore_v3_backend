@@ -22,7 +22,15 @@ func (t *TransactionClient) Select(dest interface{}, queryFile string, params in
 	return t.tx.Select(context.Background(), dest, string(query), params)
 }
 
-func (t *TransactionClient) Exec(queryFile string, params interface{}) (sql.Result, error) {
+func (t *TransactionClient) Exec(queryFile string, params interface{}, generateID bool) (sql.Result, error) {
+	if generateID {
+		query, err := t.query.ReadFile("sql/transaction/generate_id.sql")
+		if err != nil {
+			return nil, err
+		}
+		_, err = t.tx.Exec(context.Background(), string(query), nil)
+		return nil, err
+	}
 	query, err := t.query.ReadFile(queryFile)
 	if err != nil {
 		return nil, err
@@ -40,11 +48,6 @@ func (t *TransactionClient) Commit() *response.Error {
 
 func (t *TransactionClient) Rollback() error {
 	return t.tx.Rollback()
-}
-
-func (t *TransactionClient) GenerateID() error {
-	_, err := t.Exec("sql/transaction/generate_id.sql", nil)
-	return err
 }
 
 func (t *TransactionClient) GetID() (string, error) {
