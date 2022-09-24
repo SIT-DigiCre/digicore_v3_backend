@@ -25,11 +25,7 @@ func (t *TransactionClient) Select(dest interface{}, queryFile string, params in
 
 func (t *TransactionClient) Exec(queryFile string, params interface{}, generateID bool) (sql.Result, error) {
 	if generateID {
-		query, err := t.query.ReadFile("sql/transaction/generate_id.sql")
-		if err != nil {
-			return nil, err
-		}
-		_, err = t.tx.Exec(context.Background(), string(query), nil)
+		_, err := t.Exec("sql/transaction/generate_id.sql", nil, false)
 		return nil, err
 	}
 	query, err := t.query.ReadFile(queryFile)
