@@ -1,0 +1,12 @@
+/status:
+  $ref: "./paths/status.yml"
+/signup:
+  $ref: "./paths/signup.yml"
+/signup/callback:
+  $ref: "./paths/signup_callback.yml"
+/login:
+  $ref: "./paths/login.yml"
+/login/callback:
+  $ref: "./paths/login_callback.yml"
+/user/me:
+  $ref: "./paths/user_me.yml"

@@ -1,0 +1,5 @@
+required:
+  - status
+properties:
+  status:
+    type: boolean

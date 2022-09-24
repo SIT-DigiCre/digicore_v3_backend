@@ -26,16 +26,19 @@ docker compose up
 ## DBマイグレーション
 
 ```bash
-docker compose exec -w /app/db admin go run github.com/rubenv/sql-migrate/sql-migrate up
+docker compose run --rm -w /app/db admin sql-migrate up
 ```
 
 ## 開発手順
 
+
 ### apiパッケージの更新
 
+**./document/bundle.ymlとpkg/api/*.gen.goは自動生成であるため直接編集しない**
+
 ```sh
-go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest # Add "${HOME}"/go/bin to PATH
-make generate_api
+docker compose run --rm -w /app/document node_tool swagger-cli bundle -o ./bundle.yml -t yaml ./openapi.yml # OpenAPIファイルの結合
+docker compose run --rm -w /app admin make generate_api # apiパッケージの生成
 ```
 
 ## 開発時のJWT検証の無効化

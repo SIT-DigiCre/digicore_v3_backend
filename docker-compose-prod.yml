@@ -30,7 +30,7 @@ services:
 
   admin:
     build:
-      context: "./"
+      dockerfile: "./Dockerfile"
       target: "admin"
     volumes:
       - "./:/app"

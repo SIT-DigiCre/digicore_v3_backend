@@ -1,0 +1,20 @@
+ResGetStatus:
+  $ref: "./schemas/res_get_status.yml"
+ResGetSignup:
+  $ref: "./schemas/res_get_signup.yml"
+ReqPostSignupCallback:
+  $ref: "./schemas/req_post_signup_callback.yml"
+ResPostSignupCallback:
+  $ref: "./schemas/res_post_signup_callback.yml"
+ResGetLogin:
+  $ref: "./schemas/res_get_login.yml"
+ReqPostLoginCallback:
+  $ref: "./schemas/req_post_login_callback.yml"
+ResPostLoginCallback:
+  $ref: "./schemas/res_post_login_callback.yml"
+ResGetUserMe:
+  $ref: "./schemas/res_get_user_me.yml"
+ReqPutUserMe:
+  $ref: "./schemas/req_put_user_me.yml"
+Error:
+  $ref: "./schemas/error.yml"

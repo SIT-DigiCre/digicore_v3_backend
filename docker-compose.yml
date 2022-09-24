@@ -18,7 +18,7 @@ services:
 
   backend:
     build:
-      context: "./"
+      dockerfile: "./Dockerfile.develop"
       target: "development"
     volumes:
       - "./:/app"
@@ -29,13 +29,19 @@ services:
 
   admin:
     build:
-      context: "./"
+      dockerfile: "./Dockerfile"
       target: "admin"
     volumes:
       - "./:/app"
     env_file:
       - ".env"
-    tty: true
+
+  node_tool:
+    build:
+      dockerfile: "./Dockerfile.develop"
+      target: "node_tool"
+    volumes:
+      - "./:/app"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:5.2.0

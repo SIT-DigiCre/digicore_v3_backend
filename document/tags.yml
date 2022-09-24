@@ -1,0 +1,4 @@
+- name: auth
+  description: Authentication system
+- name: user
+  description: User system
