@@ -37,13 +37,14 @@ func Open() Client {
 }
 
 func OpenTransaction() (TransactionClient, *response.Error) {
-	txClient, err := tw.Begin(context.Background())
+	context := context.Background()
+	txClient, err := tw.Begin(context)
 	if err != nil {
 		return TransactionClient{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBでエラーが発生しました", Log: err.Error()}
 	}
-	return TransactionClient{tx: txClient, query: query}, nil
+	return TransactionClient{tx: txClient, query: query, context: context}, nil
 }
 
 type CommonClient interface {
-	Select(dest interface{}, queryFile string, params interface{}) error
+	Select(dest interface{}, queryPath string, params interface{}) error
 }
