@@ -2,28 +2,18 @@ package db
 
 import (
 	"context"
-	"database/sql"
 	"embed"
 	"fmt"
 	"os"
 
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/future-architect/go-twowaysql"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 )
 
-type Client interface {
-	Select(dest interface{}, query string, params interface{}) error
-	Exec(query string, params interface{}) (sql.Result, error)
-}
-
-type DBClient struct {
-	Client Client
-	Query  embed.FS
-}
-
-var DB DBClient
+var tw *twowaysql.Twowaysql
 
 //go:embed sql
 var query embed.FS
@@ -38,18 +28,21 @@ func init() {
 	if sdb.Ping() != nil {
 		logrus.Fatal(err.Error())
 	}
-	DB.Client = &client{tw: twowaysql.New(sdb)}
-	DB.Query = query
+	tw = twowaysql.New(sdb)
 }
 
-type client struct {
-	tw *twowaysql.Twowaysql
+func Open() Client {
+	return Client{tw: tw, query: query}
 }
 
-func (c *client) Select(dest interface{}, query string, params interface{}) error {
-	return c.tw.Select(context.Background(), dest, query, params)
+func OpenTransaction() (TransactionClient, *response.Error) {
+	txClient, err := tw.Begin(context.Background())
+	if err != nil {
+		return TransactionClient{}, &response.Error{}
+	}
+	return TransactionClient{tx: txClient, query: query}, nil
 }
 
-func (c *client) Exec(query string, params interface{}) (sql.Result, error) {
-	return c.tw.Exec(context.Background(), query, params)
+func GenerateID() {
+
 }

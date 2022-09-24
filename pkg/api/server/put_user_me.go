@@ -17,7 +17,18 @@ func (s *server) PutUserMe(ctx echo.Context) error {
 		return response.ErrorResponse(ctx, err)
 	}
 
-	res, err := users.PutUserMe(ctx, db.DB, requestBody)
+	dbTranisactionClient, err := db.OpenTransaction()
+	if err != nil {
+		return response.ErrorResponse(ctx, err)
+	}
+	defer dbTranisactionClient.Rollback()
+
+	res, err := users.PutUserMe(ctx, dbTranisactionClient, requestBody)
+	if err != nil {
+		return response.ErrorResponse(ctx, err)
+	}
+
+	err = dbTranisactionClient.Commit()
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

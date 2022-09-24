@@ -7,9 +7,9 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GetUserMe(ctx echo.Context, db db.DBClient) (api.ResGetUserMe, *response.Error) {
+func GetUserMe(ctx echo.Context, dbClient db.Client) (api.ResGetUserMe, *response.Error) {
 	userID := ctx.Get("user_id").(string)
-	profile, err := GetUserProfileFromUserID(userID, db)
+	profile, err := GetUserProfileFromUserID(userID, dbClient)
 	if err != nil {
 		return api.ResGetUserMe{}, err
 	}

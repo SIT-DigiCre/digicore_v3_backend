@@ -8,11 +8,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 )
 
-func IDFromStudentNumber(studentNumber string, db db.DBClient) (string, *response.Error) {
-	query, err := db.Query.ReadFile("sql/users/select_id_from_student_number.sql")
-	if err != nil {
-		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}
-	}
+func IDFromStudentNumber(studentNumber string, dbClient db.Client) (string, *response.Error) {
 	params := struct {
 		StudentNumber string `twowaysql:"studentNumber"`
 	}{
@@ -21,7 +17,7 @@ func IDFromStudentNumber(studentNumber string, db db.DBClient) (string, *respons
 	users := []struct {
 		ID string `db:"id"`
 	}{}
-	err = db.Client.Select(&users, string(query), &params)
+	err := dbClient.Select(&users, "sql/users/select_id_from_student_number.sql", &params)
 	if err != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}
 	}
@@ -42,18 +38,14 @@ type Profile struct {
 	ShortSelfIntroduction string `db:"short_self_introduction"`
 }
 
-func GetUserProfileFromUserID(userID string, db db.DBClient) (Profile, *response.Error) {
-	query, err := db.Query.ReadFile("sql/users/select_user_profile_from_user_id.sql")
-	if err != nil {
-		return Profile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}
-	}
+func GetUserProfileFromUserID(userID string, dbClient db.Client) (Profile, *response.Error) {
 	params := struct {
 		UserID string `twowaysql:"userID"`
 	}{
 		UserID: userID,
 	}
 	profile := []Profile{}
-	err = db.Client.Select(&profile, string(query), &params)
+	err := dbClient.Select(&profile, "sql/users/select_user_profile_from_user_id.sql", &params)
 	if err != sql.ErrNoRows {
 		return Profile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "プロフィールが有りません", Log: err.Error()}
 	}

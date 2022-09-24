@@ -1,0 +1,1 @@
+INSERT INTO user_profiles (id, user_id, username, school_grade, icon_url, active_limit, short_self_introduction, self_introduction) VALUE (UUID_TO_BIN(@id), UUID_TO_BIN('46aafd4e-3b3f-11ed-ad24-0242ac120004'), 'name', 1, '', '2022-08-19', 'aaa', '');

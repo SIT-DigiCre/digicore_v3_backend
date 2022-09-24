@@ -8,7 +8,9 @@ import (
 )
 
 func (s *server) GetUserMe(ctx echo.Context) error {
-	res, err := users.GetUserMe(ctx, db.DB)
+	dbClient := db.Open()
+
+	res, err := users.GetUserMe(ctx, dbClient)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}
