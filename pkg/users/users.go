@@ -44,16 +44,13 @@ func GetUserProfileFromUserID(userID string, dbClient db.Client) (Profile, *resp
 	}{
 		UserID: userID,
 	}
-	profile := []Profile{}
+	profile := Profile{}
 	err := dbClient.Select(&profile, "sql/users/select_user_profile_from_user_id.sql", &params)
-	if err != sql.ErrNoRows {
+	if err == sql.ErrNoRows {
 		return Profile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "プロフィールが有りません", Log: err.Error()}
 	}
 	if err != nil {
 		return Profile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}
 	}
-	if len(profile) != 1 {
-		return Profile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: "一意制約に違反しているデータがあります"}
-	}
-	return profile[0], nil
+	return profile, nil
 }
