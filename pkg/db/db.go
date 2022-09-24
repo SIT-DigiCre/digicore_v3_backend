@@ -4,6 +4,7 @@ import (
 	"context"
 	"embed"
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
@@ -38,7 +39,7 @@ func Open() Client {
 func OpenTransaction() (TransactionClient, *response.Error) {
 	txClient, err := tw.Begin(context.Background())
 	if err != nil {
-		return TransactionClient{}, &response.Error{}
+		return TransactionClient{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBでエラーが発生しました", Log: err.Error()}
 	}
 	return TransactionClient{tx: txClient, query: query}, nil
 }

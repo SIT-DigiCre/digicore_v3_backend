@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"embed"
+	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/future-architect/go-twowaysql"
@@ -41,7 +42,7 @@ func (t *TransactionClient) Exec(queryFile string, params interface{}, generateI
 func (t *TransactionClient) Commit() *response.Error {
 	err := t.tx.Commit()
 	if err != nil {
-		return &response.Error{}
+		return &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBでエラーが発生しました", Log: err.Error()}
 	}
 	return nil
 }
