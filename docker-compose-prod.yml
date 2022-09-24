@@ -36,7 +36,6 @@ services:
       - "./:/app"
     env_file:
       - ".env"
-    tty: true
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:5.2.0
