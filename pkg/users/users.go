@@ -38,7 +38,7 @@ type Profile struct {
 	ShortSelfIntroduction string `db:"short_self_introduction"`
 }
 
-func GetUserProfileFromUserID(userID string, dbClient db.Client) (Profile, *response.Error) {
+func getUserProfileFromUserID(userID string, dbClient db.Client) (Profile, *response.Error) {
 	params := struct {
 		UserID string `twowaysql:"userID"`
 	}{
@@ -47,7 +47,7 @@ func GetUserProfileFromUserID(userID string, dbClient db.Client) (Profile, *resp
 	profile := []Profile{}
 	err := dbClient.Select(&profile, "sql/users/select_user_profile_from_user_id.sql", &params)
 	if len(profile) == 0 {
-		return Profile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "プロフィールが有りません", Log: sql.ErrNoRows.Error()}
+		return Profile{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "プロフィールが有りません", Log: sql.ErrNoRows.Error()}
 	}
 	if err != nil {
 		return Profile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}
