@@ -36,7 +36,7 @@ type ReqPutUserMePrivate struct {
 	Address               string `ja:"住所" json:"address" validate:"required,min=1,max=255"`
 	FirstName             string `ja:"名前" json:"first_name" validate:"required,min=1,max=255"`
 	FirstNameKana         string `ja:"名前(カナ)" json:"first_name_kana" validate:"required,min=1,max=255"`
-	IsMale                bool   `ja:"性別" json:"is_male" validate:"required,min=1,max=255"`
+	IsMale                bool   `ja:"性別" json:"is_male" validate:""`
 	LastName              string `ja:"名字" json:"last_name" validate:"required,min=1,max=255"`
 	LastNameKana          string `ja:"名字(カナ)" json:"last_name_kana" validate:"required,min=1,max=255"`
 	ParentAddress         string `ja:"緊急連絡先住所" json:"parent_address" validate:"required,min=1,max=255"`

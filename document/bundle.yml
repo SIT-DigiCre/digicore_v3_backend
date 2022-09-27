@@ -363,7 +363,7 @@ components:
         is_male:
           type: boolean
           x-oapi-codegen-extra-tags:
-            validate: 'required,min=1,max=255'
+            validate: null
             ja: 性別
         phone_number:
           type: string
