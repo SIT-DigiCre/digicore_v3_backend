@@ -10,3 +10,5 @@
   $ref: "./paths/login_callback.yml"
 /user/me:
   $ref: "./paths/user_me.yml"
+/user/me/private:
+  $ref: "./paths/user_me_private.yml"

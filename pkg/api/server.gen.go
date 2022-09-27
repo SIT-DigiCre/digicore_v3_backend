@@ -30,6 +30,12 @@ type ServerInterface interface {
 
 	// (PUT /user/me)
 	PutUserMe(ctx echo.Context) error
+
+	// (GET /user/me/private)
+	GetUserMePrivate(ctx echo.Context) error
+
+	// (PUT /user/me/private)
+	PutUserMePrivate(ctx echo.Context) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
@@ -104,6 +110,28 @@ func (w *ServerInterfaceWrapper) PutUserMe(ctx echo.Context) error {
 	return err
 }
 
+// GetUserMePrivate converts echo context to params.
+func (w *ServerInterfaceWrapper) GetUserMePrivate(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetUserMePrivate(ctx)
+	return err
+}
+
+// PutUserMePrivate converts echo context to params.
+func (w *ServerInterfaceWrapper) PutUserMePrivate(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutUserMePrivate(ctx)
+	return err
+}
+
 // This is a simple interface which specifies echo.Route addition functions which
 // are present on both echo.Echo and echo.Group, since we want to allow using
 // either of them for path registration
@@ -139,5 +167,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/status", wrapper.GetStatus)
 	router.GET(baseURL+"/user/me", wrapper.GetUserMe)
 	router.PUT(baseURL+"/user/me", wrapper.PutUserMe)
+	router.GET(baseURL+"/user/me/private", wrapper.GetUserMePrivate)
+	router.PUT(baseURL+"/user/me/private", wrapper.PutUserMePrivate)
 
 }

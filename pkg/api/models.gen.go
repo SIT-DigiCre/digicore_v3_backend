@@ -31,6 +31,21 @@ type ReqPutUserMe struct {
 	Username              string `ja:"ユーザー名" json:"username" validate:"required,min=1,max=255"`
 }
 
+// ReqPutUserMePrivate defines model for ReqPutUserMePrivate.
+type ReqPutUserMePrivate struct {
+	Address               string `ja:"住所" json:"address" validate:"required,min=1,max=255"`
+	FirstName             string `ja:"名前" json:"first_name" validate:"required,min=1,max=255"`
+	FirstNameKana         string `ja:"名前(カナ)" json:"first_name_kana" validate:"required,min=1,max=255"`
+	IsMale                bool   `ja:"性別" json:"is_male" validate:"required,min=1,max=255"`
+	LastName              string `ja:"名字" json:"last_name" validate:"required,min=1,max=255"`
+	LastNameKana          string `ja:"名字(カナ)" json:"last_name_kana" validate:"required,min=1,max=255"`
+	ParentAddress         string `ja:"緊急連絡先住所" json:"parent_address" validate:"required,min=1,max=255"`
+	ParentCellphoneNumber string `ja:"緊急連絡先携帯電話番号" json:"parent_cellphone_number" validate:"required,numeric,min=1,max=15"`
+	ParentHomephoneNumber string `ja:"緊急連絡先固定電話番号" json:"parent_homephone_number" validate:"required,numeric,min=1,max=15"`
+	ParentName            string `ja:"緊急連絡先氏名" json:"parent_name" validate:"required,min=1,max=255"`
+	PhoneNumber           string `ja:"電話番号" json:"phone_number" validate:"required,numeric,min=1,max=15"`
+}
+
 // ResGetLogin defines model for ResGetLogin.
 type ResGetLogin struct {
 	Url string `json:"url"`
@@ -56,6 +71,21 @@ type ResGetUserMe struct {
 	StudentNumber         string `json:"student_number"`
 	UserId                string `json:"user_id"`
 	Username              string `json:"username"`
+}
+
+// ResGetUserMePrivate defines model for ResGetUserMePrivate.
+type ResGetUserMePrivate struct {
+	Address               string `json:"address"`
+	FirstName             string `json:"first_name"`
+	FirstNameKana         string `json:"first_name_kana"`
+	IsMale                bool   `json:"is_male"`
+	LastName              string `json:"last_name"`
+	LastNameKana          string `json:"last_name_kana"`
+	ParentAddress         string `json:"parent_address"`
+	ParentCellphoneNumber string `json:"parent_cellphone_number"`
+	ParentHomephoneNumber string `json:"parent_homephone_number"`
+	ParentName            string `json:"parent_name"`
+	PhoneNumber           string `json:"phone_number"`
 }
 
 // ResPostLoginCallback defines model for ResPostLoginCallback.
@@ -89,6 +119,9 @@ type PostSignupCallbackJSONBody = ReqPostSignupCallback
 // PutUserMeJSONBody defines parameters for PutUserMe.
 type PutUserMeJSONBody = ReqPutUserMe
 
+// PutUserMePrivateJSONBody defines parameters for PutUserMePrivate.
+type PutUserMePrivateJSONBody = ReqPutUserMePrivate
+
 // PostLoginCallbackJSONRequestBody defines body for PostLoginCallback for application/json ContentType.
 type PostLoginCallbackJSONRequestBody = PostLoginCallbackJSONBody
 
@@ -97,3 +130,6 @@ type PostSignupCallbackJSONRequestBody = PostSignupCallbackJSONBody
 
 // PutUserMeJSONRequestBody defines body for PutUserMe for application/json ContentType.
 type PutUserMeJSONRequestBody = PutUserMeJSONBody
+
+// PutUserMePrivateJSONRequestBody defines body for PutUserMePrivate for application/json ContentType.
+type PutUserMePrivateJSONRequestBody = PutUserMePrivateJSONBody

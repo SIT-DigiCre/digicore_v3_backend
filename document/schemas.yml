@@ -16,5 +16,9 @@ ResGetUserMe:
   $ref: "./schemas/res_get_user_me.yml"
 ReqPutUserMe:
   $ref: "./schemas/req_put_user_me.yml"
+ResGetUserMePrivate:
+  $ref: "./schemas/res_get_user_me_private.yml"
+ReqPutUserMePrivate:
+  $ref: "./schemas/req_put_user_me_private.yml"
 Error:
   $ref: "./schemas/error.yml"

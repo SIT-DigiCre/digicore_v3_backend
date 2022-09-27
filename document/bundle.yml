@@ -140,6 +140,52 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /user/me/private:
+    get:
+      tags:
+        - user
+      description: Get my private profile
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success get my private profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMePrivate'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - user
+      description: Update my profile
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: My profile
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutUserMePrivate'
+      responses:
+        '200':
+          description: Success update my private profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMePrivate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -244,6 +290,111 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: 短い自己紹介
+    ResGetUserMePrivate:
+      required:
+        - last_name
+        - last_name_kana
+        - first_name
+        - first_name_kana
+        - is_male
+        - phone_number
+        - address
+        - parent_name
+        - parent_cellphone_number
+        - parent_homephone_number
+        - parent_address
+      properties:
+        last_name:
+          type: string
+        last_name_kana:
+          type: string
+        first_name:
+          type: string
+        first_name_kana:
+          type: string
+        is_male:
+          type: boolean
+        phone_number:
+          type: string
+        address:
+          type: string
+        parent_name:
+          type: string
+        parent_cellphone_number:
+          type: string
+        parent_homephone_number:
+          type: string
+        parent_address:
+          type: string
+    ReqPutUserMePrivate:
+      required:
+        - last_name
+        - last_name_kana
+        - first_name
+        - first_name_kana
+        - is_male
+        - phone_number
+        - address
+        - parent_name
+        - parent_cellphone_number
+        - parent_homephone_number
+        - parent_address
+      properties:
+        last_name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 名字
+        last_name_kana:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 名字(カナ)
+        first_name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 名前
+        first_name_kana:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 名前(カナ)
+        is_male:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 性別
+        phone_number:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,numeric,min=1,max=15'
+            ja: 電話番号
+        address:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 住所
+        parent_name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 緊急連絡先氏名
+        parent_cellphone_number:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,numeric,min=1,max=15'
+            ja: 緊急連絡先携帯電話番号
+        parent_homephone_number:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,numeric,min=1,max=15'
+            ja: 緊急連絡先固定電話番号
+        parent_address:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 緊急連絡先住所
     Error:
       required:
         - level

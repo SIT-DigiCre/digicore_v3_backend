@@ -1,0 +1,68 @@
+required:
+  - last_name
+  - last_name_kana
+  - first_name
+  - first_name_kana
+  - is_male
+  - phone_number
+  - address
+  - parent_name
+  - parent_cellphone_number
+  - parent_homephone_number
+  - parent_address
+properties:
+  last_name:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 名字
+  last_name_kana:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 名字(カナ)
+  first_name:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 名前
+  first_name_kana:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 名前(カナ)
+  is_male:
+    type: boolean
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 性別
+  phone_number:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,numeric,min=1,max=15
+      ja: 電話番号
+  address:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 住所
+  parent_name:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 緊急連絡先氏名
+  parent_cellphone_number:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,numeric,min=1,max=15
+      ja: 緊急連絡先携帯電話番号
+  parent_homephone_number:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,numeric,min=1,max=15
+      ja: 緊急連絡先固定電話番号
+  parent_address:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 緊急連絡先住所
