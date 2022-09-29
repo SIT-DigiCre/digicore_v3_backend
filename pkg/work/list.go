@@ -44,7 +44,7 @@ func (c Context) WorkList(e echo.Context) error {
 	if autherId == "" {
 		rows, err = c.DB.Query("SELECT BIN_TO_UUID(id), name FROM works ORDER BY updated_at DESC LIMIT 100 OFFSET ?", pagesNum)
 	} else {
-		rows, err = c.DB.Query("SELECT BIN_TO_UUID(id), name FROM works WHERE UUID_TO_BIN(?) in( SELECT user_id FROM work_users WHERE work_id = works.id ) ORDER BY updated_at DESC LIMIT 100 OFFSET ?", autherId, pagesNum)
+		rows, err = c.DB.Query("SELECT BIN_TO_UUID(id), name FROM works WHERE UUID_TO_BIN(?) IN ( SELECT user_id FROM work_users WHERE work_id = works.id ) ORDER BY updated_at DESC LIMIT 100 OFFSET ?", autherId, pagesNum)
 	}
 	if err != nil {
 		e.JSON(http.StatusOK, Error{Message: "作品一覧の取得に失敗しました"})
