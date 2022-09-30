@@ -12,3 +12,5 @@
   $ref: "./paths/user_me.yml"
 /user/me/private:
   $ref: "./paths/user_me_private.yml"
+/user/me/payment:
+  $ref: "./paths/user_me_payment.yml"

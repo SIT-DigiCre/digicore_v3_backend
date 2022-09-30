@@ -31,6 +31,12 @@ type ReqPutUserMe struct {
 	Username              string `ja:"ユーザー名" json:"username" validate:"required,min=1,max=255"`
 }
 
+// ReqPutUserMePayment defines model for ReqPutUserMePayment.
+type ReqPutUserMePayment struct {
+	TransferName string `ja:"振込名義" json:"transfer_name" validate:"required,min=1,max=255"`
+	Year         string `ja:"年度" json:"year" validate:"required,numeric"`
+}
+
 // ReqPutUserMePrivate defines model for ReqPutUserMePrivate.
 type ReqPutUserMePrivate struct {
 	Address               string `ja:"住所" json:"address" validate:"required,min=1,max=255"`
@@ -71,6 +77,14 @@ type ResGetUserMe struct {
 	StudentNumber         string `json:"student_number"`
 	UserId                string `json:"user_id"`
 	Username              string `json:"username"`
+}
+
+// ResGetUserMePayment defines model for ResGetUserMePayment.
+type ResGetUserMePayment = []struct {
+	Checked      bool   `json:"checked"`
+	TransferName string `json:"transfer_name"`
+	UpdatedAt    string `json:"updated_at"`
+	Year         int    `json:"year"`
 }
 
 // ResGetUserMePrivate defines model for ResGetUserMePrivate.
@@ -119,6 +133,9 @@ type PostSignupCallbackJSONBody = ReqPostSignupCallback
 // PutUserMeJSONBody defines parameters for PutUserMe.
 type PutUserMeJSONBody = ReqPutUserMe
 
+// PutUserMePaymentJSONBody defines parameters for PutUserMePayment.
+type PutUserMePaymentJSONBody = ReqPutUserMePayment
+
 // PutUserMePrivateJSONBody defines parameters for PutUserMePrivate.
 type PutUserMePrivateJSONBody = ReqPutUserMePrivate
 
@@ -130,6 +147,9 @@ type PostSignupCallbackJSONRequestBody = PostSignupCallbackJSONBody
 
 // PutUserMeJSONRequestBody defines body for PutUserMe for application/json ContentType.
 type PutUserMeJSONRequestBody = PutUserMeJSONBody
+
+// PutUserMePaymentJSONRequestBody defines body for PutUserMePayment for application/json ContentType.
+type PutUserMePaymentJSONRequestBody = PutUserMePaymentJSONBody
 
 // PutUserMePrivateJSONRequestBody defines body for PutUserMePrivate for application/json ContentType.
 type PutUserMePrivateJSONRequestBody = PutUserMePrivateJSONBody

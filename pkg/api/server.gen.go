@@ -31,6 +31,12 @@ type ServerInterface interface {
 	// (PUT /user/me)
 	PutUserMe(ctx echo.Context) error
 
+	// (GET /user/me/payment)
+	GetUserMePayment(ctx echo.Context) error
+
+	// (PUT /user/me/payment)
+	PutUserMePayment(ctx echo.Context) error
+
 	// (GET /user/me/private)
 	GetUserMePrivate(ctx echo.Context) error
 
@@ -110,6 +116,28 @@ func (w *ServerInterfaceWrapper) PutUserMe(ctx echo.Context) error {
 	return err
 }
 
+// GetUserMePayment converts echo context to params.
+func (w *ServerInterfaceWrapper) GetUserMePayment(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetUserMePayment(ctx)
+	return err
+}
+
+// PutUserMePayment converts echo context to params.
+func (w *ServerInterfaceWrapper) PutUserMePayment(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutUserMePayment(ctx)
+	return err
+}
+
 // GetUserMePrivate converts echo context to params.
 func (w *ServerInterfaceWrapper) GetUserMePrivate(ctx echo.Context) error {
 	var err error
@@ -167,6 +195,8 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/status", wrapper.GetStatus)
 	router.GET(baseURL+"/user/me", wrapper.GetUserMe)
 	router.PUT(baseURL+"/user/me", wrapper.PutUserMe)
+	router.GET(baseURL+"/user/me/payment", wrapper.GetUserMePayment)
+	router.PUT(baseURL+"/user/me/payment", wrapper.PutUserMePayment)
 	router.GET(baseURL+"/user/me/private", wrapper.GetUserMePrivate)
 	router.PUT(baseURL+"/user/me/private", wrapper.PutUserMePrivate)
 

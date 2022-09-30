@@ -186,6 +186,52 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /user/me/payment:
+    get:
+      tags:
+        - user
+      description: Get my payment
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success get my payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMePayment'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - user
+      description: Update my payment
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: My payment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutUserMePayment'
+      responses:
+        '200':
+          description: Success update my payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMePayment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -395,6 +441,38 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: 緊急連絡先住所
+    ResGetUserMePayment:
+      type: array
+      items:
+        required:
+          - year
+          - transfer_name
+          - checked
+          - updated_at
+        properties:
+          year:
+            type: integer
+          transfer_name:
+            type: string
+          checked:
+            type: boolean
+          updated_at:
+            type: string
+    ReqPutUserMePayment:
+      required:
+        - year
+        - transfer_name
+      properties:
+        year:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,numeric'
+            ja: 年度
+        transfer_name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 振込名義
     Error:
       required:
         - level

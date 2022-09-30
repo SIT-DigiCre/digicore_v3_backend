@@ -20,5 +20,9 @@ ResGetUserMePrivate:
   $ref: "./schemas/res_get_user_me_private.yml"
 ReqPutUserMePrivate:
   $ref: "./schemas/req_put_user_me_private.yml"
+ResGetUserMePayment:
+  $ref: "./schemas/res_get_user_me_payment.yml"
+ReqPutUserMePayment:
+  $ref: "./schemas/req_put_user_me_payment.yml"
 Error:
   $ref: "./schemas/error.yml"
