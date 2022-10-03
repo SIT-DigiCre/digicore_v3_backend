@@ -199,7 +199,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResGetUserMePayment'
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResGetUserMePayment'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -225,7 +227,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResGetUserMePayment'
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResGetUserMePayment'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -442,22 +446,20 @@ components:
             validate: 'required,min=1,max=255'
             ja: 緊急連絡先住所
     ResGetUserMePayment:
-      type: array
-      items:
-        required:
-          - year
-          - transfer_name
-          - checked
-          - updated_at
-        properties:
-          year:
-            type: integer
-          transfer_name:
-            type: string
-          checked:
-            type: boolean
-          updated_at:
-            type: string
+      required:
+        - year
+        - transfer_name
+        - checked
+        - updated_at
+      properties:
+        year:
+          type: integer
+        transfer_name:
+          type: string
+        checked:
+          type: boolean
+        updated_at:
+          type: string
     ReqPutUserMePayment:
       required:
         - year

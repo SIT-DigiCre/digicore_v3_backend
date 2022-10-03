@@ -10,7 +10,9 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/res_get_user_me_payment.yml"
+            type: array
+            items:
+              $ref: "../schemas/res_get_user_me_payment.yml"
     403:
       $ref: "../responses/unauthorized.yml"
     404:
@@ -36,7 +38,9 @@ put:
       content:
         application/json:
           schema:
-            $ref: "../schemas/res_get_user_me_payment.yml"
+            type: array
+            items:
+              $ref: "../schemas/res_get_user_me_payment.yml"
     400:
       $ref: "../responses/bad_request.yml"
     403:

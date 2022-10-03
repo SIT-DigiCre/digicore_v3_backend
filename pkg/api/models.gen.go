@@ -80,7 +80,7 @@ type ResGetUserMe struct {
 }
 
 // ResGetUserMePayment defines model for ResGetUserMePayment.
-type ResGetUserMePayment = []struct {
+type ResGetUserMePayment struct {
 	Checked      bool   `json:"checked"`
 	TransferName string `json:"transfer_name"`
 	UpdatedAt    string `json:"updated_at"`

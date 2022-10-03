@@ -1,16 +1,14 @@
-type: array
-items:
-  required:
-    - year
-    - transfer_name
-    - checked
-    - updated_at
-  properties:
-    year:
-      type: integer
-    transfer_name:
-      type: string
-    checked:
-      type: boolean
-    updated_at:
-      type: string
+required:
+  - year
+  - transfer_name
+  - checked
+  - updated_at
+properties:
+  year:
+    type: integer
+  transfer_name:
+    type: string
+  checked:
+    type: boolean
+  updated_at:
+    type: string
