@@ -34,7 +34,6 @@ type ReqPutUserMe struct {
 // ReqPutUserMePayment defines model for ReqPutUserMePayment.
 type ReqPutUserMePayment struct {
 	TransferName string `ja:"振込名義" json:"transfer_name" validate:"required,min=1,max=255"`
-	Year         string `ja:"年度" json:"year" validate:"required,numeric"`
 }
 
 // ReqPutUserMePrivate defines model for ReqPutUserMePrivate.

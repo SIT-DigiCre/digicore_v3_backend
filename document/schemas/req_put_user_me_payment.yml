@@ -1,12 +1,6 @@
 required:
-  - year
   - transfer_name
 properties:
-  year:
-    type: string
-    x-oapi-codegen-extra-tags:
-      validate: required,numeric
-      ja: 年度
   transfer_name:
     type: string
     x-oapi-codegen-extra-tags:
