@@ -10,7 +10,7 @@ import (
 func (s *server) GetUserMePayment(ctx echo.Context) error {
 	dbClient := db.Open()
 
-	res, err := users.GetUserMePayment(ctx, dbClient)
+	res, err := users.GetUserMePayment(ctx, &dbClient)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

@@ -19,7 +19,7 @@ func (s *server) PostLoginCallback(ctx echo.Context) error {
 
 	dbClient := db.Open()
 
-	res, err := google_auth.PostLoginCallback(ctx, dbClient, requestBody)
+	res, err := google_auth.PostLoginCallback(ctx, &dbClient, requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

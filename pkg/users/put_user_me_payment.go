@@ -16,7 +16,7 @@ func PutUserMePayment(ctx echo.Context, dbClient db.TransactionClient, requestBo
 		return api.ResGetUserMePayment{}, err
 	}
 
-	_, err = getUserProfileFromUserID(userID, &dbClient)
+	_, err = getUserProfileFromUserID(userID, dbClient)
 	if err != nil {
 		return api.ResGetUserMePayment{}, err
 	}

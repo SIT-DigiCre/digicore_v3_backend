@@ -23,7 +23,7 @@ func (s *server) PutUserMePrivate(ctx echo.Context) error {
 	}
 	defer dbTranisactionClient.Rollback()
 
-	res, err := users.PutUserMePrivate(ctx, dbTranisactionClient, requestBody)
+	res, err := users.PutUserMePrivate(ctx, &dbTranisactionClient, requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

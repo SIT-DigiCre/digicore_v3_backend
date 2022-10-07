@@ -8,12 +8,12 @@ import (
 	"github.com/future-architect/go-twowaysql"
 )
 
-type Client struct {
+type client struct {
 	tw    *twowaysql.Twowaysql
-	query embed.FS
+	query *embed.FS
 }
 
-func (t *Client) Select(dest interface{}, queryPath string, params interface{}) error {
+func (t *client) Select(dest interface{}, queryPath string, params interface{}) error {
 	query, err := t.query.ReadFile(queryPath)
 	if err != nil {
 		return err
@@ -21,7 +21,7 @@ func (t *Client) Select(dest interface{}, queryPath string, params interface{}) 
 	return t.tw.Select(context.Background(), dest, string(query), params)
 }
 
-func (t *Client) Exec(queryPath string, params interface{}) (sql.Result, error) {
+func (t *client) Exec(queryPath string, params interface{}) (sql.Result, error) {
 	query, err := t.query.ReadFile(queryPath)
 	if err != nil {
 		return nil, err

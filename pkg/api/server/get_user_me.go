@@ -10,7 +10,7 @@ import (
 func (s *server) GetUserMe(ctx echo.Context) error {
 	dbClient := db.Open()
 
-	res, err := users.GetUserMe(ctx, dbClient)
+	res, err := users.GetUserMe(ctx, &dbClient)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

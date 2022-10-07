@@ -23,7 +23,7 @@ func (s *server) PutUserMePayment(ctx echo.Context) error {
 	}
 	defer dbTranisactionClient.Rollback()
 
-	res, err := users.PutUserMePayment(ctx, dbTranisactionClient, requestBody)
+	res, err := users.PutUserMePayment(ctx, &dbTranisactionClient, requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

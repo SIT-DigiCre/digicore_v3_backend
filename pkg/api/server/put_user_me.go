@@ -23,7 +23,7 @@ func (s *server) PutUserMe(ctx echo.Context) error {
 	}
 	defer dbTranisactionClient.Rollback()
 
-	res, err := users.PutUserMe(ctx, dbTranisactionClient, requestBody)
+	res, err := users.PutUserMe(ctx, &dbTranisactionClient, requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

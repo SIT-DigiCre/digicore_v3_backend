@@ -16,7 +16,7 @@ func PutUserMe(ctx echo.Context, dbClient db.TransactionClient, requestBody api.
 		return api.ResGetUserMe{}, err
 	}
 
-	profile, err := getUserProfileFromUserID(userID, &dbClient)
+	profile, err := getUserProfileFromUserID(userID, dbClient)
 	if err != nil {
 		return api.ResGetUserMe{}, err
 	}

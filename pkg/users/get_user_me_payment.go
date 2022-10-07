@@ -12,14 +12,14 @@ import (
 
 func GetUserMePayment(ctx echo.Context, dbClient db.Client) ([]api.ResGetUserMePayment, *response.Error) {
 	userID := ctx.Get("user_id").(string)
-	res, err := getUserPaymentFromUserID(userID, &dbClient)
+	res, err := getUserPaymentFromUserID(userID, dbClient)
 	if err != nil {
 		return []api.ResGetUserMePayment{}, err
 	}
 	return res, nil
 }
 
-func getUserPaymentFromUserID(userID string, dbClient db.CommonClient) ([]api.ResGetUserMePayment, *response.Error) {
+func getUserPaymentFromUserID(userID string, dbClient db.Client) ([]api.ResGetUserMePayment, *response.Error) {
 	params := struct {
 		UserID string `twowaysql:"userID"`
 	}{

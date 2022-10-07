@@ -23,7 +23,7 @@ func (s *server) PostSignupCallback(ctx echo.Context) error {
 	}
 	defer dbTranisactionClient.Rollback()
 
-	res, err := google_auth.PostSignupCallback(ctx, dbTranisactionClient, requestBody)
+	res, err := google_auth.PostSignupCallback(ctx, &dbTranisactionClient, requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

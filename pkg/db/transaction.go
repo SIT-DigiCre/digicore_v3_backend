@@ -11,13 +11,13 @@ import (
 	"github.com/go-sql-driver/mysql"
 )
 
-type TransactionClient struct {
+type transactionClient struct {
 	tx      *twowaysql.TwowaysqlTx
-	query   embed.FS
+	query   *embed.FS
 	context context.Context
 }
 
-func (t *TransactionClient) Select(dest interface{}, queryPath string, params interface{}) error {
+func (t *transactionClient) Select(dest interface{}, queryPath string, params interface{}) error {
 	query, err := t.query.ReadFile(queryPath)
 	if err != nil {
 		return err
@@ -25,7 +25,7 @@ func (t *TransactionClient) Select(dest interface{}, queryPath string, params in
 	return t.tx.Select(t.context, dest, string(query), params)
 }
 
-func (t *TransactionClient) Exec(queryPath string, params interface{}, generateID bool) (sql.Result, error) {
+func (t *transactionClient) Exec(queryPath string, params interface{}, generateID bool) (sql.Result, error) {
 	if generateID {
 		_, err := t.Exec("sql/transaction/generate_id.sql", nil, false)
 		return nil, err
@@ -37,7 +37,7 @@ func (t *TransactionClient) Exec(queryPath string, params interface{}, generateI
 	return t.tx.Exec(t.context, string(query), params)
 }
 
-func (t *TransactionClient) Commit() *response.Error {
+func (t *transactionClient) Commit() *response.Error {
 	err := t.tx.Commit()
 	if err != nil {
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBでエラーが発生しました", Log: err.Error()}
@@ -45,11 +45,11 @@ func (t *TransactionClient) Commit() *response.Error {
 	return nil
 }
 
-func (t *TransactionClient) Rollback() error {
+func (t *transactionClient) Rollback() error {
 	return t.tx.Rollback()
 }
 
-func (t *TransactionClient) GetID() (string, error) {
+func (t *transactionClient) GetID() (string, error) {
 	id := struct {
 		ID string `db:"id"`
 	}{}
@@ -60,7 +60,7 @@ func (t *TransactionClient) GetID() (string, error) {
 	return id.ID, nil
 }
 
-func (t *TransactionClient) DuplicateUpdate(insertQueryPath string, updateQueryPath string, params interface{}) (sql.Result, error) {
+func (t *transactionClient) DuplicateUpdate(insertQueryPath string, updateQueryPath string, params interface{}) (sql.Result, error) {
 	res, err := t.Exec(insertQueryPath, params, false)
 	if err != nil {
 		mysqlErr, ok := err.(*mysql.MySQLError)

@@ -9,7 +9,7 @@ import (
 
 func GetUserMe(ctx echo.Context, dbClient db.Client) (api.ResGetUserMe, *response.Error) {
 	userID := ctx.Get("user_id").(string)
-	profile, err := getUserProfileFromUserID(userID, &dbClient)
+	profile, err := getUserProfileFromUserID(userID, dbClient)
 	if err != nil {
 		return api.ResGetUserMe{}, err
 	}

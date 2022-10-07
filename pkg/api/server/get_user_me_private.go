@@ -10,7 +10,7 @@ import (
 func (s *server) GetUserMePrivate(ctx echo.Context) error {
 	dbClient := db.Open()
 
-	res, err := users.GetUserMePrivate(ctx, dbClient)
+	res, err := users.GetUserMePrivate(ctx, &dbClient)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

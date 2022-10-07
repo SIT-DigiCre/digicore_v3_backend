@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"embed"
 	"fmt"
 	"net/http"
@@ -32,19 +33,26 @@ func init() {
 	tw = twowaysql.New(sdb)
 }
 
-func Open() Client {
-	return Client{tw: tw, query: query}
+func Open() client {
+	return client{tw: tw, query: &query}
 }
 
-func OpenTransaction() (TransactionClient, *response.Error) {
+func OpenTransaction() (transactionClient, *response.Error) {
 	context := context.Background()
 	txClient, err := tw.Begin(context)
 	if err != nil {
-		return TransactionClient{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBでエラーが発生しました", Log: err.Error()}
+		return transactionClient{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBでエラーが発生しました", Log: err.Error()}
 	}
-	return TransactionClient{tx: txClient, query: query, context: context}, nil
+	return transactionClient{tx: txClient, query: &query, context: context}, nil
 }
 
-type CommonClient interface {
+type Client interface {
 	Select(dest interface{}, queryPath string, params interface{}) error
+}
+
+type TransactionClient interface {
+	Select(dest interface{}, queryPath string, params interface{}) error
+	Exec(queryPath string, params interface{}, generateID bool) (sql.Result, error)
+	GetID() (string, error)
+	DuplicateUpdate(insertQueryPath string, updateQueryPath string, params interface{}) (sql.Result, error)
 }
