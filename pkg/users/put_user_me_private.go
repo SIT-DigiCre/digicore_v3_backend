@@ -9,28 +9,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func PutUserMePrivate(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPutUserMePrivate) (api.ResGetUserMe, *response.Error) {
+func PutUserMePrivate(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPutUserMePrivate) (api.ResGetUserMePrivate, *response.Error) {
 	userID := ctx.Get("user_id").(string)
 	err := updateUserPrivateProfile(dbClient, userID, requestBody)
 	if err != nil {
-		return api.ResGetUserMe{}, err
+		return api.ResGetUserMePrivate{}, err
 	}
 
-	profile, err := getUserProfileFromUserID(userID, dbClient)
-	if err != nil {
-		return api.ResGetUserMe{}, err
-	}
-	res := api.ResGetUserMe{
-		ActiveLimit:           profile.ActiveLimit,
-		DiscordUserid:         profile.DiscordUserID,
-		IconUrl:               profile.IconUrl,
-		SchoolGrade:           profile.SchoolGrade,
-		ShortSelfIntroduction: profile.ShortSelfIntroduction,
-		StudentNumber:         profile.StudentNumber,
-		UserId:                profile.UserId,
-		Username:              profile.Username,
-	}
-	return res, nil
+	return GetUserMePrivate(ctx, dbClient)
 }
 
 func updateUserPrivateProfile(dbClient db.TransactionClient, userID string, requestBody api.ReqPutUserMePrivate) *response.Error {
