@@ -16,21 +16,7 @@ func PutUserMe(ctx echo.Context, dbClient db.TransactionClient, requestBody api.
 		return api.ResGetUserMe{}, err
 	}
 
-	profile, err := getUserProfileFromUserID(userID, dbClient)
-	if err != nil {
-		return api.ResGetUserMe{}, err
-	}
-	res := api.ResGetUserMe{
-		ActiveLimit:           profile.ActiveLimit,
-		DiscordUserid:         profile.DiscordUserID,
-		IconUrl:               profile.IconUrl,
-		SchoolGrade:           profile.SchoolGrade,
-		ShortSelfIntroduction: profile.ShortSelfIntroduction,
-		StudentNumber:         profile.StudentNumber,
-		UserId:                profile.UserId,
-		Username:              profile.Username,
-	}
-	return res, nil
+	return GetUserMe(ctx, dbClient)
 }
 
 func updateUserProfile(dbClient db.TransactionClient, userID string, requestBody api.ReqPutUserMe) *response.Error {
