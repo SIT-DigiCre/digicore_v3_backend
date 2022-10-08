@@ -40,7 +40,7 @@ type Profile struct {
 
 func GetUserProfileFromUserID(userID string, dbClient db.Client) (Profile, *response.Error) {
 	params := struct {
-		UserID string `twowaysql:"userIDs"`
+		UserID string `twowaysql:"userID"`
 	}{
 		UserID: userID,
 	}
