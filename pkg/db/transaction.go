@@ -40,7 +40,7 @@ func (t *transactionClient) Exec(queryPath string, params interface{}, generateI
 func (t *transactionClient) Commit() *response.Error {
 	err := t.tx.Commit()
 	if err != nil {
-		return &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBでエラーが発生しました", Log: err.Error()}
+		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
 	return nil
 }

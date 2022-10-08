@@ -20,7 +20,7 @@ func GetUserMePayment(ctx echo.Context, dbClient db.Client) ([]api.ResGetUserMeP
 	res := []api.ResGetUserMePayment{}
 	rerr := copier.Copy(&res, &payments)
 	if rerr != nil {
-		return []api.ResGetUserMePayment{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "支払い情報の読み込みに失敗しました", Log: rerr.Error()}
+		return []api.ResGetUserMePayment{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
 	return res, nil
 }
@@ -44,7 +44,7 @@ func getUserPaymentFromUserID(userID string, dbClient db.Client) ([]payment, *re
 		return []payment{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "支払い情報が有りません", Log: sql.ErrNoRows.Error()}
 	}
 	if err != nil {
-		return []payment{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}
+		return []payment{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
 	return payments, nil
 }

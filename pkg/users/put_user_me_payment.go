@@ -32,7 +32,7 @@ func updateUserPayment(dbClient db.TransactionClient, userID string, requestBody
 	}
 	_, err := dbClient.DuplicateUpdate("sql/users/insert_user_payment.sql", "sql/users/update_user_payment.sql", &params)
 	if err != nil {
-		return &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}
+		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
 	return nil
 }

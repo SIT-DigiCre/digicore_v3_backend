@@ -41,7 +41,7 @@ func OpenTransaction() (transactionClient, *response.Error) {
 	context := context.Background()
 	txClient, err := tw.Begin(context)
 	if err != nil {
-		return transactionClient{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBでエラーが発生しました", Log: err.Error()}
+		return transactionClient{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
 	return transactionClient{tx: txClient, query: &query, context: context}, nil
 }

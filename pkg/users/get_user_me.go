@@ -20,7 +20,7 @@ func GetUserMe(ctx echo.Context, dbClient db.Client) (api.ResGetUserMe, *respons
 	res := api.ResGetUserMe{}
 	rerr := copier.Copy(&res, &profile)
 	if rerr != nil {
-		return api.ResGetUserMe{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "プロフィールの読み込みに失敗しました", Log: rerr.Error()}
+		return api.ResGetUserMe{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
 	return res, nil
 }

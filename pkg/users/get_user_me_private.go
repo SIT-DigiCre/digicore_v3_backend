@@ -51,7 +51,7 @@ func getUserPrivateFromUserID(userID string, dbClient db.Client) (private, *resp
 		return private{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "個人情報が有りません", Log: sql.ErrNoRows.Error()}
 	}
 	if err != nil {
-		return private{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}
+		return private{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
 	return privates[0], nil
 }

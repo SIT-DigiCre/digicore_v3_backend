@@ -50,7 +50,7 @@ func GetUserProfileFromUserID(userID string, dbClient db.Client) (Profile, *resp
 		return Profile{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "プロフィールが有りません", Log: err.Error()}
 	}
 	if err != nil {
-		return Profile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}
+		return Profile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
 	return profiles[0], nil
 }

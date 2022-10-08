@@ -1,9 +1,11 @@
 package response
 
 import (
+	"fmt"
+	"runtime/debug"
+
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
 	"github.com/sirupsen/logrus"
 )
 
@@ -22,8 +24,10 @@ func ErrorResponse(ctx echo.Context, err *Error) error {
 		logrus.Warn(err.Log)
 	case "Error":
 		logrus.Error(err.Log)
+		fmt.Print("!!!!!!!!!!!!!!!!!!!!!!!")
+		debug.PrintStack()
 	default:
-		log.Debug(err.Log)
+		logrus.Debug(err.Log)
 	}
 	return ctx.JSON(err.Code, api.Error{Level: err.Level, Message: err.Message})
 }
