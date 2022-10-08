@@ -1,25 +1,25 @@
 required:
   - username
-  - icon_url
-  - school_grade
-  - short_self_introduction
+  - iconUrl
+  - schoolGrade
+  - shortSelfIntroduction
 properties:
   username:
     type: string
     x-oapi-codegen-extra-tags:
       validate: required,min=1,max=255
       ja: ユーザー名
-  icon_url:
+  iconUrl:
     type: string
     x-oapi-codegen-extra-tags:
       validate: required,min=1,max=255
       ja: アイコンURL
-  school_grade:
+  schoolGrade:
     type: integer
     x-oapi-codegen-extra-tags:
       validate: required,min=1,max=9
       ja: 学年
-  short_self_introduction:
+  shortSelfIntroduction:
     type: string
     x-oapi-codegen-extra-tags:
       validate: required,min=1,max=255

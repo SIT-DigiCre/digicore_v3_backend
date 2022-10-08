@@ -1,35 +1,35 @@
 required:
-  - last_name
-  - last_name_kana
-  - first_name
-  - first_name_kana
-  - is_male
-  - phone_number
+  - lastName
+  - lastNameKana
+  - firstName
+  - firstNameKana
+  - isMale
+  - phoneNumber
   - address
-  - parent_name
-  - parent_cellphone_number
-  - parent_homephone_number
-  - parent_address
+  - parentName
+  - parentCellphoneNumber
+  - parentHomephoneNumber
+  - parentAddress
 properties:
-  last_name:
+  lastName:
     type: string
-  last_name_kana:
+  lastNameKana:
     type: string
-  first_name:
+  firstName:
     type: string
-  first_name_kana:
+  firstNameKana:
     type: string
-  is_male:
+  isMale:
     type: boolean
-  phone_number:
+  phoneNumber:
     type: string
   address:
     type: string
-  parent_name:
+  parentName:
     type: string
-  parent_cellphone_number:
+  parentCellphoneNumber:
     type: string
-  parent_homephone_number:
+  parentHomephoneNumber:
     type: string
-  parent_address:
+  parentAddress:
     type: string

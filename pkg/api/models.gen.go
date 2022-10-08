@@ -25,30 +25,30 @@ type ReqPostSignupCallback struct {
 
 // ReqPutUserMe defines model for ReqPutUserMe.
 type ReqPutUserMe struct {
-	IconUrl               string `ja:"アイコンURL" json:"icon_url" validate:"required,min=1,max=255"`
-	SchoolGrade           int    `ja:"学年" json:"school_grade" validate:"required,min=1,max=9"`
-	ShortSelfIntroduction string `ja:"短い自己紹介" json:"short_self_introduction" validate:"required,min=1,max=255"`
+	IconUrl               string `ja:"アイコンURL" json:"iconUrl" validate:"required,min=1,max=255"`
+	SchoolGrade           int    `ja:"学年" json:"schoolGrade" validate:"required,min=1,max=9"`
+	ShortSelfIntroduction string `ja:"短い自己紹介" json:"shortSelfIntroduction" validate:"required,min=1,max=255"`
 	Username              string `ja:"ユーザー名" json:"username" validate:"required,min=1,max=255"`
 }
 
 // ReqPutUserMePayment defines model for ReqPutUserMePayment.
 type ReqPutUserMePayment struct {
-	TransferName string `ja:"振込名義" json:"transfer_name" validate:"required,min=1,max=255"`
+	TransferName string `ja:"振込名義" json:"transferName" validate:"required,min=1,max=255"`
 }
 
 // ReqPutUserMePrivate defines model for ReqPutUserMePrivate.
 type ReqPutUserMePrivate struct {
 	Address               string `ja:"住所" json:"address" validate:"required,min=1,max=255"`
-	FirstName             string `ja:"名前" json:"first_name" validate:"required,min=1,max=255"`
-	FirstNameKana         string `ja:"名前(カナ)" json:"first_name_kana" validate:"required,min=1,max=255"`
-	IsMale                bool   `ja:"性別" json:"is_male" validate:""`
-	LastName              string `ja:"名字" json:"last_name" validate:"required,min=1,max=255"`
-	LastNameKana          string `ja:"名字(カナ)" json:"last_name_kana" validate:"required,min=1,max=255"`
-	ParentAddress         string `ja:"緊急連絡先住所" json:"parent_address" validate:"required,min=1,max=255"`
-	ParentCellphoneNumber string `ja:"緊急連絡先携帯電話番号" json:"parent_cellphone_number" validate:"required,numeric,min=1,max=15"`
-	ParentHomephoneNumber string `ja:"緊急連絡先固定電話番号" json:"parent_homephone_number" validate:"required,numeric,min=1,max=15"`
-	ParentName            string `ja:"緊急連絡先氏名" json:"parent_name" validate:"required,min=1,max=255"`
-	PhoneNumber           string `ja:"電話番号" json:"phone_number" validate:"required,numeric,min=1,max=15"`
+	FirstName             string `ja:"名前" json:"firstName" validate:"required,min=1,max=255"`
+	FirstNameKana         string `ja:"名前(カナ)" json:"firstNameKana" validate:"required,min=1,max=255"`
+	IsMale                bool   `ja:"性別" json:"isMale" validate:""`
+	LastName              string `ja:"名字" json:"lastName" validate:"required,min=1,max=255"`
+	LastNameKana          string `ja:"名字(カナ)" json:"lastNameKana" validate:"required,min=1,max=255"`
+	ParentAddress         string `ja:"緊急連絡先住所" json:"parentAddress" validate:"required,min=1,max=255"`
+	ParentCellphoneNumber string `ja:"緊急連絡先携帯電話番号" json:"parentCellphoneNumber" validate:"required,numeric,min=1,max=15"`
+	ParentHomephoneNumber string `ja:"緊急連絡先固定電話番号" json:"parentHomephoneNumber" validate:"required,numeric,min=1,max=15"`
+	ParentName            string `ja:"緊急連絡先氏名" json:"parentName" validate:"required,min=1,max=255"`
+	PhoneNumber           string `ja:"電話番号" json:"phoneNumber" validate:"required,numeric,min=1,max=15"`
 }
 
 // ResGetLogin defines model for ResGetLogin.
@@ -68,37 +68,37 @@ type ResGetStatus struct {
 
 // ResGetUserMe defines model for ResGetUserMe.
 type ResGetUserMe struct {
-	ActiveLimit           string `json:"active_limit"`
-	DiscordUserid         string `json:"discord_userid"`
-	IconUrl               string `json:"icon_url"`
-	SchoolGrade           int    `json:"school_grade"`
-	ShortSelfIntroduction string `json:"short_self_introduction"`
-	StudentNumber         string `json:"student_number"`
-	UserId                string `json:"user_id"`
+	ActiveLimit           string `json:"activeLimit"`
+	DiscordUserID         string `json:"discordUserID"`
+	IconUrl               string `json:"iconUrl"`
+	SchoolGrade           int    `json:"schoolGrade"`
+	ShortSelfIntroduction string `json:"shortSelfIntroduction"`
+	StudentNumber         string `json:"studentNumber"`
+	UserId                string `json:"userId"`
 	Username              string `json:"username"`
 }
 
 // ResGetUserMePayment defines model for ResGetUserMePayment.
 type ResGetUserMePayment struct {
 	Checked      bool   `json:"checked"`
-	TransferName string `json:"transfer_name"`
-	UpdatedAt    string `json:"updated_at"`
+	TransferName string `json:"transferName"`
+	UpdatedAt    string `json:"updatedAt"`
 	Year         int    `json:"year"`
 }
 
 // ResGetUserMePrivate defines model for ResGetUserMePrivate.
 type ResGetUserMePrivate struct {
 	Address               string `json:"address"`
-	FirstName             string `json:"first_name"`
-	FirstNameKana         string `json:"first_name_kana"`
-	IsMale                bool   `json:"is_male"`
-	LastName              string `json:"last_name"`
-	LastNameKana          string `json:"last_name_kana"`
-	ParentAddress         string `json:"parent_address"`
-	ParentCellphoneNumber string `json:"parent_cellphone_number"`
-	ParentHomephoneNumber string `json:"parent_homephone_number"`
-	ParentName            string `json:"parent_name"`
-	PhoneNumber           string `json:"phone_number"`
+	FirstName             string `json:"firstName"`
+	FirstNameKana         string `json:"firstNameKana"`
+	IsMale                bool   `json:"isMale"`
+	LastName              string `json:"lastName"`
+	LastNameKana          string `json:"lastNameKana"`
+	ParentAddress         string `json:"parentAddress"`
+	ParentCellphoneNumber string `json:"parentCellphoneNumber"`
+	ParentHomephoneNumber string `json:"parentHomephoneNumber"`
+	ParentName            string `json:"parentName"`
+	PhoneNumber           string `json:"phoneNumber"`
 }
 
 // ResPostLoginCallback defines model for ResPostLoginCallback.

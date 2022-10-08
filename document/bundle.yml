@@ -288,134 +288,134 @@ components:
           type: string
     ResGetUserMe:
       required:
-        - user_id
+        - userId
         - username
-        - student_number
-        - icon_url
-        - school_grade
-        - discord_userid
-        - short_self_introduction
-        - active_limit
+        - studentNumber
+        - iconUrl
+        - schoolGrade
+        - discordUserID
+        - shortSelfIntroduction
+        - activeLimit
       properties:
-        user_id:
+        userId:
           type: string
         username:
           type: string
-        student_number:
+        studentNumber:
           type: string
-        icon_url:
+        iconUrl:
           type: string
-        school_grade:
+        schoolGrade:
           type: integer
-        discord_userid:
+        discordUserID:
           type: string
-        short_self_introduction:
+        shortSelfIntroduction:
           type: string
-        active_limit:
+        activeLimit:
           type: string
     ReqPutUserMe:
       required:
         - username
-        - icon_url
-        - school_grade
-        - short_self_introduction
+        - iconUrl
+        - schoolGrade
+        - shortSelfIntroduction
       properties:
         username:
           type: string
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: ユーザー名
-        icon_url:
+        iconUrl:
           type: string
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: アイコンURL
-        school_grade:
+        schoolGrade:
           type: integer
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=9'
             ja: 学年
-        short_self_introduction:
+        shortSelfIntroduction:
           type: string
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: 短い自己紹介
     ResGetUserMePrivate:
       required:
-        - last_name
-        - last_name_kana
-        - first_name
-        - first_name_kana
-        - is_male
-        - phone_number
+        - lastName
+        - lastNameKana
+        - firstName
+        - firstNameKana
+        - isMale
+        - phoneNumber
         - address
-        - parent_name
-        - parent_cellphone_number
-        - parent_homephone_number
-        - parent_address
+        - parentName
+        - parentCellphoneNumber
+        - parentHomephoneNumber
+        - parentAddress
       properties:
-        last_name:
+        lastName:
           type: string
-        last_name_kana:
+        lastNameKana:
           type: string
-        first_name:
+        firstName:
           type: string
-        first_name_kana:
+        firstNameKana:
           type: string
-        is_male:
+        isMale:
           type: boolean
-        phone_number:
+        phoneNumber:
           type: string
         address:
           type: string
-        parent_name:
+        parentName:
           type: string
-        parent_cellphone_number:
+        parentCellphoneNumber:
           type: string
-        parent_homephone_number:
+        parentHomephoneNumber:
           type: string
-        parent_address:
+        parentAddress:
           type: string
     ReqPutUserMePrivate:
       required:
-        - last_name
-        - last_name_kana
-        - first_name
-        - first_name_kana
-        - is_male
-        - phone_number
+        - lastName
+        - lastNameKana
+        - firstName
+        - firstNameKana
+        - isMale
+        - phoneNumber
         - address
-        - parent_name
-        - parent_cellphone_number
-        - parent_homephone_number
-        - parent_address
+        - parentName
+        - parentCellphoneNumber
+        - parentHomephoneNumber
+        - parentAddress
       properties:
-        last_name:
+        lastName:
           type: string
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: 名字
-        last_name_kana:
+        lastNameKana:
           type: string
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: 名字(カナ)
-        first_name:
+        firstName:
           type: string
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: 名前
-        first_name_kana:
+        firstNameKana:
           type: string
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: 名前(カナ)
-        is_male:
+        isMale:
           type: boolean
           x-oapi-codegen-extra-tags:
             validate: null
             ja: 性別
-        phone_number:
+        phoneNumber:
           type: string
           x-oapi-codegen-extra-tags:
             validate: 'required,numeric,min=1,max=15'
@@ -425,22 +425,22 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: 住所
-        parent_name:
+        parentName:
           type: string
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: 緊急連絡先氏名
-        parent_cellphone_number:
+        parentCellphoneNumber:
           type: string
           x-oapi-codegen-extra-tags:
             validate: 'required,numeric,min=1,max=15'
             ja: 緊急連絡先携帯電話番号
-        parent_homephone_number:
+        parentHomephoneNumber:
           type: string
           x-oapi-codegen-extra-tags:
             validate: 'required,numeric,min=1,max=15'
             ja: 緊急連絡先固定電話番号
-        parent_address:
+        parentAddress:
           type: string
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
@@ -448,23 +448,23 @@ components:
     ResGetUserMePayment:
       required:
         - year
-        - transfer_name
+        - transferName
         - checked
-        - updated_at
+        - updatedAt
       properties:
         year:
           type: integer
-        transfer_name:
+        transferName:
           type: string
         checked:
           type: boolean
-        updated_at:
+        updatedAt:
           type: string
     ReqPutUserMePayment:
       required:
-        - transfer_name
+        - transferName
       properties:
-        transfer_name:
+        transferName:
           type: string
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
