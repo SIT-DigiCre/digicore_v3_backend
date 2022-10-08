@@ -40,7 +40,7 @@ func getUserPaymentFromUserID(userID string, dbClient db.Client) ([]payment, *re
 	}
 	payments := []payment{}
 	err := dbClient.Select(&payments, "sql/users/select_user_payment_from_user_id.sql", &params)
-	if err == sql.ErrNoRows {
+	if len(payments) == 0 {
 		return []payment{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "支払い情報が有りません", Log: sql.ErrNoRows.Error()}
 	}
 	if err != nil {
