@@ -11,7 +11,7 @@ import (
 
 func PutUserMePrivate(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPutUserMePrivate) (api.ResGetUserMePrivate, *response.Error) {
 	userID := ctx.Get("user_id").(string)
-	err := updateUserPrivateProfile(dbClient, userID, requestBody)
+	err := updateUserPrivate(dbClient, userID, requestBody)
 	if err != nil {
 		return api.ResGetUserMePrivate{}, err
 	}
@@ -19,17 +19,35 @@ func PutUserMePrivate(ctx echo.Context, dbClient db.TransactionClient, requestBo
 	return GetUserMePrivate(ctx, dbClient)
 }
 
-func updateUserPrivateProfile(dbClient db.TransactionClient, userID string, requestBody api.ReqPutUserMePrivate) *response.Error {
+func updateUserPrivate(dbClient db.TransactionClient, userID string, requestBody api.ReqPutUserMePrivate) *response.Error {
 	params := struct {
 		UserID                string `twowaysql:"userID"`
-		IconUrl               string `twowaysql:"iconURL"`
-		SchoolGrade           int    `twowaysql:"schoolGrade"`
-		ShortSelfIntroduction string `twowaysql:"shortSelfIntroduction"`
-		Username              string `twowaysql:"username"`
+		FirstName             string `twowaysql:"firstName"`
+		LastName              string `twowaysql:"lastName"`
+		FirstNameKana         string `twowaysql:"firstNameKana"`
+		LastNameKana          string `twowaysql:"lastNameKana"`
+		IsMale                bool   `twowaysql:"isMale"`
+		PhoneNumber           string `twowaysql:"phoneNumber"`
+		Address               string `twowaysql:"address"`
+		ParentName            string `twowaysql:"parentName"`
+		ParentCellphoneNumber string `twowaysql:"parentCellphoneNumber"`
+		ParentHomephoneNumber string `twowaysql:"parentHomephoneNumber"`
+		ParentAddress         string `twowaysql:"parentAddress"`
 	}{
-		UserID: userID,
+		UserID:                userID,
+		FirstName:             requestBody.FirstName,
+		LastName:              requestBody.LastName,
+		FirstNameKana:         requestBody.FirstNameKana,
+		LastNameKana:          requestBody.LastNameKana,
+		IsMale:                requestBody.IsMale,
+		PhoneNumber:           requestBody.PhoneNumber,
+		Address:               requestBody.Address,
+		ParentName:            requestBody.ParentName,
+		ParentCellphoneNumber: requestBody.ParentCellphoneNumber,
+		ParentHomephoneNumber: requestBody.ParentHomephoneNumber,
+		ParentAddress:         requestBody.ParentAddress,
 	}
-	_, err := dbClient.DuplicateUpdate("sql/users/insert_user_profile.sql", "sql/users/update_user_profile.sql", &params)
+	_, err := dbClient.DuplicateUpdate("sql/users/insert_user_private.sql", "sql/users/update_user_private.sql", &params)
 	if err != nil {
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}
 	}
