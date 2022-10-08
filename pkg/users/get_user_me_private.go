@@ -47,7 +47,7 @@ func getUserPrivateFromUserID(userID string, dbClient db.Client) (private, *resp
 	}
 	privates := []private{}
 	err := dbClient.Select(&privates, "sql/users/select_user_private_from_user_id.sql", &params)
-	if err == sql.ErrNoRows {
+	if len(privates) == 0 {
 		return private{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "個人情報が有りません", Log: sql.ErrNoRows.Error()}
 	}
 	if err != nil {
