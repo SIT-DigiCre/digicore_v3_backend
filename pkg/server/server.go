@@ -9,6 +9,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/event"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/google"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/group"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/info"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/storage"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/work"
@@ -106,6 +107,14 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	env_group.Use(middleware.JWTWithConfig(config))
 	env, _ := env.CreateContext()
 	env_group.GET("/join", env.GetJoinURL)
+
+	info_group := e.Group("/info")
+	info_group.Use(middleware.JWTWithConfig(config))
+	info, _ := info.CreateContext(db)
+	info_group.GET("", info.GetInfoList)
+	info_group.POST("", info.PostInfo)
+	info_group.GET("/:id", info.GetInfo)
+	info_group.PUT("/:id", info.UpdateInfo)
 }
 
 func CreateDbConnection(address string) (*sql.DB, error) {
