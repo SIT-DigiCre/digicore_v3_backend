@@ -33,6 +33,11 @@ var WasabiPrivateBucket = os.Getenv("WASABI_PRIVATE_BUCKET")
 var WasabiPublicBucket = os.Getenv("WASABI_PUBLIC_BUCKET")
 var WasabiDirectURLDomain = "s3.ap-northeast-1.wasabisys.com"
 
+var MattermostURL = "https://mm.digicre.net"
+var MattermostTeamID = os.Getenv("MATTERMOST_TEAM_ID")
+var MattermostAdminAccount = os.Getenv("MATTERMOST_ADMIN_ACCOUNT")
+var MattermostAdminPassword = os.Getenv("MATTERMOST_ADMIN_PASSWORD")
+
 type Context struct {
 }
 

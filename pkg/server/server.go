@@ -12,6 +12,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/storage"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/work"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/mattermost"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -101,6 +102,10 @@ func addRouting(e *echo.Echo, db *sql.DB) {
 	s.GET("", storage.GetUserFileList)
 	s.POST("", storage.UploadUserfile)
 	s.GET("/:fileId", storage.GetUserFileUrl)
+
+	mm := e.Group("/mattermost")
+	mm.Use(middleware.JWTWithConfig(config))
+	mm.GET("/invite", mattermost.GetInviteURL)
 
 	env_group := e.Group("/env")
 	env_group.Use(middleware.JWTWithConfig(config))
