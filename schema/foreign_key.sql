@@ -21,3 +21,5 @@ ALTER TABLE work_users ADD CONSTRAINT fk_work_users_work_id_works_id FOREIGN KEY
 
 ALTER TABLE work_files ADD CONSTRAINT fk_work_files_file_id_user_files_id FOREIGN KEY (file_id) REFERENCES user_files(id);
 ALTER TABLE work_files ADD CONSTRAINT fk_work_files_work_id_works_id FOREIGN KEY (work_id) REFERENCES works(id);
+
+ALTER TABLE info_boards ADD CONSTRAINT fk_info_boards_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id);
