@@ -30,9 +30,10 @@ func (cu *RequestCreateUserInfo) validate() error {
 	if len(cu.Username) == 0 {
 		return errors.New("ユーザ名が空です")
 	}
-	if len(cu.Password) < 4 {
+	if len(cu.Password) < 8 {
 		return errors.New("パスワードが短すぎます")
 	}
+
 	return nil
 }
 
@@ -74,7 +75,7 @@ func (c Context) CreateUser(e echo.Context) error {
 	}
 	createdUser, _ := client.CreateUserWithInviteId(user, inviteID)
 	if createdUser == nil {
-		return e.JSON(http.StatusInternalServerError, ResponseError{ Message: "ユーザの追加に失敗しました" })
+		return e.JSON(http.StatusInternalServerError, ResponseError{ Message: "ユーザの追加に失敗しました。パスワードが基準を満たしているか確認してください。" })
 	}
 
 	return e.JSON(http.StatusOK, ResponseCreatedUser{ Username: createdUser.Username })
