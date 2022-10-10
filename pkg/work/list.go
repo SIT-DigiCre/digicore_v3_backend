@@ -3,6 +3,7 @@ package work
 import (
 	"net/http"
 	"strconv"
+	"database/sql"
 
 	"github.com/labstack/echo/v4"
 )
@@ -32,11 +33,19 @@ type ResponseGetTagList struct {
 // @Security Authorization
 // @Router /work/work [get]
 // @Param pages query int false "pages"
+// @Param auther_id query string false "auther_id"
 // @Success 200 {object} ResponseGetWorkList
 func (c Context) WorkList(e echo.Context) error {
 	pages := e.QueryParam("pages")
+	autherId := e.QueryParam("auther_id")
 	pagesNum, _ := strconv.Atoi(pages)
-	rows, err := c.DB.Query("SELECT BIN_TO_UUID(id), name FROM works ORDER BY updated_at DESC LIMIT 100 OFFSET ?", pagesNum)
+	var rows *sql.Rows
+	var err error
+	if autherId == "" {
+		rows, err = c.DB.Query("SELECT BIN_TO_UUID(id), name FROM works ORDER BY updated_at DESC LIMIT 100 OFFSET ?", pagesNum)
+	} else {
+		rows, err = c.DB.Query("SELECT BIN_TO_UUID(id), name FROM works WHERE UUID_TO_BIN(?) IN ( SELECT user_id FROM work_users WHERE work_id = works.id ) ORDER BY updated_at DESC LIMIT 100 OFFSET ?", autherId, pagesNum)
+	}
 	if err != nil {
 		e.JSON(http.StatusOK, Error{Message: "作品一覧の取得に失敗しました"})
 	}
