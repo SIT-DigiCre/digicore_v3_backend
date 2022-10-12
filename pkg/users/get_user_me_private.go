@@ -12,12 +12,12 @@ import (
 )
 
 func GetUserMePrivate(ctx echo.Context, dbClient db.Client) (api.ResGetUserMePrivate, *response.Error) {
+	res := api.ResGetUserMePrivate{}
 	userID := ctx.Get("user_id").(string)
 	private, err := getUserPrivateFromUserID(userID, dbClient)
 	if err != nil {
 		return api.ResGetUserMePrivate{}, err
 	}
-	res := api.ResGetUserMePrivate{}
 	rerr := copier.Copy(&res, &private)
 	if rerr != nil {
 		return api.ResGetUserMePrivate{}, &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "プロフィールの読み込みに失敗しました", Log: rerr.Error()}
