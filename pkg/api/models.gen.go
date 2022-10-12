@@ -66,6 +66,14 @@ type ResGetStatus struct {
 	Status bool `json:"status"`
 }
 
+// ResGetUser defines model for ResGetUser.
+type ResGetUser struct {
+	IconUrl               string `json:"iconUrl"`
+	ShortSelfIntroduction string `json:"shortSelfIntroduction"`
+	UserId                string `json:"userId"`
+	Username              string `json:"username"`
+}
+
 // ResGetUserMe defines model for ResGetUserMe.
 type ResGetUserMe struct {
 	ActiveLimit           string `json:"activeLimit"`
@@ -128,6 +136,12 @@ type PostLoginCallbackJSONBody = ReqPostLoginCallback
 
 // PostSignupCallbackJSONBody defines parameters for PostSignupCallback.
 type PostSignupCallbackJSONBody = ReqPostSignupCallback
+
+// GetUserParams defines parameters for GetUser.
+type GetUserParams struct {
+	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+	Seed   *int `form:"seed,omitempty" json:"seed,omitempty"`
+}
 
 // PutUserMeJSONBody defines parameters for PutUserMe.
 type PutUserMeJSONBody = ReqPutUserMe

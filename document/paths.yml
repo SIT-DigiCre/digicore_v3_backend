@@ -8,6 +8,8 @@
   $ref: "./paths/login.yml"
 /login/callback:
   $ref: "./paths/login_callback.yml"
+/user:
+  $ref: "./paths/user.yml"
 /user/me:
   $ref: "./paths/user_me.yml"
 /user/me/private:

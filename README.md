@@ -36,8 +36,7 @@ docker compose run --rm -w /app/db admin sql-migrate up
 **./document/bundle.ymlと./pkg/api/*.gen.goは自動生成であるため直接編集しない**
 
 ```sh
-docker compose run --rm -w /app/document node_tool swagger-cli bundle -o ./bundle.yml -t yaml ./openapi.yml # OpenAPIファイルの結合
-docker compose run --rm -w /app admin make generate_api # apiパッケージの生成
+make generate_api
 ```
 
 ## 開発時のJWT検証の無効化

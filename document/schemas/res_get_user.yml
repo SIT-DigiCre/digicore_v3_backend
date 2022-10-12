@@ -1,0 +1,14 @@
+required:
+  - userId
+  - username
+  - iconUrl
+  - shortSelfIntroduction
+properties:
+  userId:
+    type: string
+  username:
+    type: string
+  iconUrl:
+    type: string
+  shortSelfIntroduction:
+    type: string

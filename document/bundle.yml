@@ -94,6 +94,37 @@ paths:
                 $ref: '#/components/schemas/ResPostLoginCallback'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /user:
+    get:
+      tags:
+        - user
+      description: Get user list
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+        - name: seed
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success get user list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResGetUser'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me:
     get:
       tags:
@@ -285,6 +316,21 @@ components:
         - jwt
       properties:
         jwt:
+          type: string
+    ResGetUser:
+      required:
+        - userId
+        - username
+        - iconUrl
+        - shortSelfIntroduction
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+        shortSelfIntroduction:
           type: string
     ResGetUserMe:
       required:
