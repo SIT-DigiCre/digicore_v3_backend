@@ -1,14 +1,7 @@
 required:
-  - userId
-  - username
-  - iconUrl
-  - shortSelfIntroduction
+  - user
 properties:
-  userId:
-    type: string
-  username:
-    type: string
-  iconUrl:
-    type: string
-  shortSelfIntroduction:
-    type: string
+  user:
+    type: array
+    items:
+      $ref: './res_get_user.user.yml'

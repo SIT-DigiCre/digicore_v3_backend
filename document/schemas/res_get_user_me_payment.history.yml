@@ -1,0 +1,14 @@
+required:
+  - year
+  - transferName
+  - checked
+  - updatedAt
+properties:
+  year:
+    type: integer
+  transferName:
+    type: string
+  checked:
+    type: boolean
+  updatedAt:
+    type: string

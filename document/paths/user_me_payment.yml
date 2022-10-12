@@ -10,9 +10,7 @@ get:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: "../schemas/res_get_user_me_payment.yml"
+            $ref: "../schemas/res_get_user_me_payment.yml"
     403:
       $ref: "../responses/unauthorized.yml"
     404:

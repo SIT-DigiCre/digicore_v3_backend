@@ -11,16 +11,16 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GetUserMePayment(ctx echo.Context, dbClient db.Client) ([]api.ResGetUserMePayment, *response.Error) {
+func GetUserMePayment(ctx echo.Context, dbClient db.Client) (api.ResGetUserMePayment, *response.Error) {
 	userID := ctx.Get("user_id").(string)
 	payments, err := getUserPaymentFromUserID(userID, dbClient)
 	if err != nil {
-		return []api.ResGetUserMePayment{}, err
+		return api.ResGetUserMePayment{}, err
 	}
-	res := []api.ResGetUserMePayment{}
-	rerr := copier.Copy(&res, &payments)
+	res := api.ResGetUserMePayment{}
+	rerr := copier.Copy(&res.History, &payments)
 	if rerr != nil {
-		return []api.ResGetUserMePayment{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
+		return api.ResGetUserMePayment{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
 	return res, nil
 }

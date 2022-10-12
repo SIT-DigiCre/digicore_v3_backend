@@ -68,10 +68,7 @@ type ResGetStatus struct {
 
 // ResGetUser defines model for ResGetUser.
 type ResGetUser struct {
-	IconUrl               string `json:"iconUrl"`
-	ShortSelfIntroduction string `json:"shortSelfIntroduction"`
-	UserId                string `json:"userId"`
-	Username              string `json:"username"`
+	User []ResGetUserObjectUser `json:"user"`
 }
 
 // ResGetUserMe defines model for ResGetUserMe.
@@ -88,6 +85,11 @@ type ResGetUserMe struct {
 
 // ResGetUserMePayment defines model for ResGetUserMePayment.
 type ResGetUserMePayment struct {
+	History []ResGetUserMePaymentObjectHistory `json:"history"`
+}
+
+// ResGetUserMePaymentObjectHistory defines model for ResGetUserMePaymentObjectHistory.
+type ResGetUserMePaymentObjectHistory struct {
 	Checked      bool   `json:"checked"`
 	TransferName string `json:"transferName"`
 	UpdatedAt    string `json:"updatedAt"`
@@ -107,6 +109,14 @@ type ResGetUserMePrivate struct {
 	ParentHomephoneNumber string `json:"parentHomephoneNumber"`
 	ParentName            string `json:"parentName"`
 	PhoneNumber           string `json:"phoneNumber"`
+}
+
+// ResGetUserObjectUser defines model for ResGetUserObjectUser.
+type ResGetUserObjectUser struct {
+	IconUrl               string `json:"iconUrl"`
+	ShortSelfIntroduction string `json:"shortSelfIntroduction"`
+	UserId                string `json:"userId"`
+	Username              string `json:"username"`
 }
 
 // ResPostLoginCallback defines model for ResPostLoginCallback.

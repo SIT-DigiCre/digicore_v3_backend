@@ -1,14 +1,7 @@
 required:
-  - year
-  - transferName
-  - checked
-  - updatedAt
+  - history
 properties:
-  year:
-    type: integer
-  transferName:
-    type: string
-  checked:
-    type: boolean
-  updatedAt:
-    type: string
+  history:
+    type: array
+    items:
+      $ref: './res_get_user_me_payment.history.yml'

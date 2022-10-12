@@ -10,11 +10,11 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func PutUserMePayment(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPutUserMePayment) ([]api.ResGetUserMePayment, *response.Error) {
+func PutUserMePayment(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPutUserMePayment) (api.ResGetUserMePayment, *response.Error) {
 	userID := ctx.Get("user_id").(string)
 	err := updateUserPayment(dbClient, userID, requestBody)
 	if err != nil {
-		return []api.ResGetUserMePayment{}, err
+		return api.ResGetUserMePayment{}, err
 	}
 
 	return GetUserMePayment(ctx, dbClient)

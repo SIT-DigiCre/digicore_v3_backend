@@ -116,9 +116,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ResGetUser'
+                $ref: '#/components/schemas/ResGetUser'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -230,9 +228,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ResGetUserMePayment'
+                $ref: '#/components/schemas/ResGetUserMePayment'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -318,6 +314,14 @@ components:
         jwt:
           type: string
     ResGetUser:
+      required:
+        - user
+      properties:
+        user:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetUserObjectUser'
+    ResGetUserObjectUser:
       required:
         - userId
         - username
@@ -492,6 +496,14 @@ components:
             validate: 'required,min=1,max=255'
             ja: 緊急連絡先住所
     ResGetUserMePayment:
+      required:
+        - history
+      properties:
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetUserMePaymentObjectHistory'
+    ResGetUserMePaymentObjectHistory:
       required:
         - year
         - transferName
