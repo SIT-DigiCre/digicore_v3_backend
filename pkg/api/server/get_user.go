@@ -11,7 +11,7 @@ import (
 func (s *server) GetUser(ctx echo.Context, params api.GetUserParams) error {
 	dbClient := db.Open()
 
-	res, err := users.GetUser(ctx, &dbClient)
+	res, err := users.GetUser(ctx, &dbClient, params)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

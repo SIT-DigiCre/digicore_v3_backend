@@ -1,12 +1,51 @@
 package users
 
 import (
+	"database/sql"
+	"net/http"
+
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
+	"github.com/jinzhu/copier"
 	"github.com/labstack/echo/v4"
 )
 
-func GetUser(ctx echo.Context, dbClient db.Client) (api.ResGetUser, *response.Error) {
-	return api.ResGetUser{}, nil
+func GetUser(ctx echo.Context, dbClient db.Client, params api.GetUserParams) (api.ResGetUser, *response.Error) {
+	res := api.ResGetUser{}
+	user, err := getUserList(dbClient, params.Offset, params.Seed)
+	if err != nil {
+		return api.ResGetUser{}, err
+	}
+	rerr := copier.Copy(&res.User, &user)
+	if rerr != nil {
+		return api.ResGetUser{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
+	}
+	return res, nil
+}
+
+type userOverview struct {
+	IconUrl               string `db:"icon_url"`
+	ShortSelfIntroduction string `db:"short_self_introduction"`
+	UserId                string `db:"user_id"`
+	Username              string `db:"username"`
+}
+
+func getUserList(dbClient db.Client, offset *int, seed *int) ([]userOverview, *response.Error) {
+	params := struct {
+		Offset *int `twowaysql:"offset"`
+		Seed   *int `twowaysql:"seed"`
+	}{
+		Offset: offset,
+		Seed:   seed,
+	}
+	userOverviews := []userOverview{}
+	err := dbClient.Select(&userOverviews, "sql/users/select_user_profile.sql", &params)
+	if len(userOverviews) == 0 {
+		return []userOverview{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "ユーザーが存在しません", Log: sql.ErrNoRows.Error()}
+	}
+	if err != nil {
+		return []userOverview{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+	}
+	return userOverviews, nil
 }
