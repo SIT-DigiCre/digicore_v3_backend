@@ -14,7 +14,7 @@ import (
 func GetUserMe(ctx echo.Context, dbClient db.Client) (api.ResGetUserMe, *response.Error) {
 	res := api.ResGetUserMe{}
 	userID := ctx.Get("user_id").(string)
-	profile, err := GetUserProfileFromUserID(userID, dbClient)
+	profile, err := GetUserProfileFromUserID(dbClient, userID)
 	if err != nil {
 		return api.ResGetUserMe{}, err
 	}

@@ -14,11 +14,11 @@ import (
 func GetUserMePayment(ctx echo.Context, dbClient db.Client) (api.ResGetUserMePayment, *response.Error) {
 	res := api.ResGetUserMePayment{}
 	userID := ctx.Get("user_id").(string)
-	payments, err := getUserPaymentFromUserID(userID, dbClient)
+	history, err := getUserPaymentFromUserID(dbClient, userID)
 	if err != nil {
 		return api.ResGetUserMePayment{}, err
 	}
-	rerr := copier.Copy(&res.History, &payments)
+	rerr := copier.Copy(&res.History, &history)
 	if rerr != nil {
 		return api.ResGetUserMePayment{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
@@ -32,7 +32,7 @@ type payment struct {
 	Year         int    `db:"year"`
 }
 
-func getUserPaymentFromUserID(userID string, dbClient db.Client) ([]payment, *response.Error) {
+func getUserPaymentFromUserID(dbClient db.Client, userID string) ([]payment, *response.Error) {
 	params := struct {
 		UserID string `twowaysql:"userID"`
 	}{
