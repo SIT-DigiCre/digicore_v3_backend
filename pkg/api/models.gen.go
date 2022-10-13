@@ -31,6 +31,11 @@ type ReqPutUserMe struct {
 	Username              string `ja:"ユーザー名" json:"username" validate:"required,min=1,max=255"`
 }
 
+// ReqPutUserMeIntroduction defines model for ReqPutUserMeIntroduction.
+type ReqPutUserMeIntroduction struct {
+	Introduction string `ja:"自己紹介" json:"introduction" validate:"required,min=1"`
+}
+
 // ReqPutUserMePayment defines model for ReqPutUserMePayment.
 type ReqPutUserMePayment struct {
 	TransferName string `ja:"振込名義" json:"transferName" validate:"required,min=1,max=255"`
@@ -81,6 +86,11 @@ type ResGetUserMe struct {
 	StudentNumber         string `json:"studentNumber"`
 	UserId                string `json:"userId"`
 	Username              string `json:"username"`
+}
+
+// ResGetUserMeIntroduction defines model for ResGetUserMeIntroduction.
+type ResGetUserMeIntroduction struct {
+	Introduction string `json:"introduction"`
 }
 
 // ResGetUserMePayment defines model for ResGetUserMePayment.
@@ -156,6 +166,9 @@ type GetUserParams struct {
 // PutUserMeJSONBody defines parameters for PutUserMe.
 type PutUserMeJSONBody = ReqPutUserMe
 
+// PutUserMeIntroductionJSONBody defines parameters for PutUserMeIntroduction.
+type PutUserMeIntroductionJSONBody = ReqPutUserMeIntroduction
+
 // PutUserMePaymentJSONBody defines parameters for PutUserMePayment.
 type PutUserMePaymentJSONBody = ReqPutUserMePayment
 
@@ -170,6 +183,9 @@ type PostSignupCallbackJSONRequestBody = PostSignupCallbackJSONBody
 
 // PutUserMeJSONRequestBody defines body for PutUserMe for application/json ContentType.
 type PutUserMeJSONRequestBody = PutUserMeJSONBody
+
+// PutUserMeIntroductionJSONRequestBody defines body for PutUserMeIntroduction for application/json ContentType.
+type PutUserMeIntroductionJSONRequestBody = PutUserMeIntroductionJSONBody
 
 // PutUserMePaymentJSONRequestBody defines body for PutUserMePayment for application/json ContentType.
 type PutUserMePaymentJSONRequestBody = PutUserMePaymentJSONBody

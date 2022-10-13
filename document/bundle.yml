@@ -169,6 +169,52 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /user/me/introduction:
+    get:
+      tags:
+        - user
+      description: Get my introduction
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success get my introduction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMeIntroduction'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - user
+      description: Update my introduction
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: My introduction
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutUserMeIntroduction'
+      responses:
+        '200':
+          description: Success update my introduction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMeIntroduction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me/private:
     get:
       tags:
@@ -390,6 +436,21 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: 短い自己紹介
+    ResGetUserMeIntroduction:
+      required:
+        - introduction
+      properties:
+        introduction:
+          type: string
+    ReqPutUserMeIntroduction:
+      required:
+        - introduction
+      properties:
+        introduction:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1'
+            ja: 自己紹介
     ResGetUserMePrivate:
       required:
         - lastName

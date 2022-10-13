@@ -20,6 +20,10 @@ ResGetUserMe:
   $ref: "./schemas/res_get_user_me.yml"
 ReqPutUserMe:
   $ref: "./schemas/req_put_user_me.yml"
+ResGetUserMeIntroduction:
+  $ref: "./schemas/res_get_user_me_introduction.yml"
+ReqPutUserMeIntroduction:
+  $ref: "./schemas/req_put_user_me_introduction.yml"
 ResGetUserMePrivate:
   $ref: "./schemas/res_get_user_me_private.yml"
 ReqPutUserMePrivate:
