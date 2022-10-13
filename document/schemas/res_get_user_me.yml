@@ -5,7 +5,7 @@ required:
   - iconUrl
   - schoolGrade
   - discordUserID
-  - shortSelfIntroduction
+  - shortIntroduction
   - activeLimit
 properties:
   userId:
@@ -20,7 +20,7 @@ properties:
     type: integer
   discordUserID:
     type: string
-  shortSelfIntroduction:
+  shortIntroduction:
     type: string
   activeLimit:
     type: string

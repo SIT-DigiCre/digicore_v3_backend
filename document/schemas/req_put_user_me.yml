@@ -2,7 +2,7 @@ required:
   - username
   - iconUrl
   - schoolGrade
-  - shortSelfIntroduction
+  - shortIntroduction
 properties:
   username:
     type: string
@@ -19,7 +19,7 @@ properties:
     x-oapi-codegen-extra-tags:
       validate: required,min=1,max=9
       ja: 学年
-  shortSelfIntroduction:
+  shortIntroduction:
     type: string
     x-oapi-codegen-extra-tags:
       validate: required,min=1,max=255

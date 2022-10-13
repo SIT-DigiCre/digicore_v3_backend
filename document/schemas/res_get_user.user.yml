@@ -2,7 +2,7 @@ required:
   - userId
   - username
   - iconUrl
-  - shortSelfIntroduction
+  - shortIntroduction
 properties:
   userId:
     type: string
@@ -10,5 +10,5 @@ properties:
     type: string
   iconUrl:
     type: string
-  shortSelfIntroduction:
+  shortIntroduction:
     type: string

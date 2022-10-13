@@ -28,14 +28,14 @@ func IDFromStudentNumber(dbClient db.Client, studentNumber string) (string, *res
 }
 
 type Profile struct {
-	UserId                string `db:"user_id"`
-	StudentNumber         string `db:"student_number"`
-	Username              string `db:"username"`
-	SchoolGrade           int    `db:"school_grade"`
-	IconUrl               string `db:"icon_url"`
-	DiscordUserID         string `db:"discord_userid"`
-	ActiveLimit           string `db:"active_limit"`
-	ShortSelfIntroduction string `db:"short_self_introduction"`
+	UserId            string `db:"user_id"`
+	StudentNumber     string `db:"student_number"`
+	Username          string `db:"username"`
+	SchoolGrade       int    `db:"school_grade"`
+	IconUrl           string `db:"icon_url"`
+	DiscordUserID     string `db:"discord_userid"`
+	ActiveLimit       string `db:"active_limit"`
+	ShortIntroduction string `db:"short_introduction"`
 }
 
 func GetUserProfileFromUserID(dbClient db.Client, userID string) (Profile, *response.Error) {

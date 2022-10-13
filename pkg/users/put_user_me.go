@@ -21,17 +21,17 @@ func PutUserMe(ctx echo.Context, dbClient db.TransactionClient, requestBody api.
 
 func updateUserProfile(dbClient db.TransactionClient, userID string, requestBody api.ReqPutUserMe) *response.Error {
 	params := struct {
-		UserID                string `twowaysql:"userID"`
-		IconUrl               string `twowaysql:"iconURL"`
-		SchoolGrade           int    `twowaysql:"schoolGrade"`
-		ShortSelfIntroduction string `twowaysql:"shortSelfIntroduction"`
-		Username              string `twowaysql:"username"`
+		UserID            string `twowaysql:"userID"`
+		IconUrl           string `twowaysql:"iconURL"`
+		SchoolGrade       int    `twowaysql:"schoolGrade"`
+		ShortIntroduction string `twowaysql:"shortIntroduction"`
+		Username          string `twowaysql:"username"`
 	}{
-		UserID:                userID,
-		IconUrl:               requestBody.IconUrl,
-		SchoolGrade:           requestBody.SchoolGrade,
-		ShortSelfIntroduction: requestBody.ShortSelfIntroduction,
-		Username:              requestBody.Username,
+		UserID:            userID,
+		IconUrl:           requestBody.IconUrl,
+		SchoolGrade:       requestBody.SchoolGrade,
+		ShortIntroduction: requestBody.ShortIntroduction,
+		Username:          requestBody.Username,
 	}
 	_, err := dbClient.DuplicateUpdate("sql/users/insert_user_profile.sql", "sql/users/update_user_profile.sql", &params)
 	if err != nil {

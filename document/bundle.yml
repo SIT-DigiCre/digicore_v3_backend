@@ -372,7 +372,7 @@ components:
         - userId
         - username
         - iconUrl
-        - shortSelfIntroduction
+        - shortIntroduction
       properties:
         userId:
           type: string
@@ -380,7 +380,7 @@ components:
           type: string
         iconUrl:
           type: string
-        shortSelfIntroduction:
+        shortIntroduction:
           type: string
     ResGetUserMe:
       required:
@@ -390,7 +390,7 @@ components:
         - iconUrl
         - schoolGrade
         - discordUserID
-        - shortSelfIntroduction
+        - shortIntroduction
         - activeLimit
       properties:
         userId:
@@ -405,7 +405,7 @@ components:
           type: integer
         discordUserID:
           type: string
-        shortSelfIntroduction:
+        shortIntroduction:
           type: string
         activeLimit:
           type: string
@@ -414,7 +414,7 @@ components:
         - username
         - iconUrl
         - schoolGrade
-        - shortSelfIntroduction
+        - shortIntroduction
       properties:
         username:
           type: string
@@ -431,7 +431,7 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=9'
             ja: 学年
-        shortSelfIntroduction:
+        shortIntroduction:
           type: string
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'

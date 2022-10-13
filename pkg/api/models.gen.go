@@ -25,10 +25,10 @@ type ReqPostSignupCallback struct {
 
 // ReqPutUserMe defines model for ReqPutUserMe.
 type ReqPutUserMe struct {
-	IconUrl               string `ja:"アイコンURL" json:"iconUrl" validate:"required,min=1,max=255"`
-	SchoolGrade           int    `ja:"学年" json:"schoolGrade" validate:"required,min=1,max=9"`
-	ShortSelfIntroduction string `ja:"短い自己紹介" json:"shortSelfIntroduction" validate:"required,min=1,max=255"`
-	Username              string `ja:"ユーザー名" json:"username" validate:"required,min=1,max=255"`
+	IconUrl           string `ja:"アイコンURL" json:"iconUrl" validate:"required,min=1,max=255"`
+	SchoolGrade       int    `ja:"学年" json:"schoolGrade" validate:"required,min=1,max=9"`
+	ShortIntroduction string `ja:"短い自己紹介" json:"shortIntroduction" validate:"required,min=1,max=255"`
+	Username          string `ja:"ユーザー名" json:"username" validate:"required,min=1,max=255"`
 }
 
 // ReqPutUserMeIntroduction defines model for ReqPutUserMeIntroduction.
@@ -78,14 +78,14 @@ type ResGetUser struct {
 
 // ResGetUserMe defines model for ResGetUserMe.
 type ResGetUserMe struct {
-	ActiveLimit           string `json:"activeLimit"`
-	DiscordUserID         string `json:"discordUserID"`
-	IconUrl               string `json:"iconUrl"`
-	SchoolGrade           int    `json:"schoolGrade"`
-	ShortSelfIntroduction string `json:"shortSelfIntroduction"`
-	StudentNumber         string `json:"studentNumber"`
-	UserId                string `json:"userId"`
-	Username              string `json:"username"`
+	ActiveLimit       string `json:"activeLimit"`
+	DiscordUserID     string `json:"discordUserID"`
+	IconUrl           string `json:"iconUrl"`
+	SchoolGrade       int    `json:"schoolGrade"`
+	ShortIntroduction string `json:"shortIntroduction"`
+	StudentNumber     string `json:"studentNumber"`
+	UserId            string `json:"userId"`
+	Username          string `json:"username"`
 }
 
 // ResGetUserMeIntroduction defines model for ResGetUserMeIntroduction.
@@ -123,10 +123,10 @@ type ResGetUserMePrivate struct {
 
 // ResGetUserObjectUser defines model for ResGetUserObjectUser.
 type ResGetUserObjectUser struct {
-	IconUrl               string `json:"iconUrl"`
-	ShortSelfIntroduction string `json:"shortSelfIntroduction"`
-	UserId                string `json:"userId"`
-	Username              string `json:"username"`
+	IconUrl           string `json:"iconUrl"`
+	ShortIntroduction string `json:"shortIntroduction"`
+	UserId            string `json:"userId"`
+	Username          string `json:"username"`
 }
 
 // ResPostLoginCallback defines model for ResPostLoginCallback.
