@@ -1,8 +1,10 @@
 package mattermost
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -24,6 +26,7 @@ type ResponseError struct {
 
 type RequestCreateUserInfo struct {
 	Username string `json:"username"`
+	Nickname string `json:"nickname"`
 	Password string `json:"password"`
 }
 func (cu *RequestCreateUserInfo) validate() error {
@@ -72,11 +75,34 @@ func (c Context) CreateUser(e echo.Context) error {
 		Username: createUserInfo.Username,
 		Email: email,
 		Password: createUserInfo.Password,
+		Nickname: createUserInfo.Nickname,
 	}
 	createdUser, _ := client.CreateUserWithInviteId(user, inviteID)
 	if createdUser == nil {
-		return e.JSON(http.StatusInternalServerError, ResponseError{ Message: "ユーザの追加に失敗しました。パスワードが基準を満たしているか確認してください。" })
+		return e.JSON(http.StatusInternalServerError, ResponseError{ Message: "ユーザの追加に失敗しました。同じユーザIDが既に使われている可能性があります。" })
 	}
+	// ユーザ作成には成功しているので、以降の処理は失敗してもOKを返す
+	responseOK :=  e.JSON(http.StatusOK, ResponseCreatedUser{ Username: createdUser.Username })
 
-	return e.JSON(http.StatusOK, ResponseCreatedUser{ Username: createdUser.Username })
+	var iconURL string
+	err = c.DB.QueryRow("SELECT icon_url FROM user_profiles WHERE user_id = UUID_TO_BIN(?)", userId).
+		Scan(&iconURL)
+	if err == sql.ErrNoRows {
+		return responseOK
+	} else if err != nil {
+		return responseOK
+	}
+	if (0 < len(iconURL)) {
+		res, err := http.Get(iconURL)
+		if err != nil {
+			return responseOK
+		}
+		defer res.Body.Close()
+		iconData, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			return responseOK
+		}
+		client.SetProfileImage(createdUser.Id, iconData)
+	}
+	return responseOK
 }
