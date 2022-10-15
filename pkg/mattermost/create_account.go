@@ -41,7 +41,8 @@ func (cu *RequestCreateUserInfo) validate() error {
 }
 
 // Create Mattermost user and add to team
-// @Router /mattermost/create_user
+// @Router /mattermost/create_user [post]
+// @Param RequestCreateUserInfo body RequestCreateUserInfo true "my mattermost user info"
 // @Security Authorization
 // @Success 200 {object}  ResponseCreatedUser
 // @Failure 500 {object} ResponseError
