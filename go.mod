@@ -11,7 +11,7 @@ require (
 	github.com/labstack/echo/v4 v4.7.2
 	github.com/mattermost/mattermost-server/v5 v5.39.3
 	github.com/swaggo/swag v1.8.4
-	golang.org/x/oauth2 v0.0.0-20220808172628-8227340efae7
+	golang.org/x/oauth2 v0.0.0-20221014153046-6fdb5e3db783
 )
 
 require (
