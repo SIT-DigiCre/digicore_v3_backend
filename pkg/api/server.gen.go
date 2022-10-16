@@ -38,6 +38,12 @@ type ServerInterface interface {
 	// (PUT /user/me)
 	PutUserMe(ctx echo.Context) error
 
+	// (GET /user/me/discord)
+	GetUserMeDiscord(ctx echo.Context) error
+
+	// (POST /user/me/discord/callback)
+	PostUserMeDiscordCallback(ctx echo.Context) error
+
 	// (GET /user/me/introduction)
 	GetUserMeIntroduction(ctx echo.Context) error
 
@@ -156,6 +162,28 @@ func (w *ServerInterfaceWrapper) PutUserMe(ctx echo.Context) error {
 	return err
 }
 
+// GetUserMeDiscord converts echo context to params.
+func (w *ServerInterfaceWrapper) GetUserMeDiscord(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetUserMeDiscord(ctx)
+	return err
+}
+
+// PostUserMeDiscordCallback converts echo context to params.
+func (w *ServerInterfaceWrapper) PostUserMeDiscordCallback(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostUserMeDiscordCallback(ctx)
+	return err
+}
+
 // GetUserMeIntroduction converts echo context to params.
 func (w *ServerInterfaceWrapper) GetUserMeIntroduction(ctx echo.Context) error {
 	var err error
@@ -258,6 +286,8 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/user", wrapper.GetUser)
 	router.GET(baseURL+"/user/me", wrapper.GetUserMe)
 	router.PUT(baseURL+"/user/me", wrapper.PutUserMe)
+	router.GET(baseURL+"/user/me/discord", wrapper.GetUserMeDiscord)
+	router.POST(baseURL+"/user/me/discord/callback", wrapper.PostUserMeDiscordCallback)
 	router.GET(baseURL+"/user/me/introduction", wrapper.GetUserMeIntroduction)
 	router.PUT(baseURL+"/user/me/introduction", wrapper.PutUserMeIntroduction)
 	router.GET(baseURL+"/user/me/payment", wrapper.GetUserMePayment)

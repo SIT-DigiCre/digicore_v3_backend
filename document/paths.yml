@@ -12,6 +12,10 @@
   $ref: "./paths/user.yml"
 /user/me:
   $ref: "./paths/user_me.yml"
+/user/me/discord:
+  $ref: "./paths/user_me_discord.yml"
+/user/me/discord/callback:
+  $ref: "./paths/user_me_discord_callback.yml"
 /user/me/introduction:
   $ref: "./paths/user_me_introduction.yml"
 /user/me/private:

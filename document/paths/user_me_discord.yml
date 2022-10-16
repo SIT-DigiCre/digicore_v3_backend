@@ -1,0 +1,13 @@
+get:
+  tags:
+    - user
+  description: "Get discord login URL"
+  security:
+    - BearerAuth: []
+  responses:
+    200:
+      description: "Discord login URL"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_user_me_discord.yml"

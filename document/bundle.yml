@@ -169,6 +169,43 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /user/me/discord:
+    get:
+      tags:
+        - user
+      description: Get discord login URL
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Discord login URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMeDiscord'
+  /user/me/discord/callback:
+    post:
+      tags:
+        - user
+      description: Verify discord auth
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Auth information
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostUserMeDiscordCallback'
+      responses:
+        '200':
+          description: Success signup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMe'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me/introduction:
     get:
       tags:
@@ -588,6 +625,21 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: 振込名義
+    ResGetUserMeDiscord:
+      required:
+        - url
+      properties:
+        url:
+          type: string
+    ReqPostUserMeDiscordCallback:
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 認証コード
     Error:
       required:
         - level

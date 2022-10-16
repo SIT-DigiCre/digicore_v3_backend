@@ -23,6 +23,11 @@ type ReqPostSignupCallback struct {
 	Code string `ja:"認証コード" json:"code" validate:"required"`
 }
 
+// ReqPostUserMeDiscordCallback defines model for ReqPostUserMeDiscordCallback.
+type ReqPostUserMeDiscordCallback struct {
+	Code string `ja:"認証コード" json:"code" validate:"required"`
+}
+
 // ReqPutUserMe defines model for ReqPutUserMe.
 type ReqPutUserMe struct {
 	IconUrl           string `ja:"アイコンURL" json:"iconUrl" validate:"required,min=1,max=255"`
@@ -86,6 +91,11 @@ type ResGetUserMe struct {
 	StudentNumber     string `json:"studentNumber"`
 	UserId            string `json:"userId"`
 	Username          string `json:"username"`
+}
+
+// ResGetUserMeDiscord defines model for ResGetUserMeDiscord.
+type ResGetUserMeDiscord struct {
+	Url string `json:"url"`
 }
 
 // ResGetUserMeIntroduction defines model for ResGetUserMeIntroduction.
@@ -166,6 +176,9 @@ type GetUserParams struct {
 // PutUserMeJSONBody defines parameters for PutUserMe.
 type PutUserMeJSONBody = ReqPutUserMe
 
+// PostUserMeDiscordCallbackJSONBody defines parameters for PostUserMeDiscordCallback.
+type PostUserMeDiscordCallbackJSONBody = ReqPostUserMeDiscordCallback
+
 // PutUserMeIntroductionJSONBody defines parameters for PutUserMeIntroduction.
 type PutUserMeIntroductionJSONBody = ReqPutUserMeIntroduction
 
@@ -183,6 +196,9 @@ type PostSignupCallbackJSONRequestBody = PostSignupCallbackJSONBody
 
 // PutUserMeJSONRequestBody defines body for PutUserMe for application/json ContentType.
 type PutUserMeJSONRequestBody = PutUserMeJSONBody
+
+// PostUserMeDiscordCallbackJSONRequestBody defines body for PostUserMeDiscordCallback for application/json ContentType.
+type PostUserMeDiscordCallbackJSONRequestBody = PostUserMeDiscordCallbackJSONBody
 
 // PutUserMeIntroductionJSONRequestBody defines body for PutUserMeIntroduction for application/json ContentType.
 type PutUserMeIntroductionJSONRequestBody = PutUserMeIntroductionJSONBody
