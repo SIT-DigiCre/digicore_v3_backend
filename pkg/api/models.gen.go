@@ -176,8 +176,8 @@ type GetUserParams struct {
 // PutUserMeJSONBody defines parameters for PutUserMe.
 type PutUserMeJSONBody = ReqPutUserMe
 
-// PostUserMeDiscordCallbackJSONBody defines parameters for PostUserMeDiscordCallback.
-type PostUserMeDiscordCallbackJSONBody = ReqPostUserMeDiscordCallback
+// PutUserMeDiscordCallbackJSONBody defines parameters for PutUserMeDiscordCallback.
+type PutUserMeDiscordCallbackJSONBody = ReqPostUserMeDiscordCallback
 
 // PutUserMeIntroductionJSONBody defines parameters for PutUserMeIntroduction.
 type PutUserMeIntroductionJSONBody = ReqPutUserMeIntroduction
@@ -197,8 +197,8 @@ type PostSignupCallbackJSONRequestBody = PostSignupCallbackJSONBody
 // PutUserMeJSONRequestBody defines body for PutUserMe for application/json ContentType.
 type PutUserMeJSONRequestBody = PutUserMeJSONBody
 
-// PostUserMeDiscordCallbackJSONRequestBody defines body for PostUserMeDiscordCallback for application/json ContentType.
-type PostUserMeDiscordCallbackJSONRequestBody = PostUserMeDiscordCallbackJSONBody
+// PutUserMeDiscordCallbackJSONRequestBody defines body for PutUserMeDiscordCallback for application/json ContentType.
+type PutUserMeDiscordCallbackJSONRequestBody = PutUserMeDiscordCallbackJSONBody
 
 // PutUserMeIntroductionJSONRequestBody defines body for PutUserMeIntroduction for application/json ContentType.
 type PutUserMeIntroductionJSONRequestBody = PutUserMeIntroductionJSONBody

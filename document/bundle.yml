@@ -184,7 +184,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResGetUserMeDiscord'
   /user/me/discord/callback:
-    post:
+    put:
       tags:
         - user
       description: Verify discord auth

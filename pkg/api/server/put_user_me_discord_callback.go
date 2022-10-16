@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *server) PostUserMeDiscordCallback(ctx echo.Context) error {
+func (s *server) PutUserMeDiscordCallback(ctx echo.Context) error {
 	var requestBody api.ReqPostUserMeDiscordCallback
 	ctx.Bind(&requestBody)
 	err := validator.Validate(requestBody)
@@ -23,7 +23,7 @@ func (s *server) PostUserMeDiscordCallback(ctx echo.Context) error {
 	}
 	defer dbTranisactionClient.Rollback()
 
-	res, err := discord.PostUserMeDiscordCallback(ctx, &dbTranisactionClient, requestBody)
+	res, err := discord.PutUserMeDiscordCallback(ctx, &dbTranisactionClient, requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

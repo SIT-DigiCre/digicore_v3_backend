@@ -1,4 +1,4 @@
-post:
+put:
   tags:
     - user
   description: "Verify discord auth"

@@ -14,7 +14,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func PostUserMeDiscordCallback(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPostUserMeDiscordCallback) (api.ResGetUserMe, *response.Error) {
+func PutUserMeDiscordCallback(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPostUserMeDiscordCallback) (api.ResGetUserMe, *response.Error) {
 	userID := ctx.Get("user_id").(string)
 
 	accessToken, err := getAccessToken(requestBody.Code)
