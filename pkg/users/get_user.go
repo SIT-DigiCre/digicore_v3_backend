@@ -1,7 +1,6 @@
 package users
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
@@ -41,11 +40,11 @@ func getUserList(dbClient db.Client, offset *int, seed *int) ([]userOverview, *r
 	}
 	userOverviews := []userOverview{}
 	err := dbClient.Select(&userOverviews, "sql/users/select_user_profile.sql", &params)
-	if len(userOverviews) == 0 {
-		return []userOverview{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "ユーザーが存在しません", Log: sql.ErrNoRows.Error()}
-	}
 	if err != nil {
 		return []userOverview{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+	}
+	if len(userOverviews) == 0 {
+		return []userOverview{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "ユーザーが存在しません", Log: "no rows in result"}
 	}
 	return userOverviews, nil
 }

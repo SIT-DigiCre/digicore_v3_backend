@@ -1,7 +1,6 @@
 package users
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
@@ -46,11 +45,11 @@ func GetUserProfileFromUserID(dbClient db.Client, userID string) (Profile, *resp
 	}
 	profiles := []Profile{}
 	err := dbClient.Select(&profiles, "sql/users/select_user_profile_from_user_id.sql", &params)
-	if err == sql.ErrNoRows {
-		return Profile{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "プロフィールが有りません", Log: err.Error()}
-	}
 	if err != nil {
 		return Profile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+	}
+	if len(profiles) == 0 {
+		return Profile{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "プロフィールが有りません", Log: "no rows in result"}
 	}
 	return profiles[0], nil
 }

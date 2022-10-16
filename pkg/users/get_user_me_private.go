@@ -1,7 +1,6 @@
 package users
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
@@ -47,11 +46,11 @@ func getUserPrivateFromUserID(dbClient db.Client, userID string) (private, *resp
 	}
 	privates := []private{}
 	err := dbClient.Select(&privates, "sql/users/select_user_private_from_user_id.sql", &params)
-	if len(privates) == 0 {
-		return private{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "個人情報が有りません", Log: sql.ErrNoRows.Error()}
-	}
 	if err != nil {
 		return private{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+	}
+	if len(privates) == 0 {
+		return private{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "個人情報が有りません", Log: "no rows in result"}
 	}
 	return privates[0], nil
 }

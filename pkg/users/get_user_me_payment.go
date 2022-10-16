@@ -1,7 +1,6 @@
 package users
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
@@ -40,11 +39,11 @@ func getUserPaymentFromUserID(dbClient db.Client, userID string) ([]payment, *re
 	}
 	payments := []payment{}
 	err := dbClient.Select(&payments, "sql/users/select_user_payment_from_user_id.sql", &params)
-	if len(payments) == 0 {
-		return []payment{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "支払い情報が有りません", Log: sql.ErrNoRows.Error()}
-	}
 	if err != nil {
 		return []payment{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+	}
+	if len(payments) == 0 {
+		return []payment{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "支払い情報が有りません", Log: "no rows in result"}
 	}
 	return payments, nil
 }

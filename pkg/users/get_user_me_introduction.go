@@ -1,7 +1,6 @@
 package users
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/jinzhu/copier"
@@ -38,11 +37,11 @@ func GetUserIntroductionFromUserID(dbClient db.Client, userID string) (introduct
 	}
 	introductions := []introduction{}
 	err := dbClient.Select(&introductions, "sql/users/select_user_introduction_from_user_id.sql", &params)
-	if err == sql.ErrNoRows {
-		return introduction{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "自己紹介が有りません", Log: err.Error()}
-	}
 	if err != nil {
 		return introduction{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+	}
+	if len(introductions) == 0 {
+		return introduction{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "自己紹介が有りません", Log: "no rows in result"}
 	}
 	return introductions[0], nil
 }
