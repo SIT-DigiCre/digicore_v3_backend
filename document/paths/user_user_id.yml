@@ -1,0 +1,25 @@
+get:
+  tags:
+    - user
+  description: "Get user id's profile"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: userID
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      description: "Success get user id's profile"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_user_user_id.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

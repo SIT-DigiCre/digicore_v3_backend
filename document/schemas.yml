@@ -16,6 +16,8 @@ ResGetUser:
   $ref: "./schemas/res_get_user.yml"
 ResGetUserObjectUser:
   $ref: "./schemas/res_get_user.user.yml"
+ResGetUserUserID:
+  $ref: "./schemas/res_get_user_user_id.yml"
 ResGetUserMe:
   $ref: "./schemas/res_get_user_me.yml"
 ReqPutUserMe:

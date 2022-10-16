@@ -123,6 +123,32 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+  '/user/{userID}':
+    get:
+      tags:
+        - user
+      description: Get user id's profile
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get user id's profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserUserID'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me:
     get:
       tags:
@@ -418,6 +444,33 @@ components:
         iconUrl:
           type: string
         shortIntroduction:
+          type: string
+    ResGetUserUserID:
+      required:
+        - userID
+        - username
+        - studentNumber
+        - iconUrl
+        - schoolGrade
+        - discordUserID
+        - shortIntroduction
+        - activeLimit
+      properties:
+        userID:
+          type: string
+        username:
+          type: string
+        studentNumber:
+          type: string
+        iconUrl:
+          type: string
+        schoolGrade:
+          type: integer
+        discordUserID:
+          type: string
+        shortIntroduction:
+          type: string
+        activeLimit:
           type: string
     ResGetUserMe:
       required:

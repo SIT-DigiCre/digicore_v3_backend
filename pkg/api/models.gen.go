@@ -139,6 +139,18 @@ type ResGetUserObjectUser struct {
 	Username          string `json:"username"`
 }
 
+// ResGetUserUserID defines model for ResGetUserUserID.
+type ResGetUserUserID struct {
+	ActiveLimit       string `json:"activeLimit"`
+	DiscordUserID     string `json:"discordUserID"`
+	IconUrl           string `json:"iconUrl"`
+	SchoolGrade       int    `json:"schoolGrade"`
+	ShortIntroduction string `json:"shortIntroduction"`
+	StudentNumber     string `json:"studentNumber"`
+	UserID            string `json:"userID"`
+	Username          string `json:"username"`
+}
+
 // ResPostLoginCallback defines model for ResPostLoginCallback.
 type ResPostLoginCallback struct {
 	Jwt string `json:"jwt"`
