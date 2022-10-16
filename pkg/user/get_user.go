@@ -1,4 +1,4 @@
-package users
+package user
 
 import (
 	"net/http"
@@ -39,7 +39,7 @@ func getUserList(dbClient db.Client, offset *int, seed *int) ([]userOverview, *r
 		Seed:   seed,
 	}
 	userOverviews := []userOverview{}
-	err := dbClient.Select(&userOverviews, "sql/users/select_user_profile.sql", &params)
+	err := dbClient.Select(&userOverviews, "sql/user/select_user_profile.sql", &params)
 	if err != nil {
 		return []userOverview{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}

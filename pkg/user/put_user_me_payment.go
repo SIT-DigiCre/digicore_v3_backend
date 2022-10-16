@@ -1,4 +1,4 @@
-package users
+package user
 
 import (
 	"net/http"
@@ -30,7 +30,7 @@ func updateUserPayment(dbClient db.TransactionClient, userID string, requestBody
 		Year:         utils.GetSchoolYear(),
 		TransferName: requestBody.TransferName,
 	}
-	_, err := dbClient.DuplicateUpdate("sql/users/insert_user_payment.sql", "sql/users/update_user_payment.sql", &params)
+	_, err := dbClient.DuplicateUpdate("sql/user/insert_user_payment.sql", "sql/user/update_user_payment.sql", &params)
 	if err != nil {
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}

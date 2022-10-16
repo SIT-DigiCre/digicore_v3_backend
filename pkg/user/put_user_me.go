@@ -1,4 +1,4 @@
-package users
+package user
 
 import (
 	"net/http"
@@ -33,7 +33,7 @@ func updateUserProfile(dbClient db.TransactionClient, userID string, requestBody
 		ShortIntroduction: requestBody.ShortIntroduction,
 		Username:          requestBody.Username,
 	}
-	_, err := dbClient.DuplicateUpdate("sql/users/insert_user_profile.sql", "sql/users/update_user_profile.sql", &params)
+	_, err := dbClient.DuplicateUpdate("sql/user/insert_user_profile.sql", "sql/user/update_user_profile.sql", &params)
 	if err != nil {
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}

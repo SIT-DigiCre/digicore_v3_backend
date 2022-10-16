@@ -1,4 +1,4 @@
-package users
+package user
 
 import (
 	"net/http"
@@ -47,7 +47,7 @@ func updateUserPrivate(dbClient db.TransactionClient, userID string, requestBody
 		ParentHomephoneNumber: requestBody.ParentHomephoneNumber,
 		ParentAddress:         requestBody.ParentAddress,
 	}
-	_, err := dbClient.DuplicateUpdate("sql/users/insert_user_private.sql", "sql/users/update_user_private.sql", &params)
+	_, err := dbClient.DuplicateUpdate("sql/user/insert_user_private.sql", "sql/user/update_user_private.sql", &params)
 	if err != nil {
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}

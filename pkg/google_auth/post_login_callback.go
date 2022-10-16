@@ -5,7 +5,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/authenticator"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/users"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
 	"github.com/labstack/echo/v4"
 )
 
@@ -14,7 +14,7 @@ func PostLoginCallback(ctx echo.Context, dbClient db.Client, requestBody api.Req
 	if err != nil {
 		return api.ResPostLoginCallback{}, err
 	}
-	userID, err := users.IDFromStudentNumber(dbClient, studentNumber)
+	userID, err := user.IDFromStudentNumber(dbClient, studentNumber)
 	if err != nil {
 		return api.ResPostLoginCallback{}, err
 	}

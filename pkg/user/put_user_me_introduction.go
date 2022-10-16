@@ -1,4 +1,4 @@
-package users
+package user
 
 import (
 	"net/http"
@@ -27,7 +27,7 @@ func updateUserIntroduction(dbClient db.TransactionClient, userID string, reques
 		UserID:       userID,
 		Introduction: requestBody.Introduction,
 	}
-	_, err := dbClient.Exec("sql/users/update_user_introduction.sql", &params, false)
+	_, err := dbClient.Exec("sql/user/update_user_introduction.sql", &params, false)
 	if err != nil {
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}

@@ -33,7 +33,7 @@ func createUser(studentNumber string, dbClient db.TransactionClient) (string, *r
 	}{
 		StudentNumber: studentNumber,
 	}
-	_, err := dbClient.Exec("sql/users/insert_users.sql", &params, false)
+	_, err := dbClient.Exec("sql/user/insert_user.sql", &params, false)
 	if err != nil {
 		if mysqlErr, ok := err.(*mysql.MySQLError); ok {
 			if mysqlErr.Number == 1062 {

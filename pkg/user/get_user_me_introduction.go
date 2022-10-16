@@ -1,4 +1,4 @@
-package users
+package user
 
 import (
 	"net/http"
@@ -36,7 +36,7 @@ func GetUserIntroductionFromUserID(dbClient db.Client, userID string) (introduct
 		UserID: userID,
 	}
 	introductions := []introduction{}
-	err := dbClient.Select(&introductions, "sql/users/select_user_introduction_from_user_id.sql", &params)
+	err := dbClient.Select(&introductions, "sql/user/select_user_introduction_from_user_id.sql", &params)
 	if err != nil {
 		return introduction{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}

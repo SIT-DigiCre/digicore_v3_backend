@@ -10,7 +10,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/users"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
 	"github.com/labstack/echo/v4"
 )
 
@@ -31,7 +31,7 @@ func PutUserMeDiscordCallback(ctx echo.Context, dbClient db.TransactionClient, r
 		return api.ResGetUserMe{}, err
 	}
 
-	return users.GetUserMe(ctx, dbClient)
+	return user.GetUserMe(ctx, dbClient)
 }
 
 func getAccessToken(code string) (string, *response.Error) {
@@ -49,8 +49,11 @@ func getAccessToken(code string) (string, *response.Error) {
 		AccessToken string `json:"access_token"`
 	}{}
 	err = json.NewDecoder(res.Body).Decode(&accessToken)
-	if err != nil || res.StatusCode != 200 {
+	if err != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+	}
+	if res.StatusCode != 200 {
+		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: fmt.Sprintf("return %d not 200", res.StatusCode)}
 	}
 	return accessToken.AccessToken, nil
 }
@@ -70,8 +73,11 @@ func getUserIDfromToken(token string) (string, *response.Error) {
 		ID string `json:"id"`
 	}{}
 	err = json.NewDecoder(res.Body).Decode(&id)
-	if err != nil || res.StatusCode != 200 {
+	if err != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+	}
+	if res.StatusCode != 200 {
+		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: fmt.Sprintf("return %d not 200", res.StatusCode)}
 	}
 	return id.ID, nil
 }

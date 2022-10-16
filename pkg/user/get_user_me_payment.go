@@ -1,4 +1,4 @@
-package users
+package user
 
 import (
 	"net/http"
@@ -38,7 +38,7 @@ func getUserPaymentFromUserID(dbClient db.Client, userID string) ([]payment, *re
 		UserID: userID,
 	}
 	payments := []payment{}
-	err := dbClient.Select(&payments, "sql/users/select_user_payment_from_user_id.sql", &params)
+	err := dbClient.Select(&payments, "sql/user/select_user_payment_from_user_id.sql", &params)
 	if err != nil {
 		return []payment{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}

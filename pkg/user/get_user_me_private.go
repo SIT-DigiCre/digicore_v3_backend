@@ -1,4 +1,4 @@
-package users
+package user
 
 import (
 	"net/http"
@@ -45,7 +45,7 @@ func getUserPrivateFromUserID(dbClient db.Client, userID string) (private, *resp
 		UserID: userID,
 	}
 	privates := []private{}
-	err := dbClient.Select(&privates, "sql/users/select_user_private_from_user_id.sql", &params)
+	err := dbClient.Select(&privates, "sql/user/select_user_private_from_user_id.sql", &params)
 	if err != nil {
 		return private{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}

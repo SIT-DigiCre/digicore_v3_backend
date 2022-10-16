@@ -1,4 +1,4 @@
-package users
+package user
 
 import (
 	"net/http"
@@ -13,17 +13,17 @@ func IDFromStudentNumber(dbClient db.Client, studentNumber string) (string, *res
 	}{
 		StudentNumber: studentNumber,
 	}
-	users := []struct {
+	user := []struct {
 		ID string `db:"id"`
 	}{}
-	err := dbClient.Select(&users, "sql/users/select_id_from_student_number.sql", &params)
+	err := dbClient.Select(&user, "sql/user/select_id_from_student_number.sql", &params)
 	if err != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}
 	}
-	if len(users) != 1 {
+	if len(user) != 1 {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: "一意制約に違反しているデータがあります"}
 	}
-	return users[0].ID, nil
+	return user[0].ID, nil
 }
 
 type Profile struct {
@@ -44,7 +44,7 @@ func GetUserProfileFromUserID(dbClient db.Client, userID string) (Profile, *resp
 		UserID: userID,
 	}
 	profiles := []Profile{}
-	err := dbClient.Select(&profiles, "sql/users/select_user_profile_from_user_id.sql", &params)
+	err := dbClient.Select(&profiles, "sql/user/select_user_profile_from_user_id.sql", &params)
 	if err != nil {
 		return Profile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
