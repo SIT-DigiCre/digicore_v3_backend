@@ -64,6 +64,9 @@ type ServerInterface interface {
 
 	// (GET /user/{userID})
 	GetUserUserID(ctx echo.Context, userID string) error
+
+	// (GET /user/{userID}/introduction)
+	GetUserUserIDIntroduction(ctx echo.Context, userID string) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
@@ -271,6 +274,24 @@ func (w *ServerInterfaceWrapper) GetUserUserID(ctx echo.Context) error {
 	return err
 }
 
+// GetUserUserIDIntroduction converts echo context to params.
+func (w *ServerInterfaceWrapper) GetUserUserIDIntroduction(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "userID" -------------
+	var userID string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "userID", runtime.ParamLocationPath, ctx.Param("userID"), &userID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter userID: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetUserUserIDIntroduction(ctx, userID)
+	return err
+}
+
 // This is a simple interface which specifies echo.Route addition functions which
 // are present on both echo.Echo and echo.Group, since we want to allow using
 // either of them for path registration
@@ -316,5 +337,6 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/user/me/private", wrapper.GetUserMePrivate)
 	router.PUT(baseURL+"/user/me/private", wrapper.PutUserMePrivate)
 	router.GET(baseURL+"/user/:userID", wrapper.GetUserUserID)
+	router.GET(baseURL+"/user/:userID/introduction", wrapper.GetUserUserIDIntroduction)
 
 }

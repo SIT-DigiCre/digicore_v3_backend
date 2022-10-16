@@ -149,6 +149,32 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+  '/user/{userID}/introduction':
+    get:
+      tags:
+        - user
+      description: Get my introduction
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get my introduction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserUserIDIntroduction'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me:
     get:
       tags:
@@ -471,6 +497,12 @@ components:
         shortIntroduction:
           type: string
         activeLimit:
+          type: string
+    ResGetUserUserIDIntroduction:
+      required:
+        - introduction
+      properties:
+        introduction:
           type: string
     ResGetUserMe:
       required:

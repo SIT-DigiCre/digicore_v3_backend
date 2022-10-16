@@ -151,6 +151,11 @@ type ResGetUserUserID struct {
 	Username          string `json:"username"`
 }
 
+// ResGetUserUserIDIntroduction defines model for ResGetUserUserIDIntroduction.
+type ResGetUserUserIDIntroduction struct {
+	Introduction string `json:"introduction"`
+}
+
 // ResPostLoginCallback defines model for ResPostLoginCallback.
 type ResPostLoginCallback struct {
 	Jwt string `json:"jwt"`

@@ -1,0 +1,25 @@
+get:
+  tags:
+    - user
+  description: "Get my introduction"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: userID
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      description: "Success get my introduction"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_user_user_id_introduction.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
