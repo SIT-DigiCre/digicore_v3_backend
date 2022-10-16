@@ -1,10 +1,10 @@
 required:
-  - userId
+  - userID
   - username
   - iconUrl
   - shortIntroduction
 properties:
-  userId:
+  userID:
     type: string
   username:
     type: string

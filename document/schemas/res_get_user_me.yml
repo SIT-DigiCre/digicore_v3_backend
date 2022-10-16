@@ -1,5 +1,5 @@
 required:
-  - userId
+  - userID
   - username
   - studentNumber
   - iconUrl
@@ -8,7 +8,7 @@ required:
   - shortIntroduction
   - activeLimit
 properties:
-  userId:
+  userID:
     type: string
   username:
     type: string

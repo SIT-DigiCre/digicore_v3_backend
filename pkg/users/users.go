@@ -28,7 +28,7 @@ func IDFromStudentNumber(dbClient db.Client, studentNumber string) (string, *res
 }
 
 type Profile struct {
-	UserId            string `db:"user_id"`
+	UserID            string `db:"user_id"`
 	StudentNumber     string `db:"student_number"`
 	Username          string `db:"username"`
 	SchoolGrade       int    `db:"school_grade"`

@@ -89,7 +89,7 @@ type ResGetUserMe struct {
 	SchoolGrade       int    `json:"schoolGrade"`
 	ShortIntroduction string `json:"shortIntroduction"`
 	StudentNumber     string `json:"studentNumber"`
-	UserId            string `json:"userId"`
+	UserID            string `json:"userID"`
 	Username          string `json:"username"`
 }
 
@@ -135,7 +135,7 @@ type ResGetUserMePrivate struct {
 type ResGetUserObjectUser struct {
 	IconUrl           string `json:"iconUrl"`
 	ShortIntroduction string `json:"shortIntroduction"`
-	UserId            string `json:"userId"`
+	UserID            string `json:"userID"`
 	Username          string `json:"username"`
 }
 

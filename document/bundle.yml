@@ -406,12 +406,12 @@ components:
             $ref: '#/components/schemas/ResGetUserObjectUser'
     ResGetUserObjectUser:
       required:
-        - userId
+        - userID
         - username
         - iconUrl
         - shortIntroduction
       properties:
-        userId:
+        userID:
           type: string
         username:
           type: string
@@ -421,7 +421,7 @@ components:
           type: string
     ResGetUserMe:
       required:
-        - userId
+        - userID
         - username
         - studentNumber
         - iconUrl
@@ -430,7 +430,7 @@ components:
         - shortIntroduction
         - activeLimit
       properties:
-        userId:
+        userID:
           type: string
         username:
           type: string
