@@ -1,7 +1,6 @@
 package response
 
 import (
-	"fmt"
 	"runtime/debug"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
@@ -24,7 +23,6 @@ func ErrorResponse(ctx echo.Context, err *Error) error {
 		logrus.Warn(err.Log)
 	case "Error":
 		logrus.Error(err.Log)
-		fmt.Print("!!!!!!!!!!!!!!!!!!!!!!!")
 		debug.PrintStack()
 	default:
 		logrus.Debug(err.Log)
