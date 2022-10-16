@@ -7,7 +7,7 @@ import (
 )
 
 var loginUrl string
-var loginRedirectUrl = env.FrontendRootURL + "/user/discord/callback"
+var loginRedirectUrl = env.FrontendRootURL + env.DiscordLoginRedirectPath
 
 func init() {
 	loginUrl = fmt.Sprintf("https://discord.com/api/oauth2/authorize?client_id=%s&redirect_uri=%s&response_type=code&scope=identify", env.DiscordClientID, loginRedirectUrl)
