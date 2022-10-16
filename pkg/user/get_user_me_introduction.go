@@ -24,24 +24,3 @@ func GetUserMeIntroduction(ctx echo.Context, dbClient db.Client) (api.ResGetUser
 	}
 	return res, nil
 }
-
-type introduction struct {
-	Introduction string `db:"introduction"`
-}
-
-func GetUserIntroductionFromUserID(dbClient db.Client, userID string) (introduction, *response.Error) {
-	params := struct {
-		UserID string `twowaysql:"userID"`
-	}{
-		UserID: userID,
-	}
-	introductions := []introduction{}
-	err := dbClient.Select(&introductions, "sql/user/select_user_introduction_from_user_id.sql", &params)
-	if err != nil {
-		return introduction{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
-	}
-	if len(introductions) == 0 {
-		return introduction{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "自己紹介が有りません", Log: "no rows in result"}
-	}
-	return introductions[0], nil
-}

@@ -26,7 +26,7 @@ func IDFromStudentNumber(dbClient db.Client, studentNumber string) (string, *res
 	return user[0].ID, nil
 }
 
-type Profile struct {
+type profile struct {
 	UserID            string `db:"user_id"`
 	StudentNumber     string `db:"student_number"`
 	Username          string `db:"username"`
@@ -37,19 +37,40 @@ type Profile struct {
 	ShortIntroduction string `db:"short_introduction"`
 }
 
-func GetUserProfileFromUserID(dbClient db.Client, userID string) (Profile, *response.Error) {
+func GetUserProfileFromUserID(dbClient db.Client, userID string) (profile, *response.Error) {
 	params := struct {
 		UserID string `twowaysql:"userID"`
 	}{
 		UserID: userID,
 	}
-	profiles := []Profile{}
+	profiles := []profile{}
 	err := dbClient.Select(&profiles, "sql/user/select_user_profile_from_user_id.sql", &params)
 	if err != nil {
-		return Profile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+		return profile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
 	if len(profiles) == 0 {
-		return Profile{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "プロフィールが有りません", Log: "no rows in result"}
+		return profile{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "プロフィールが有りません", Log: "no rows in result"}
 	}
 	return profiles[0], nil
+}
+
+type introduction struct {
+	Introduction string `db:"introduction"`
+}
+
+func GetUserIntroductionFromUserID(dbClient db.Client, userID string) (introduction, *response.Error) {
+	params := struct {
+		UserID string `twowaysql:"userID"`
+	}{
+		UserID: userID,
+	}
+	introductions := []introduction{}
+	err := dbClient.Select(&introductions, "sql/user/select_user_introduction_from_user_id.sql", &params)
+	if err != nil {
+		return introduction{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+	}
+	if len(introductions) == 0 {
+		return introduction{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "自己紹介が有りません", Log: "no rows in result"}
+	}
+	return introductions[0], nil
 }
