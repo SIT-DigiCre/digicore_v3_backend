@@ -76,6 +76,11 @@ type ResGetStatus struct {
 	Status bool `json:"status"`
 }
 
+// ResGetTool defines model for ResGetTool.
+type ResGetTool struct {
+	DiscordUrl string `json:"discordUrl"`
+}
+
 // ResGetUser defines model for ResGetUser.
 type ResGetUser struct {
 	User []ResGetUserObjectUser `json:"user"`

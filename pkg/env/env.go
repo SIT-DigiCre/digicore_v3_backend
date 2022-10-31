@@ -13,4 +13,6 @@ var DiscordLoginRedirectPath = os.Getenv("DISCORD_LOGIN_REDIRECT_PATH")
 var DiscordClientID = os.Getenv("DISCORD_CLIENT_ID")
 var DiscordClientSecret = os.Getenv("DISCORD_CLIENT_SECRET")
 
+var DiscordJoinUrl = os.Getenv("DISCORD_JOIN_URL")
+
 var Auth = os.Getenv("AUTH")

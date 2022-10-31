@@ -2,3 +2,5 @@
   description: Authentication system
 - name: user
   description: User system
+- name: tool
+  description: Tool system

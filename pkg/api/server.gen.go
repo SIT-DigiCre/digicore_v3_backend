@@ -29,6 +29,9 @@ type ServerInterface interface {
 	// (GET /status)
 	GetStatus(ctx echo.Context) error
 
+	// (GET /tool)
+	GetTool(ctx echo.Context) error
+
 	// (GET /user)
 	GetUser(ctx echo.Context, params GetUserParams) error
 
@@ -116,6 +119,15 @@ func (w *ServerInterfaceWrapper) GetStatus(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetStatus(ctx)
+	return err
+}
+
+// GetTool converts echo context to params.
+func (w *ServerInterfaceWrapper) GetTool(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetTool(ctx)
 	return err
 }
 
@@ -325,6 +337,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/signup", wrapper.GetSignup)
 	router.POST(baseURL+"/signup/callback", wrapper.PostSignupCallback)
 	router.GET(baseURL+"/status", wrapper.GetStatus)
+	router.GET(baseURL+"/tool", wrapper.GetTool)
 	router.GET(baseURL+"/user", wrapper.GetUser)
 	router.GET(baseURL+"/user/me", wrapper.GetUserMe)
 	router.PUT(baseURL+"/user/me", wrapper.PutUserMe)

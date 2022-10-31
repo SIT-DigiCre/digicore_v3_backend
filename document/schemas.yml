@@ -12,6 +12,8 @@ ReqPostLoginCallback:
   $ref: "./schemas/req_post_login_callback.yml"
 ResPostLoginCallback:
   $ref: "./schemas/res_post_login_callback.yml"
+ResGetTool:
+  $ref: "./schemas/res_get_tool.yml"
 ResGetUser:
   $ref: "./schemas/res_get_user.yml"
 ResGetUserObjectUser:

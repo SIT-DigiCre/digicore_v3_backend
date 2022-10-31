@@ -26,3 +26,5 @@
   $ref: "./paths/user_me_private.yml"
 /user/me/payment:
   $ref: "./paths/user_me_payment.yml"
+/tool:
+  $ref: "./paths/tool.yml"
