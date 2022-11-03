@@ -15,6 +15,8 @@ tags:
     description: Authentication system
   - name: user
     description: User system
+  - name: event
+    description: Event system
   - name: tool
     description: Tool system
 paths:
@@ -412,6 +414,276 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetTool'
+  /event:
+    get:
+      tags:
+        - event
+      description: Get event list
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+        - name: seed
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success get event list
+          content:
+            application/json:
+              schema:
+                required:
+                  - user
+                properties:
+                  event:
+                    type: array
+                    items:
+                      required:
+                        - eventID
+                        - name
+                        - reservable
+                        - reservated
+                      properties:
+                        eventID:
+                          type: string
+                        name:
+                          type: string
+                        reservable:
+                          type: boolean
+                        reservated:
+                          type: boolean
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/event/{eventID}':
+    get:
+      tags:
+        - event
+      description: Get event
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: eventID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get event
+          content:
+            application/json:
+              schema:
+                required:
+                  - eventID
+                  - name
+                  - reservable
+                  - reservated
+                  - reservation
+                properties:
+                  eventID:
+                    type: string
+                  name:
+                    type: string
+                  reservable:
+                    type: boolean
+                  reservated:
+                    type: boolean
+                  reservation:
+                    type: array
+                    items:
+                      required:
+                        - reservationID
+                        - name
+                        - description
+                        - startDate
+                        - finishDate
+                        - reservable
+                        - reservated
+                        - reservationFinishDate
+                        - reservationStartDate
+                        - capacity
+                        - freeCapacity
+                      properties:
+                        reservationID:
+                          type: string
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        startDate:
+                          type: boolean
+                        finishDate:
+                          type: boolean
+                        reservable:
+                          type: boolean
+                        reservated:
+                          type: boolean
+                        reservationFinishDate:
+                          type: string
+                        reservationStartDate:
+                          type: string
+                        capacity:
+                          type: integer
+                        freeCapacity:
+                          type: integer
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/event/{eventID}/{reservationID}':
+    get:
+      tags:
+        - event
+      description: Get event reservation
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: eventID
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: reservationID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get event reservation
+          content:
+            application/json:
+              schema:
+                required:
+                  - eventID
+                  - reservationID
+                  - name
+                  - reservable
+                  - reservated
+                  - user
+                properties:
+                  eventID:
+                    type: string
+                  name:
+                    type: string
+                  reservable:
+                    type: boolean
+                  reservated:
+                    type: boolean
+                  user:
+                    type: array
+                    items:
+                      required:
+                        - userID
+                        - name
+                        - comment
+                        - URL
+                      properties:
+                        userID:
+                          type: string
+                        name:
+                          type: string
+                        comment:
+                          type: string
+                        URL:
+                          type: string
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/event/{eventID}/{reservationID}/me':
+    put:
+      tags:
+        - event
+      description: Create my event reservation
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: eventID
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: reservationID
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: My event reservation
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - comment
+                - URL
+              properties:
+                comment:
+                  type: string
+                  x-oapi-codegen-extra-tags:
+                    validate: max=255
+                    ja: コメント
+                URL:
+                  type: string
+                  x-oapi-codegen-extra-tags:
+                    validate: 'url,max=255'
+                    ja: URL
+      responses:
+        '200':
+          description: Success create my event reservation
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1event~1%7BeventID%7D~1%7BreservationID%7D/get/responses/200/content/application~1json/schema'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - event
+      description: Delete my event reservation
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: eventID
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: reservationID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success delete my event reservation
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1event~1%7BeventID%7D~1%7BreservationID%7D/get/responses/200/content/application~1json/schema'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:

@@ -1,0 +1,20 @@
+required:
+  - eventID
+  - reservationID
+  - name
+  - reservable
+  - reservated
+  - user
+properties:
+  eventID:
+    type: string
+  name:
+    type: string
+  reservable:
+    type: boolean
+  reservated:
+    type: boolean
+  user:
+    type: array
+    items:
+      $ref: './res_get_event_event_id_reservation_id.user.yml'

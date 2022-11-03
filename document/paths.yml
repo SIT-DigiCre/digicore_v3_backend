@@ -28,3 +28,11 @@
   $ref: "./paths/user_me_payment.yml"
 /tool:
   $ref: "./paths/tool.yml"
+/event:
+  $ref: "./paths/event.yml"
+/event/{eventID}:
+  $ref: "./paths/event_event_id.yml"
+/event/{eventID}/{reservationID}:
+  $ref: "./paths/event_event_id_reservation_id.yml"
+/event/{eventID}/{reservationID}/me:
+  $ref: "./paths/event_event_id_reservation_id_me.yml"

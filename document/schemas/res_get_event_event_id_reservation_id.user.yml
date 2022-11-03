@@ -1,0 +1,14 @@
+required:
+  - userID
+  - name
+  - comment
+  - URL
+properties:
+  userID:
+    type: string
+  name:
+    type: string
+  comment:
+    type: string
+  URL:
+    type: string

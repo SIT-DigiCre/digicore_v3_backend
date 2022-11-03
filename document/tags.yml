@@ -2,5 +2,7 @@
   description: Authentication system
 - name: user
   description: User system
+- name: event
+  description: Event system
 - name: tool
   description: Tool system

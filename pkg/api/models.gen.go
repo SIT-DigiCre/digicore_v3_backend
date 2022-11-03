@@ -183,6 +183,18 @@ type NotFound = Error
 // Unauthorized defines model for Unauthorized.
 type Unauthorized = Error
 
+// GetEventParams defines parameters for GetEvent.
+type GetEventParams struct {
+	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+	Seed   *int `form:"seed,omitempty" json:"seed,omitempty"`
+}
+
+// PutEventEventIDReservationIDMeJSONBody defines parameters for PutEventEventIDReservationIDMe.
+type PutEventEventIDReservationIDMeJSONBody struct {
+	URL     string `ja:"URL" json:"URL" validate:"url,max=255"`
+	Comment string `ja:"コメント" json:"comment" validate:"max=255"`
+}
+
 // PostLoginCallbackJSONBody defines parameters for PostLoginCallback.
 type PostLoginCallbackJSONBody = ReqPostLoginCallback
 
@@ -209,6 +221,9 @@ type PutUserMePaymentJSONBody = ReqPutUserMePayment
 
 // PutUserMePrivateJSONBody defines parameters for PutUserMePrivate.
 type PutUserMePrivateJSONBody = ReqPutUserMePrivate
+
+// PutEventEventIDReservationIDMeJSONRequestBody defines body for PutEventEventIDReservationIDMe for application/json ContentType.
+type PutEventEventIDReservationIDMeJSONRequestBody PutEventEventIDReservationIDMeJSONBody
 
 // PostLoginCallbackJSONRequestBody defines body for PostLoginCallback for application/json ContentType.
 type PostLoginCallbackJSONRequestBody = PostLoginCallbackJSONBody

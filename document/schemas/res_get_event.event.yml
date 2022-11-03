@@ -1,0 +1,14 @@
+required:
+  - eventID
+  - name
+  - reservable
+  - reservated
+properties:
+  eventID:
+    type: string
+  name:
+    type: string
+  reservable:
+    type: boolean
+  reservated:
+    type: boolean
