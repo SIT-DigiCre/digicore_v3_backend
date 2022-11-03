@@ -8,7 +8,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/k0kubun/sqldef v0.13.9
-	github.com/labstack/echo/v4 v4.7.2
+	github.com/labstack/echo/v4 v4.9.1
 	github.com/mattermost/mattermost-server/v5 v5.39.3
 	github.com/swaggo/swag v1.8.4
 	golang.org/x/oauth2 v0.0.0-20220808172628-8227340efae7
@@ -36,7 +36,7 @@ require (
 	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/k0kubun/pp/v3 v3.1.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.6 // indirect
-	github.com/labstack/gommon v0.3.1 // indirect
+	github.com/labstack/gommon v0.4.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattermost/go-i18n v1.11.0 // indirect
 	github.com/mattermost/ldap v0.0.0-20201202150706-ee0e6284187d // indirect
