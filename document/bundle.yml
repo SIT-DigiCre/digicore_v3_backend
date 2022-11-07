@@ -436,26 +436,7 @@ paths:
           content:
             application/json:
               schema:
-                required:
-                  - user
-                properties:
-                  event:
-                    type: array
-                    items:
-                      required:
-                        - eventID
-                        - name
-                        - reservable
-                        - reservated
-                      properties:
-                        eventID:
-                          type: string
-                        name:
-                          type: string
-                        reservable:
-                          type: boolean
-                        reservated:
-                          type: boolean
+                $ref: '#/components/schemas/ResGetEvent'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -481,59 +462,7 @@ paths:
           content:
             application/json:
               schema:
-                required:
-                  - eventID
-                  - name
-                  - reservable
-                  - reservated
-                  - reservation
-                properties:
-                  eventID:
-                    type: string
-                  name:
-                    type: string
-                  reservable:
-                    type: boolean
-                  reservated:
-                    type: boolean
-                  reservation:
-                    type: array
-                    items:
-                      required:
-                        - reservationID
-                        - name
-                        - description
-                        - startDate
-                        - finishDate
-                        - reservable
-                        - reservated
-                        - reservationFinishDate
-                        - reservationStartDate
-                        - capacity
-                        - freeCapacity
-                      properties:
-                        reservationID:
-                          type: string
-                        name:
-                          type: string
-                        description:
-                          type: string
-                        startDate:
-                          type: boolean
-                        finishDate:
-                          type: boolean
-                        reservable:
-                          type: boolean
-                        reservated:
-                          type: boolean
-                        reservationFinishDate:
-                          type: string
-                        reservationStartDate:
-                          type: string
-                        capacity:
-                          type: integer
-                        freeCapacity:
-                          type: integer
+                $ref: '#/components/schemas/ResGetEventEventID'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -564,39 +493,7 @@ paths:
           content:
             application/json:
               schema:
-                required:
-                  - eventID
-                  - reservationID
-                  - name
-                  - reservable
-                  - reservated
-                  - user
-                properties:
-                  eventID:
-                    type: string
-                  name:
-                    type: string
-                  reservable:
-                    type: boolean
-                  reservated:
-                    type: boolean
-                  user:
-                    type: array
-                    items:
-                      required:
-                        - userID
-                        - name
-                        - comment
-                        - URL
-                      properties:
-                        userID:
-                          type: string
-                        name:
-                          type: string
-                        comment:
-                          type: string
-                        URL:
-                          type: string
+                $ref: '#/components/schemas/ResGetEventEventIDReservationID'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -627,27 +524,14 @@ paths:
         content:
           application/json:
             schema:
-              required:
-                - comment
-                - URL
-              properties:
-                comment:
-                  type: string
-                  x-oapi-codegen-extra-tags:
-                    validate: max=255
-                    ja: コメント
-                URL:
-                  type: string
-                  x-oapi-codegen-extra-tags:
-                    validate: 'url,max=255'
-                    ja: URL
+              $ref: '#/components/schemas/ReqGetEventEventIDReservationIDMe'
       responses:
         '200':
           description: Success create my event reservation
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1event~1%7BeventID%7D~1%7BreservationID%7D/get/responses/200/content/application~1json/schema'
+                $ref: '#/components/schemas/ResGetEventEventIDReservationID'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -677,7 +561,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1event~1%7BeventID%7D~1%7BreservationID%7D/get/responses/200/content/application~1json/schema'
+                $ref: '#/components/schemas/ResGetEventEventIDReservationID'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1017,6 +901,134 @@ components:
           x-oapi-codegen-extra-tags:
             validate: required
             ja: 認証コード
+    ResGetEvent:
+      required:
+        - event
+      properties:
+        event:
+          type: array
+          items:
+            required:
+              - eventID
+              - name
+              - reservable
+              - reservated
+            properties:
+              eventID:
+                type: string
+              name:
+                type: string
+              reservable:
+                type: boolean
+              reservated:
+                type: boolean
+    ResGetEventEventID:
+      required:
+        - eventID
+        - name
+        - reservable
+        - reservated
+        - reservation
+      properties:
+        eventID:
+          type: string
+        name:
+          type: string
+        reservable:
+          type: boolean
+        reservated:
+          type: boolean
+        reservation:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetEventEventIDObjectReservation'
+    ResGetEventEventIDObjectReservation:
+      required:
+        - reservationID
+        - name
+        - description
+        - startDate
+        - finishDate
+        - reservable
+        - reservated
+        - reservationFinishDate
+        - reservationStartDate
+        - capacity
+        - freeCapacity
+      properties:
+        reservationID:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        startDate:
+          type: boolean
+        finishDate:
+          type: boolean
+        reservable:
+          type: boolean
+        reservated:
+          type: boolean
+        reservationFinishDate:
+          type: string
+        reservationStartDate:
+          type: string
+        capacity:
+          type: integer
+        freeCapacity:
+          type: integer
+    ResGetEventEventIDReservationID:
+      required:
+        - eventID
+        - reservationID
+        - name
+        - reservable
+        - reservated
+        - user
+      properties:
+        eventID:
+          type: string
+        name:
+          type: string
+        reservable:
+          type: boolean
+        reservated:
+          type: boolean
+        user:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetEventEventIDReservationIDObjectUser'
+    ResGetEventEventIDReservationIDObjectUser:
+      required:
+        - userID
+        - name
+        - comment
+        - URL
+      properties:
+        userID:
+          type: string
+        name:
+          type: string
+        comment:
+          type: string
+        URL:
+          type: string
+    ReqGetEventEventIDReservationIDMe:
+      required:
+        - comment
+        - URL
+      properties:
+        comment:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: max=255
+            ja: コメント
+        URL:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'url,max=255'
+            ja: URL
     Error:
       required:
         - level

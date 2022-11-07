@@ -13,6 +13,12 @@ type Error struct {
 	Message string `json:"message"`
 }
 
+// ReqGetEventEventIDReservationIDMe defines model for ReqGetEventEventIDReservationIDMe.
+type ReqGetEventEventIDReservationIDMe struct {
+	URL     string `ja:"URL" json:"URL" validate:"url,max=255"`
+	Comment string `ja:"コメント" json:"comment" validate:"max=255"`
+}
+
 // ReqPostLoginCallback defines model for ReqPostLoginCallback.
 type ReqPostLoginCallback struct {
 	Code string `ja:"認証コード" json:"code" validate:"required"`
@@ -59,6 +65,57 @@ type ReqPutUserMePrivate struct {
 	ParentHomephoneNumber string `ja:"緊急連絡先固定電話番号" json:"parentHomephoneNumber" validate:"required,numeric,min=1,max=15"`
 	ParentName            string `ja:"緊急連絡先氏名" json:"parentName" validate:"required,min=1,max=255"`
 	PhoneNumber           string `ja:"電話番号" json:"phoneNumber" validate:"required,numeric,min=1,max=15"`
+}
+
+// ResGetEvent defines model for ResGetEvent.
+type ResGetEvent struct {
+	Event []struct {
+		EventID    string `json:"eventID"`
+		Name       string `json:"name"`
+		Reservable bool   `json:"reservable"`
+		Reservated bool   `json:"reservated"`
+	} `json:"event"`
+}
+
+// ResGetEventEventID defines model for ResGetEventEventID.
+type ResGetEventEventID struct {
+	EventID     string                                `json:"eventID"`
+	Name        string                                `json:"name"`
+	Reservable  bool                                  `json:"reservable"`
+	Reservated  bool                                  `json:"reservated"`
+	Reservation []ResGetEventEventIDObjectReservation `json:"reservation"`
+}
+
+// ResGetEventEventIDObjectReservation defines model for ResGetEventEventIDObjectReservation.
+type ResGetEventEventIDObjectReservation struct {
+	Capacity              int    `json:"capacity"`
+	Description           string `json:"description"`
+	FinishDate            bool   `json:"finishDate"`
+	FreeCapacity          int    `json:"freeCapacity"`
+	Name                  string `json:"name"`
+	Reservable            bool   `json:"reservable"`
+	Reservated            bool   `json:"reservated"`
+	ReservationFinishDate string `json:"reservationFinishDate"`
+	ReservationID         string `json:"reservationID"`
+	ReservationStartDate  string `json:"reservationStartDate"`
+	StartDate             bool   `json:"startDate"`
+}
+
+// ResGetEventEventIDReservationID defines model for ResGetEventEventIDReservationID.
+type ResGetEventEventIDReservationID struct {
+	EventID    string                                      `json:"eventID"`
+	Name       string                                      `json:"name"`
+	Reservable bool                                        `json:"reservable"`
+	Reservated bool                                        `json:"reservated"`
+	User       []ResGetEventEventIDReservationIDObjectUser `json:"user"`
+}
+
+// ResGetEventEventIDReservationIDObjectUser defines model for ResGetEventEventIDReservationIDObjectUser.
+type ResGetEventEventIDReservationIDObjectUser struct {
+	URL     string `json:"URL"`
+	Comment string `json:"comment"`
+	Name    string `json:"name"`
+	UserID  string `json:"userID"`
 }
 
 // ResGetLogin defines model for ResGetLogin.
@@ -190,10 +247,7 @@ type GetEventParams struct {
 }
 
 // PutEventEventIDReservationIDMeJSONBody defines parameters for PutEventEventIDReservationIDMe.
-type PutEventEventIDReservationIDMeJSONBody struct {
-	URL     string `ja:"URL" json:"URL" validate:"url,max=255"`
-	Comment string `ja:"コメント" json:"comment" validate:"max=255"`
-}
+type PutEventEventIDReservationIDMeJSONBody = ReqGetEventEventIDReservationIDMe
 
 // PostLoginCallbackJSONBody defines parameters for PostLoginCallback.
 type PostLoginCallbackJSONBody = ReqPostLoginCallback
@@ -223,7 +277,7 @@ type PutUserMePaymentJSONBody = ReqPutUserMePayment
 type PutUserMePrivateJSONBody = ReqPutUserMePrivate
 
 // PutEventEventIDReservationIDMeJSONRequestBody defines body for PutEventEventIDReservationIDMe for application/json ContentType.
-type PutEventEventIDReservationIDMeJSONRequestBody PutEventEventIDReservationIDMeJSONBody
+type PutEventEventIDReservationIDMeJSONRequestBody = PutEventEventIDReservationIDMeJSONBody
 
 // PostLoginCallbackJSONRequestBody defines body for PostLoginCallback for application/json ContentType.
 type PostLoginCallbackJSONRequestBody = PostLoginCallbackJSONBody

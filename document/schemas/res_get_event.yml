@@ -1,5 +1,5 @@
 required:
-  - user
+  - event
 properties:
   event:
     type: array
