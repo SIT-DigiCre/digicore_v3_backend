@@ -25,8 +25,9 @@ docker compose up
 
 ## DBマイグレーション
 
-```bash
-docker compose run --rm -w /app/db admin sql-migrate up
+```sh
+make migrate-dry // dryrun
+make migrate
 ```
 
 ## 開発手順

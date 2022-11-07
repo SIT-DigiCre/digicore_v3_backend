@@ -14,7 +14,8 @@ CMD ["/digicore_v3_backend"]
 FROM golang:1.19.0 as admin
 
 WORKDIR "/app"
-RUN go install github.com/rubenv/sql-migrate/...@v1.2.0
+RUN go install github.com/k0kubun/sqldef/cmd/mysqldef@v0.13.9
 RUN go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@v1.11.0
+RUN apt-get update && apt-get install -y default-mysql-client-core
 
 COPY . .
