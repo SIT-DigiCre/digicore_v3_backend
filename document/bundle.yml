@@ -426,10 +426,6 @@ paths:
           in: query
           schema:
             type: integer
-        - name: seed
-          in: query
-          schema:
-            type: integer
       responses:
         '200':
           description: Success get event list
@@ -911,6 +907,7 @@ components:
             required:
               - eventID
               - name
+              - calendarView
               - reservable
               - reservated
             properties:
@@ -918,6 +915,8 @@ components:
                 type: string
               name:
                 type: string
+              calendarView:
+                type: boolean
               reservable:
                 type: boolean
               reservated:

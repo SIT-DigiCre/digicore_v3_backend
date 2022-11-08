@@ -9,10 +9,6 @@ get:
       in: query
       schema:
         type: integer
-    - name: seed
-      in: query
-      schema:
-        type: integer
   responses:
     200:
       description: "Success get event list"

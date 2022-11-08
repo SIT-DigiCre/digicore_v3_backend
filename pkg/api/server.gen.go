@@ -107,13 +107,6 @@ func (w *ServerInterfaceWrapper) GetEvent(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter offset: %s", err))
 	}
 
-	// ------------- Optional query parameter "seed" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "seed", ctx.QueryParams(), &params.Seed)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter seed: %s", err))
-	}
-
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetEvent(ctx, params)
 	return err

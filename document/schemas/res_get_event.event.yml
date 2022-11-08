@@ -1,6 +1,7 @@
 required:
   - eventID
   - name
+  - calendarView
   - reservable
   - reservated
 properties:
@@ -8,6 +9,8 @@ properties:
     type: string
   name:
     type: string
+  calendarView:
+    type: boolean
   reservable:
     type: boolean
   reservated:

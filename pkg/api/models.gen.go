@@ -70,10 +70,11 @@ type ReqPutUserMePrivate struct {
 // ResGetEvent defines model for ResGetEvent.
 type ResGetEvent struct {
 	Event []struct {
-		EventID    string `json:"eventID"`
-		Name       string `json:"name"`
-		Reservable bool   `json:"reservable"`
-		Reservated bool   `json:"reservated"`
+		CalendarView bool   `json:"calendarView"`
+		EventID      string `json:"eventID"`
+		Name         string `json:"name"`
+		Reservable   bool   `json:"reservable"`
+		Reservated   bool   `json:"reservated"`
 	} `json:"event"`
 }
 
@@ -243,7 +244,6 @@ type Unauthorized = Error
 // GetEventParams defines parameters for GetEvent.
 type GetEventParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
-	Seed   *int `form:"seed,omitempty" json:"seed,omitempty"`
 }
 
 // PutEventEventIDReservationIDMeJSONBody defines parameters for PutEventEventIDReservationIDMe.
