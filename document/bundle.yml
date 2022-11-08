@@ -925,6 +925,8 @@ components:
       required:
         - eventID
         - name
+        - description
+        - calendarView
         - reservable
         - reservated
         - reservation
@@ -933,6 +935,10 @@ components:
           type: string
         name:
           type: string
+        description:
+          type: string
+        calendarView:
+          type: boolean
         reservable:
           type: boolean
         reservated:
@@ -962,9 +968,9 @@ components:
         description:
           type: string
         startDate:
-          type: boolean
+          type: string
         finishDate:
-          type: boolean
+          type: string
         reservable:
           type: boolean
         reservated:

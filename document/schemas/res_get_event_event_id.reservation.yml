@@ -18,9 +18,9 @@ properties:
   description:
     type: string
   startDate:
-    type: boolean
+    type: string
   finishDate:
-    type: boolean
+    type: string
   reservable:
     type: boolean
   reservated:
