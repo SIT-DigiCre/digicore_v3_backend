@@ -106,19 +106,28 @@ type ResGetEventEventIDObjectReservation struct {
 
 // ResGetEventEventIDReservationID defines model for ResGetEventEventIDReservationID.
 type ResGetEventEventIDReservationID struct {
-	EventID    string                                      `json:"eventID"`
-	Name       string                                      `json:"name"`
-	Reservable bool                                        `json:"reservable"`
-	Reservated bool                                        `json:"reservated"`
-	User       []ResGetEventEventIDReservationIDObjectUser `json:"user"`
+	Capacity              int                                         `json:"capacity"`
+	Description           string                                      `json:"description"`
+	EventID               string                                      `json:"eventID"`
+	FinishDate            string                                      `json:"finishDate"`
+	FreeCapacity          int                                         `json:"freeCapacity"`
+	Name                  string                                      `json:"name"`
+	Reservable            bool                                        `json:"reservable"`
+	Reservated            bool                                        `json:"reservated"`
+	ReservationFinishDate string                                      `json:"reservationFinishDate"`
+	ReservationID         string                                      `json:"reservationID"`
+	ReservationStartDate  string                                      `json:"reservationStartDate"`
+	StartDate             string                                      `json:"startDate"`
+	User                  []ResGetEventEventIDReservationIDObjectUser `json:"user"`
 }
 
 // ResGetEventEventIDReservationIDObjectUser defines model for ResGetEventEventIDReservationIDObjectUser.
 type ResGetEventEventIDReservationIDObjectUser struct {
-	URL     string `json:"URL"`
-	Comment string `json:"comment"`
-	Name    string `json:"name"`
-	UserID  string `json:"userID"`
+	URL      string `json:"URL"`
+	Comment  string `json:"comment"`
+	Name     string `json:"name"`
+	UserID   string `json:"userID"`
+	UserIcon string `json:"userIcon"`
 }
 
 // ResGetLogin defines model for ResGetLogin.

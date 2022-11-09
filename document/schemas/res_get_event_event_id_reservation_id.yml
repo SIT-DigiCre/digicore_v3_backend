@@ -2,18 +2,41 @@ required:
   - eventID
   - reservationID
   - name
+  - description
   - reservable
   - reservated
+  - startDate
+  - finishDate
+  - reservationFinishDate
+  - reservationStartDate
+  - capacity
+  - freeCapacity
   - user
 properties:
   eventID:
     type: string
+  reservationID:
+    type: string
   name:
+    type: string
+  description:
+    type: string
+  startDate:
+    type: string
+  finishDate:
     type: string
   reservable:
     type: boolean
   reservated:
     type: boolean
+  reservationFinishDate:
+    type: string
+  reservationStartDate:
+    type: string
+  capacity:
+    type: integer
+  freeCapacity:
+    type: integer
   user:
     type: array
     items:
