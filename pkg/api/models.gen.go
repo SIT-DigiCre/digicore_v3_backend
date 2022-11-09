@@ -80,18 +80,20 @@ type ResGetEvent struct {
 
 // ResGetEventEventID defines model for ResGetEventEventID.
 type ResGetEventEventID struct {
-	EventID     string                                `json:"eventID"`
-	Name        string                                `json:"name"`
-	Reservable  bool                                  `json:"reservable"`
-	Reservated  bool                                  `json:"reservated"`
-	Reservation []ResGetEventEventIDObjectReservation `json:"reservation"`
+	CalendarView bool                                  `json:"calendarView"`
+	Description  string                                `json:"description"`
+	EventID      string                                `json:"eventID"`
+	Name         string                                `json:"name"`
+	Reservable   bool                                  `json:"reservable"`
+	Reservated   bool                                  `json:"reservated"`
+	Reservation  []ResGetEventEventIDObjectReservation `json:"reservation"`
 }
 
 // ResGetEventEventIDObjectReservation defines model for ResGetEventEventIDObjectReservation.
 type ResGetEventEventIDObjectReservation struct {
 	Capacity              int    `json:"capacity"`
 	Description           string `json:"description"`
-	FinishDate            bool   `json:"finishDate"`
+	FinishDate            string `json:"finishDate"`
 	FreeCapacity          int    `json:"freeCapacity"`
 	Name                  string `json:"name"`
 	Reservable            bool   `json:"reservable"`
@@ -99,7 +101,7 @@ type ResGetEventEventIDObjectReservation struct {
 	ReservationFinishDate string `json:"reservationFinishDate"`
 	ReservationID         string `json:"reservationID"`
 	ReservationStartDate  string `json:"reservationStartDate"`
-	StartDate             bool   `json:"startDate"`
+	StartDate             string `json:"startDate"`
 }
 
 // ResGetEventEventIDReservationID defines model for ResGetEventEventIDReservationID.

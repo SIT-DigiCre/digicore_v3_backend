@@ -13,7 +13,7 @@ import (
 func GetEvent(ctx echo.Context, dbClient db.Client, params api.GetEventParams) (api.ResGetEvent, *response.Error) {
 	res := api.ResGetEvent{}
 	userID := ctx.Get("user_id").(string)
-	events, err := eventList(dbClient, userID, params.Offset)
+	events, err := getEventList(dbClient, userID, params.Offset)
 	if err != nil {
 		return api.ResGetEvent{}, err
 	}
@@ -32,7 +32,7 @@ type event struct {
 	Reservated   bool   `db:"reservated"`
 }
 
-func eventList(dbClient db.Client, userID string, offset *int) ([]event, *response.Error) {
+func getEventList(dbClient db.Client, userID string, offset *int) ([]event, *response.Error) {
 	params := struct {
 		UserID string `twowaysql:"userID"`
 		Offset *int   `twowaysql:"offset"`
