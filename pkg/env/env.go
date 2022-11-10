@@ -2,8 +2,8 @@ package env
 
 import "os"
 
-var FrontendRootURL = os.Getenv("FRONTEND_ROOT_URL")
-var BackendRootURL = os.Getenv("BACKEND_ROOT_URL")
+var FrontendRootUrl = os.Getenv("FRONTEND_ROOT_URL")
+var BackendRootUrl = os.Getenv("BACKEND_ROOT_URL")
 
 var SignupRedirectPath = os.Getenv("SIGNUP_REDIRECT_PATH")
 var LoginRedirectPath = os.Getenv("LOGIN_REDIRECT_PATH")

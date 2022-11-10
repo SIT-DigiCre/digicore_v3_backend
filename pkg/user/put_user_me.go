@@ -22,7 +22,7 @@ func PutUserMe(ctx echo.Context, dbClient db.TransactionClient, requestBody api.
 func updateUserProfile(dbClient db.TransactionClient, userId string, requestBody api.ReqPutUserMe) *response.Error {
 	params := struct {
 		UserId            string `twowaysql:"userId"`
-		IconUrl           string `twowaysql:"iconURL"`
+		IconUrl           string `twowaysql:"iconUrl"`
 		SchoolGrade       int    `twowaysql:"schoolGrade"`
 		ShortIntroduction string `twowaysql:"shortIntroduction"`
 		Username          string `twowaysql:"username"`

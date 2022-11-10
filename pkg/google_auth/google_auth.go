@@ -17,9 +17,9 @@ import (
 
 var gcpConfig *oauth2.Config
 var signupUrl string
-var signupRedirectUrl = env.FrontendRootURL + env.SignupRedirectPath
+var signupRedirectUrl = env.FrontendRootUrl + env.SignupRedirectPath
 var loginUrl string
-var loginRedirectUrl = env.FrontendRootURL + env.LoginRedirectPath
+var loginRedirectUrl = env.FrontendRootUrl + env.LoginRedirectPath
 
 func init() {
 	gcpSecretJson, _ := os.ReadFile("./config/gcp_secret.json")
