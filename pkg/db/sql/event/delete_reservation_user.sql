@@ -1,0 +1,1 @@
+DELETE FROM event_reservation_users WHERE reservation_id = UUID_TO_BIN(/*reservationID*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee') AND user_id = UUID_TO_BIN(/*userID*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');
