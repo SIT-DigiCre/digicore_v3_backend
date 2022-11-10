@@ -42,7 +42,7 @@ type eventReservation struct {
 }
 
 type eventReservationObjectUser struct {
-	URL      string `db:"url"`
+	Url      string `db:"url"`
 	Comment  string `db:"comment"`
 	Name     string `db:"username"`
 	UserIcon string `db:"icon_url"`

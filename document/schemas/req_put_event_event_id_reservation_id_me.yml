@@ -1,13 +1,13 @@
 required:
   - comment
-  - URL
+  - url
 properties:
   comment:
     type: string
     x-oapi-codegen-extra-tags:
       validate: max=255
       ja: コメント
-  URL:
+  url:
     type: string
     x-oapi-codegen-extra-tags:
       validate: max=255

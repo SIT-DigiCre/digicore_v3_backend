@@ -1033,7 +1033,7 @@ components:
         - userIcon
         - name
         - comment
-        - URL
+        - url
       properties:
         userID:
           type: string
@@ -1043,19 +1043,19 @@ components:
           type: string
         comment:
           type: string
-        URL:
+        url:
           type: string
     ReqPutEventEventIDReservationIDMe:
       required:
         - comment
-        - URL
+        - url
       properties:
         comment:
           type: string
           x-oapi-codegen-extra-tags:
             validate: max=255
             ja: コメント
-        URL:
+        url:
           type: string
           x-oapi-codegen-extra-tags:
             validate: max=255

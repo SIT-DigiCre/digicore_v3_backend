@@ -23,12 +23,12 @@ func updateReservationUser(dbClient db.TransactionClient, reservationID string, 
 	params := struct {
 		ReservationID string `twowaysql:"reservationID"`
 		UserID        string `twowaysql:"userID"`
-		URL           string `twowaysql:"URL"`
+		Url           string `twowaysql:"url"`
 		Comment       string `twowaysql:"comment"`
 	}{
 		ReservationID: reservationID,
 		UserID:        userID,
-		URL:           requestBody.URL,
+		Url:           requestBody.Url,
 		Comment:       requestBody.Comment,
 	}
 	_, err := dbClient.DuplicateUpdate("sql/event/insert_reservation_user.sql", "sql/event/update_reservation_user.sql", &params)

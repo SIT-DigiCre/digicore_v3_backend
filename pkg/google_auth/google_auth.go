@@ -27,10 +27,10 @@ func init() {
 		logrus.Fatal("Not found ./config/gcp_secret.json")
 	}
 	gcpConfig, _ = google.ConfigFromJSON(gcpSecretJson, "https://www.googleapis.com/auth/userinfo.email")
-	signupRedirectURL := oauth2.SetAuthURLParam("redirect_uri", signupRedirectUrl)
-	signupUrl = gcpConfig.AuthCodeURL("", oauth2.AccessTypeOffline, oauth2.ApprovalForce, signupRedirectURL)
-	loginRedirectURL := oauth2.SetAuthURLParam("redirect_uri", loginRedirectUrl)
-	loginUrl = gcpConfig.AuthCodeURL("", oauth2.AccessTypeOffline, oauth2.ApprovalForce, loginRedirectURL)
+	signupRedirectUrlConfig := oauth2.SetAuthURLParam("redirect_uri", signupRedirectUrl)
+	signupUrl = gcpConfig.AuthCodeURL("", oauth2.AccessTypeOffline, oauth2.ApprovalForce, signupRedirectUrlConfig)
+	loginRedirectUrlConfig := oauth2.SetAuthURLParam("redirect_uri", loginRedirectUrl)
+	loginUrl = gcpConfig.AuthCodeURL("", oauth2.AccessTypeOffline, oauth2.ApprovalForce, loginRedirectUrlConfig)
 }
 
 type UserInfoResponse struct {
@@ -46,8 +46,8 @@ func (u UserInfoResponse) validate() error {
 	return nil
 }
 
-func getStudentNumberfromGoogle(code string, redirectURL string) (string, *response.Error) {
-	redirectParam := oauth2.SetAuthURLParam("redirect_uri", redirectURL)
+func getStudentNumberfromGoogle(code string, redirectUrl string) (string, *response.Error) {
+	redirectParam := oauth2.SetAuthURLParam("redirect_uri", redirectUrl)
 	token, err := gcpConfig.Exchange(context.Background(), code, redirectParam)
 	if err != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "認証でエラーが発生しました", Log: err.Error()}

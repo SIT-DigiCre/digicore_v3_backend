@@ -25,8 +25,8 @@ type ReqPostSignupCallback struct {
 
 // ReqPutEventEventIDReservationIDMe defines model for ReqPutEventEventIDReservationIDMe.
 type ReqPutEventEventIDReservationIDMe struct {
-	URL     string `ja:"URL" json:"URL" validate:"max=255"`
 	Comment string `ja:"コメント" json:"comment" validate:"max=255"`
+	Url     string `ja:"URL" json:"url" validate:"max=255"`
 }
 
 // ReqPutUserMe defines model for ReqPutUserMe.
@@ -123,9 +123,9 @@ type ResGetEventEventIDReservationID struct {
 
 // ResGetEventEventIDReservationIDObjectUser defines model for ResGetEventEventIDReservationIDObjectUser.
 type ResGetEventEventIDReservationIDObjectUser struct {
-	URL      string `json:"URL"`
 	Comment  string `json:"comment"`
 	Name     string `json:"name"`
+	Url      string `json:"url"`
 	UserID   string `json:"userID"`
 	UserIcon string `json:"userIcon"`
 }

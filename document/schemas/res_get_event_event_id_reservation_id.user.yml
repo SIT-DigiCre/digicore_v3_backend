@@ -3,7 +3,7 @@ required:
   - userIcon
   - name
   - comment
-  - URL
+  - url
 properties:
   userID:
     type: string
@@ -13,5 +13,5 @@ properties:
     type: string
   comment:
     type: string
-  URL:
+  url:
     type: string
