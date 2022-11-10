@@ -10,7 +10,7 @@ import (
 )
 
 func (s *server) PutUserMeDiscordCallback(ctx echo.Context) error {
-	var requestBody api.ReqPostUserMeDiscordCallback
+	var requestBody api.ReqPutUserMeDiscordCallback
 	ctx.Bind(&requestBody)
 	err := validator.Validate(requestBody)
 	if err != nil {

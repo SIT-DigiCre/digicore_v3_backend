@@ -10,5 +10,5 @@ properties:
   URL:
     type: string
     x-oapi-codegen-extra-tags:
-      validate: url,max=255
+      validate: max=255
       ja: URL

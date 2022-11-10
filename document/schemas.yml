@@ -42,8 +42,8 @@ ReqPutUserMePayment:
   $ref: "./schemas/req_put_user_me_payment.yml"
 ResGetUserMeDiscord:
   $ref: "./schemas/res_user_me_discord.yml"
-ReqPostUserMeDiscordCallback:
-  $ref: "./schemas/req_post_user_me_discord_callback.yml"
+ReqPutUserMeDiscordCallback:
+  $ref: "./schemas/req_put_user_me_discord_callback.yml"
 ResGetEvent:
   $ref: "./schemas/res_get_event.yml"
 ResGetEventEventID:
@@ -54,7 +54,7 @@ ResGetEventEventIDReservationID:
   $ref: "./schemas/res_get_event_event_id_reservation_id.yml"
 ResGetEventEventIDReservationIDObjectUser:
   $ref: "./schemas/res_get_event_event_id_reservation_id.user.yml"
-ReqGetEventEventIDReservationIDMe:
+ReqPutEventEventIDReservationIDMe:
   $ref: "./schemas/req_put_event_event_id_reservation_id_me.yml"
 
 

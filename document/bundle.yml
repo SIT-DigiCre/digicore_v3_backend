@@ -252,7 +252,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReqPostUserMeDiscordCallback'
+              $ref: '#/components/schemas/ReqPutUserMeDiscordCallback'
       responses:
         '200':
           description: Success signup
@@ -520,7 +520,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReqGetEventEventIDReservationIDMe'
+              $ref: '#/components/schemas/ReqPutEventEventIDReservationIDMe'
       responses:
         '200':
           description: Success create my event reservation
@@ -888,7 +888,7 @@ components:
       properties:
         url:
           type: string
-    ReqPostUserMeDiscordCallback:
+    ReqPutUserMeDiscordCallback:
       required:
         - code
       properties:
@@ -1045,7 +1045,7 @@ components:
           type: string
         URL:
           type: string
-    ReqGetEventEventIDReservationIDMe:
+    ReqPutEventEventIDReservationIDMe:
       required:
         - comment
         - URL
@@ -1058,7 +1058,7 @@ components:
         URL:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: 'url,max=255'
+            validate: max=255
             ja: URL
     Error:
       required:

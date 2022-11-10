@@ -13,12 +13,6 @@ type Error struct {
 	Message string `json:"message"`
 }
 
-// ReqGetEventEventIDReservationIDMe defines model for ReqGetEventEventIDReservationIDMe.
-type ReqGetEventEventIDReservationIDMe struct {
-	URL     string `ja:"URL" json:"URL" validate:"url,max=255"`
-	Comment string `ja:"コメント" json:"comment" validate:"max=255"`
-}
-
 // ReqPostLoginCallback defines model for ReqPostLoginCallback.
 type ReqPostLoginCallback struct {
 	Code string `ja:"認証コード" json:"code" validate:"required"`
@@ -29,9 +23,10 @@ type ReqPostSignupCallback struct {
 	Code string `ja:"認証コード" json:"code" validate:"required"`
 }
 
-// ReqPostUserMeDiscordCallback defines model for ReqPostUserMeDiscordCallback.
-type ReqPostUserMeDiscordCallback struct {
-	Code string `ja:"認証コード" json:"code" validate:"required"`
+// ReqPutEventEventIDReservationIDMe defines model for ReqPutEventEventIDReservationIDMe.
+type ReqPutEventEventIDReservationIDMe struct {
+	URL     string `ja:"URL" json:"URL" validate:"max=255"`
+	Comment string `ja:"コメント" json:"comment" validate:"max=255"`
 }
 
 // ReqPutUserMe defines model for ReqPutUserMe.
@@ -40,6 +35,11 @@ type ReqPutUserMe struct {
 	SchoolGrade       int    `ja:"学年" json:"schoolGrade" validate:"required,min=1,max=9"`
 	ShortIntroduction string `ja:"短い自己紹介" json:"shortIntroduction" validate:"required,min=1,max=255"`
 	Username          string `ja:"ユーザー名" json:"username" validate:"required,min=1,max=255"`
+}
+
+// ReqPutUserMeDiscordCallback defines model for ReqPutUserMeDiscordCallback.
+type ReqPutUserMeDiscordCallback struct {
+	Code string `ja:"認証コード" json:"code" validate:"required"`
 }
 
 // ReqPutUserMeIntroduction defines model for ReqPutUserMeIntroduction.
@@ -258,7 +258,7 @@ type GetEventParams struct {
 }
 
 // PutEventEventIDReservationIDMeJSONBody defines parameters for PutEventEventIDReservationIDMe.
-type PutEventEventIDReservationIDMeJSONBody = ReqGetEventEventIDReservationIDMe
+type PutEventEventIDReservationIDMeJSONBody = ReqPutEventEventIDReservationIDMe
 
 // PostLoginCallbackJSONBody defines parameters for PostLoginCallback.
 type PostLoginCallbackJSONBody = ReqPostLoginCallback
@@ -276,7 +276,7 @@ type GetUserParams struct {
 type PutUserMeJSONBody = ReqPutUserMe
 
 // PutUserMeDiscordCallbackJSONBody defines parameters for PutUserMeDiscordCallback.
-type PutUserMeDiscordCallbackJSONBody = ReqPostUserMeDiscordCallback
+type PutUserMeDiscordCallbackJSONBody = ReqPutUserMeDiscordCallback
 
 // PutUserMeIntroductionJSONBody defines parameters for PutUserMeIntroduction.
 type PutUserMeIntroductionJSONBody = ReqPutUserMeIntroduction
