@@ -11,8 +11,8 @@ import (
 )
 
 func PutUserMePayment(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPutUserMePayment) (api.ResGetUserMePayment, *response.Error) {
-	userID := ctx.Get("user_id").(string)
-	err := updateUserPayment(dbClient, userID, requestBody)
+	userId := ctx.Get("user_id").(string)
+	err := updateUserPayment(dbClient, userId, requestBody)
 	if err != nil {
 		return api.ResGetUserMePayment{}, err
 	}
@@ -20,13 +20,13 @@ func PutUserMePayment(ctx echo.Context, dbClient db.TransactionClient, requestBo
 	return GetUserMePayment(ctx, dbClient)
 }
 
-func updateUserPayment(dbClient db.TransactionClient, userID string, requestBody api.ReqPutUserMePayment) *response.Error {
+func updateUserPayment(dbClient db.TransactionClient, userId string, requestBody api.ReqPutUserMePayment) *response.Error {
 	params := struct {
-		UserID       string `twowaysql:"userID"`
+		UserId       string `twowaysql:"userId"`
 		Year         int    `twowaysql:"year"`
 		TransferName string `twowaysql:"transferName"`
 	}{
-		UserID:       userID,
+		UserId:       userId,
 		Year:         utils.GetSchoolYear(),
 		TransferName: requestBody.TransferName,
 	}

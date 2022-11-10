@@ -15,18 +15,18 @@ import (
 )
 
 func PutUserMeDiscordCallback(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPutUserMeDiscordCallback) (api.ResGetUserMe, *response.Error) {
-	userID := ctx.Get("user_id").(string)
+	userId := ctx.Get("user_id").(string)
 
 	accessToken, err := getAccessToken(requestBody.Code)
 	if err != nil {
 		return api.ResGetUserMe{}, err
 	}
 
-	dicordUserID, err := getUserIDfromToken(accessToken)
+	dicordUserId, err := getUserIdfromToken(accessToken)
 	if err != nil {
 		return api.ResGetUserMe{}, err
 	}
-	err = updateUserDiscordUserID(dbClient, userID, dicordUserID)
+	err = updateUserDiscordUserId(dbClient, userId, dicordUserId)
 	if err != nil {
 		return api.ResGetUserMe{}, err
 	}
@@ -35,7 +35,7 @@ func PutUserMeDiscordCallback(ctx echo.Context, dbClient db.TransactionClient, r
 }
 
 func getAccessToken(code string) (string, *response.Error) {
-	req, err := http.NewRequest("POST", "https://discordapp.com/api/oauth2/token", strings.NewReader(fmt.Sprintf("client_id=%s&client_secret=%s&grant_type=authorization_code&code=%s&redirect_uri=%s", env.DiscordClientID, env.DiscordClientSecret, code, loginRedirectUrl)))
+	req, err := http.NewRequest("POST", "https://discordapp.com/api/oauth2/token", strings.NewReader(fmt.Sprintf("client_id=%s&client_secret=%s&grant_type=authorization_code&code=%s&redirect_uri=%s", env.DiscordClientId, env.DiscordClientSecret, code, loginRedirectUrl)))
 	if err != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
@@ -58,7 +58,7 @@ func getAccessToken(code string) (string, *response.Error) {
 	return accessToken.AccessToken, nil
 }
 
-func getUserIDfromToken(token string) (string, *response.Error) {
+func getUserIdfromToken(token string) (string, *response.Error) {
 	req, err := http.NewRequest("GET", "https://discordapp.com/api/users/@me", nil)
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	if err != nil {
@@ -70,7 +70,7 @@ func getUserIDfromToken(token string) (string, *response.Error) {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
 	id := struct {
-		ID string `json:"id"`
+		Id string `json:"id"`
 	}{}
 	err = json.NewDecoder(res.Body).Decode(&id)
 	if err != nil {
@@ -79,16 +79,16 @@ func getUserIDfromToken(token string) (string, *response.Error) {
 	if res.StatusCode != 200 {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: fmt.Sprintf("return %d not 200", res.StatusCode)}
 	}
-	return id.ID, nil
+	return id.Id, nil
 }
 
-func updateUserDiscordUserID(dbClient db.TransactionClient, userID string, discordUserID string) *response.Error {
+func updateUserDiscordUserId(dbClient db.TransactionClient, userId string, discordUserId string) *response.Error {
 	params := struct {
-		UserID        string `twowaysql:"userID"`
-		DiscordUserID string `twowaysql:"discordUserID"`
+		UserId        string `twowaysql:"userId"`
+		DiscordUserId string `twowaysql:"discordUserId"`
 	}{
-		UserID:        userID,
-		DiscordUserID: discordUserID,
+		UserId:        userId,
+		DiscordUserId: discordUserId,
 	}
 	_, err := dbClient.Exec("sql/discord/update_user_discord_id.sql", &params, false)
 	if err != nil {

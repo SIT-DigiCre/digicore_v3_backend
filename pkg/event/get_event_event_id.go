@@ -11,22 +11,22 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GetEventEventID(ctx echo.Context, dbClient db.Client, eventID string) (api.ResGetEventEventID, *response.Error) {
-	res := api.ResGetEventEventID{}
-	userID := ctx.Get("user_id").(string)
-	eventDetail, err := getEventFromEventID(dbClient, eventID, userID)
+func GetEventEventId(ctx echo.Context, dbClient db.Client, eventId string) (api.ResGetEventEventId, *response.Error) {
+	res := api.ResGetEventEventId{}
+	userId := ctx.Get("user_id").(string)
+	eventDetail, err := getEventFromEventId(dbClient, eventId, userId)
 	if err != nil {
-		return api.ResGetEventEventID{}, err
+		return api.ResGetEventEventId{}, err
 	}
 	rerr := copier.Copy(&res, &eventDetail)
 	if rerr != nil {
-		return api.ResGetEventEventID{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベント一覧の取得に失敗しました", Log: rerr.Error()}
+		return api.ResGetEventEventId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベント一覧の取得に失敗しました", Log: rerr.Error()}
 	}
 	return res, nil
 }
 
 type eventDetail struct {
-	EventID      string `db:"event_id"`
+	EventId      string `db:"event_id"`
 	Name         string `db:"name"`
 	Description  string `db:"description"`
 	CalendarView bool   `db:"calendar_view"`
@@ -42,20 +42,20 @@ type eventDetailObjectReservation struct {
 	Name                  string `db:"name"`
 	Reservable            bool   `db:"reservable"`
 	Reservated            bool   `db:"reservated"`
-	ReservationID         string `db:"reservation_id"`
+	ReservationId         string `db:"reservation_id"`
 	StartDate             string `db:"start_date"`
 	FinishDate            string `db:"finish_date"`
 	ReservationStartDate  string `db:"reservation_start_date"`
 	ReservationFinishDate string `db:"reservation_finish_date"`
 }
 
-func getEventFromEventID(dbClient db.Client, eventID string, userID string) (eventDetail, *response.Error) {
+func getEventFromEventId(dbClient db.Client, eventId string, userId string) (eventDetail, *response.Error) {
 	params := struct {
-		EventID string `twowaysql:"eventID"`
-		UserID  string `twowaysql:"userID"`
+		EventId string `twowaysql:"eventId"`
+		UserId  string `twowaysql:"userId"`
 	}{
-		EventID: eventID,
-		UserID:  userID,
+		EventId: eventId,
+		UserId:  userId,
 	}
 	eventDetails := []eventDetail{}
 	err := dbClient.Select(&eventDetails, "sql/event/select_event_from_event_id.sql", &params)

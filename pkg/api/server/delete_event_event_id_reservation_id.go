@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *server) DeleteEventEventIDReservationIDMe(ctx echo.Context, eventID string, reservationID string) error {
+func (s *server) DeleteEventEventIdReservationIdMe(ctx echo.Context, eventId string, reservationId string) error {
 
 	dbTranisactionClient, err := db.OpenTransaction()
 	if err != nil {
@@ -15,7 +15,7 @@ func (s *server) DeleteEventEventIDReservationIDMe(ctx echo.Context, eventID str
 	}
 	defer dbTranisactionClient.Rollback()
 
-	res, err := event.DeleteEventEventIDReservationIDMe(ctx, &dbTranisactionClient, eventID, reservationID)
+	res, err := event.DeleteEventEventIdReservationIdMe(ctx, &dbTranisactionClient, eventId, reservationId)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

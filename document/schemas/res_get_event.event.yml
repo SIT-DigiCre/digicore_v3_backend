@@ -1,11 +1,11 @@
 required:
-  - eventID
+  - eventId
   - name
   - calendarView
   - reservable
   - reservated
 properties:
-  eventID:
+  eventId:
     type: string
   name:
     type: string

@@ -7,10 +7,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *server) GetEventEventIDReservationID(ctx echo.Context, eventID string, reservationID string) error {
+func (s *server) GetEventEventIdReservationId(ctx echo.Context, eventId string, reservationId string) error {
 	dbClient := db.Open()
 
-	res, err := event.GetEventEventIDReservationID(ctx, &dbClient, eventID, reservationID)
+	res, err := event.GetEventEventIdReservationId(ctx, &dbClient, eventId, reservationId)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

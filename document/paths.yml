@@ -10,9 +10,9 @@
   $ref: "./paths/login_callback.yml"
 /user:
   $ref: "./paths/user.yml"
-/user/{userID}:
+/user/{userId}:
   $ref: "./paths/user_user_id.yml"
-/user/{userID}/introduction:
+/user/{userId}/introduction:
   $ref: "./paths/user_user_id_introduction.yml"
 /user/me:
   $ref: "./paths/user_me.yml"
@@ -30,9 +30,9 @@
   $ref: "./paths/tool.yml"
 /event:
   $ref: "./paths/event.yml"
-/event/{eventID}:
+/event/{eventId}:
   $ref: "./paths/event_event_id.yml"
-/event/{eventID}/{reservationID}:
+/event/{eventId}/{reservationId}:
   $ref: "./paths/event_event_id_reservation_id.yml"
-/event/{eventID}/{reservationID}/me:
+/event/{eventId}/{reservationId}/me:
   $ref: "./paths/event_event_id_reservation_id_me.yml"

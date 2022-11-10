@@ -9,8 +9,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *server) PutEventEventIDReservationIDMe(ctx echo.Context, eventID string, reservationID string) error {
-	var requestBody api.ReqPutEventEventIDReservationIDMe
+func (s *server) PutEventEventIdReservationIdMe(ctx echo.Context, eventId string, reservationId string) error {
+	var requestBody api.ReqPutEventEventIdReservationIdMe
 	ctx.Bind(&requestBody)
 	err := validator.Validate(requestBody)
 	if err != nil {
@@ -23,7 +23,7 @@ func (s *server) PutEventEventIDReservationIDMe(ctx echo.Context, eventID string
 	}
 	defer dbTranisactionClient.Rollback()
 
-	res, err := event.PutEventEventIDReservationIDMe(ctx, &dbTranisactionClient, eventID, reservationID, requestBody)
+	res, err := event.PutEventEventIdReservationIdMe(ctx, &dbTranisactionClient, eventId, reservationId, requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

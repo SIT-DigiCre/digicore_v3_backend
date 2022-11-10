@@ -12,8 +12,8 @@ import (
 
 func GetUserMePrivate(ctx echo.Context, dbClient db.Client) (api.ResGetUserMePrivate, *response.Error) {
 	res := api.ResGetUserMePrivate{}
-	userID := ctx.Get("user_id").(string)
-	private, err := getUserPrivateFromUserID(dbClient, userID)
+	userId := ctx.Get("user_id").(string)
+	private, err := getUserPrivateFromUserId(dbClient, userId)
 	if err != nil {
 		return api.ResGetUserMePrivate{}, err
 	}
@@ -38,11 +38,11 @@ type private struct {
 	ParentAddress         string `db:"parent_address"`
 }
 
-func getUserPrivateFromUserID(dbClient db.Client, userID string) (private, *response.Error) {
+func getUserPrivateFromUserId(dbClient db.Client, userId string) (private, *response.Error) {
 	params := struct {
-		UserID string `twowaysql:"userID"`
+		UserId string `twowaysql:"userId"`
 	}{
-		UserID: userID,
+		UserId: userId,
 	}
 	privates := []private{}
 	err := dbClient.Select(&privates, "sql/user/select_user_private_from_user_id.sql", &params)

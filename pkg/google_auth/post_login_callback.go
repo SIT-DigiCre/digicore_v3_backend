@@ -14,11 +14,11 @@ func PostLoginCallback(ctx echo.Context, dbClient db.Client, requestBody api.Req
 	if err != nil {
 		return api.ResPostLoginCallback{}, err
 	}
-	userID, err := user.IDFromStudentNumber(dbClient, studentNumber)
+	userId, err := user.IdFromStudentNumber(dbClient, studentNumber)
 	if err != nil {
 		return api.ResPostLoginCallback{}, err
 	}
-	jwt, err := authenticator.CreateToken(userID)
+	jwt, err := authenticator.CreateToken(userId)
 	if err != nil {
 		return api.ResPostLoginCallback{}, err
 	}

@@ -1,1 +1,1 @@
-UPDATE user_profiles SET  username = /*username*/'name', school_grade = /*schoolGrade*/1, icon_url = /*iconUrl*/'', short_introduction =  /*shortIntroduction*/'intro' WHERE user_id = UUID_TO_BIN(/*userID*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');
+UPDATE user_profiles SET  username = /*username*/'name', school_grade = /*schoolGrade*/1, icon_url = /*iconUrl*/'', short_introduction =  /*shortIntroduction*/'intro' WHERE user_id = UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');

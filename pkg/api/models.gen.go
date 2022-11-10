@@ -23,8 +23,8 @@ type ReqPostSignupCallback struct {
 	Code string `ja:"認証コード" json:"code" validate:"required"`
 }
 
-// ReqPutEventEventIDReservationIDMe defines model for ReqPutEventEventIDReservationIDMe.
-type ReqPutEventEventIDReservationIDMe struct {
+// ReqPutEventEventIdReservationIdMe defines model for ReqPutEventEventIdReservationIdMe.
+type ReqPutEventEventIdReservationIdMe struct {
 	Comment string `ja:"コメント" json:"comment" validate:"max=255"`
 	Url     string `ja:"URL" json:"url" validate:"max=255"`
 }
@@ -71,26 +71,26 @@ type ReqPutUserMePrivate struct {
 type ResGetEvent struct {
 	Event []struct {
 		CalendarView bool   `json:"calendarView"`
-		EventID      string `json:"eventID"`
+		EventId      string `json:"eventId"`
 		Name         string `json:"name"`
 		Reservable   bool   `json:"reservable"`
 		Reservated   bool   `json:"reservated"`
 	} `json:"event"`
 }
 
-// ResGetEventEventID defines model for ResGetEventEventID.
-type ResGetEventEventID struct {
+// ResGetEventEventId defines model for ResGetEventEventId.
+type ResGetEventEventId struct {
 	CalendarView bool                                  `json:"calendarView"`
 	Description  string                                `json:"description"`
-	EventID      string                                `json:"eventID"`
+	EventId      string                                `json:"eventId"`
 	Name         string                                `json:"name"`
 	Reservable   bool                                  `json:"reservable"`
 	Reservated   bool                                  `json:"reservated"`
-	Reservation  []ResGetEventEventIDObjectReservation `json:"reservation"`
+	Reservation  []ResGetEventEventIdObjectReservation `json:"reservation"`
 }
 
-// ResGetEventEventIDObjectReservation defines model for ResGetEventEventIDObjectReservation.
-type ResGetEventEventIDObjectReservation struct {
+// ResGetEventEventIdObjectReservation defines model for ResGetEventEventIdObjectReservation.
+type ResGetEventEventIdObjectReservation struct {
 	Capacity              int    `json:"capacity"`
 	Description           string `json:"description"`
 	FinishDate            string `json:"finishDate"`
@@ -99,35 +99,35 @@ type ResGetEventEventIDObjectReservation struct {
 	Reservable            bool   `json:"reservable"`
 	Reservated            bool   `json:"reservated"`
 	ReservationFinishDate string `json:"reservationFinishDate"`
-	ReservationID         string `json:"reservationID"`
+	ReservationId         string `json:"reservationId"`
 	ReservationStartDate  string `json:"reservationStartDate"`
 	StartDate             string `json:"startDate"`
 }
 
-// ResGetEventEventIDReservationID defines model for ResGetEventEventIDReservationID.
-type ResGetEventEventIDReservationID struct {
+// ResGetEventEventIdReservationId defines model for ResGetEventEventIdReservationId.
+type ResGetEventEventIdReservationId struct {
 	Capacity              int                                         `json:"capacity"`
 	Description           string                                      `json:"description"`
-	EventID               string                                      `json:"eventID"`
+	EventId               string                                      `json:"eventId"`
 	FinishDate            string                                      `json:"finishDate"`
 	FreeCapacity          int                                         `json:"freeCapacity"`
 	Name                  string                                      `json:"name"`
 	Reservable            bool                                        `json:"reservable"`
 	Reservated            bool                                        `json:"reservated"`
 	ReservationFinishDate string                                      `json:"reservationFinishDate"`
-	ReservationID         string                                      `json:"reservationID"`
+	ReservationId         string                                      `json:"reservationId"`
 	ReservationStartDate  string                                      `json:"reservationStartDate"`
 	StartDate             string                                      `json:"startDate"`
-	User                  []ResGetEventEventIDReservationIDObjectUser `json:"user"`
+	User                  []ResGetEventEventIdReservationIdObjectUser `json:"user"`
 }
 
-// ResGetEventEventIDReservationIDObjectUser defines model for ResGetEventEventIDReservationIDObjectUser.
-type ResGetEventEventIDReservationIDObjectUser struct {
+// ResGetEventEventIdReservationIdObjectUser defines model for ResGetEventEventIdReservationIdObjectUser.
+type ResGetEventEventIdReservationIdObjectUser struct {
 	Comment  string `json:"comment"`
 	Name     string `json:"name"`
 	Url      string `json:"url"`
-	UserID   string `json:"userID"`
 	UserIcon string `json:"userIcon"`
+	UserId   string `json:"userId"`
 }
 
 // ResGetLogin defines model for ResGetLogin.
@@ -158,12 +158,12 @@ type ResGetUser struct {
 // ResGetUserMe defines model for ResGetUserMe.
 type ResGetUserMe struct {
 	ActiveLimit       string `json:"activeLimit"`
-	DiscordUserID     string `json:"discordUserID"`
+	DiscordUserId     string `json:"discordUserId"`
 	IconUrl           string `json:"iconUrl"`
 	SchoolGrade       int    `json:"schoolGrade"`
 	ShortIntroduction string `json:"shortIntroduction"`
 	StudentNumber     string `json:"studentNumber"`
-	UserID            string `json:"userID"`
+	UserId            string `json:"userId"`
 	Username          string `json:"username"`
 }
 
@@ -209,24 +209,24 @@ type ResGetUserMePrivate struct {
 type ResGetUserObjectUser struct {
 	IconUrl           string `json:"iconUrl"`
 	ShortIntroduction string `json:"shortIntroduction"`
-	UserID            string `json:"userID"`
+	UserId            string `json:"userId"`
 	Username          string `json:"username"`
 }
 
-// ResGetUserUserID defines model for ResGetUserUserID.
-type ResGetUserUserID struct {
+// ResGetUserUserId defines model for ResGetUserUserId.
+type ResGetUserUserId struct {
 	ActiveLimit       string `json:"activeLimit"`
-	DiscordUserID     string `json:"discordUserID"`
+	DiscordUserId     string `json:"discordUserId"`
 	IconUrl           string `json:"iconUrl"`
 	SchoolGrade       int    `json:"schoolGrade"`
 	ShortIntroduction string `json:"shortIntroduction"`
 	StudentNumber     string `json:"studentNumber"`
-	UserID            string `json:"userID"`
+	UserId            string `json:"userId"`
 	Username          string `json:"username"`
 }
 
-// ResGetUserUserIDIntroduction defines model for ResGetUserUserIDIntroduction.
-type ResGetUserUserIDIntroduction struct {
+// ResGetUserUserIdIntroduction defines model for ResGetUserUserIdIntroduction.
+type ResGetUserUserIdIntroduction struct {
 	Introduction string `json:"introduction"`
 }
 
@@ -257,8 +257,8 @@ type GetEventParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
 }
 
-// PutEventEventIDReservationIDMeJSONBody defines parameters for PutEventEventIDReservationIDMe.
-type PutEventEventIDReservationIDMeJSONBody = ReqPutEventEventIDReservationIDMe
+// PutEventEventIdReservationIdMeJSONBody defines parameters for PutEventEventIdReservationIdMe.
+type PutEventEventIdReservationIdMeJSONBody = ReqPutEventEventIdReservationIdMe
 
 // PostLoginCallbackJSONBody defines parameters for PostLoginCallback.
 type PostLoginCallbackJSONBody = ReqPostLoginCallback
@@ -287,8 +287,8 @@ type PutUserMePaymentJSONBody = ReqPutUserMePayment
 // PutUserMePrivateJSONBody defines parameters for PutUserMePrivate.
 type PutUserMePrivateJSONBody = ReqPutUserMePrivate
 
-// PutEventEventIDReservationIDMeJSONRequestBody defines body for PutEventEventIDReservationIDMe for application/json ContentType.
-type PutEventEventIDReservationIDMeJSONRequestBody = PutEventEventIDReservationIDMeJSONBody
+// PutEventEventIdReservationIdMeJSONRequestBody defines body for PutEventEventIdReservationIdMe for application/json ContentType.
+type PutEventEventIdReservationIdMeJSONRequestBody = PutEventEventIdReservationIdMeJSONBody
 
 // PostLoginCallbackJSONRequestBody defines body for PostLoginCallback for application/json ContentType.
 type PostLoginCallbackJSONRequestBody = PostLoginCallbackJSONBody

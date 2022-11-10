@@ -17,17 +17,17 @@ type ServerInterface interface {
 	// (GET /event)
 	GetEvent(ctx echo.Context, params GetEventParams) error
 
-	// (GET /event/{eventID})
-	GetEventEventID(ctx echo.Context, eventID string) error
+	// (GET /event/{eventId})
+	GetEventEventId(ctx echo.Context, eventId string) error
 
-	// (GET /event/{eventID}/{reservationID})
-	GetEventEventIDReservationID(ctx echo.Context, eventID string, reservationID string) error
+	// (GET /event/{eventId}/{reservationId})
+	GetEventEventIdReservationId(ctx echo.Context, eventId string, reservationId string) error
 
-	// (DELETE /event/{eventID}/{reservationID}/me)
-	DeleteEventEventIDReservationIDMe(ctx echo.Context, eventID string, reservationID string) error
+	// (DELETE /event/{eventId}/{reservationId}/me)
+	DeleteEventEventIdReservationIdMe(ctx echo.Context, eventId string, reservationId string) error
 
-	// (PUT /event/{eventID}/{reservationID}/me)
-	PutEventEventIDReservationIDMe(ctx echo.Context, eventID string, reservationID string) error
+	// (PUT /event/{eventId}/{reservationId}/me)
+	PutEventEventIdReservationIdMe(ctx echo.Context, eventId string, reservationId string) error
 
 	// (GET /login)
 	GetLogin(ctx echo.Context) error
@@ -80,11 +80,11 @@ type ServerInterface interface {
 	// (PUT /user/me/private)
 	PutUserMePrivate(ctx echo.Context) error
 
-	// (GET /user/{userID})
-	GetUserUserID(ctx echo.Context, userID string) error
+	// (GET /user/{userId})
+	GetUserUserId(ctx echo.Context, userId string) error
 
-	// (GET /user/{userID}/introduction)
-	GetUserUserIDIntroduction(ctx echo.Context, userID string) error
+	// (GET /user/{userId}/introduction)
+	GetUserUserIdIntroduction(ctx echo.Context, userId string) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
@@ -112,99 +112,99 @@ func (w *ServerInterfaceWrapper) GetEvent(ctx echo.Context) error {
 	return err
 }
 
-// GetEventEventID converts echo context to params.
-func (w *ServerInterfaceWrapper) GetEventEventID(ctx echo.Context) error {
+// GetEventEventId converts echo context to params.
+func (w *ServerInterfaceWrapper) GetEventEventId(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "eventID" -------------
-	var eventID string
+	// ------------- Path parameter "eventId" -------------
+	var eventId string
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "eventID", runtime.ParamLocationPath, ctx.Param("eventID"), &eventID)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "eventId", runtime.ParamLocationPath, ctx.Param("eventId"), &eventId)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventID: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventId: %s", err))
 	}
 
 	ctx.Set(BearerAuthScopes, []string{""})
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetEventEventID(ctx, eventID)
+	err = w.Handler.GetEventEventId(ctx, eventId)
 	return err
 }
 
-// GetEventEventIDReservationID converts echo context to params.
-func (w *ServerInterfaceWrapper) GetEventEventIDReservationID(ctx echo.Context) error {
+// GetEventEventIdReservationId converts echo context to params.
+func (w *ServerInterfaceWrapper) GetEventEventIdReservationId(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "eventID" -------------
-	var eventID string
+	// ------------- Path parameter "eventId" -------------
+	var eventId string
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "eventID", runtime.ParamLocationPath, ctx.Param("eventID"), &eventID)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "eventId", runtime.ParamLocationPath, ctx.Param("eventId"), &eventId)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventID: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventId: %s", err))
 	}
 
-	// ------------- Path parameter "reservationID" -------------
-	var reservationID string
+	// ------------- Path parameter "reservationId" -------------
+	var reservationId string
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "reservationID", runtime.ParamLocationPath, ctx.Param("reservationID"), &reservationID)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "reservationId", runtime.ParamLocationPath, ctx.Param("reservationId"), &reservationId)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter reservationID: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter reservationId: %s", err))
 	}
 
 	ctx.Set(BearerAuthScopes, []string{""})
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetEventEventIDReservationID(ctx, eventID, reservationID)
+	err = w.Handler.GetEventEventIdReservationId(ctx, eventId, reservationId)
 	return err
 }
 
-// DeleteEventEventIDReservationIDMe converts echo context to params.
-func (w *ServerInterfaceWrapper) DeleteEventEventIDReservationIDMe(ctx echo.Context) error {
+// DeleteEventEventIdReservationIdMe converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteEventEventIdReservationIdMe(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "eventID" -------------
-	var eventID string
+	// ------------- Path parameter "eventId" -------------
+	var eventId string
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "eventID", runtime.ParamLocationPath, ctx.Param("eventID"), &eventID)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "eventId", runtime.ParamLocationPath, ctx.Param("eventId"), &eventId)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventID: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventId: %s", err))
 	}
 
-	// ------------- Path parameter "reservationID" -------------
-	var reservationID string
+	// ------------- Path parameter "reservationId" -------------
+	var reservationId string
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "reservationID", runtime.ParamLocationPath, ctx.Param("reservationID"), &reservationID)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "reservationId", runtime.ParamLocationPath, ctx.Param("reservationId"), &reservationId)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter reservationID: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter reservationId: %s", err))
 	}
 
 	ctx.Set(BearerAuthScopes, []string{""})
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.DeleteEventEventIDReservationIDMe(ctx, eventID, reservationID)
+	err = w.Handler.DeleteEventEventIdReservationIdMe(ctx, eventId, reservationId)
 	return err
 }
 
-// PutEventEventIDReservationIDMe converts echo context to params.
-func (w *ServerInterfaceWrapper) PutEventEventIDReservationIDMe(ctx echo.Context) error {
+// PutEventEventIdReservationIdMe converts echo context to params.
+func (w *ServerInterfaceWrapper) PutEventEventIdReservationIdMe(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "eventID" -------------
-	var eventID string
+	// ------------- Path parameter "eventId" -------------
+	var eventId string
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "eventID", runtime.ParamLocationPath, ctx.Param("eventID"), &eventID)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "eventId", runtime.ParamLocationPath, ctx.Param("eventId"), &eventId)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventID: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventId: %s", err))
 	}
 
-	// ------------- Path parameter "reservationID" -------------
-	var reservationID string
+	// ------------- Path parameter "reservationId" -------------
+	var reservationId string
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "reservationID", runtime.ParamLocationPath, ctx.Param("reservationID"), &reservationID)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "reservationId", runtime.ParamLocationPath, ctx.Param("reservationId"), &reservationId)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter reservationID: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter reservationId: %s", err))
 	}
 
 	ctx.Set(BearerAuthScopes, []string{""})
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.PutEventEventIDReservationIDMe(ctx, eventID, reservationID)
+	err = w.Handler.PutEventEventIdReservationIdMe(ctx, eventId, reservationId)
 	return err
 }
 
@@ -399,39 +399,39 @@ func (w *ServerInterfaceWrapper) PutUserMePrivate(ctx echo.Context) error {
 	return err
 }
 
-// GetUserUserID converts echo context to params.
-func (w *ServerInterfaceWrapper) GetUserUserID(ctx echo.Context) error {
+// GetUserUserId converts echo context to params.
+func (w *ServerInterfaceWrapper) GetUserUserId(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "userID" -------------
-	var userID string
+	// ------------- Path parameter "userId" -------------
+	var userId string
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "userID", runtime.ParamLocationPath, ctx.Param("userID"), &userID)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "userId", runtime.ParamLocationPath, ctx.Param("userId"), &userId)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter userID: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter userId: %s", err))
 	}
 
 	ctx.Set(BearerAuthScopes, []string{""})
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetUserUserID(ctx, userID)
+	err = w.Handler.GetUserUserId(ctx, userId)
 	return err
 }
 
-// GetUserUserIDIntroduction converts echo context to params.
-func (w *ServerInterfaceWrapper) GetUserUserIDIntroduction(ctx echo.Context) error {
+// GetUserUserIdIntroduction converts echo context to params.
+func (w *ServerInterfaceWrapper) GetUserUserIdIntroduction(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "userID" -------------
-	var userID string
+	// ------------- Path parameter "userId" -------------
+	var userId string
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "userID", runtime.ParamLocationPath, ctx.Param("userID"), &userID)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "userId", runtime.ParamLocationPath, ctx.Param("userId"), &userId)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter userID: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter userId: %s", err))
 	}
 
 	ctx.Set(BearerAuthScopes, []string{""})
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetUserUserIDIntroduction(ctx, userID)
+	err = w.Handler.GetUserUserIdIntroduction(ctx, userId)
 	return err
 }
 
@@ -464,10 +464,10 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	}
 
 	router.GET(baseURL+"/event", wrapper.GetEvent)
-	router.GET(baseURL+"/event/:eventID", wrapper.GetEventEventID)
-	router.GET(baseURL+"/event/:eventID/:reservationID", wrapper.GetEventEventIDReservationID)
-	router.DELETE(baseURL+"/event/:eventID/:reservationID/me", wrapper.DeleteEventEventIDReservationIDMe)
-	router.PUT(baseURL+"/event/:eventID/:reservationID/me", wrapper.PutEventEventIDReservationIDMe)
+	router.GET(baseURL+"/event/:eventId", wrapper.GetEventEventId)
+	router.GET(baseURL+"/event/:eventId/:reservationId", wrapper.GetEventEventIdReservationId)
+	router.DELETE(baseURL+"/event/:eventId/:reservationId/me", wrapper.DeleteEventEventIdReservationIdMe)
+	router.PUT(baseURL+"/event/:eventId/:reservationId/me", wrapper.PutEventEventIdReservationIdMe)
 	router.GET(baseURL+"/login", wrapper.GetLogin)
 	router.POST(baseURL+"/login/callback", wrapper.PostLoginCallback)
 	router.GET(baseURL+"/signup", wrapper.GetSignup)
@@ -485,7 +485,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.PUT(baseURL+"/user/me/payment", wrapper.PutUserMePayment)
 	router.GET(baseURL+"/user/me/private", wrapper.GetUserMePrivate)
 	router.PUT(baseURL+"/user/me/private", wrapper.PutUserMePrivate)
-	router.GET(baseURL+"/user/:userID", wrapper.GetUserUserID)
-	router.GET(baseURL+"/user/:userID/introduction", wrapper.GetUserUserIDIntroduction)
+	router.GET(baseURL+"/user/:userId", wrapper.GetUserUserId)
+	router.GET(baseURL+"/user/:userId/introduction", wrapper.GetUserUserIdIntroduction)
 
 }

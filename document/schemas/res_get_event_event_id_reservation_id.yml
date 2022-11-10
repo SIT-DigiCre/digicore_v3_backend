@@ -1,6 +1,6 @@
 required:
-  - eventID
-  - reservationID
+  - eventId
+  - reservationId
   - name
   - description
   - reservable
@@ -13,9 +13,9 @@ required:
   - freeCapacity
   - user
 properties:
-  eventID:
+  eventId:
     type: string
-  reservationID:
+  reservationId:
     type: string
   name:
     type: string

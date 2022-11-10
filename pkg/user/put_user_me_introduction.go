@@ -10,8 +10,8 @@ import (
 )
 
 func PutUserMeIntroduction(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPutUserMeIntroduction) (api.ResGetUserMeIntroduction, *response.Error) {
-	userID := ctx.Get("user_id").(string)
-	err := updateUserIntroduction(dbClient, userID, requestBody)
+	userId := ctx.Get("user_id").(string)
+	err := updateUserIntroduction(dbClient, userId, requestBody)
 	if err != nil {
 		return api.ResGetUserMeIntroduction{}, err
 	}
@@ -19,12 +19,12 @@ func PutUserMeIntroduction(ctx echo.Context, dbClient db.TransactionClient, requ
 	return GetUserMeIntroduction(ctx, dbClient)
 }
 
-func updateUserIntroduction(dbClient db.TransactionClient, userID string, requestBody api.ReqPutUserMeIntroduction) *response.Error {
+func updateUserIntroduction(dbClient db.TransactionClient, userId string, requestBody api.ReqPutUserMeIntroduction) *response.Error {
 	params := struct {
-		UserID       string `twowaysql:"userID"`
+		UserId       string `twowaysql:"userId"`
 		Introduction string `twowaysql:"introduction"`
 	}{
-		UserID:       userID,
+		UserId:       userId,
 		Introduction: requestBody.Introduction,
 	}
 	_, err := dbClient.Exec("sql/user/update_user_introduction.sql", &params, false)

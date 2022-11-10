@@ -5,7 +5,7 @@ get:
   security:
     - BearerAuth: []
   parameters:
-    - name: eventID
+    - name: eventId
       in: path
       required: true
       schema:

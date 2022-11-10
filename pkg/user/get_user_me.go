@@ -13,8 +13,8 @@ import (
 
 func GetUserMe(ctx echo.Context, dbClient db.Client) (api.ResGetUserMe, *response.Error) {
 	res := api.ResGetUserMe{}
-	userID := ctx.Get("user_id").(string)
-	profile, err := GetUserProfileFromUserID(dbClient, userID)
+	userId := ctx.Get("user_id").(string)
+	profile, err := GetUserProfileFromUserId(dbClient, userId)
 	if err != nil {
 		return api.ResGetUserMe{}, err
 	}

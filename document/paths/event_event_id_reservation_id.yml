@@ -5,12 +5,12 @@ get:
   security:
     - BearerAuth: []
   parameters:
-    - name: eventID
+    - name: eventId
       in: path
       required: true
       schema:
         type: string
-    - name: reservationID
+    - name: reservationId
       in: path
       required: true
       schema:

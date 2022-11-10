@@ -9,25 +9,25 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func PutEventEventIDReservationIDMe(ctx echo.Context, dbClient db.TransactionClient, eventID string, reservationID string, requestBody api.ReqPutEventEventIDReservationIDMe) (api.ResGetEventEventIDReservationID, *response.Error) {
-	userID := ctx.Get("user_id").(string)
-	err := updateReservationUser(dbClient, reservationID, userID, requestBody)
+func PutEventEventIdReservationIdMe(ctx echo.Context, dbClient db.TransactionClient, eventId string, reservationId string, requestBody api.ReqPutEventEventIdReservationIdMe) (api.ResGetEventEventIdReservationId, *response.Error) {
+	userId := ctx.Get("user_id").(string)
+	err := updateReservationUser(dbClient, reservationId, userId, requestBody)
 	if err != nil {
-		return api.ResGetEventEventIDReservationID{}, err
+		return api.ResGetEventEventIdReservationId{}, err
 	}
 
-	return GetEventEventIDReservationID(ctx, dbClient, eventID, reservationID)
+	return GetEventEventIdReservationId(ctx, dbClient, eventId, reservationId)
 }
 
-func updateReservationUser(dbClient db.TransactionClient, reservationID string, userID string, requestBody api.ReqPutEventEventIDReservationIDMe) *response.Error {
+func updateReservationUser(dbClient db.TransactionClient, reservationId string, userId string, requestBody api.ReqPutEventEventIdReservationIdMe) *response.Error {
 	params := struct {
-		ReservationID string `twowaysql:"reservationID"`
-		UserID        string `twowaysql:"userID"`
+		ReservationId string `twowaysql:"reservationId"`
+		UserId        string `twowaysql:"userId"`
 		Url           string `twowaysql:"url"`
 		Comment       string `twowaysql:"comment"`
 	}{
-		ReservationID: reservationID,
-		UserID:        userID,
+		ReservationId: reservationId,
+		UserId:        userId,
 		Url:           requestBody.Url,
 		Comment:       requestBody.Comment,
 	}

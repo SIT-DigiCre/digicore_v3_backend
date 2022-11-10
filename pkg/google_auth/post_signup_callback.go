@@ -16,11 +16,11 @@ func PostSignupCallback(ctx echo.Context, dbTransactionClient db.TransactionClie
 	if err != nil {
 		return api.ResPostSignupCallback{}, err
 	}
-	userID, err := createUser(studentNumber, dbTransactionClient)
+	userId, err := createUser(studentNumber, dbTransactionClient)
 	if err != nil {
 		return api.ResPostSignupCallback{}, err
 	}
-	jwt, err := authenticator.CreateToken(userID)
+	jwt, err := authenticator.CreateToken(userId)
 	if err != nil {
 		return api.ResPostSignupCallback{}, err
 	}

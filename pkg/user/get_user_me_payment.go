@@ -12,8 +12,8 @@ import (
 
 func GetUserMePayment(ctx echo.Context, dbClient db.Client) (api.ResGetUserMePayment, *response.Error) {
 	res := api.ResGetUserMePayment{}
-	userID := ctx.Get("user_id").(string)
-	history, err := getUserPaymentFromUserID(dbClient, userID)
+	userId := ctx.Get("user_id").(string)
+	history, err := getUserPaymentFromUserId(dbClient, userId)
 	if err != nil {
 		return api.ResGetUserMePayment{}, err
 	}
@@ -31,11 +31,11 @@ type payment struct {
 	Year         int    `db:"year"`
 }
 
-func getUserPaymentFromUserID(dbClient db.Client, userID string) ([]payment, *response.Error) {
+func getUserPaymentFromUserId(dbClient db.Client, userId string) ([]payment, *response.Error) {
 	params := struct {
-		UserID string `twowaysql:"userID"`
+		UserId string `twowaysql:"userId"`
 	}{
-		UserID: userID,
+		UserId: userId,
 	}
 	payments := []payment{}
 	err := dbClient.Select(&payments, "sql/user/select_user_payment_from_user_id.sql", &params)

@@ -13,8 +13,8 @@ import (
 
 func GetUserMeIntroduction(ctx echo.Context, dbClient db.Client) (api.ResGetUserMeIntroduction, *response.Error) {
 	res := api.ResGetUserMeIntroduction{}
-	userID := ctx.Get("user_id").(string)
-	introduction, err := GetUserIntroductionFromUserID(dbClient, userID)
+	userId := ctx.Get("user_id").(string)
+	introduction, err := GetUserIntroductionFromUserId(dbClient, userId)
 	if err != nil {
 		return api.ResGetUserMeIntroduction{}, err
 	}

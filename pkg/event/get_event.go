@@ -12,8 +12,8 @@ import (
 
 func GetEvent(ctx echo.Context, dbClient db.Client, params api.GetEventParams) (api.ResGetEvent, *response.Error) {
 	res := api.ResGetEvent{}
-	userID := ctx.Get("user_id").(string)
-	events, err := getEventList(dbClient, userID, params.Offset)
+	userId := ctx.Get("user_id").(string)
+	events, err := getEventList(dbClient, userId, params.Offset)
 	if err != nil {
 		return api.ResGetEvent{}, err
 	}
@@ -25,19 +25,19 @@ func GetEvent(ctx echo.Context, dbClient db.Client, params api.GetEventParams) (
 }
 
 type event struct {
-	EventID      string `db:"event_id"`
+	EventId      string `db:"event_id"`
 	Name         string `db:"name"`
 	CalendarView bool   `db:"calendar_view"`
 	Reservable   bool   `db:"reservable"`
 	Reservated   bool   `db:"reservated"`
 }
 
-func getEventList(dbClient db.Client, userID string, offset *int) ([]event, *response.Error) {
+func getEventList(dbClient db.Client, userId string, offset *int) ([]event, *response.Error) {
 	params := struct {
-		UserID string `twowaysql:"userID"`
+		UserId string `twowaysql:"userId"`
 		Offset *int   `twowaysql:"offset"`
 	}{
-		UserID: userID,
+		UserId: userId,
 		Offset: offset,
 	}
 	events := []event{}

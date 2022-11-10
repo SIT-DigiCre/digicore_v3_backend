@@ -1,5 +1,5 @@
 required:
-  - eventID
+  - eventId
   - name
   - description
   - calendarView
@@ -7,7 +7,7 @@ required:
   - reservated
   - reservation
 properties:
-  eventID:
+  eventId:
     type: string
   name:
     type: string

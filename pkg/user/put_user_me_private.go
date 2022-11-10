@@ -10,8 +10,8 @@ import (
 )
 
 func PutUserMePrivate(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPutUserMePrivate) (api.ResGetUserMePrivate, *response.Error) {
-	userID := ctx.Get("user_id").(string)
-	err := updateUserPrivate(dbClient, userID, requestBody)
+	userId := ctx.Get("user_id").(string)
+	err := updateUserPrivate(dbClient, userId, requestBody)
 	if err != nil {
 		return api.ResGetUserMePrivate{}, err
 	}
@@ -19,9 +19,9 @@ func PutUserMePrivate(ctx echo.Context, dbClient db.TransactionClient, requestBo
 	return GetUserMePrivate(ctx, dbClient)
 }
 
-func updateUserPrivate(dbClient db.TransactionClient, userID string, requestBody api.ReqPutUserMePrivate) *response.Error {
+func updateUserPrivate(dbClient db.TransactionClient, userId string, requestBody api.ReqPutUserMePrivate) *response.Error {
 	params := struct {
-		UserID                string `twowaysql:"userID"`
+		UserId                string `twowaysql:"userId"`
 		FirstName             string `twowaysql:"firstName"`
 		LastName              string `twowaysql:"lastName"`
 		FirstNameKana         string `twowaysql:"firstNameKana"`
@@ -34,7 +34,7 @@ func updateUserPrivate(dbClient db.TransactionClient, userID string, requestBody
 		ParentHomephoneNumber string `twowaysql:"parentHomephoneNumber"`
 		ParentAddress         string `twowaysql:"parentAddress"`
 	}{
-		UserID:                userID,
+		UserId:                userId,
 		FirstName:             requestBody.FirstName,
 		LastName:              requestBody.LastName,
 		FirstNameKana:         requestBody.FirstNameKana,

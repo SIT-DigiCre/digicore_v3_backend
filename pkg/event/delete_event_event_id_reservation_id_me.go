@@ -9,23 +9,23 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func DeleteEventEventIDReservationIDMe(ctx echo.Context, dbClient db.TransactionClient, eventID string, reservationID string) (api.ResGetEventEventIDReservationID, *response.Error) {
-	userID := ctx.Get("user_id").(string)
-	err := deleteReservationUser(dbClient, reservationID, userID)
+func DeleteEventEventIdReservationIdMe(ctx echo.Context, dbClient db.TransactionClient, eventId string, reservationId string) (api.ResGetEventEventIdReservationId, *response.Error) {
+	userId := ctx.Get("user_id").(string)
+	err := deleteReservationUser(dbClient, reservationId, userId)
 	if err != nil {
-		return api.ResGetEventEventIDReservationID{}, err
+		return api.ResGetEventEventIdReservationId{}, err
 	}
 
-	return GetEventEventIDReservationID(ctx, dbClient, eventID, reservationID)
+	return GetEventEventIdReservationId(ctx, dbClient, eventId, reservationId)
 }
 
-func deleteReservationUser(dbClient db.TransactionClient, reservationID string, userID string) *response.Error {
+func deleteReservationUser(dbClient db.TransactionClient, reservationId string, userId string) *response.Error {
 	params := struct {
-		ReservationID string `twowaysql:"reservationID"`
-		UserID        string `twowaysql:"userID"`
+		ReservationId string `twowaysql:"reservationId"`
+		UserId        string `twowaysql:"userId"`
 	}{
-		ReservationID: reservationID,
-		UserID:        userID,
+		ReservationId: reservationId,
+		UserId:        userId,
 	}
 	_, err := dbClient.Exec("sql/event/delete_reservation_user.sql", &params, false)
 	if err != nil {

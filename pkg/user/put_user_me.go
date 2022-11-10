@@ -10,8 +10,8 @@ import (
 )
 
 func PutUserMe(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPutUserMe) (api.ResGetUserMe, *response.Error) {
-	userID := ctx.Get("user_id").(string)
-	err := updateUserProfile(dbClient, userID, requestBody)
+	userId := ctx.Get("user_id").(string)
+	err := updateUserProfile(dbClient, userId, requestBody)
 	if err != nil {
 		return api.ResGetUserMe{}, err
 	}
@@ -19,15 +19,15 @@ func PutUserMe(ctx echo.Context, dbClient db.TransactionClient, requestBody api.
 	return GetUserMe(ctx, dbClient)
 }
 
-func updateUserProfile(dbClient db.TransactionClient, userID string, requestBody api.ReqPutUserMe) *response.Error {
+func updateUserProfile(dbClient db.TransactionClient, userId string, requestBody api.ReqPutUserMe) *response.Error {
 	params := struct {
-		UserID            string `twowaysql:"userID"`
+		UserId            string `twowaysql:"userId"`
 		IconUrl           string `twowaysql:"iconURL"`
 		SchoolGrade       int    `twowaysql:"schoolGrade"`
 		ShortIntroduction string `twowaysql:"shortIntroduction"`
 		Username          string `twowaysql:"username"`
 	}{
-		UserID:            userID,
+		UserId:            userId,
 		IconUrl:           requestBody.IconUrl,
 		SchoolGrade:       requestBody.SchoolGrade,
 		ShortIntroduction: requestBody.ShortIntroduction,

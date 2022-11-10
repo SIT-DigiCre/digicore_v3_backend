@@ -18,9 +18,9 @@ ResGetUser:
   $ref: "./schemas/res_get_user.yml"
 ResGetUserObjectUser:
   $ref: "./schemas/res_get_user.user.yml"
-ResGetUserUserID:
+ResGetUserUserId:
   $ref: "./schemas/res_get_user_user_id.yml"
-ResGetUserUserIDIntroduction:
+ResGetUserUserIdIntroduction:
   $ref: "./schemas/res_get_user_user_id_introduction.yml"
 ResGetUserMe:
   $ref: "./schemas/res_get_user_me.yml"
@@ -46,15 +46,15 @@ ReqPutUserMeDiscordCallback:
   $ref: "./schemas/req_put_user_me_discord_callback.yml"
 ResGetEvent:
   $ref: "./schemas/res_get_event.yml"
-ResGetEventEventID:
+ResGetEventEventId:
   $ref: "./schemas/res_get_event_event_id.yml"
-ResGetEventEventIDObjectReservation:
+ResGetEventEventIdObjectReservation:
   $ref: "./schemas/res_get_event_event_id.reservation.yml"
-ResGetEventEventIDReservationID:
+ResGetEventEventIdReservationId:
   $ref: "./schemas/res_get_event_event_id_reservation_id.yml"
-ResGetEventEventIDReservationIDObjectUser:
+ResGetEventEventIdReservationIdObjectUser:
   $ref: "./schemas/res_get_event_event_id_reservation_id.user.yml"
-ReqPutEventEventIDReservationIDMe:
+ReqPutEventEventIdReservationIdMe:
   $ref: "./schemas/req_put_event_event_id_reservation_id_me.yml"
 
 

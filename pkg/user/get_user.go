@@ -26,7 +26,7 @@ func GetUser(ctx echo.Context, dbClient db.Client, params api.GetUserParams) (ap
 type userOverview struct {
 	IconUrl           string `db:"icon_url"`
 	ShortIntroduction string `db:"short_introduction"`
-	UserID            string `db:"user_id"`
+	UserId            string `db:"user_id"`
 	Username          string `db:"username"`
 }
 

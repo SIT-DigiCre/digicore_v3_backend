@@ -1,1 +1,1 @@
-INSERT INTO event_reservation_users (reservation_id, user_id, comment, url) VALUES (UUID_TO_BIN(/*reservationID*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'), UUID_TO_BIN(/*userID*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'), /*comment*/'comment', /*url*/'https:');
+INSERT INTO event_reservation_users (reservation_id, user_id, comment, url) VALUES (UUID_TO_BIN(/*reservationId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'), UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'), /*comment*/'comment', /*url*/'https:');

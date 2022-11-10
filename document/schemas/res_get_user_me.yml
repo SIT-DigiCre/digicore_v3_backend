@@ -1,14 +1,14 @@
 required:
-  - userID
+  - userId
   - username
   - studentNumber
   - iconUrl
   - schoolGrade
-  - discordUserID
+  - discordUserId
   - shortIntroduction
   - activeLimit
 properties:
-  userID:
+  userId:
     type: string
   username:
     type: string
@@ -18,7 +18,7 @@ properties:
     type: string
   schoolGrade:
     type: integer
-  discordUserID:
+  discordUserId:
     type: string
   shortIntroduction:
     type: string

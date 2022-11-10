@@ -1,5 +1,5 @@
 required:
-  - reservationID
+  - reservationId
   - name
   - description
   - startDate
@@ -11,7 +11,7 @@ required:
   - capacity
   - freeCapacity
 properties:
-  reservationID:
+  reservationId:
     type: string
   name:
     type: string

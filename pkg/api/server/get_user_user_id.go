@@ -7,10 +7,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *server) GetUserUserID(ctx echo.Context, userID string) error {
+func (s *server) GetUserUserId(ctx echo.Context, userId string) error {
 	dbClient := db.Open()
 
-	res, err := user.GetUserUserID(ctx, &dbClient, userID)
+	res, err := user.GetUserUserId(ctx, &dbClient, userId)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

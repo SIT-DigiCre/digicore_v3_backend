@@ -11,15 +11,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GetUserUserIDIntroduction(ctx echo.Context, dbClient db.Client, userID string) (api.ResGetUserUserIDIntroduction, *response.Error) {
-	res := api.ResGetUserUserIDIntroduction{}
-	introduction, err := GetUserIntroductionFromUserID(dbClient, userID)
+func GetUserUserIdIntroduction(ctx echo.Context, dbClient db.Client, userId string) (api.ResGetUserUserIdIntroduction, *response.Error) {
+	res := api.ResGetUserUserIdIntroduction{}
+	introduction, err := GetUserIntroductionFromUserId(dbClient, userId)
 	if err != nil {
-		return api.ResGetUserUserIDIntroduction{}, err
+		return api.ResGetUserUserIdIntroduction{}, err
 	}
 	rerr := copier.Copy(&res, &introduction)
 	if rerr != nil {
-		return api.ResGetUserUserIDIntroduction{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
+		return api.ResGetUserUserIdIntroduction{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
 	return res, nil
 }

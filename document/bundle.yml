@@ -127,7 +127,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
-  '/user/{userID}':
+  '/user/{userId}':
     get:
       tags:
         - user
@@ -135,7 +135,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: userID
+        - name: userId
           in: path
           required: true
           schema:
@@ -146,14 +146,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResGetUserUserID'
+                $ref: '#/components/schemas/ResGetUserUserId'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
-  '/user/{userID}/introduction':
+  '/user/{userId}/introduction':
     get:
       tags:
         - user
@@ -161,7 +161,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: userID
+        - name: userId
           in: path
           required: true
           schema:
@@ -172,7 +172,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResGetUserUserIDIntroduction'
+                $ref: '#/components/schemas/ResGetUserUserIdIntroduction'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -439,7 +439,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
-  '/event/{eventID}':
+  '/event/{eventId}':
     get:
       tags:
         - event
@@ -447,7 +447,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: eventID
+        - name: eventId
           in: path
           required: true
           schema:
@@ -458,14 +458,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResGetEventEventID'
+                $ref: '#/components/schemas/ResGetEventEventId'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
-  '/event/{eventID}/{reservationID}':
+  '/event/{eventId}/{reservationId}':
     get:
       tags:
         - event
@@ -473,12 +473,12 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: eventID
+        - name: eventId
           in: path
           required: true
           schema:
             type: string
-        - name: reservationID
+        - name: reservationId
           in: path
           required: true
           schema:
@@ -489,14 +489,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResGetEventEventIDReservationID'
+                $ref: '#/components/schemas/ResGetEventEventIdReservationId'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
-  '/event/{eventID}/{reservationID}/me':
+  '/event/{eventId}/{reservationId}/me':
     put:
       tags:
         - event
@@ -504,12 +504,12 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: eventID
+        - name: eventId
           in: path
           required: true
           schema:
             type: string
-        - name: reservationID
+        - name: reservationId
           in: path
           required: true
           schema:
@@ -520,14 +520,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReqPutEventEventIDReservationIDMe'
+              $ref: '#/components/schemas/ReqPutEventEventIdReservationIdMe'
       responses:
         '200':
           description: Success create my event reservation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResGetEventEventIDReservationID'
+                $ref: '#/components/schemas/ResGetEventEventIdReservationId'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -541,12 +541,12 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: eventID
+        - name: eventId
           in: path
           required: true
           schema:
             type: string
-        - name: reservationID
+        - name: reservationId
           in: path
           required: true
           schema:
@@ -557,7 +557,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResGetEventEventIDReservationID'
+                $ref: '#/components/schemas/ResGetEventEventIdReservationId'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -630,12 +630,12 @@ components:
             $ref: '#/components/schemas/ResGetUserObjectUser'
     ResGetUserObjectUser:
       required:
-        - userID
+        - userId
         - username
         - iconUrl
         - shortIntroduction
       properties:
-        userID:
+        userId:
           type: string
         username:
           type: string
@@ -643,18 +643,18 @@ components:
           type: string
         shortIntroduction:
           type: string
-    ResGetUserUserID:
+    ResGetUserUserId:
       required:
-        - userID
+        - userId
         - username
         - studentNumber
         - iconUrl
         - schoolGrade
-        - discordUserID
+        - discordUserId
         - shortIntroduction
         - activeLimit
       properties:
-        userID:
+        userId:
           type: string
         username:
           type: string
@@ -664,13 +664,13 @@ components:
           type: string
         schoolGrade:
           type: integer
-        discordUserID:
+        discordUserId:
           type: string
         shortIntroduction:
           type: string
         activeLimit:
           type: string
-    ResGetUserUserIDIntroduction:
+    ResGetUserUserIdIntroduction:
       required:
         - introduction
       properties:
@@ -678,16 +678,16 @@ components:
           type: string
     ResGetUserMe:
       required:
-        - userID
+        - userId
         - username
         - studentNumber
         - iconUrl
         - schoolGrade
-        - discordUserID
+        - discordUserId
         - shortIntroduction
         - activeLimit
       properties:
-        userID:
+        userId:
           type: string
         username:
           type: string
@@ -697,7 +697,7 @@ components:
           type: string
         schoolGrade:
           type: integer
-        discordUserID:
+        discordUserId:
           type: string
         shortIntroduction:
           type: string
@@ -905,13 +905,13 @@ components:
           type: array
           items:
             required:
-              - eventID
+              - eventId
               - name
               - calendarView
               - reservable
               - reservated
             properties:
-              eventID:
+              eventId:
                 type: string
               name:
                 type: string
@@ -921,9 +921,9 @@ components:
                 type: boolean
               reservated:
                 type: boolean
-    ResGetEventEventID:
+    ResGetEventEventId:
       required:
-        - eventID
+        - eventId
         - name
         - description
         - calendarView
@@ -931,7 +931,7 @@ components:
         - reservated
         - reservation
       properties:
-        eventID:
+        eventId:
           type: string
         name:
           type: string
@@ -946,10 +946,10 @@ components:
         reservation:
           type: array
           items:
-            $ref: '#/components/schemas/ResGetEventEventIDObjectReservation'
-    ResGetEventEventIDObjectReservation:
+            $ref: '#/components/schemas/ResGetEventEventIdObjectReservation'
+    ResGetEventEventIdObjectReservation:
       required:
-        - reservationID
+        - reservationId
         - name
         - description
         - startDate
@@ -961,7 +961,7 @@ components:
         - capacity
         - freeCapacity
       properties:
-        reservationID:
+        reservationId:
           type: string
         name:
           type: string
@@ -983,10 +983,10 @@ components:
           type: integer
         freeCapacity:
           type: integer
-    ResGetEventEventIDReservationID:
+    ResGetEventEventIdReservationId:
       required:
-        - eventID
-        - reservationID
+        - eventId
+        - reservationId
         - name
         - description
         - reservable
@@ -999,9 +999,9 @@ components:
         - freeCapacity
         - user
       properties:
-        eventID:
+        eventId:
           type: string
-        reservationID:
+        reservationId:
           type: string
         name:
           type: string
@@ -1026,16 +1026,16 @@ components:
         user:
           type: array
           items:
-            $ref: '#/components/schemas/ResGetEventEventIDReservationIDObjectUser'
-    ResGetEventEventIDReservationIDObjectUser:
+            $ref: '#/components/schemas/ResGetEventEventIdReservationIdObjectUser'
+    ResGetEventEventIdReservationIdObjectUser:
       required:
-        - userID
+        - userId
         - userIcon
         - name
         - comment
         - url
       properties:
-        userID:
+        userId:
           type: string
         userIcon:
           type: string
@@ -1045,7 +1045,7 @@ components:
           type: string
         url:
           type: string
-    ReqPutEventEventIDReservationIDMe:
+    ReqPutEventEventIdReservationIdMe:
       required:
         - comment
         - url

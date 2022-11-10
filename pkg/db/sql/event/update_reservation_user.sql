@@ -1,1 +1,1 @@
-UPDATE event_reservation_users SET comment =  /*comment*/'comment', url = /*url*/'https:' WHERE reservation_id = UUID_TO_BIN(/*reservationID*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee') AND user_id = UUID_TO_BIN(/*userID*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');
+UPDATE event_reservation_users SET comment =  /*comment*/'comment', url = /*url*/'https:' WHERE reservation_id = UUID_TO_BIN(/*reservationId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee') AND user_id = UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');
