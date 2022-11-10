@@ -28,7 +28,9 @@ func (t *transactionClient) Select(dest interface{}, queryPath string, params in
 func (t *transactionClient) Exec(queryPath string, params interface{}, generateId bool) (sql.Result, error) {
 	if generateId {
 		_, err := t.Exec("sql/transaction/generate_id.sql", nil, false)
-		return nil, err
+		if err != nil {
+			return nil, err
+		}
 	}
 	query, err := t.query.ReadFile(queryPath)
 	if err != nil {
@@ -50,14 +52,14 @@ func (t *transactionClient) Rollback() error {
 }
 
 func (t *transactionClient) GetId() (string, error) {
-	id := struct {
+	id := []struct {
 		Id string `db:"id"`
 	}{}
 	err := t.Select(&id, "sql/transaction/get_id.sql", nil)
 	if err != nil {
 		return "", err
 	}
-	return id.Id, nil
+	return id[0].Id, nil
 }
 
 func (t *transactionClient) DuplicateUpdate(insertQueryPath string, updateQueryPath string, params interface{}) (sql.Result, error) {

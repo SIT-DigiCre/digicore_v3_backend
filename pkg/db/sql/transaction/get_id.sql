@@ -1,1 +1,1 @@
-SELECT @id;
+SELECT @id AS id;
