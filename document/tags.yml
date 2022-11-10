@@ -6,3 +6,5 @@
   description: Event system
 - name: tool
   description: Tool system
+- name: storage
+  description: Storage system

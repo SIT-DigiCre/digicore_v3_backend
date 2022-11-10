@@ -23,6 +23,13 @@ type ReqPostSignupCallback struct {
 	Code string `ja:"認証コード" json:"code" validate:"required"`
 }
 
+// ReqPostStorage defines model for ReqPostStorage.
+type ReqPostStorage struct {
+	File     string `ja:"ファイル" json:"file" validate:"required,max=104857600"`
+	IsPublic bool   `ja:"公開" json:"isPublic" validate:""`
+	Name     string `ja:"ファイル名" json:"name" validate:"required,max=255"`
+}
+
 // ReqPutEventEventIdReservationIdMe defines model for ReqPutEventEventIdReservationIdMe.
 type ReqPutEventEventIdReservationIdMe struct {
 	Comment string `ja:"コメント" json:"comment" validate:"max=255"`
@@ -143,6 +150,36 @@ type ResGetSignup struct {
 // ResGetStatus defines model for ResGetStatus.
 type ResGetStatus struct {
 	Status bool `json:"status"`
+}
+
+// ResGetStorage defines model for ResGetStorage.
+type ResGetStorage struct {
+	File []ResGetStorageObjectFile `json:"file"`
+}
+
+// ResGetStorageFileId defines model for ResGetStorageFileId.
+type ResGetStorageFileId struct {
+	CreatedAt string `json:"createdAt"`
+	Extension string `json:"extension"`
+	FileId    string `json:"fileId"`
+	IsPublic  bool   `json:"isPublic"`
+	KSize     string `json:"kSize"`
+	Name      string `json:"name"`
+	UpdatedAt string `json:"updatedAt"`
+	Url       string `json:"url"`
+	UserId    string `json:"userId"`
+}
+
+// ResGetStorageObjectFile defines model for ResGetStorageObjectFile.
+type ResGetStorageObjectFile struct {
+	CreatedAt string `json:"createdAt"`
+	Extension string `json:"extension"`
+	FileId    string `json:"fileId"`
+	IsPublic  bool   `json:"isPublic"`
+	KSize     string `json:"kSize"`
+	Name      string `json:"name"`
+	UpdatedAt string `json:"updatedAt"`
+	UserId    string `json:"userId"`
 }
 
 // ResGetTool defines model for ResGetTool.
@@ -266,6 +303,12 @@ type PostLoginCallbackJSONBody = ReqPostLoginCallback
 // PostSignupCallbackJSONBody defines parameters for PostSignupCallback.
 type PostSignupCallbackJSONBody = ReqPostSignupCallback
 
+// PostStorageJSONBody defines parameters for PostStorage.
+type PostStorageJSONBody = ReqPostStorage
+
+// PutStorageFileIdJSONBody defines parameters for PutStorageFileId.
+type PutStorageFileIdJSONBody = ReqPostStorage
+
 // GetUserParams defines parameters for GetUser.
 type GetUserParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
@@ -295,6 +338,12 @@ type PostLoginCallbackJSONRequestBody = PostLoginCallbackJSONBody
 
 // PostSignupCallbackJSONRequestBody defines body for PostSignupCallback for application/json ContentType.
 type PostSignupCallbackJSONRequestBody = PostSignupCallbackJSONBody
+
+// PostStorageJSONRequestBody defines body for PostStorage for application/json ContentType.
+type PostStorageJSONRequestBody = PostStorageJSONBody
+
+// PutStorageFileIdJSONRequestBody defines body for PutStorageFileId for application/json ContentType.
+type PutStorageFileIdJSONRequestBody = PutStorageFileIdJSONBody
 
 // PutUserMeJSONRequestBody defines body for PutUserMe for application/json ContentType.
 type PutUserMeJSONRequestBody = PutUserMeJSONBody

@@ -19,6 +19,8 @@ tags:
     description: Event system
   - name: tool
     description: Tool system
+  - name: storage
+    description: Storage system
 paths:
   /status:
     get:
@@ -407,6 +409,8 @@ paths:
       tags:
         - tool
       description: Get tool URL
+      security:
+        - BearerAuth: []
       responses:
         '200':
           description: Tool URL
@@ -562,6 +566,102 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /storage:
+    get:
+      tags:
+        - storage
+      description: Get file list
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: file list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetStorage'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    post:
+      tags:
+        - storage
+      description: Post file
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Upload file
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostStorage'
+      responses:
+        '200':
+          description: Create file
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetStorageFileId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/storage/{fileId}':
+    get:
+      tags:
+        - storage
+      description: Get file
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: fileId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Get file
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetStorageFileId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - storage
+      description: Update file
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: fileId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update file
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostStorage'
+      responses:
+        '200':
+          description: file list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetStorageFileId'
         '500':
           $ref: '#/components/responses/InternalServer'
 components:
@@ -1060,6 +1160,92 @@ components:
           x-oapi-codegen-extra-tags:
             validate: max=255
             ja: URL
+    ResGetStorage:
+      required:
+        - file
+      properties:
+        file:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetStorageObjectFile'
+    ResGetStorageObjectFile:
+      required:
+        - fileId
+        - userId
+        - name
+        - kSize
+        - extension
+        - isPublic
+        - createdAt
+        - updatedAt
+      properties:
+        fileId:
+          type: string
+        userId:
+          type: string
+        name:
+          type: string
+        kSize:
+          type: string
+        extension:
+          type: string
+        isPublic:
+          type: boolean
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    ReqPostStorage:
+      required:
+        - name
+        - file
+        - isPublic
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,max=255'
+            ja: ファイル名
+        file:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,max=104857600'
+            ja: ファイル
+        isPublic:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            validate: null
+            ja: 公開
+    ResGetStorageFileId:
+      required:
+        - fileId
+        - userId
+        - name
+        - kSize
+        - extension
+        - isPublic
+        - createdAt
+        - updatedAt
+        - url
+      properties:
+        fileId:
+          type: string
+        userId:
+          type: string
+        name:
+          type: string
+        kSize:
+          type: string
+        extension:
+          type: string
+        isPublic:
+          type: boolean
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        url:
+          type: string
     Error:
       required:
         - level

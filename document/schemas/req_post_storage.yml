@@ -1,0 +1,20 @@
+required:
+  - name
+  - file
+  - isPublic
+properties:
+  name:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,max=255
+      ja: ファイル名
+  file:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,max=104857600
+      ja: ファイル
+  isPublic:
+    type: boolean
+    x-oapi-codegen-extra-tags:
+      validate:
+      ja: 公開

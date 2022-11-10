@@ -1,0 +1,26 @@
+required:
+  - fileId
+  - userId
+  - name
+  - kSize
+  - extension
+  - isPublic
+  - createdAt
+  - updatedAt
+properties:
+  fileId:
+    type: string
+  userId:
+    type: string
+  name:
+    type: string
+  kSize:
+    type: string
+  extension:
+    type: string
+  isPublic:
+    type: boolean
+  createdAt:
+    type: string
+  updatedAt:
+    type: string

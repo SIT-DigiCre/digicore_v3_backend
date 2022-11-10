@@ -44,6 +44,18 @@ type ServerInterface interface {
 	// (GET /status)
 	GetStatus(ctx echo.Context) error
 
+	// (GET /storage)
+	GetStorage(ctx echo.Context) error
+
+	// (POST /storage)
+	PostStorage(ctx echo.Context) error
+
+	// (GET /storage/{fileId})
+	GetStorageFileId(ctx echo.Context, fileId string) error
+
+	// (PUT /storage/{fileId})
+	PutStorageFileId(ctx echo.Context, fileId string) error
+
 	// (GET /tool)
 	GetTool(ctx echo.Context) error
 
@@ -253,9 +265,69 @@ func (w *ServerInterfaceWrapper) GetStatus(ctx echo.Context) error {
 	return err
 }
 
+// GetStorage converts echo context to params.
+func (w *ServerInterfaceWrapper) GetStorage(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetStorage(ctx)
+	return err
+}
+
+// PostStorage converts echo context to params.
+func (w *ServerInterfaceWrapper) PostStorage(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostStorage(ctx)
+	return err
+}
+
+// GetStorageFileId converts echo context to params.
+func (w *ServerInterfaceWrapper) GetStorageFileId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "fileId" -------------
+	var fileId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "fileId", runtime.ParamLocationPath, ctx.Param("fileId"), &fileId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter fileId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetStorageFileId(ctx, fileId)
+	return err
+}
+
+// PutStorageFileId converts echo context to params.
+func (w *ServerInterfaceWrapper) PutStorageFileId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "fileId" -------------
+	var fileId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "fileId", runtime.ParamLocationPath, ctx.Param("fileId"), &fileId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter fileId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutStorageFileId(ctx, fileId)
+	return err
+}
+
 // GetTool converts echo context to params.
 func (w *ServerInterfaceWrapper) GetTool(ctx echo.Context) error {
 	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetTool(ctx)
@@ -473,6 +545,10 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/signup", wrapper.GetSignup)
 	router.POST(baseURL+"/signup/callback", wrapper.PostSignupCallback)
 	router.GET(baseURL+"/status", wrapper.GetStatus)
+	router.GET(baseURL+"/storage", wrapper.GetStorage)
+	router.POST(baseURL+"/storage", wrapper.PostStorage)
+	router.GET(baseURL+"/storage/:fileId", wrapper.GetStorageFileId)
+	router.PUT(baseURL+"/storage/:fileId", wrapper.PutStorageFileId)
 	router.GET(baseURL+"/tool", wrapper.GetTool)
 	router.GET(baseURL+"/user", wrapper.GetUser)
 	router.GET(baseURL+"/user/me", wrapper.GetUserMe)
