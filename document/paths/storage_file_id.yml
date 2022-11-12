@@ -23,31 +23,3 @@ get:
       $ref: "../responses/not_found.yml"
     500:
       $ref: "../responses/internal_server.yml"
-put:
-  tags:
-    - storage
-  description: "Update file"
-  security:
-    - BearerAuth: []
-  parameters:
-    - name: fileId
-      in: path
-      required: true
-      schema:
-        type: string
-  requestBody:
-    description: "Update file"
-    required: true
-    content:
-      application/json:
-        schema:
-          $ref: "../schemas/req_post_storage.yml"
-  responses:
-    200:
-      description: "file list"
-      content:
-        application/json:
-          schema:
-            $ref: "../schemas/res_get_storage_file_id.yml"
-    500:
-      $ref: "../responses/internal_server.yml"

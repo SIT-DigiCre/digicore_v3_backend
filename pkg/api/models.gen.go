@@ -306,9 +306,6 @@ type PostSignupCallbackJSONBody = ReqPostSignupCallback
 // PostStorageJSONBody defines parameters for PostStorage.
 type PostStorageJSONBody = ReqPostStorage
 
-// PutStorageFileIdJSONBody defines parameters for PutStorageFileId.
-type PutStorageFileIdJSONBody = ReqPostStorage
-
 // GetUserParams defines parameters for GetUser.
 type GetUserParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
@@ -341,9 +338,6 @@ type PostSignupCallbackJSONRequestBody = PostSignupCallbackJSONBody
 
 // PostStorageJSONRequestBody defines body for PostStorage for application/json ContentType.
 type PostStorageJSONRequestBody = PostStorageJSONBody
-
-// PutStorageFileIdJSONRequestBody defines body for PutStorageFileId for application/json ContentType.
-type PutStorageFileIdJSONRequestBody = PutStorageFileIdJSONBody
 
 // PutUserMeJSONRequestBody defines body for PutUserMe for application/json ContentType.
 type PutUserMeJSONRequestBody = PutUserMeJSONBody
