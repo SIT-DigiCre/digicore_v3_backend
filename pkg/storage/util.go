@@ -2,6 +2,7 @@ package storage
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 	"github.com/aws/aws-sdk-go/aws"
@@ -42,4 +43,11 @@ func getBucketName(isPublic bool) string {
 	} else {
 		return env.WasabiPrivateBucket
 	}
+}
+
+func getFileNameFromIDandExt(fileID string, extension string) string {
+	if len(extension) == 0 {
+		return fileID
+	}
+	return fmt.Sprintf("%s.%s", fileID, extension)
 }

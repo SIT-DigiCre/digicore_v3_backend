@@ -17,30 +17,23 @@ import (
 
 func GetStorageFileId(ctx echo.Context, dbClient db.Client, fileId string) (api.ResGetStorageFileId, *response.Error) {
 	res := api.ResGetStorageFileId{}
-	userId := ctx.Get("user_id").(string)
 	file, err := getFileFromFileId(dbClient, fileId)
 	if err != nil {
 		return api.ResGetStorageFileId{}, err
-	}
-	if userId != file.UserId && !res.IsPublic {
-		return api.ResGetStorageFileId{}, &response.Error{Code: http.StatusNotFound, Level: "INFO", Message: "ファイルが有りません", Log: "unaccessed file"}
 	}
 	rerr := copier.Copy(&res, &file)
 	if rerr != nil {
 		return api.ResGetStorageFileId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
-	res.Url, err = getFileURL(fileId, res.Extension, res.IsPublic)
+	key := getFileNameFromIDandExt(fileId, res.Extension)
+	res.Url, err = getFileURL(key, res.IsPublic)
 	if err != nil {
 		return api.ResGetStorageFileId{}, err
 	}
 	return res, nil
 }
 
-func getFileURL(fileId string, extension string, isPublic bool) (string, *response.Error) {
-	key := fileId
-	if len(extension) != 0 {
-		key = fmt.Sprintf("%s.%s", fileId, extension)
-	}
+func getFileURL(key string, isPublic bool) (string, *response.Error) {
 	bucketName := getBucketName(isPublic)
 	if isPublic {
 		return fmt.Sprintf("https://%s/%s/%s", env.WasabiDirectURLDomain, bucketName, key), nil
