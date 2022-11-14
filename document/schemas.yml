@@ -64,6 +64,10 @@ ReqPostStorage:
   $ref: "./schemas/req_post_storage.yml"
 ResGetStorageFileId:
   $ref: "./schemas/res_get_storage_file_id.yml"
+ReqPostMattermostCreateuser:
+  $ref: "./schemas/req_post_mattermost_create_user.yml"
+ResPostMattermostCreateuser:
+  $ref: "./schemas/res_post_mattermost_create_user.yml"
 
 Error:
   $ref: "./schemas/error.yml"

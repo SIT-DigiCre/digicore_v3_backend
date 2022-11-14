@@ -40,3 +40,5 @@
   $ref: "./paths/storage.yml"
 /storage/{fileId}:
   $ref: "./paths/storage_file_id.yml"
+/mattermost/create_user:
+  $ref: "./paths/mattermost_create_user.yml"

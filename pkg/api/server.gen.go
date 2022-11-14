@@ -35,6 +35,9 @@ type ServerInterface interface {
 	// (POST /login/callback)
 	PostLoginCallback(ctx echo.Context) error
 
+	// (POST /mattermost/create_user)
+	PostMattermostCreateUser(ctx echo.Context) error
+
 	// (GET /signup)
 	GetSignup(ctx echo.Context) error
 
@@ -232,6 +235,15 @@ func (w *ServerInterfaceWrapper) PostLoginCallback(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PostLoginCallback(ctx)
+	return err
+}
+
+// PostMattermostCreateUser converts echo context to params.
+func (w *ServerInterfaceWrapper) PostMattermostCreateUser(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostMattermostCreateUser(ctx)
 	return err
 }
 
@@ -521,6 +533,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.PUT(baseURL+"/event/:eventId/:reservationId/me", wrapper.PutEventEventIdReservationIdMe)
 	router.GET(baseURL+"/login", wrapper.GetLogin)
 	router.POST(baseURL+"/login/callback", wrapper.PostLoginCallback)
+	router.POST(baseURL+"/mattermost/create_user", wrapper.PostMattermostCreateUser)
 	router.GET(baseURL+"/signup", wrapper.GetSignup)
 	router.POST(baseURL+"/signup/callback", wrapper.PostSignupCallback)
 	router.GET(baseURL+"/status", wrapper.GetStatus)

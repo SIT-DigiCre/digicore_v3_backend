@@ -18,6 +18,13 @@ type ReqPostLoginCallback struct {
 	Code string `ja:"認証コード" json:"code" validate:"required"`
 }
 
+// ReqPostMattermostCreateuser defines model for ReqPostMattermostCreateuser.
+type ReqPostMattermostCreateuser struct {
+	Nickname string `ja:"ニックネーム" json:"nickname" validate:"required,min=3,max=22"`
+	Password string `ja:"パスワード" json:"password" validate:"required,min=8,max=64"`
+	Username string `ja:"ユーザー名" json:"username" validate:"required,min=3,max=22"`
+}
+
 // ReqPostSignupCallback defines model for ReqPostSignupCallback.
 type ReqPostSignupCallback struct {
 	Code string `ja:"認証コード" json:"code" validate:"required"`
@@ -272,6 +279,11 @@ type ResPostLoginCallback struct {
 	Jwt string `json:"jwt"`
 }
 
+// ResPostMattermostCreateuser defines model for ResPostMattermostCreateuser.
+type ResPostMattermostCreateuser struct {
+	Username string `json:"username"`
+}
+
 // ResPostSignupCallback defines model for ResPostSignupCallback.
 type ResPostSignupCallback struct {
 	Jwt string `json:"jwt"`
@@ -299,6 +311,9 @@ type PutEventEventIdReservationIdMeJSONBody = ReqPutEventEventIdReservationIdMe
 
 // PostLoginCallbackJSONBody defines parameters for PostLoginCallback.
 type PostLoginCallbackJSONBody = ReqPostLoginCallback
+
+// PostMattermostCreateUserJSONBody defines parameters for PostMattermostCreateUser.
+type PostMattermostCreateUserJSONBody = ReqPostMattermostCreateuser
 
 // PostSignupCallbackJSONBody defines parameters for PostSignupCallback.
 type PostSignupCallbackJSONBody = ReqPostSignupCallback
@@ -332,6 +347,9 @@ type PutEventEventIdReservationIdMeJSONRequestBody = PutEventEventIdReservationI
 
 // PostLoginCallbackJSONRequestBody defines body for PostLoginCallback for application/json ContentType.
 type PostLoginCallbackJSONRequestBody = PostLoginCallbackJSONBody
+
+// PostMattermostCreateUserJSONRequestBody defines body for PostMattermostCreateUser for application/json ContentType.
+type PostMattermostCreateUserJSONRequestBody = PostMattermostCreateUserJSONBody
 
 // PostSignupCallbackJSONRequestBody defines body for PostSignupCallback for application/json ContentType.
 type PostSignupCallbackJSONRequestBody = PostSignupCallbackJSONBody

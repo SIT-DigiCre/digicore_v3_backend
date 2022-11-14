@@ -636,6 +636,31 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /mattermost/create_user:
+    post:
+      tags:
+        - mattermost
+      description: Create mattermost account
+      requestBody:
+        description: Mattermost account
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostMattermostCreateuser'
+      responses:
+        '200':
+          description: Success to create mattermost account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostMattermostCreateuser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -1217,6 +1242,33 @@ components:
         updatedAt:
           type: string
         url:
+          type: string
+    ReqPostMattermostCreateuser:
+      required:
+        - username
+        - nickname
+        - password
+      properties:
+        username:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=3,max=22'
+            ja: ユーザー名
+        nickname:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=3,max=22'
+            ja: ニックネーム
+        password:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=8,max=64'
+            ja: パスワード
+    ResPostMattermostCreateuser:
+      required:
+        - username
+      properties:
+        username:
           type: string
     Error:
       required:

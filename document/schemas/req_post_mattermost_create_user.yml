@@ -1,0 +1,20 @@
+required:
+  - username
+  - nickname
+  - password
+properties:
+  username:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=3,max=22
+      ja: ユーザー名
+  nickname:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=3,max=22
+      ja: ニックネーム
+  password:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=8,max=64
+      ja: パスワード
