@@ -5,6 +5,10 @@ get:
   security:
     - BearerAuth: []
   parameters:
+    - name: offset
+      in: query
+      schema:
+        type: integer
     - name: autherId
       in: query
       required: false

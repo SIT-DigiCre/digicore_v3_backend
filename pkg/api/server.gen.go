@@ -99,7 +99,7 @@ type ServerInterface interface {
 	GetUserUserIdIntroduction(ctx echo.Context, userId string) error
 
 	// (GET /work/tag)
-	GetWorkTag(ctx echo.Context) error
+	GetWorkTag(ctx echo.Context, params GetWorkTagParams) error
 
 	// (POST /work/tag)
 	PostWorkTag(ctx echo.Context) error
@@ -271,6 +271,8 @@ func (w *ServerInterfaceWrapper) PostLoginCallback(ctx echo.Context) error {
 // PostMattermostCreateUser converts echo context to params.
 func (w *ServerInterfaceWrapper) PostMattermostCreateUser(ctx echo.Context) error {
 	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PostMattermostCreateUser(ctx)
@@ -534,8 +536,17 @@ func (w *ServerInterfaceWrapper) GetWorkTag(ctx echo.Context) error {
 
 	ctx.Set(BearerAuthScopes, []string{""})
 
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetWorkTagParams
+	// ------------- Optional query parameter "offset" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "offset", ctx.QueryParams(), &params.Offset)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter offset: %s", err))
+	}
+
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetWorkTag(ctx)
+	err = w.Handler.GetWorkTag(ctx, params)
 	return err
 }
 
@@ -612,6 +623,13 @@ func (w *ServerInterfaceWrapper) GetWorkWork(ctx echo.Context) error {
 
 	// Parameter object where we will unmarshal all parameters from the context
 	var params GetWorkWorkParams
+	// ------------- Optional query parameter "offset" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "offset", ctx.QueryParams(), &params.Offset)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter offset: %s", err))
+	}
+
 	// ------------- Optional query parameter "autherId" -------------
 
 	err = runtime.BindQueryParameter("form", true, false, "autherId", ctx.QueryParams(), &params.AutherId)

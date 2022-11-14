@@ -423,8 +423,14 @@ type GetUserParams struct {
 	Seed   *int `form:"seed,omitempty" json:"seed,omitempty"`
 }
 
+// GetWorkTagParams defines parameters for GetWorkTag.
+type GetWorkTagParams struct {
+	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+}
+
 // GetWorkWorkParams defines parameters for GetWorkWork.
 type GetWorkWorkParams struct {
+	Offset   *int    `form:"offset,omitempty" json:"offset,omitempty"`
 	AutherId *string `form:"autherId,omitempty" json:"autherId,omitempty"`
 }
 

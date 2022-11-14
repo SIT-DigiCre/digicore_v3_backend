@@ -643,6 +643,8 @@ paths:
       tags:
         - mattermost
       description: Create mattermost account
+      security:
+        - BearerAuth: []
       requestBody:
         description: Mattermost account
         required: true
@@ -671,6 +673,10 @@ paths:
       security:
         - BearerAuth: []
       parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
         - name: autherId
           in: query
           required: false
@@ -789,6 +795,11 @@ paths:
       description: Get tag list
       security:
         - BearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
       responses:
         '200':
           description: tag list

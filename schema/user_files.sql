@@ -9,5 +9,6 @@ CREATE TABLE user_files
     is_public  BOOLEAN      NOT NULL DEFAULT false,
     created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_user_id_md5_hash_is_public (user_id, md5_hash, is_public),
     PRIMARY KEY (id)
 );

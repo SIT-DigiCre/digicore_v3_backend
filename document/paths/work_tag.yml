@@ -4,6 +4,11 @@ get:
   description: "Get tag list"
   security:
     - BearerAuth: []
+  parameters:
+    - name: offset
+      in: query
+      schema:
+        type: integer
   responses:
     200:
       description: "tag list"
