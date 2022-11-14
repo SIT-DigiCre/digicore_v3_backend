@@ -1,0 +1,11 @@
+required:
+  - userId
+  - name
+  - iconUrl
+properties:
+  userId:
+    type: string
+  name:
+    type: string
+  iconUrl:
+    type: string

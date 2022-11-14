@@ -1,0 +1,70 @@
+get:
+  tags:
+    - work
+  description: "Get tag"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: tagId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      description: "Get tag"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_work_tag_tag_id.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+put:
+  tags:
+    - work
+  description: "Update tag"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: tagId
+      in: path
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: "Update tag"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_put_work_tag_tag_id.yml"
+  responses:
+    200:
+      description: "Update tag"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_work_tag_tag_id.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+delete:
+  tags:
+    - work
+  description: "Delete tag"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: tagId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      $ref: "../responses/blank_success.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

@@ -1,0 +1,7 @@
+required:
+  - work
+properties:
+  work:
+    type: array
+    items:
+      $ref: './res_get_work_work.work.yml'

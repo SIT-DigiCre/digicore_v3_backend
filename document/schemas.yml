@@ -68,6 +68,39 @@ ReqPostMattermostCreateuser:
   $ref: "./schemas/req_post_mattermost_create_user.yml"
 ResPostMattermostCreateuser:
   $ref: "./schemas/res_post_mattermost_create_user.yml"
+ResGetWorkWork:
+  $ref: "./schemas/res_get_work_work.yml"
+ResGetWorkWorkObjectWork:
+  $ref: "./schemas/res_get_work_work.work.yml"
+ResGetWorkWorkObjectWorkObjectAuther:
+  $ref: "./schemas/res_get_work_work.work.auther.yml"
+ResGetWorkWorkObjectWorkObjectTag:
+  $ref: "./schemas/res_get_work_work.work.tag.yml"
+ReqPostWorkWork:
+  $ref: "./schemas/req_post_work_work.yml"
+ResGetWorkWorkWorkId:
+  $ref: "./schemas/res_get_work_work_work_id.yml"
+ResGetWorkWorkWorkIdObjectAuther:
+  $ref: "./schemas/res_get_work_work_work_id.auther.yml"
+ResGetWorkWorkWorkIdObjectTag:
+  $ref: "./schemas/res_get_work_work_work_id.file.yml"
+ResGetWorkWorkWorkIdObjectFile:
+  $ref: "./schemas/res_get_work_work_work_id.tag.yml"
+ReqPutWorkWorkWorkId:
+  $ref: "./schemas/req_put_work_work_work_id.yml"
+ResGetWorkTag:
+  $ref: "./schemas/res_get_work_tag.yml"
+ResGetWorkTagObjectTag:
+  $ref: "./schemas/res_get_work_tag.tag.yml"
+ReqPostWorkTag:
+  $ref: "./schemas/req_post_work_tag.yml"
+ResGetWorkTagTagId:
+  $ref: "./schemas/res_get_work_tag_tag_id.yml"
+
+ReqPutWorkTagTagId:
+  $ref: "./schemas/req_put_work_tag_tag_id.yml"
 
 Error:
   $ref: "./schemas/error.yml"
+Success:
+  $ref: "./schemas/success.yml"

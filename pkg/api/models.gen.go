@@ -37,6 +37,21 @@ type ReqPostStorage struct {
 	Name     string `ja:"ファイル名" json:"name" validate:"required,max=255"`
 }
 
+// ReqPostWorkTag defines model for ReqPostWorkTag.
+type ReqPostWorkTag struct {
+	Description string `ja:"説明" json:"description" validate:"required"`
+	Name        string `ja:"タグ名" json:"name" validate:"required"`
+}
+
+// ReqPostWorkWork defines model for ReqPostWorkWork.
+type ReqPostWorkWork struct {
+	Auther      []string `ja:"作者" json:"auther" validate:"dive,uuid"`
+	Description string   `ja:"説明" json:"description" validate:"required"`
+	File        []string `ja:"ファイル" json:"file" validate:"dive,uuid"`
+	Name        string   `ja:"作品名" json:"name" validate:"required"`
+	Tag         []string `ja:"タグ" json:"tag" validate:"dive,uuid"`
+}
+
 // ReqPutEventEventIdReservationIdMe defines model for ReqPutEventEventIdReservationIdMe.
 type ReqPutEventEventIdReservationIdMe struct {
 	Comment string `ja:"コメント" json:"comment" validate:"max=255"`
@@ -79,6 +94,21 @@ type ReqPutUserMePrivate struct {
 	ParentHomephoneNumber string `ja:"緊急連絡先固定電話番号" json:"parentHomephoneNumber" validate:"required,numeric,min=1,max=15"`
 	ParentName            string `ja:"緊急連絡先氏名" json:"parentName" validate:"required,min=1,max=255"`
 	PhoneNumber           string `ja:"電話番号" json:"phoneNumber" validate:"required,numeric,min=1,max=15"`
+}
+
+// ReqPutWorkTagTagId defines model for ReqPutWorkTagTagId.
+type ReqPutWorkTagTagId struct {
+	Description string `ja:"説明" json:"description" validate:"required"`
+	Name        string `ja:"タグ名" json:"name" validate:"required"`
+}
+
+// ReqPutWorkWorkWorkId defines model for ReqPutWorkWorkWorkId.
+type ReqPutWorkWorkWorkId struct {
+	Auther      []string `ja:"作者" json:"auther" validate:"dive,uuid"`
+	Description string   `ja:"説明" json:"description" validate:"required"`
+	File        []string `ja:"ファイル" json:"file" validate:"dive,uuid"`
+	Name        string   `ja:"作品名" json:"name" validate:"required"`
+	Tag         []string `ja:"タグ" json:"tag" validate:"dive,uuid"`
 }
 
 // ResGetEvent defines model for ResGetEvent.
@@ -274,6 +304,79 @@ type ResGetUserUserIdIntroduction struct {
 	Introduction string `json:"introduction"`
 }
 
+// ResGetWorkTag defines model for ResGetWorkTag.
+type ResGetWorkTag struct {
+	Tag []ResGetWorkTagObjectTag `json:"tag"`
+}
+
+// ResGetWorkTagObjectTag defines model for ResGetWorkTagObjectTag.
+type ResGetWorkTagObjectTag struct {
+	Name  string `json:"name"`
+	TagId string `json:"tagId"`
+}
+
+// ResGetWorkTagTagId defines model for ResGetWorkTagTagId.
+type ResGetWorkTagTagId struct {
+	Description string `json:"description"`
+	Name        string `json:"name"`
+	TagId       string `json:"tagId"`
+}
+
+// ResGetWorkWork defines model for ResGetWorkWork.
+type ResGetWorkWork struct {
+	Work []ResGetWorkWorkObjectWork `json:"work"`
+}
+
+// ResGetWorkWorkObjectWork defines model for ResGetWorkWorkObjectWork.
+type ResGetWorkWorkObjectWork struct {
+	Auther []ResGetWorkWorkObjectWorkObjectAuther `json:"auther"`
+	Name   string                                 `json:"name"`
+	Tag    []ResGetWorkWorkObjectWorkObjectTag    `json:"tag"`
+	WorkId string                                 `json:"workId"`
+}
+
+// ResGetWorkWorkObjectWorkObjectAuther defines model for ResGetWorkWorkObjectWorkObjectAuther.
+type ResGetWorkWorkObjectWorkObjectAuther struct {
+	IconUrl string `json:"iconUrl"`
+	Name    string `json:"name"`
+	UserId  string `json:"userId"`
+}
+
+// ResGetWorkWorkObjectWorkObjectTag defines model for ResGetWorkWorkObjectWorkObjectTag.
+type ResGetWorkWorkObjectWorkObjectTag struct {
+	Name  string `json:"name"`
+	TagId string `json:"tagId"`
+}
+
+// ResGetWorkWorkWorkId defines model for ResGetWorkWorkWorkId.
+type ResGetWorkWorkWorkId struct {
+	Auther      []ResGetWorkWorkWorkIdObjectAuther `json:"auther"`
+	Description string                             `json:"description"`
+	File        []ResGetWorkWorkWorkIdObjectTag    `json:"file"`
+	Name        string                             `json:"name"`
+	Tag         []ResGetWorkWorkWorkIdObjectFile   `json:"tag"`
+	WorkId      string                             `json:"workId"`
+}
+
+// ResGetWorkWorkWorkIdObjectAuther defines model for ResGetWorkWorkWorkIdObjectAuther.
+type ResGetWorkWorkWorkIdObjectAuther struct {
+	IconUrl string `json:"iconUrl"`
+	Name    string `json:"name"`
+	UserId  string `json:"userId"`
+}
+
+// ResGetWorkWorkWorkIdObjectFile defines model for ResGetWorkWorkWorkIdObjectFile.
+type ResGetWorkWorkWorkIdObjectFile struct {
+	Name  string `json:"name"`
+	TagId string `json:"tagId"`
+}
+
+// ResGetWorkWorkWorkIdObjectTag defines model for ResGetWorkWorkWorkIdObjectTag.
+type ResGetWorkWorkWorkIdObjectTag struct {
+	FileId string `json:"fileId"`
+	Name   string `json:"name"`
+}
+
 // ResPostLoginCallback defines model for ResPostLoginCallback.
 type ResPostLoginCallback struct {
 	Jwt string `json:"jwt"`
@@ -289,8 +392,16 @@ type ResPostSignupCallback struct {
 	Jwt string `json:"jwt"`
 }
 
+// Success defines model for Success.
+type Success struct {
+	Success bool `json:"success"`
+}
+
 // BadRequest defines model for BadRequest.
 type BadRequest = Error
+
+// BlankSuccess defines model for BlankSuccess.
+type BlankSuccess = Success
 
 // InternalServer defines model for InternalServer.
 type InternalServer = Error
@@ -310,6 +421,11 @@ type GetEventParams struct {
 type GetUserParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
 	Seed   *int `form:"seed,omitempty" json:"seed,omitempty"`
+}
+
+// GetWorkWorkParams defines parameters for GetWorkWork.
+type GetWorkWorkParams struct {
+	AutherId *string `form:"autherId,omitempty" json:"autherId,omitempty"`
 }
 
 // PutEventEventIdReservationIdMeJSONRequestBody defines body for PutEventEventIdReservationIdMe for application/json ContentType.
@@ -341,3 +457,15 @@ type PutUserMePaymentJSONRequestBody = ReqPutUserMePayment
 
 // PutUserMePrivateJSONRequestBody defines body for PutUserMePrivate for application/json ContentType.
 type PutUserMePrivateJSONRequestBody = ReqPutUserMePrivate
+
+// PostWorkTagJSONRequestBody defines body for PostWorkTag for application/json ContentType.
+type PostWorkTagJSONRequestBody = ReqPostWorkTag
+
+// PutWorkTagTagIdJSONRequestBody defines body for PutWorkTagTagId for application/json ContentType.
+type PutWorkTagTagIdJSONRequestBody = ReqPutWorkTagTagId
+
+// PostWorkWorkJSONRequestBody defines body for PostWorkWork for application/json ContentType.
+type PostWorkWorkJSONRequestBody = ReqPostWorkWork
+
+// PutWorkWorkWorkIdJSONRequestBody defines body for PutWorkWorkWorkId for application/json ContentType.
+type PutWorkWorkWorkIdJSONRequestBody = ReqPutWorkWorkWorkId

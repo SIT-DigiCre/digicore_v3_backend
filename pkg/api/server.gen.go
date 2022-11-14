@@ -97,6 +97,36 @@ type ServerInterface interface {
 
 	// (GET /user/{userId}/introduction)
 	GetUserUserIdIntroduction(ctx echo.Context, userId string) error
+
+	// (GET /work/tag)
+	GetWorkTag(ctx echo.Context) error
+
+	// (POST /work/tag)
+	PostWorkTag(ctx echo.Context) error
+
+	// (DELETE /work/tag/{tagId})
+	DeleteWorkTagTagId(ctx echo.Context, tagId string) error
+
+	// (GET /work/tag/{tagId})
+	GetWorkTagTagId(ctx echo.Context, tagId string) error
+
+	// (PUT /work/tag/{tagId})
+	PutWorkTagTagId(ctx echo.Context, tagId string) error
+
+	// (GET /work/work)
+	GetWorkWork(ctx echo.Context, params GetWorkWorkParams) error
+
+	// (POST /work/work)
+	PostWorkWork(ctx echo.Context) error
+
+	// (DELETE /work/work/{workId})
+	DeleteWorkWorkWorkId(ctx echo.Context, workId string) error
+
+	// (GET /work/work/{workId})
+	GetWorkWorkWorkId(ctx echo.Context, workId string) error
+
+	// (PUT /work/work/{workId})
+	PutWorkWorkWorkId(ctx echo.Context, workId string) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
@@ -498,6 +528,167 @@ func (w *ServerInterfaceWrapper) GetUserUserIdIntroduction(ctx echo.Context) err
 	return err
 }
 
+// GetWorkTag converts echo context to params.
+func (w *ServerInterfaceWrapper) GetWorkTag(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetWorkTag(ctx)
+	return err
+}
+
+// PostWorkTag converts echo context to params.
+func (w *ServerInterfaceWrapper) PostWorkTag(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostWorkTag(ctx)
+	return err
+}
+
+// DeleteWorkTagTagId converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteWorkTagTagId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "tagId" -------------
+	var tagId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "tagId", runtime.ParamLocationPath, ctx.Param("tagId"), &tagId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter tagId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteWorkTagTagId(ctx, tagId)
+	return err
+}
+
+// GetWorkTagTagId converts echo context to params.
+func (w *ServerInterfaceWrapper) GetWorkTagTagId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "tagId" -------------
+	var tagId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "tagId", runtime.ParamLocationPath, ctx.Param("tagId"), &tagId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter tagId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetWorkTagTagId(ctx, tagId)
+	return err
+}
+
+// PutWorkTagTagId converts echo context to params.
+func (w *ServerInterfaceWrapper) PutWorkTagTagId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "tagId" -------------
+	var tagId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "tagId", runtime.ParamLocationPath, ctx.Param("tagId"), &tagId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter tagId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutWorkTagTagId(ctx, tagId)
+	return err
+}
+
+// GetWorkWork converts echo context to params.
+func (w *ServerInterfaceWrapper) GetWorkWork(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetWorkWorkParams
+	// ------------- Optional query parameter "autherId" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "autherId", ctx.QueryParams(), &params.AutherId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter autherId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetWorkWork(ctx, params)
+	return err
+}
+
+// PostWorkWork converts echo context to params.
+func (w *ServerInterfaceWrapper) PostWorkWork(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostWorkWork(ctx)
+	return err
+}
+
+// DeleteWorkWorkWorkId converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteWorkWorkWorkId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "workId" -------------
+	var workId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "workId", runtime.ParamLocationPath, ctx.Param("workId"), &workId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter workId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteWorkWorkWorkId(ctx, workId)
+	return err
+}
+
+// GetWorkWorkWorkId converts echo context to params.
+func (w *ServerInterfaceWrapper) GetWorkWorkWorkId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "workId" -------------
+	var workId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "workId", runtime.ParamLocationPath, ctx.Param("workId"), &workId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter workId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetWorkWorkWorkId(ctx, workId)
+	return err
+}
+
+// PutWorkWorkWorkId converts echo context to params.
+func (w *ServerInterfaceWrapper) PutWorkWorkWorkId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "workId" -------------
+	var workId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "workId", runtime.ParamLocationPath, ctx.Param("workId"), &workId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter workId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutWorkWorkWorkId(ctx, workId)
+	return err
+}
+
 // This is a simple interface which specifies echo.Route addition functions which
 // are present on both echo.Echo and echo.Group, since we want to allow using
 // either of them for path registration
@@ -554,5 +745,15 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.PUT(baseURL+"/user/me/private", wrapper.PutUserMePrivate)
 	router.GET(baseURL+"/user/:userId", wrapper.GetUserUserId)
 	router.GET(baseURL+"/user/:userId/introduction", wrapper.GetUserUserIdIntroduction)
+	router.GET(baseURL+"/work/tag", wrapper.GetWorkTag)
+	router.POST(baseURL+"/work/tag", wrapper.PostWorkTag)
+	router.DELETE(baseURL+"/work/tag/:tagId", wrapper.DeleteWorkTagTagId)
+	router.GET(baseURL+"/work/tag/:tagId", wrapper.GetWorkTagTagId)
+	router.PUT(baseURL+"/work/tag/:tagId", wrapper.PutWorkTagTagId)
+	router.GET(baseURL+"/work/work", wrapper.GetWorkWork)
+	router.POST(baseURL+"/work/work", wrapper.PostWorkWork)
+	router.DELETE(baseURL+"/work/work/:workId", wrapper.DeleteWorkWorkWorkId)
+	router.GET(baseURL+"/work/work/:workId", wrapper.GetWorkWorkWorkId)
+	router.PUT(baseURL+"/work/work/:workId", wrapper.PutWorkWorkWorkId)
 
 }

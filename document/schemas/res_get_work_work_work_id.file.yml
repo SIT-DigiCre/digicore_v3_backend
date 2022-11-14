@@ -1,0 +1,8 @@
+required:
+  - fileId
+  - name
+properties:
+  fileId:
+    type: string
+  name:
+    type: string

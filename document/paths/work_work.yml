@@ -1,0 +1,47 @@
+get:
+  tags:
+    - work
+  description: "Get work list"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: autherId
+      in: query
+      required: false
+      schema:
+        type: string
+  responses:
+    200:
+      description: "work list"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_work_work.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+post:
+  tags:
+    - work
+  description: "Post work"
+  security:
+    - BearerAuth: []
+  requestBody:
+    description: "Create work"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_post_work_work.yml"
+  responses:
+    200:
+      description: "Create work"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_work_work_work_id.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

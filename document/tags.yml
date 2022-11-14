@@ -8,3 +8,5 @@
   description: Tool system
 - name: storage
   description: Storage system
+- name: work
+  description: Work system

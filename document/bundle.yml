@@ -21,6 +21,8 @@ tags:
     description: Tool system
   - name: storage
     description: Storage system
+  - name: work
+    description: Work system
 paths:
   /status:
     get:
@@ -661,6 +663,238 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /work/work:
+    get:
+      tags:
+        - work
+      description: Get work list
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: autherId
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: work list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkWork'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    post:
+      tags:
+        - work
+      description: Post work
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Create work
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostWorkWork'
+      responses:
+        '200':
+          description: Create work
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkWorkWorkId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/work/work/{workId}':
+    get:
+      tags:
+        - work
+      description: Get work
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: workId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Get work
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkWorkWorkId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - work
+      description: Update work
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: workId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update work
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutWorkWorkWorkId'
+      responses:
+        '200':
+          description: Create work
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkWorkWorkId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - work
+      description: Delete work
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: workId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /work/tag:
+    get:
+      tags:
+        - work
+      description: Get tag list
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: tag list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkTag'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    post:
+      tags:
+        - work
+      description: Post tag
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Create tag
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostWorkTag'
+      responses:
+        '200':
+          description: Create tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkTagTagId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/work/tag/{tagId}':
+    get:
+      tags:
+        - work
+      description: Get tag
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Get tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkTagTagId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - work
+      description: Update tag
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update tag
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutWorkTagTagId'
+      responses:
+        '200':
+          description: Update tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkTagTagId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - work
+      description: Delete tag
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -1270,6 +1504,248 @@ components:
       properties:
         username:
           type: string
+    ResGetWorkWork:
+      required:
+        - work
+      properties:
+        work:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkObjectWork'
+    ResGetWorkWorkObjectWork:
+      required:
+        - workId
+        - name
+        - auther
+        - tag
+      properties:
+        workId:
+          type: string
+        name:
+          type: string
+        auther:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkObjectWorkObjectAuther'
+        tag:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkObjectWorkObjectTag'
+    ResGetWorkWorkObjectWorkObjectAuther:
+      required:
+        - userId
+        - name
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        name:
+          type: string
+        iconUrl:
+          type: string
+    ResGetWorkWorkObjectWorkObjectTag:
+      required:
+        - tagId
+        - name
+      properties:
+        tagId:
+          type: string
+        name:
+          type: string
+    ReqPostWorkWork:
+      required:
+        - name
+        - description
+        - auther
+        - file
+        - tag
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 作品名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 説明
+        auther:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: 作者
+        file:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: ファイル
+        tag:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: タグ
+    ResGetWorkWorkWorkId:
+      required:
+        - workId
+        - name
+        - description
+        - auther
+        - file
+        - tag
+      properties:
+        workId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        auther:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectAuther'
+        file:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectTag'
+        tag:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectFile'
+    ResGetWorkWorkWorkIdObjectAuther:
+      required:
+        - userId
+        - name
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        name:
+          type: string
+        iconUrl:
+          type: string
+    ResGetWorkWorkWorkIdObjectTag:
+      required:
+        - fileId
+        - name
+      properties:
+        fileId:
+          type: string
+        name:
+          type: string
+    ResGetWorkWorkWorkIdObjectFile:
+      required:
+        - tagId
+        - name
+      properties:
+        tagId:
+          type: string
+        name:
+          type: string
+    ReqPutWorkWorkWorkId:
+      required:
+        - name
+        - description
+        - auther
+        - file
+        - tag
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 作品名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 説明
+        auther:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: 作者
+        file:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: ファイル
+        tag:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: タグ
+    ResGetWorkTag:
+      required:
+        - tag
+      properties:
+        tag:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkTagObjectTag'
+    ResGetWorkTagObjectTag:
+      required:
+        - tagId
+        - name
+      properties:
+        tagId:
+          type: string
+        name:
+          type: string
+    ReqPostWorkTag:
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: タグ名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 説明
+    ResGetWorkTagTagId:
+      required:
+        - tagId
+        - name
+        - description
+      properties:
+        tagId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    ReqPutWorkTagTagId:
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: タグ名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 説明
     Error:
       required:
         - level
@@ -1279,6 +1755,12 @@ components:
           type: string
         message:
           type: string
+    Success:
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
   responses:
     BadRequest:
       description: 'Validation error, etc.'
@@ -1304,6 +1786,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    BlankSuccess:
+      description: Success response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Success'
   securitySchemes:
     BearerAuth:
       type: http

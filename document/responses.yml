@@ -6,3 +6,6 @@ NotFound:
   $ref: "./responses/not_found.yml"
 InternalServer:
   $ref: "./responses/internal_server.yml"
+
+BlankSuccess:
+  $ref: "./responses/blank_success.yml"

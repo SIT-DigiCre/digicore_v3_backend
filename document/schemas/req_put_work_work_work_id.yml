@@ -1,0 +1,38 @@
+required:
+  - name
+  - description
+  - auther
+  - file
+  - tag
+properties:
+  name:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 作品名
+  description:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 説明
+  auther:
+    type: array
+    items:
+      type: string
+    x-oapi-codegen-extra-tags:
+      validate: dive,uuid
+      ja: 作者
+  file:
+    type: array
+    items:
+      type: string
+    x-oapi-codegen-extra-tags:
+      validate: dive,uuid
+      ja: ファイル
+  tag:
+    type: array
+    items:
+      type: string
+    x-oapi-codegen-extra-tags:
+      validate: dive,uuid
+      ja: タグ

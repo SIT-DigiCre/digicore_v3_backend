@@ -1,0 +1,18 @@
+required:
+  - workId
+  - name
+  - auther
+  - tag
+properties:
+  workId:
+    type: string
+  name:
+    type: string
+  auther:
+    type: array
+    items:
+      $ref: './res_get_work_work.work.auther.yml'
+  tag:
+    type: array
+    items:
+      $ref: './res_get_work_work.work.tag.yml'

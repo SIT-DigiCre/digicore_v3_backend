@@ -42,3 +42,11 @@
   $ref: "./paths/storage_file_id.yml"
 /mattermost/create_user:
   $ref: "./paths/mattermost_create_user.yml"
+/work/work:
+  $ref: "./paths/work_work.yml"
+/work/work/{workId}:
+  $ref: "./paths/work_work_work_id.yml"
+/work/tag:
+  $ref: "./paths/work_tag.yml"
+/work/tag/{tagId}:
+  $ref: "./paths/work_tag_tag_id.yml"
