@@ -2,6 +2,8 @@ post:
   tags:
     - mattermost
   description: "Create mattermost account"
+  security:
+    - BearerAuth: []
   requestBody:
     description: "Mattermost account"
     required: true
