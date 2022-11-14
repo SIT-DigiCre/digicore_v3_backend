@@ -1,11 +1,11 @@
 required:
   - userId
-  - name
+  - username
   - iconUrl
 properties:
   userId:
     type: string
-  name:
+  username:
     type: string
   iconUrl:
     type: string

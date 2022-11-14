@@ -337,9 +337,9 @@ type ResGetWorkWorkObjectWork struct {
 
 // ResGetWorkWorkObjectWorkObjectAuther defines model for ResGetWorkWorkObjectWorkObjectAuther.
 type ResGetWorkWorkObjectWorkObjectAuther struct {
-	IconUrl string `json:"iconUrl"`
-	Name    string `json:"name"`
-	UserId  string `json:"userId"`
+	IconUrl  string `json:"iconUrl"`
+	UserId   string `json:"userId"`
+	Username string `json:"username"`
 }
 
 // ResGetWorkWorkObjectWorkObjectTag defines model for ResGetWorkWorkObjectWorkObjectTag.
@@ -360,9 +360,9 @@ type ResGetWorkWorkWorkId struct {
 
 // ResGetWorkWorkWorkIdObjectAuther defines model for ResGetWorkWorkWorkIdObjectAuther.
 type ResGetWorkWorkWorkIdObjectAuther struct {
-	IconUrl string `json:"iconUrl"`
-	Name    string `json:"name"`
-	UserId  string `json:"userId"`
+	IconUrl  string `json:"iconUrl"`
+	UserId   string `json:"userId"`
+	Username string `json:"username"`
 }
 
 // ResGetWorkWorkWorkIdObjectFile defines model for ResGetWorkWorkWorkIdObjectFile.

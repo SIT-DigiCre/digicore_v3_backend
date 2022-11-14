@@ -1545,12 +1545,12 @@ components:
     ResGetWorkWorkObjectWorkObjectAuther:
       required:
         - userId
-        - name
+        - username
         - iconUrl
       properties:
         userId:
           type: string
-        name:
+        username:
           type: string
         iconUrl:
           type: string
@@ -1632,12 +1632,12 @@ components:
     ResGetWorkWorkWorkIdObjectAuther:
       required:
         - userId
-        - name
+        - username
         - iconUrl
       properties:
         userId:
           type: string
-        name:
+        username:
           type: string
         iconUrl:
           type: string

@@ -1,0 +1,1 @@
+SELECT BIN_TO_UUID(work_users.user_id) AS user_id, username, icon_url FROM work_users LEFT JOIN user_profiles ON user_profiles.user_id = work_users.user_id WHERE work_id = UUID_TO_BIN(/*workId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');
