@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/deepmap/oapi-codegen/examples/petstore-expanded/echo/api"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/labstack/echo/v4"
 	"github.com/lestrrat-go/jwx/v2/jwa"

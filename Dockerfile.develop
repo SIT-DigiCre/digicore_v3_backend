@@ -1,4 +1,4 @@
-FROM golang:1.19.0 as development
+FROM golang:1.19.3 as development
 
 WORKDIR "/app"
 COPY go.mod go.sum ./
@@ -9,6 +9,15 @@ COPY . .
 
 CMD ["air", "-c", "./config/.air.toml"]
 
-FROM node:16.17.0 as node_tool
+FROM golang:1.19.3 as admin
+
+WORKDIR "/app"
+RUN go install github.com/k0kubun/sqldef/cmd/mysqldef@v0.13.19
+RUN go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@v1.12.2
+RUN apt-get update && apt-get install -y default-mysql-client-core
+
+COPY . .
+
+FROM node:18.12.1 as node_tool
 
 RUN npm install -g @apidevtools/swagger-cli@4.0.4

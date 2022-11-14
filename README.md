@@ -14,13 +14,14 @@
 ## コンテナのビルド
 
 ```sh
-docker compose build
+make build
 ```
 
 ## 実行
 
 ```sh
-docker compose up
+make up
+# make up-d
 ```
 
 ## DBマイグレーション

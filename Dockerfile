@@ -1,4 +1,4 @@
-FROM golang:1.19.0 as build
+FROM golang:1.19.3 as build
 
 WORKDIR /work
 COPY . .
@@ -11,11 +11,10 @@ COPY --from=build /work/digicore_v3_backend /
 
 CMD ["/digicore_v3_backend"]
 
-FROM golang:1.19.0 as admin
+FROM golang:1.19.3 as admin
 
 WORKDIR "/app"
-RUN go install github.com/k0kubun/sqldef/cmd/mysqldef@v0.13.9
-RUN go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@v1.11.0
+RUN go install github.com/k0kubun/sqldef/cmd/mysqldef@v0.13.19
 RUN apt-get update && apt-get install -y default-mysql-client-core
 
 COPY . .
