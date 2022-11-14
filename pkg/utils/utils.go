@@ -10,3 +10,16 @@ func GetSchoolYear() int {
 	}
 	return now.Year()
 }
+
+func GetUniqueString(str []string) []string {
+	m := make(map[string]bool)
+	uniq := []string{}
+
+	for _, ele := range str {
+		if !m[ele] {
+			m[ele] = true
+			uniq = append(uniq, ele)
+		}
+	}
+	return uniq
+}
