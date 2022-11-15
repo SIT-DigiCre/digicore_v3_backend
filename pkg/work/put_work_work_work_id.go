@@ -10,7 +10,15 @@ import (
 )
 
 func PutWorkWorkWorkId(ctx echo.Context, dbClient db.TransactionClient, workId string, requestBody api.ReqPutWorkWorkWorkId) (api.ResGetWorkWorkWorkId, *response.Error) {
-	err := deleteWorkAuther(dbClient, workId)
+	userId := ctx.Get("user_id").(string)
+	permission, err := checkWorkAuther(dbClient, workId, userId)
+	if err != nil {
+		return api.ResGetWorkWorkWorkId{}, err
+	}
+	if !permission {
+		return api.ResGetWorkWorkWorkId{}, &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "編集権限がありません", Log: "no edit permission"}
+	}
+	err = deleteWorkAuther(dbClient, workId)
 	if err != nil {
 		return api.ResGetWorkWorkWorkId{}, err
 	}
@@ -39,6 +47,19 @@ func PutWorkWorkWorkId(ctx echo.Context, dbClient db.TransactionClient, workId s
 		return api.ResGetWorkWorkWorkId{}, err
 	}
 	return GetWorkWorkWorkId(ctx, dbClient, workId)
+}
+
+func checkWorkAuther(dbClient db.Client, workId string, userId string) (bool, *response.Error) {
+	authers, err := getWorkWorkAutherList(dbClient, workId)
+	if err != nil {
+		return false, err
+	}
+	for _, auther := range authers {
+		if auther.UserId == userId {
+			return true, nil
+		}
+	}
+	return false, nil
 }
 
 func updateWork(dbClient db.TransactionClient, workId string, requestBody api.ReqPutWorkWorkWorkId) *response.Error {
