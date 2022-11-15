@@ -34,7 +34,7 @@ type work struct {
 
 type workObjectAuther struct {
 	UserId   string `db:"user_id"`
-	UserName string `db:"username"`
+	Username string `db:"username"`
 	IconUrl  string `db:"icon_url"`
 }
 
