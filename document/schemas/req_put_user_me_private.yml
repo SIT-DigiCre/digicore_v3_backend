@@ -8,7 +8,6 @@ required:
   - address
   - parentName
   - parentCellphoneNumber
-  - parentHomephoneNumber
   - parentAddress
 properties:
   lastName:
@@ -34,12 +33,12 @@ properties:
   isMale:
     type: boolean
     x-oapi-codegen-extra-tags:
-      validate: 
+      validate:
       ja: 性別
   phoneNumber:
     type: string
     x-oapi-codegen-extra-tags:
-      validate: required,numeric,min=1,max=15
+      validate: required,phonenumber
       ja: 電話番号
   address:
     type: string
@@ -54,12 +53,12 @@ properties:
   parentCellphoneNumber:
     type: string
     x-oapi-codegen-extra-tags:
-      validate: required,numeric,min=1,max=15
+      validate: required,phonenumber
       ja: 緊急連絡先携帯電話番号
   parentHomephoneNumber:
     type: string
     x-oapi-codegen-extra-tags:
-      validate: required,numeric,min=1,max=15
+      validate: phonenumber
       ja: 緊急連絡先固定電話番号
   parentAddress:
     type: string

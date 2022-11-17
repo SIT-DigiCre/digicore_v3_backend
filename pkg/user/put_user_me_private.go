@@ -21,18 +21,18 @@ func PutUserMePrivate(ctx echo.Context, dbClient db.TransactionClient, requestBo
 
 func updateUserPrivate(dbClient db.TransactionClient, userId string, requestBody api.ReqPutUserMePrivate) *response.Error {
 	params := struct {
-		UserId                string `twowaysql:"userId"`
-		FirstName             string `twowaysql:"firstName"`
-		LastName              string `twowaysql:"lastName"`
-		FirstNameKana         string `twowaysql:"firstNameKana"`
-		LastNameKana          string `twowaysql:"lastNameKana"`
-		IsMale                bool   `twowaysql:"isMale"`
-		PhoneNumber           string `twowaysql:"phoneNumber"`
-		Address               string `twowaysql:"address"`
-		ParentName            string `twowaysql:"parentName"`
-		ParentCellphoneNumber string `twowaysql:"parentCellphoneNumber"`
-		ParentHomephoneNumber string `twowaysql:"parentHomephoneNumber"`
-		ParentAddress         string `twowaysql:"parentAddress"`
+		UserId                string  `twowaysql:"userId"`
+		FirstName             string  `twowaysql:"firstName"`
+		LastName              string  `twowaysql:"lastName"`
+		FirstNameKana         string  `twowaysql:"firstNameKana"`
+		LastNameKana          string  `twowaysql:"lastNameKana"`
+		IsMale                bool    `twowaysql:"isMale"`
+		PhoneNumber           string  `twowaysql:"phoneNumber"`
+		Address               string  `twowaysql:"address"`
+		ParentName            string  `twowaysql:"parentName"`
+		ParentCellphoneNumber string  `twowaysql:"parentCellphoneNumber"`
+		ParentHomephoneNumber *string `twowaysql:"parentHomephoneNumber"`
+		ParentAddress         string  `twowaysql:"parentAddress"`
 	}{
 		UserId:                userId,
 		FirstName:             requestBody.FirstName,

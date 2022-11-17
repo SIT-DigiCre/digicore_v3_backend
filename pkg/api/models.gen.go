@@ -83,17 +83,17 @@ type ReqPutUserMePayment struct {
 
 // ReqPutUserMePrivate defines model for ReqPutUserMePrivate.
 type ReqPutUserMePrivate struct {
-	Address               string `ja:"住所" json:"address" validate:"required,min=1,max=255"`
-	FirstName             string `ja:"名前" json:"firstName" validate:"required,min=1,max=255"`
-	FirstNameKana         string `ja:"名前(カナ)" json:"firstNameKana" validate:"required,min=1,max=255"`
-	IsMale                bool   `ja:"性別" json:"isMale" validate:""`
-	LastName              string `ja:"名字" json:"lastName" validate:"required,min=1,max=255"`
-	LastNameKana          string `ja:"名字(カナ)" json:"lastNameKana" validate:"required,min=1,max=255"`
-	ParentAddress         string `ja:"緊急連絡先住所" json:"parentAddress" validate:"required,min=1,max=255"`
-	ParentCellphoneNumber string `ja:"緊急連絡先携帯電話番号" json:"parentCellphoneNumber" validate:"required,numeric,min=1,max=15"`
-	ParentHomephoneNumber string `ja:"緊急連絡先固定電話番号" json:"parentHomephoneNumber" validate:"required,numeric,min=1,max=15"`
-	ParentName            string `ja:"緊急連絡先氏名" json:"parentName" validate:"required,min=1,max=255"`
-	PhoneNumber           string `ja:"電話番号" json:"phoneNumber" validate:"required,numeric,min=1,max=15"`
+	Address               string  `ja:"住所" json:"address" validate:"required,min=1,max=255"`
+	FirstName             string  `ja:"名前" json:"firstName" validate:"required,min=1,max=255"`
+	FirstNameKana         string  `ja:"名前(カナ)" json:"firstNameKana" validate:"required,min=1,max=255"`
+	IsMale                bool    `ja:"性別" json:"isMale" validate:""`
+	LastName              string  `ja:"名字" json:"lastName" validate:"required,min=1,max=255"`
+	LastNameKana          string  `ja:"名字(カナ)" json:"lastNameKana" validate:"required,min=1,max=255"`
+	ParentAddress         string  `ja:"緊急連絡先住所" json:"parentAddress" validate:"required,min=1,max=255"`
+	ParentCellphoneNumber string  `ja:"緊急連絡先携帯電話番号" json:"parentCellphoneNumber" validate:"required,phonenumber"`
+	ParentHomephoneNumber *string `ja:"緊急連絡先固定電話番号" json:"parentHomephoneNumber,omitempty" validate:"phonenumber"`
+	ParentName            string  `ja:"緊急連絡先氏名" json:"parentName" validate:"required,min=1,max=255"`
+	PhoneNumber           string  `ja:"電話番号" json:"phoneNumber" validate:"required,phonenumber"`
 }
 
 // ReqPutWorkTagTagId defines model for ReqPutWorkTagTagId.
