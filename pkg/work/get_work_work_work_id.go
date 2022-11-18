@@ -26,9 +26,9 @@ func GetWorkWorkWorkId(ctx echo.Context, dbClient db.Client, workId string) (api
 type work struct {
 	Authors     []workObjectAuthor `db:"author"`
 	Description string             `db:"description"`
-	File        []workObjectFile   `db:"file"`
+	Files       []workObjectFile   `db:"file"`
 	Name        string             `db:"name"`
-	Tag         []workObjectTag    `db:"tag"`
+	Tags        []workObjectTag    `db:"tag"`
 	WorkId      string             `db:"work_id"`
 }
 
@@ -71,12 +71,12 @@ func getWorkFromTagId(dbClient db.Client, workId string) (work, *response.Error)
 	if err != nil {
 		return work{}, err
 	}
-	works[0].Tag = workTags
+	works[0].Tags = workTags
 	workFiles, err := getWorkWorkFileList(dbClient, workId)
 	if err != nil {
 		return work{}, err
 	}
-	works[0].File = workFiles
+	works[0].Files = workFiles
 	return works[0], nil
 }
 
