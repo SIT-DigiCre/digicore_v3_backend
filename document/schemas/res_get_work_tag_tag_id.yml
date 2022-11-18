@@ -1,0 +1,11 @@
+required:
+  - tagId
+  - name
+  - description
+properties:
+  tagId:
+    type: string
+  name:
+    type: string
+  description:
+    type: string

@@ -1,0 +1,52 @@
+/status:
+  $ref: "./paths/status.yml"
+/signup:
+  $ref: "./paths/signup.yml"
+/signup/callback:
+  $ref: "./paths/signup_callback.yml"
+/login:
+  $ref: "./paths/login.yml"
+/login/callback:
+  $ref: "./paths/login_callback.yml"
+/user:
+  $ref: "./paths/user.yml"
+/user/{userId}:
+  $ref: "./paths/user_user_id.yml"
+/user/{userId}/introduction:
+  $ref: "./paths/user_user_id_introduction.yml"
+/user/me:
+  $ref: "./paths/user_me.yml"
+/user/me/discord:
+  $ref: "./paths/user_me_discord.yml"
+/user/me/discord/callback:
+  $ref: "./paths/user_me_discord_callback.yml"
+/user/me/introduction:
+  $ref: "./paths/user_me_introduction.yml"
+/user/me/private:
+  $ref: "./paths/user_me_private.yml"
+/user/me/payment:
+  $ref: "./paths/user_me_payment.yml"
+/tool:
+  $ref: "./paths/tool.yml"
+/event:
+  $ref: "./paths/event.yml"
+/event/{eventId}:
+  $ref: "./paths/event_event_id.yml"
+/event/{eventId}/{reservationId}:
+  $ref: "./paths/event_event_id_reservation_id.yml"
+/event/{eventId}/{reservationId}/me:
+  $ref: "./paths/event_event_id_reservation_id_me.yml"
+/storage/myfile:
+  $ref: "./paths/storage_myfile.yml"
+/storage/{fileId}:
+  $ref: "./paths/storage_file_id.yml"
+/mattermost/create_user:
+  $ref: "./paths/mattermost_create_user.yml"
+/work/work:
+  $ref: "./paths/work_work.yml"
+/work/work/{workId}:
+  $ref: "./paths/work_work_work_id.yml"
+/work/tag:
+  $ref: "./paths/work_tag.yml"
+/work/tag/{tagId}:
+  $ref: "./paths/work_tag_tag_id.yml"

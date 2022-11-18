@@ -1,0 +1,67 @@
+put:
+  tags:
+    - event
+  description: "Create my event reservation"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: eventId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: reservationId
+      in: path
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: "My event reservation"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_put_event_event_id_reservation_id_me.yml"
+  responses:
+    200:
+      description: "Success create my event reservation"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_event_event_id_reservation_id.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+delete:
+  tags:
+    - event
+  description: "Delete my event reservation"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: eventId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: reservationId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      description: "Success delete my event reservation"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_event_event_id_reservation_id.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

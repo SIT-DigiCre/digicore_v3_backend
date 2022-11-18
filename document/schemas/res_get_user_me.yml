@@ -1,0 +1,26 @@
+required:
+  - userId
+  - username
+  - studentNumber
+  - iconUrl
+  - schoolGrade
+  - discordUserId
+  - shortIntroduction
+  - activeLimit
+properties:
+  userId:
+    type: string
+  username:
+    type: string
+  studentNumber:
+    type: string
+  iconUrl:
+    type: string
+  schoolGrade:
+    type: integer
+  discordUserId:
+    type: string
+  shortIntroduction:
+    type: string
+  activeLimit:
+    type: string

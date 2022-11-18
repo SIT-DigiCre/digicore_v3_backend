@@ -1,0 +1,17 @@
+required:
+  - userId
+  - userIcon
+  - name
+  - comment
+  - url
+properties:
+  userId:
+    type: string
+  userIcon:
+    type: string
+  name:
+    type: string
+  comment:
+    type: string
+  url:
+    type: string

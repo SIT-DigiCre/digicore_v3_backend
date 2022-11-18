@@ -1,0 +1,8 @@
+required:
+  - code
+properties:
+  code:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 認証コード

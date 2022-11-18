@@ -1,0 +1,11 @@
+get:
+  tags:
+    - auth
+  description: "Get signup URL"
+  responses:
+    200:
+      description: "Signup URL"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_signup.yml"

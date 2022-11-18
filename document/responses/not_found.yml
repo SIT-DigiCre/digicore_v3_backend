@@ -1,0 +1,5 @@
+description: "Resource does not exist, etc."
+content:
+  application/json:
+    schema:
+      $ref: "../schemas/error.yml"

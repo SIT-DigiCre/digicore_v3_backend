@@ -1,0 +1,1 @@
+SELECT BIN_TO_UUID(user_id) as user_id, username, icon_url, short_introduction FROM user_profiles /* IF seed */ ORDER BY rand(/*seed*/0) /* END */ LIMIT 100 /* IF offset */ OFFSET /*offset*/0 /* END */;

@@ -1,0 +1,12 @@
+- name: auth
+  description: Authentication system
+- name: user
+  description: User system
+- name: event
+  description: Event system
+- name: tool
+  description: Tool system
+- name: storage
+  description: Storage system
+- name: work
+  description: Work system

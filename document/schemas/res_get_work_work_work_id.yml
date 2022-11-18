@@ -1,0 +1,26 @@
+required:
+  - workId
+  - name
+  - description
+  - authors
+  - files
+  - tags
+properties:
+  workId:
+    type: string
+  name:
+    type: string
+  description:
+    type: string
+  authors:
+    type: array
+    items:
+      $ref: './res_get_work_work_work_id.author.yml'
+  files:
+    type: array
+    items:
+      $ref: './res_get_work_work_work_id.file.yml'
+  tags:
+    type: array
+    items:
+      $ref: './res_get_work_work_work_id.tag.yml'

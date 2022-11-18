@@ -1,0 +1,35 @@
+required:
+  - lastName
+  - lastNameKana
+  - firstName
+  - firstNameKana
+  - isMale
+  - phoneNumber
+  - address
+  - parentName
+  - parentCellphoneNumber
+  - parentHomephoneNumber
+  - parentAddress
+properties:
+  lastName:
+    type: string
+  lastNameKana:
+    type: string
+  firstName:
+    type: string
+  firstNameKana:
+    type: string
+  isMale:
+    type: boolean
+  phoneNumber:
+    type: string
+  address:
+    type: string
+  parentName:
+    type: string
+  parentCellphoneNumber:
+    type: string
+  parentHomephoneNumber:
+    type: string
+  parentAddress:
+    type: string

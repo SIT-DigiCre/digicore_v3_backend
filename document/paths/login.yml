@@ -1,0 +1,11 @@
+get:
+  tags:
+    - auth
+  description: "Get login URL"
+  responses:
+    200:
+      description: "Login URL"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_login.yml"

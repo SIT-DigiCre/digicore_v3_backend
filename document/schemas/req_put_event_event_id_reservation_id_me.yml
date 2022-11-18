@@ -1,0 +1,14 @@
+required:
+  - comment
+  - url
+properties:
+  comment:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: max=255
+      ja: コメント
+  url:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: max=255
+      ja: URL

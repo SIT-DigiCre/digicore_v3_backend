@@ -1,0 +1,1 @@
+INSERT INTO user_files (id, user_id, name, k_size, md5_hash, extension, is_public) VALUES (UUID_TO_BIN(@Id), UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'), /*name*/'a.txt', /*kSize*/10, /*md5Hash*/'00000000000000000000000000000000', /*extension*/'txt', /*isPublic*/true);

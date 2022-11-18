@@ -1,0 +1,13 @@
+get:
+  tags:
+    - tool
+  description: "Get tool URL"
+  security:
+    - BearerAuth: []
+  responses:
+    200:
+      description: "Tool URL"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_tool.yml"

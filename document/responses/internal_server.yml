@@ -1,0 +1,5 @@
+description: "System error, etc."
+content:
+  application/json:
+    schema:
+      $ref: "../schemas/error.yml"

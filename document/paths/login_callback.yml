@@ -1,0 +1,20 @@
+post:
+  tags:
+    - auth
+  description: "Verify auth"
+  requestBody:
+    description: "Auth information"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_post_login_callback.yml"
+  responses:
+    200:
+      description: "Success signup"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_post_login_callback.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

@@ -1,0 +1,43 @@
+required:
+  - eventId
+  - reservationId
+  - name
+  - description
+  - reservable
+  - reservated
+  - startDate
+  - finishDate
+  - reservationFinishDate
+  - reservationStartDate
+  - capacity
+  - freeCapacity
+  - users
+properties:
+  eventId:
+    type: string
+  reservationId:
+    type: string
+  name:
+    type: string
+  description:
+    type: string
+  startDate:
+    type: string
+  finishDate:
+    type: string
+  reservable:
+    type: boolean
+  reservated:
+    type: boolean
+  reservationFinishDate:
+    type: string
+  reservationStartDate:
+    type: string
+  capacity:
+    type: integer
+  freeCapacity:
+    type: integer
+  users:
+    type: array
+    items:
+      $ref: './res_get_event_event_id_reservation_id.user.yml'

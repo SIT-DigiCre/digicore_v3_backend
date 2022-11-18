@@ -1,0 +1,7 @@
+required:
+properties:
+  introduction:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate:
+      ja: 自己紹介

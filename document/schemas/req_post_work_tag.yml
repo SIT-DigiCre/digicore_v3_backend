@@ -1,0 +1,14 @@
+required:
+  - name
+  - description
+properties:
+  name:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: タグ名
+  description:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 説明

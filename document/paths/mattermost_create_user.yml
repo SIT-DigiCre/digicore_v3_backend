@@ -1,0 +1,26 @@
+post:
+  tags:
+    - mattermost
+  description: "Create mattermost account"
+  security:
+    - BearerAuth: []
+  requestBody:
+    description: "Mattermost account"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_post_mattermost_create_user.yml"
+  responses:
+    200:
+      description: "Success to create mattermost account"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_post_mattermost_create_user.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

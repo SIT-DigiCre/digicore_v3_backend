@@ -1,0 +1,5 @@
+required:
+  - introduction
+properties:
+  introduction:
+    type: string

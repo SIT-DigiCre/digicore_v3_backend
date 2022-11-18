@@ -4,6 +4,5 @@
 package tools
 
 import (
-	_ "github.com/k0kubun/sqldef/cmd/mysqldef"
-	_ "github.com/swaggo/swag"
+	_ "github.com/rubenv/sql-migrate/sql-migrate"
 )

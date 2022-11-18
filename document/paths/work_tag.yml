@@ -1,0 +1,46 @@
+get:
+  tags:
+    - work
+  description: "Get tag list"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: offset
+      in: query
+      schema:
+        type: integer
+  responses:
+    200:
+      description: "tag list"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_work_tag.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+post:
+  tags:
+    - work
+  description: "Post tag"
+  security:
+    - BearerAuth: []
+  requestBody:
+    description: "Create tag"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_post_work_tag.yml"
+  responses:
+    200:
+      description: "Create tag"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_work_tag_tag_id.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

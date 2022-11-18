@@ -1,0 +1,1 @@
+SELECT BIN_TO_UUID(id) AS id, name, extension, is_public, k_size, BIN_TO_UUID(user_id) AS user_id, created_at, updated_at FROM user_files WHERE user_id = UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee')

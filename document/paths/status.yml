@@ -1,0 +1,11 @@
+get:
+  description: "Server status check"
+  responses:
+    200:
+      description: "All Systems Operational"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_status.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

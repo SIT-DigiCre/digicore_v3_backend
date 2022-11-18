@@ -1,0 +1,1 @@
+SELECT BIN_TO_UUID(tag_id) AS tag_id, name FROM work_work_tags LEFT JOIN work_tags ON work_tags.id = work_work_tags.tag_id WHERE work_id = UUID_TO_BIN(/*workId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');

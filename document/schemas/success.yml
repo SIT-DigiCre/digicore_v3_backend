@@ -1,0 +1,5 @@
+required:
+  - success
+properties:
+  success:
+    type: boolean

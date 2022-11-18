@@ -5,5 +5,6 @@ CREATE TABLE work_tags
     description TEXT         NOT NULL,
     created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_name (name),
     PRIMARY KEY (id)
 );

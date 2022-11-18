@@ -1,0 +1,25 @@
+required:
+  - eventId
+  - name
+  - description
+  - calendarView
+  - reservable
+  - reservated
+  - reservations
+properties:
+  eventId:
+    type: string
+  name:
+    type: string
+  description:
+    type: string
+  calendarView:
+    type: boolean
+  reservable:
+    type: boolean
+  reservated:
+    type: boolean
+  reservations:
+    type: array
+    items:
+      $ref: './res_get_event_event_id.reservation.yml'

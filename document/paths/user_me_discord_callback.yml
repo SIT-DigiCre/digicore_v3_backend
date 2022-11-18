@@ -1,0 +1,22 @@
+put:
+  tags:
+    - user
+  description: "Verify discord auth"
+  security:
+    - BearerAuth: []
+  requestBody:
+    description: "Auth information"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_put_user_me_discord_callback.yml"
+  responses:
+    200:
+      description: "Success signup"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_user_me.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

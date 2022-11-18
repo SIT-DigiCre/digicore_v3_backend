@@ -1,0 +1,35 @@
+required:
+  - reservationId
+  - name
+  - description
+  - startDate
+  - finishDate
+  - reservable
+  - reservated
+  - reservationFinishDate
+  - reservationStartDate
+  - capacity
+  - freeCapacity
+properties:
+  reservationId:
+    type: string
+  name:
+    type: string
+  description:
+    type: string
+  startDate:
+    type: string
+  finishDate:
+    type: string
+  reservable:
+    type: boolean
+  reservated:
+    type: boolean
+  reservationFinishDate:
+    type: string
+  reservationStartDate:
+    type: string
+  capacity:
+    type: integer
+  freeCapacity:
+    type: integer

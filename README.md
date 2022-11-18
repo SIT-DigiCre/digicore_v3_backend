@@ -1,38 +1,46 @@
 # digicore v3 backend
 
-## setup env
+## 環境構築
 
 1. .env.sampleをコピーして.envを作成する
 1. [Discord developers](https://discord.com/developers/applications)でAppを作成し、Oauth2のRedirectsに`${BACKEND_ROOT_URL}/discord/oauth/callback`を指定する
 1. 上記で作成したAppのClient informationからClient IDとClient Secretを取得し、.envに追記する。
-1. [Google Cloud Platform](https://console.cloud.google.com/home/dashboard)でAppを作成し、OAuth クライアント IDをアプリケーションの種類をウェブアプリケーションにして作成し、承認済みのリダイレクト URIに`${BACKEND_ROOT_URL}/google/oauth/callback/login`と`${BACKEND_ROOT_URL}/google/oauth/callback/register`を指定する。
-1. 上記で作成したAppのclient_secret_*.jsonをダウンロードし、client_secret.jsonに名前を書き換えこのファイルが有る階層に配置する。
-1. [build env](#build-env)を行う
-1. [run env](#run-env)を行う
-1. [db migration](#db-migration)を行う
+1. [Google Cloud Platform](https://console.cloud.google.com/home/dashboard)でAppを作成し、OAuth クライアント IDをアプリケーションの種類をウェブアプリケーションにして作成し、承認済みのリダイレクト URIに`${FRONTEND_ROOT_URL}/signup/callback`と`${FRONTEND_ROOT_URL}/login/callback`を指定する。
+1. 上記で作成したAppのclient_secret_*.jsonをダウンロードし、config/gcp_secret.jsonに名前を書き換えこのファイルが有る階層に配置する。
+1. [コンテナのビルド](#コンテナのビルド)を行う
+1. [実行](#実行)を行う
+1. [DBマイグレーション](#DBマイグレーション)を行う
 
-## build env
-
-```sh
-docker compose build
-```
-
-## run env
+## コンテナのビルド
 
 ```sh
-docker compose up
+make build
 ```
 
-## db migration
+## 実行
 
 ```sh
-docker compose run --rm -w /app/schema admin bash -c 'cat `ls | grep -v foreign_key.sql` | go run github.com/k0kubun/sqldef/cmd/mysqldef@v0.13.9 --user=${DB_USER} --password=${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} --dry-run'
-docker compose run --rm -w /app/schema admin bash -c 'cat `ls | grep -v foreign_key.sql` | go run github.com/k0kubun/sqldef/cmd/mysqldef@v0.13.9 --user=${DB_USER} --password=${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE}'
-docker compose run --rm -w /app/schema admin bash -c 'mysql -u ${DB_USER} -p${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} < foreign_key.sql'
+make up
+# make up-d
 ```
 
-## generate swagger docs
+## DBマイグレーション
 
 ```sh
-swag init
+make migrate-dry // dryrun
+make migrate
 ```
+
+## 開発手順
+
+### apiパッケージの更新
+
+**./document/bundle.ymlと./pkg/api/*.gen.goは自動生成であるため直接編集しない**
+
+```sh
+make generate_api
+```
+
+## 開発時のJWT検証の無効化
+
+.envのAUTHをdisableに書き換えてください。

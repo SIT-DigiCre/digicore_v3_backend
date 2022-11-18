@@ -1,0 +1,67 @@
+required:
+  - lastName
+  - lastNameKana
+  - firstName
+  - firstNameKana
+  - isMale
+  - phoneNumber
+  - address
+  - parentName
+  - parentCellphoneNumber
+  - parentAddress
+properties:
+  lastName:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 名字
+  lastNameKana:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 名字(カナ)
+  firstName:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 名前
+  firstNameKana:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 名前(カナ)
+  isMale:
+    type: boolean
+    x-oapi-codegen-extra-tags:
+      validate:
+      ja: 性別
+  phoneNumber:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,phonenumber
+      ja: 電話番号
+  address:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 住所
+  parentName:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 緊急連絡先氏名
+  parentCellphoneNumber:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,phonenumber
+      ja: 緊急連絡先携帯電話番号
+  parentHomephoneNumber:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: phonenumber
+      ja: 緊急連絡先固定電話番号
+  parentAddress:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 緊急連絡先住所

@@ -1,0 +1,106 @@
+ResGetStatus:
+  $ref: "./schemas/res_get_status.yml"
+ResGetSignup:
+  $ref: "./schemas/res_get_signup.yml"
+ReqPostSignupCallback:
+  $ref: "./schemas/req_post_signup_callback.yml"
+ResPostSignupCallback:
+  $ref: "./schemas/res_post_signup_callback.yml"
+ResGetLogin:
+  $ref: "./schemas/res_get_login.yml"
+ReqPostLoginCallback:
+  $ref: "./schemas/req_post_login_callback.yml"
+ResPostLoginCallback:
+  $ref: "./schemas/res_post_login_callback.yml"
+ResGetTool:
+  $ref: "./schemas/res_get_tool.yml"
+ResGetUser:
+  $ref: "./schemas/res_get_user.yml"
+ResGetUserObjectUser:
+  $ref: "./schemas/res_get_user.user.yml"
+ResGetUserUserId:
+  $ref: "./schemas/res_get_user_user_id.yml"
+ResGetUserUserIdIntroduction:
+  $ref: "./schemas/res_get_user_user_id_introduction.yml"
+ResGetUserMe:
+  $ref: "./schemas/res_get_user_me.yml"
+ReqPutUserMe:
+  $ref: "./schemas/req_put_user_me.yml"
+ResGetUserMeIntroduction:
+  $ref: "./schemas/res_get_user_me_introduction.yml"
+ReqPutUserMeIntroduction:
+  $ref: "./schemas/req_put_user_me_introduction.yml"
+ResGetUserMePrivate:
+  $ref: "./schemas/res_get_user_me_private.yml"
+ReqPutUserMePrivate:
+  $ref: "./schemas/req_put_user_me_private.yml"
+ResGetUserMePayment:
+  $ref: "./schemas/res_get_user_me_payment.yml"
+ResGetUserMePaymentObjectHistory:
+  $ref: "./schemas/res_get_user_me_payment.history.yml"
+ReqPutUserMePayment:
+  $ref: "./schemas/req_put_user_me_payment.yml"
+ResGetUserMeDiscord:
+  $ref: "./schemas/res_user_me_discord.yml"
+ReqPutUserMeDiscordCallback:
+  $ref: "./schemas/req_put_user_me_discord_callback.yml"
+ResGetEvent:
+  $ref: "./schemas/res_get_event.yml"
+ResGetEventEventId:
+  $ref: "./schemas/res_get_event_event_id.yml"
+ResGetEventEventIdObjectReservation:
+  $ref: "./schemas/res_get_event_event_id.reservation.yml"
+ResGetEventEventIdReservationId:
+  $ref: "./schemas/res_get_event_event_id_reservation_id.yml"
+ResGetEventEventIdReservationIdObjectUser:
+  $ref: "./schemas/res_get_event_event_id_reservation_id.user.yml"
+ReqPutEventEventIdReservationIdMe:
+  $ref: "./schemas/req_put_event_event_id_reservation_id_me.yml"
+ResGetStorageMyfile:
+  $ref: "./schemas/res_get_storage_myfile.yml"
+ResGetStorageMyfileObjectFile:
+  $ref: "./schemas/res_get_storage_myfile.file.yml"
+ReqPostStorageMyfile:
+  $ref: "./schemas/req_post_storage_myfile.yml"
+ResGetStorageFileId:
+  $ref: "./schemas/res_get_storage_file_id.yml"
+ReqPostMattermostCreateuser:
+  $ref: "./schemas/req_post_mattermost_create_user.yml"
+ResPostMattermostCreateuser:
+  $ref: "./schemas/res_post_mattermost_create_user.yml"
+ResGetWorkWork:
+  $ref: "./schemas/res_get_work_work.yml"
+ResGetWorkWorkObjectWork:
+  $ref: "./schemas/res_get_work_work.work.yml"
+ResGetWorkWorkObjectWorkObjectAuthor:
+  $ref: "./schemas/res_get_work_work.work.author.yml"
+ResGetWorkWorkObjectWorkObjectTag:
+  $ref: "./schemas/res_get_work_work.work.tag.yml"
+ReqPostWorkWork:
+  $ref: "./schemas/req_post_work_work.yml"
+ResGetWorkWorkWorkId:
+  $ref: "./schemas/res_get_work_work_work_id.yml"
+ResGetWorkWorkWorkIdObjectAuthor:
+  $ref: "./schemas/res_get_work_work_work_id.author.yml"
+ResGetWorkWorkWorkIdObjectTag:
+  $ref: "./schemas/res_get_work_work_work_id.file.yml"
+ResGetWorkWorkWorkIdObjectFile:
+  $ref: "./schemas/res_get_work_work_work_id.tag.yml"
+ReqPutWorkWorkWorkId:
+  $ref: "./schemas/req_put_work_work_work_id.yml"
+ResGetWorkTag:
+  $ref: "./schemas/res_get_work_tag.yml"
+ResGetWorkTagObjectTag:
+  $ref: "./schemas/res_get_work_tag.tag.yml"
+ReqPostWorkTag:
+  $ref: "./schemas/req_post_work_tag.yml"
+ResGetWorkTagTagId:
+  $ref: "./schemas/res_get_work_tag_tag_id.yml"
+
+ReqPutWorkTagTagId:
+  $ref: "./schemas/req_put_work_tag_tag_id.yml"
+
+Error:
+  $ref: "./schemas/error.yml"
+Success:
+  $ref: "./schemas/success.yml"

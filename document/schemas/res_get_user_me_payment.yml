@@ -1,0 +1,7 @@
+required:
+  - histories
+properties:
+  histories:
+    type: array
+    items:
+      $ref: './res_get_user_me_payment.history.yml'

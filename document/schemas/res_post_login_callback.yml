@@ -1,0 +1,5 @@
+required:
+  - jwt
+properties:
+  jwt:
+    type: string

@@ -4,7 +4,7 @@ services:
   digicoreapi_v3:
     image: ghcr.io/sit-digicre/digicore_v3_backend:master
     volumes:
-      - "./client_secret.json:/client_secret.json"
+      - "./config/gcp_secret.json:/config/gcp_secret.json"
     env_file:
       - ".env"
     networks:
@@ -13,11 +13,11 @@ services:
     restart: always
 
   db:
-    image: mysql:8.0.30
+    image: mysql:8.0.31
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       - "db_data:/var/lib/mysql"
-      - "./my.conf:/etc/mysql/conf.d/my.cnf"
+      - "./config/my.conf:/etc/mysql/conf.d/my.cnf"
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USER}
@@ -30,14 +30,14 @@ services:
 
   admin:
     build:
-      context: "./"
+      dockerfile: "./Dockerfile"
       target: "admin"
     volumes:
       - "./:/app"
     env_file:
       - ".env"
-    profiles:
-      - admin
+    networks:
+      - digicoreapi
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:5.2.0

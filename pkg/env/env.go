@@ -2,28 +2,20 @@ package env
 
 import "os"
 
-var BackendRootURL = os.Getenv("BACKEND_ROOT_URL")
+var FrontendRootUrl = os.Getenv("FRONTEND_ROOT_URL")
+var BackendRootUrl = os.Getenv("BACKEND_ROOT_URL")
 
-var FrontendRootURL = os.Getenv("FRONTEND_ROOT_URL")
+var SignupRedirectPath = os.Getenv("SIGNUP_REDIRECT_PATH")
+var LoginRedirectPath = os.Getenv("LOGIN_REDIRECT_PATH")
 
-var JWTSecret = os.Getenv("JWT_SECRET")
-var DefaultIconURL = os.Getenv("DEFAULT_ICON_URL")
+var DiscordLoginRedirectPath = os.Getenv("DISCORD_LOGIN_REDIRECT_PATH")
 
-var DiscordClientID = os.Getenv("DISCORD_CLIENT_ID")
+var DiscordClientId = os.Getenv("DISCORD_CLIENT_ID")
 var DiscordClientSecret = os.Getenv("DISCORD_CLIENT_SECRET")
-var DiscordRedirectURL = os.Getenv("DISCORD_REDIRECT_URL")
 
-var SlackURL = os.Getenv("SLACK_URL")
-var DiscordURL = os.Getenv("DISCORD_URL")
+var DiscordJoinUrl = os.Getenv("DISCORD_JOIN_URL")
 
-var ConohaIdentityServerURL = os.Getenv("CONOHA_IDENTITY_SERVER_URL")
-var ConohaObjectStorageServerURL = os.Getenv("CONOHA_OBJECT_STORAGE_SERVER_URL")
-
-var ConohaTenantID = os.Getenv("CONOHA_TENANT_ID")
-var ConohaAPIUserName = os.Getenv("CONOHA_API_USER_NAME")
-var ConohaAPIUserPassword = os.Getenv("CONOHA_API_USER_PASSWORD")
-var ConohaStorageContainerName = "corev3"
-var ConohaFileUploadMaxSize = 104857600
+var Auth = os.Getenv("AUTH")
 
 var WasabiAccessKey = os.Getenv("WASABI_ACCESS_KEY")
 var WasabiSecretKey = os.Getenv("WASABI_SECRET_KEY")
@@ -37,11 +29,3 @@ var MattermostURL = "https://mm.digicre.net"
 var MattermostDigicreTeamID = os.Getenv("MATTERMOST_DIGICRE_TEAM_ID")
 var MattermostAdminAccount = os.Getenv("MATTERMOST_ADMIN_ACCOUNT")
 var MattermostAdminPassword = os.Getenv("MATTERMOST_ADMIN_PASSWORD")
-
-type Context struct {
-}
-
-func CreateContext() (Context, error) {
-	context := Context{}
-	return context, nil
-}
