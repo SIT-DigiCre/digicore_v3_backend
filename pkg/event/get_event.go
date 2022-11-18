@@ -27,6 +27,7 @@ func GetEvent(ctx echo.Context, dbClient db.Client, params api.GetEventParams) (
 type event struct {
 	EventId      string `db:"event_id"`
 	Name         string `db:"name"`
+	Description  string `db:"description"`
 	CalendarView bool   `db:"calendar_view"`
 	Reservable   bool   `db:"reservable"`
 	Reservated   bool   `db:"reservated"`

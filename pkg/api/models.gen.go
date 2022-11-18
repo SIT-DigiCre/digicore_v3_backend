@@ -115,6 +115,7 @@ type ReqPutWorkWorkWorkId struct {
 type ResGetEvent struct {
 	Events []struct {
 		CalendarView bool   `json:"calendarView"`
+		Description  string `json:"description"`
 		EventId      string `json:"eventId"`
 		Name         string `json:"name"`
 		Reservable   bool   `json:"reservable"`
