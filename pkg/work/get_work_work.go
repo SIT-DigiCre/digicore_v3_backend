@@ -24,10 +24,10 @@ func GetWorkWork(ctx echo.Context, dbClient db.Client, params api.GetWorkWorkPar
 }
 
 type workOverview struct {
-	Author []workObjectAuthor
-	Name   string `db:"name"`
-	Tag    []workObjectTag
-	WorkId string `db:"work_id"`
+	Authors []workObjectAuthor
+	Name    string `db:"name"`
+	Tags    []workObjectTag
+	WorkId  string `db:"work_id"`
 }
 
 func getWorkList(dbClient db.Client, offset *int, authorId *string) ([]workOverview, *response.Error) {
