@@ -1,9 +1,9 @@
 required:
   - name
   - description
-  - auther
-  - file
-  - tag
+  - authors
+  - files
+  - tags
 properties:
   name:
     type: string
@@ -15,21 +15,21 @@ properties:
     x-oapi-codegen-extra-tags:
       validate: required
       ja: 説明
-  auther:
+  authors:
     type: array
     items:
       type: string
     x-oapi-codegen-extra-tags:
       validate: dive,uuid
       ja: 作者
-  file:
+  files:
     type: array
     items:
       type: string
     x-oapi-codegen-extra-tags:
       validate: dive,uuid
       ja: ファイル
-  tag:
+  tags:
     type: array
     items:
       type: string

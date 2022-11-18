@@ -677,7 +677,7 @@ paths:
           in: query
           schema:
             type: integer
-        - name: autherId
+        - name: authorId
           in: query
           required: false
           schema:
@@ -964,9 +964,9 @@ components:
           type: string
     ResGetUser:
       required:
-        - user
+        - users
       properties:
-        user:
+        users:
           type: array
           items:
             $ref: '#/components/schemas/ResGetUserObjectUser'
@@ -1192,9 +1192,9 @@ components:
             ja: 緊急連絡先住所
     ResGetUserMePayment:
       required:
-        - history
+        - histories
       properties:
-        history:
+        histories:
           type: array
           items:
             $ref: '#/components/schemas/ResGetUserMePaymentObjectHistory'
@@ -1239,9 +1239,9 @@ components:
             ja: 認証コード
     ResGetEvent:
       required:
-        - event
+        - events
       properties:
-        event:
+        events:
           type: array
           items:
             required:
@@ -1269,7 +1269,7 @@ components:
         - calendarView
         - reservable
         - reservated
-        - reservation
+        - reservations
       properties:
         eventId:
           type: string
@@ -1283,7 +1283,7 @@ components:
           type: boolean
         reservated:
           type: boolean
-        reservation:
+        reservations:
           type: array
           items:
             $ref: '#/components/schemas/ResGetEventEventIdObjectReservation'
@@ -1337,7 +1337,7 @@ components:
         - reservationStartDate
         - capacity
         - freeCapacity
-        - user
+        - users
       properties:
         eventId:
           type: string
@@ -1363,7 +1363,7 @@ components:
           type: integer
         freeCapacity:
           type: integer
-        user:
+        users:
           type: array
           items:
             $ref: '#/components/schemas/ResGetEventEventIdReservationIdObjectUser'
@@ -1402,9 +1402,9 @@ components:
             ja: URL
     ResGetStorage:
       required:
-        - file
+        - files
       properties:
-        file:
+        files:
           type: array
           items:
             $ref: '#/components/schemas/ResGetStorageObjectFile'
@@ -1515,9 +1515,9 @@ components:
           type: string
     ResGetWorkWork:
       required:
-        - work
+        - works
       properties:
-        work:
+        works:
           type: array
           items:
             $ref: '#/components/schemas/ResGetWorkWorkObjectWork'
@@ -1525,22 +1525,22 @@ components:
       required:
         - workId
         - name
-        - auther
-        - tag
+        - authors
+        - tags
       properties:
         workId:
           type: string
         name:
           type: string
-        auther:
+        authors:
           type: array
           items:
-            $ref: '#/components/schemas/ResGetWorkWorkObjectWorkObjectAuther'
-        tag:
+            $ref: '#/components/schemas/ResGetWorkWorkObjectWorkObjectAuthor'
+        tags:
           type: array
           items:
             $ref: '#/components/schemas/ResGetWorkWorkObjectWorkObjectTag'
-    ResGetWorkWorkObjectWorkObjectAuther:
+    ResGetWorkWorkObjectWorkObjectAuthor:
       required:
         - userId
         - username
@@ -1565,9 +1565,9 @@ components:
       required:
         - name
         - description
-        - auther
-        - file
-        - tag
+        - authors
+        - files
+        - tags
       properties:
         name:
           type: string
@@ -1579,21 +1579,21 @@ components:
           x-oapi-codegen-extra-tags:
             validate: required
             ja: 説明
-        auther:
+        authors:
           type: array
           items:
             type: string
           x-oapi-codegen-extra-tags:
             validate: 'dive,uuid'
             ja: 作者
-        file:
+        files:
           type: array
           items:
             type: string
           x-oapi-codegen-extra-tags:
             validate: 'dive,uuid'
             ja: ファイル
-        tag:
+        tags:
           type: array
           items:
             type: string
@@ -1605,9 +1605,9 @@ components:
         - workId
         - name
         - description
-        - auther
-        - file
-        - tag
+        - authors
+        - files
+        - tags
       properties:
         workId:
           type: string
@@ -1615,19 +1615,19 @@ components:
           type: string
         description:
           type: string
-        auther:
+        authors:
           type: array
           items:
-            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectAuther'
-        file:
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectAuthor'
+        files:
           type: array
           items:
             $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectTag'
-        tag:
+        tags:
           type: array
           items:
             $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectFile'
-    ResGetWorkWorkWorkIdObjectAuther:
+    ResGetWorkWorkWorkIdObjectAuthor:
       required:
         - userId
         - username
@@ -1661,9 +1661,9 @@ components:
       required:
         - name
         - description
-        - auther
-        - file
-        - tag
+        - authors
+        - files
+        - tags
       properties:
         name:
           type: string
@@ -1675,21 +1675,21 @@ components:
           x-oapi-codegen-extra-tags:
             validate: required
             ja: 説明
-        auther:
+        authors:
           type: array
           items:
             type: string
           x-oapi-codegen-extra-tags:
             validate: 'dive,uuid'
             ja: 作者
-        file:
+        files:
           type: array
           items:
             type: string
           x-oapi-codegen-extra-tags:
             validate: 'dive,uuid'
             ja: ファイル
-        tag:
+        tags:
           type: array
           items:
             type: string
@@ -1698,9 +1698,9 @@ components:
             ja: タグ
     ResGetWorkTag:
       required:
-        - tag
+        - tags
       properties:
-        tag:
+        tags:
           type: array
           items:
             $ref: '#/components/schemas/ResGetWorkTagObjectTag'

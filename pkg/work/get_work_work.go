@@ -12,11 +12,11 @@ import (
 
 func GetWorkWork(ctx echo.Context, dbClient db.Client, params api.GetWorkWorkParams) (api.ResGetWorkWork, *response.Error) {
 	res := api.ResGetWorkWork{}
-	work, err := getWorkList(dbClient, params.Offset, params.AutherId)
+	work, err := getWorkList(dbClient, params.Offset, params.AuthorId)
 	if err != nil {
 		return api.ResGetWorkWork{}, err
 	}
-	rerr := copier.Copy(&res.Work, &work)
+	rerr := copier.Copy(&res.Works, &work)
 	if rerr != nil {
 		return api.ResGetWorkWork{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
@@ -24,19 +24,19 @@ func GetWorkWork(ctx echo.Context, dbClient db.Client, params api.GetWorkWorkPar
 }
 
 type workOverview struct {
-	Auther []workObjectAuther
+	Author []workObjectAuthor
 	Name   string `db:"name"`
 	Tag    []workObjectTag
 	WorkId string `db:"work_id"`
 }
 
-func getWorkList(dbClient db.Client, offset *int, autherId *string) ([]workOverview, *response.Error) {
+func getWorkList(dbClient db.Client, offset *int, authorId *string) ([]workOverview, *response.Error) {
 	params := struct {
 		Offset   *int    `twowaysql:"offset"`
-		AutherId *string `twowaysql:"autherId"`
+		AuthorId *string `twowaysql:"authorId"`
 	}{
 		Offset:   offset,
-		AutherId: autherId,
+		AuthorId: authorId,
 	}
 	workOverviews := []workOverview{}
 	err := dbClient.Select(&workOverviews, "sql/work/select_work.sql", &params)
@@ -48,11 +48,11 @@ func getWorkList(dbClient db.Client, offset *int, autherId *string) ([]workOverv
 	}
 	for i := range workOverviews {
 		workId := workOverviews[i].WorkId
-		workAuthers, err := getWorkWorkAutherList(dbClient, workId)
+		workAuthors, err := getWorkWorkAuthorList(dbClient, workId)
 		if err != nil {
 			return []workOverview{}, err
 		}
-		workOverviews[i].Auther = workAuthers
+		workOverviews[i].Author = workAuthors
 		workTags, err := getWorkWorkTagList(dbClient, workId)
 		if err != nil {
 			return []workOverview{}, err

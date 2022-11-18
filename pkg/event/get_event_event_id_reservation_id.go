@@ -38,7 +38,7 @@ type eventReservation struct {
 	FinishDate            string `db:"finish_date"`
 	ReservationStartDate  string `db:"reservation_start_date"`
 	ReservationFinishDate string `db:"reservation_finish_date"`
-	User                  []eventReservationObjectUser
+	Users                 []eventReservationObjectUser
 }
 
 type eventReservationObjectUser struct {
@@ -83,6 +83,6 @@ func getReservationFromReservationId(dbClient db.Client, eventId string, reserva
 	if err != nil {
 		return eventReservation{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントの取得に失敗しました", Log: err.Error()}
 	}
-	eventReservations[0].User = eventReservationObjectUsers
+	eventReservations[0].Users = eventReservationObjectUsers
 	return eventReservations[0], nil
 }

@@ -45,11 +45,11 @@ type ReqPostWorkTag struct {
 
 // ReqPostWorkWork defines model for ReqPostWorkWork.
 type ReqPostWorkWork struct {
-	Auther      []string `ja:"作者" json:"auther" validate:"dive,uuid"`
+	Authors     []string `ja:"作者" json:"authors" validate:"dive,uuid"`
 	Description string   `ja:"説明" json:"description" validate:"required"`
-	File        []string `ja:"ファイル" json:"file" validate:"dive,uuid"`
+	Files       []string `ja:"ファイル" json:"files" validate:"dive,uuid"`
 	Name        string   `ja:"作品名" json:"name" validate:"required"`
-	Tag         []string `ja:"タグ" json:"tag" validate:"dive,uuid"`
+	Tags        []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
 }
 
 // ReqPutEventEventIdReservationIdMe defines model for ReqPutEventEventIdReservationIdMe.
@@ -104,22 +104,22 @@ type ReqPutWorkTagTagId struct {
 
 // ReqPutWorkWorkWorkId defines model for ReqPutWorkWorkWorkId.
 type ReqPutWorkWorkWorkId struct {
-	Auther      []string `ja:"作者" json:"auther" validate:"dive,uuid"`
+	Authors     []string `ja:"作者" json:"authors" validate:"dive,uuid"`
 	Description string   `ja:"説明" json:"description" validate:"required"`
-	File        []string `ja:"ファイル" json:"file" validate:"dive,uuid"`
+	Files       []string `ja:"ファイル" json:"files" validate:"dive,uuid"`
 	Name        string   `ja:"作品名" json:"name" validate:"required"`
-	Tag         []string `ja:"タグ" json:"tag" validate:"dive,uuid"`
+	Tags        []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
 }
 
 // ResGetEvent defines model for ResGetEvent.
 type ResGetEvent struct {
-	Event []struct {
+	Events []struct {
 		CalendarView bool   `json:"calendarView"`
 		EventId      string `json:"eventId"`
 		Name         string `json:"name"`
 		Reservable   bool   `json:"reservable"`
 		Reservated   bool   `json:"reservated"`
-	} `json:"event"`
+	} `json:"events"`
 }
 
 // ResGetEventEventId defines model for ResGetEventEventId.
@@ -130,7 +130,7 @@ type ResGetEventEventId struct {
 	Name         string                                `json:"name"`
 	Reservable   bool                                  `json:"reservable"`
 	Reservated   bool                                  `json:"reservated"`
-	Reservation  []ResGetEventEventIdObjectReservation `json:"reservation"`
+	Reservations []ResGetEventEventIdObjectReservation `json:"reservations"`
 }
 
 // ResGetEventEventIdObjectReservation defines model for ResGetEventEventIdObjectReservation.
@@ -162,7 +162,7 @@ type ResGetEventEventIdReservationId struct {
 	ReservationId         string                                      `json:"reservationId"`
 	ReservationStartDate  string                                      `json:"reservationStartDate"`
 	StartDate             string                                      `json:"startDate"`
-	User                  []ResGetEventEventIdReservationIdObjectUser `json:"user"`
+	Users                 []ResGetEventEventIdReservationIdObjectUser `json:"users"`
 }
 
 // ResGetEventEventIdReservationIdObjectUser defines model for ResGetEventEventIdReservationIdObjectUser.
@@ -191,7 +191,7 @@ type ResGetStatus struct {
 
 // ResGetStorage defines model for ResGetStorage.
 type ResGetStorage struct {
-	File []ResGetStorageObjectFile `json:"file"`
+	Files []ResGetStorageObjectFile `json:"files"`
 }
 
 // ResGetStorageFileId defines model for ResGetStorageFileId.
@@ -226,7 +226,7 @@ type ResGetTool struct {
 
 // ResGetUser defines model for ResGetUser.
 type ResGetUser struct {
-	User []ResGetUserObjectUser `json:"user"`
+	Users []ResGetUserObjectUser `json:"users"`
 }
 
 // ResGetUserMe defines model for ResGetUserMe.
@@ -253,7 +253,7 @@ type ResGetUserMeIntroduction struct {
 
 // ResGetUserMePayment defines model for ResGetUserMePayment.
 type ResGetUserMePayment struct {
-	History []ResGetUserMePaymentObjectHistory `json:"history"`
+	Histories []ResGetUserMePaymentObjectHistory `json:"histories"`
 }
 
 // ResGetUserMePaymentObjectHistory defines model for ResGetUserMePaymentObjectHistory.
@@ -306,7 +306,7 @@ type ResGetUserUserIdIntroduction struct {
 
 // ResGetWorkTag defines model for ResGetWorkTag.
 type ResGetWorkTag struct {
-	Tag []ResGetWorkTagObjectTag `json:"tag"`
+	Tags []ResGetWorkTagObjectTag `json:"tags"`
 }
 
 // ResGetWorkTagObjectTag defines model for ResGetWorkTagObjectTag.
@@ -324,19 +324,19 @@ type ResGetWorkTagTagId struct {
 
 // ResGetWorkWork defines model for ResGetWorkWork.
 type ResGetWorkWork struct {
-	Work []ResGetWorkWorkObjectWork `json:"work"`
+	Works []ResGetWorkWorkObjectWork `json:"works"`
 }
 
 // ResGetWorkWorkObjectWork defines model for ResGetWorkWorkObjectWork.
 type ResGetWorkWorkObjectWork struct {
-	Auther []ResGetWorkWorkObjectWorkObjectAuther `json:"auther"`
-	Name   string                                 `json:"name"`
-	Tag    []ResGetWorkWorkObjectWorkObjectTag    `json:"tag"`
-	WorkId string                                 `json:"workId"`
+	Authors []ResGetWorkWorkObjectWorkObjectAuthor `json:"authors"`
+	Name    string                                 `json:"name"`
+	Tags    []ResGetWorkWorkObjectWorkObjectTag    `json:"tags"`
+	WorkId  string                                 `json:"workId"`
 }
 
-// ResGetWorkWorkObjectWorkObjectAuther defines model for ResGetWorkWorkObjectWorkObjectAuther.
-type ResGetWorkWorkObjectWorkObjectAuther struct {
+// ResGetWorkWorkObjectWorkObjectAuthor defines model for ResGetWorkWorkObjectWorkObjectAuthor.
+type ResGetWorkWorkObjectWorkObjectAuthor struct {
 	IconUrl  string `json:"iconUrl"`
 	UserId   string `json:"userId"`
 	Username string `json:"username"`
@@ -350,16 +350,16 @@ type ResGetWorkWorkObjectWorkObjectTag struct {
 
 // ResGetWorkWorkWorkId defines model for ResGetWorkWorkWorkId.
 type ResGetWorkWorkWorkId struct {
-	Auther      []ResGetWorkWorkWorkIdObjectAuther `json:"auther"`
+	Authors     []ResGetWorkWorkWorkIdObjectAuthor `json:"authors"`
 	Description string                             `json:"description"`
-	File        []ResGetWorkWorkWorkIdObjectTag    `json:"file"`
+	Files       []ResGetWorkWorkWorkIdObjectTag    `json:"files"`
 	Name        string                             `json:"name"`
-	Tag         []ResGetWorkWorkWorkIdObjectFile   `json:"tag"`
+	Tags        []ResGetWorkWorkWorkIdObjectFile   `json:"tags"`
 	WorkId      string                             `json:"workId"`
 }
 
-// ResGetWorkWorkWorkIdObjectAuther defines model for ResGetWorkWorkWorkIdObjectAuther.
-type ResGetWorkWorkWorkIdObjectAuther struct {
+// ResGetWorkWorkWorkIdObjectAuthor defines model for ResGetWorkWorkWorkIdObjectAuthor.
+type ResGetWorkWorkWorkIdObjectAuthor struct {
 	IconUrl  string `json:"iconUrl"`
 	UserId   string `json:"userId"`
 	Username string `json:"username"`
@@ -431,7 +431,7 @@ type GetWorkTagParams struct {
 // GetWorkWorkParams defines parameters for GetWorkWork.
 type GetWorkWorkParams struct {
 	Offset   *int    `form:"offset,omitempty" json:"offset,omitempty"`
-	AutherId *string `form:"autherId,omitempty" json:"autherId,omitempty"`
+	AuthorId *string `form:"authorId,omitempty" json:"authorId,omitempty"`
 }
 
 // PutEventEventIdReservationIdMeJSONRequestBody defines body for PutEventEventIdReservationIdMe for application/json ContentType.

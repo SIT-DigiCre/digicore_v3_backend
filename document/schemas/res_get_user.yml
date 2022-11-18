@@ -1,7 +1,7 @@
 required:
-  - user
+  - users
 properties:
-  user:
+  users:
     type: array
     items:
       $ref: './res_get_user.user.yml'

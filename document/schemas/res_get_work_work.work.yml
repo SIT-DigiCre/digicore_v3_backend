@@ -1,18 +1,18 @@
 required:
   - workId
   - name
-  - auther
-  - tag
+  - authors
+  - tags
 properties:
   workId:
     type: string
   name:
     type: string
-  auther:
+  authors:
     type: array
     items:
-      $ref: './res_get_work_work.work.auther.yml'
-  tag:
+      $ref: './res_get_work_work.work.author.yml'
+  tags:
     type: array
     items:
       $ref: './res_get_work_work.work.tag.yml'

@@ -1,7 +1,7 @@
 required:
-  - file
+  - files
 properties:
-  file:
+  files:
     type: array
     items:
       $ref: './res_get_storage.file.yml'

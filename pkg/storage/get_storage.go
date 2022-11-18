@@ -17,7 +17,7 @@ func GetStorage(ctx echo.Context, dbClient db.Client) (api.ResGetStorage, *respo
 	if err != nil {
 		return api.ResGetStorage{}, err
 	}
-	rerr := copier.Copy(&res.File, &files)
+	rerr := copier.Copy(&res.Files, &files)
 	if rerr != nil {
 		return api.ResGetStorage{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}

@@ -17,7 +17,7 @@ func GetUserMePayment(ctx echo.Context, dbClient db.Client) (api.ResGetUserMePay
 	if err != nil {
 		return api.ResGetUserMePayment{}, err
 	}
-	rerr := copier.Copy(&res.History, &history)
+	rerr := copier.Copy(&res.Histories, &history)
 	if rerr != nil {
 		return api.ResGetUserMePayment{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}

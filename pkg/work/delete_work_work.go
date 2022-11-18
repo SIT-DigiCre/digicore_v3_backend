@@ -10,7 +10,7 @@ import (
 )
 
 func DeleteWorkWorkWorkId(ctx echo.Context, dbClient db.TransactionClient, workId string) (api.BlankSuccess, *response.Error) {
-	err := deleteWorkAuther(dbClient, workId)
+	err := deleteWorkAuthor(dbClient, workId)
 	if err != nil {
 		return api.BlankSuccess{}, err
 	}
@@ -42,7 +42,7 @@ func deleteWork(dbClient db.TransactionClient, workId string) *response.Error {
 	return nil
 }
 
-func deleteWorkAuther(dbClient db.TransactionClient, workId string) *response.Error {
+func deleteWorkAuthor(dbClient db.TransactionClient, workId string) *response.Error {
 	params := struct {
 		WorkId string `twowaysql:"workId"`
 	}{

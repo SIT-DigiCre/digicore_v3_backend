@@ -5,7 +5,7 @@ required:
   - calendarView
   - reservable
   - reservated
-  - reservation
+  - reservations
 properties:
   eventId:
     type: string
@@ -19,7 +19,7 @@ properties:
     type: boolean
   reservated:
     type: boolean
-  reservation:
+  reservations:
     type: array
     items:
       $ref: './res_get_event_event_id.reservation.yml'

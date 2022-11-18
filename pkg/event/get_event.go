@@ -17,7 +17,7 @@ func GetEvent(ctx echo.Context, dbClient db.Client, params api.GetEventParams) (
 	if err != nil {
 		return api.ResGetEvent{}, err
 	}
-	rerr := copier.Copy(&res.Event, &events)
+	rerr := copier.Copy(&res.Events, &events)
 	if rerr != nil {
 		return api.ResGetEvent{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベント一覧の取得に失敗しました", Log: rerr.Error()}
 	}

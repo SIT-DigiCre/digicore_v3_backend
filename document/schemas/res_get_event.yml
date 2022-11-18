@@ -1,7 +1,7 @@
 required:
-  - event
+  - events
 properties:
-  event:
+  events:
     type: array
     items:
       $ref: './res_get_event.event.yml'

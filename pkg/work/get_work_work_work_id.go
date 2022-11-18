@@ -24,7 +24,7 @@ func GetWorkWorkWorkId(ctx echo.Context, dbClient db.Client, workId string) (api
 }
 
 type work struct {
-	Auther      []workObjectAuther `db:"auther"`
+	Authors     []workObjectAuthor `db:"author"`
 	Description string             `db:"description"`
 	File        []workObjectFile   `db:"file"`
 	Name        string             `db:"name"`
@@ -32,7 +32,7 @@ type work struct {
 	WorkId      string             `db:"work_id"`
 }
 
-type workObjectAuther struct {
+type workObjectAuthor struct {
 	UserId   string `db:"user_id"`
 	Username string `db:"username"`
 	IconUrl  string `db:"icon_url"`
@@ -62,11 +62,11 @@ func getWorkFromTagId(dbClient db.Client, workId string) (work, *response.Error)
 	if len(works) == 0 {
 		return work{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "作品が存在しません", Log: "no rows in result"}
 	}
-	workAuthers, err := getWorkWorkAutherList(dbClient, workId)
+	workAuthors, err := getWorkWorkAuthorList(dbClient, workId)
 	if err != nil {
 		return work{}, err
 	}
-	works[0].Auther = workAuthers
+	works[0].Authors = workAuthors
 	workTags, err := getWorkWorkTagList(dbClient, workId)
 	if err != nil {
 		return work{}, err
@@ -80,18 +80,18 @@ func getWorkFromTagId(dbClient db.Client, workId string) (work, *response.Error)
 	return works[0], nil
 }
 
-func getWorkWorkAutherList(dbClient db.Client, workId string) ([]workObjectAuther, *response.Error) {
+func getWorkWorkAuthorList(dbClient db.Client, workId string) ([]workObjectAuthor, *response.Error) {
 	params := struct {
 		WorkId string `twowaysql:"workId"`
 	}{
 		WorkId: workId,
 	}
-	workAuthers := []workObjectAuther{}
-	err := dbClient.Select(&workAuthers, "sql/work/select_work_work_auther.sql", &params)
+	workAuthors := []workObjectAuthor{}
+	err := dbClient.Select(&workAuthors, "sql/work/select_work_work_author.sql", &params)
 	if err != nil {
-		return []workObjectAuther{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+		return []workObjectAuthor{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
-	return workAuthers, nil
+	return workAuthors, nil
 }
 
 func getWorkWorkTagList(dbClient db.Client, workId string) ([]workObjectTag, *response.Error) {

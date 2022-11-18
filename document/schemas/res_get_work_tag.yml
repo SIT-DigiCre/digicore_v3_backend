@@ -1,7 +1,7 @@
 required:
-  - tag
+  - tags
 properties:
-  tag:
+  tags:
     type: array
     items:
       $ref: './res_get_work_tag.tag.yml'

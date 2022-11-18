@@ -72,16 +72,16 @@ ResGetWorkWork:
   $ref: "./schemas/res_get_work_work.yml"
 ResGetWorkWorkObjectWork:
   $ref: "./schemas/res_get_work_work.work.yml"
-ResGetWorkWorkObjectWorkObjectAuther:
-  $ref: "./schemas/res_get_work_work.work.auther.yml"
+ResGetWorkWorkObjectWorkObjectAuthor:
+  $ref: "./schemas/res_get_work_work.work.author.yml"
 ResGetWorkWorkObjectWorkObjectTag:
   $ref: "./schemas/res_get_work_work.work.tag.yml"
 ReqPostWorkWork:
   $ref: "./schemas/req_post_work_work.yml"
 ResGetWorkWorkWorkId:
   $ref: "./schemas/res_get_work_work_work_id.yml"
-ResGetWorkWorkWorkIdObjectAuther:
-  $ref: "./schemas/res_get_work_work_work_id.auther.yml"
+ResGetWorkWorkWorkIdObjectAuthor:
+  $ref: "./schemas/res_get_work_work_work_id.author.yml"
 ResGetWorkWorkWorkIdObjectTag:
   $ref: "./schemas/res_get_work_work_work_id.file.yml"
 ResGetWorkWorkWorkIdObjectFile:

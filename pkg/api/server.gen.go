@@ -630,11 +630,11 @@ func (w *ServerInterfaceWrapper) GetWorkWork(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter offset: %s", err))
 	}
 
-	// ------------- Optional query parameter "autherId" -------------
+	// ------------- Optional query parameter "authorId" -------------
 
-	err = runtime.BindQueryParameter("form", true, false, "autherId", ctx.QueryParams(), &params.AutherId)
+	err = runtime.BindQueryParameter("form", true, false, "authorId", ctx.QueryParams(), &params.AuthorId)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter autherId: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter authorId: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshalled arguments

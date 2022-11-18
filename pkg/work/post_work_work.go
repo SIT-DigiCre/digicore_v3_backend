@@ -13,22 +13,22 @@ import (
 
 func PostWorkWork(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPostWorkWork) (api.ResGetWorkWorkWorkId, *response.Error) {
 	userId := ctx.Get("user_id").(string)
-	requestBody.Auther = utils.GetUniqueString(append(requestBody.Auther, userId))
-	requestBody.File = utils.GetUniqueString(requestBody.File)
-	requestBody.Tag = utils.GetUniqueString(requestBody.Tag)
+	requestBody.Authors = utils.GetUniqueString(append(requestBody.Authors, userId))
+	requestBody.Files = utils.GetUniqueString(requestBody.Files)
+	requestBody.Tags = utils.GetUniqueString(requestBody.Tags)
 	workId, err := createWork(dbClient, requestBody)
 	if err != nil {
 		return api.ResGetWorkWorkWorkId{}, err
 	}
-	err = createWorkAuther(dbClient, workId, requestBody.Auther)
+	err = createWorkAuthor(dbClient, workId, requestBody.Authors)
 	if err != nil {
 		return api.ResGetWorkWorkWorkId{}, err
 	}
-	err = createWorkFile(dbClient, workId, requestBody.File)
+	err = createWorkFile(dbClient, workId, requestBody.Files)
 	if err != nil {
 		return api.ResGetWorkWorkWorkId{}, err
 	}
-	err = createWorkWorkTag(dbClient, workId, requestBody.Tag)
+	err = createWorkWorkTag(dbClient, workId, requestBody.Tags)
 	if err != nil {
 		return api.ResGetWorkWorkWorkId{}, err
 	}
@@ -59,14 +59,14 @@ func createWork(dbClient db.TransactionClient, requestBody api.ReqPostWorkWork) 
 	return workId, nil
 }
 
-func createWorkAuther(dbClient db.TransactionClient, workId string, autherIds []string) *response.Error {
-	for _, autherId := range autherIds {
+func createWorkAuthor(dbClient db.TransactionClient, workId string, authorIds []string) *response.Error {
+	for _, authorId := range authorIds {
 		params := struct {
 			WorkId string `twowaysql:"workId"`
 			UserId string `twowaysql:"userId"`
 		}{
 			WorkId: workId,
-			UserId: autherId,
+			UserId: authorId,
 		}
 		_, rerr := dbClient.Exec("sql/work/insert_work_user.sql", &params, false)
 		if rerr != nil {

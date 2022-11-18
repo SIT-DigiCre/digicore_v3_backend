@@ -12,15 +12,15 @@ import (
 
 func PutWorkWorkWorkId(ctx echo.Context, dbClient db.TransactionClient, workId string, requestBody api.ReqPutWorkWorkWorkId) (api.ResGetWorkWorkWorkId, *response.Error) {
 	userId := ctx.Get("user_id").(string)
-	requestBody.Auther = utils.GetUniqueString(append(requestBody.Auther, userId))
-	permission, err := checkWorkAuther(dbClient, workId, userId)
+	requestBody.Authors = utils.GetUniqueString(append(requestBody.Authors, userId))
+	permission, err := checkWorkAuthor(dbClient, workId, userId)
 	if err != nil {
 		return api.ResGetWorkWorkWorkId{}, err
 	}
 	if !permission {
 		return api.ResGetWorkWorkWorkId{}, &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "編集権限がありません", Log: "no edit permission"}
 	}
-	err = deleteWorkAuther(dbClient, workId)
+	err = deleteWorkAuthor(dbClient, workId)
 	if err != nil {
 		return api.ResGetWorkWorkWorkId{}, err
 	}
@@ -36,28 +36,28 @@ func PutWorkWorkWorkId(ctx echo.Context, dbClient db.TransactionClient, workId s
 	if err != nil {
 		return api.ResGetWorkWorkWorkId{}, err
 	}
-	err = createWorkAuther(dbClient, workId, requestBody.Auther)
+	err = createWorkAuthor(dbClient, workId, requestBody.Authors)
 	if err != nil {
 		return api.ResGetWorkWorkWorkId{}, err
 	}
-	err = createWorkFile(dbClient, workId, requestBody.File)
+	err = createWorkFile(dbClient, workId, requestBody.Files)
 	if err != nil {
 		return api.ResGetWorkWorkWorkId{}, err
 	}
-	err = createWorkWorkTag(dbClient, workId, requestBody.Tag)
+	err = createWorkWorkTag(dbClient, workId, requestBody.Tags)
 	if err != nil {
 		return api.ResGetWorkWorkWorkId{}, err
 	}
 	return GetWorkWorkWorkId(ctx, dbClient, workId)
 }
 
-func checkWorkAuther(dbClient db.Client, workId string, userId string) (bool, *response.Error) {
-	authers, err := getWorkWorkAutherList(dbClient, workId)
+func checkWorkAuthor(dbClient db.Client, workId string, userId string) (bool, *response.Error) {
+	authors, err := getWorkWorkAuthorList(dbClient, workId)
 	if err != nil {
 		return false, err
 	}
-	for _, auther := range authers {
-		if auther.UserId == userId {
+	for _, author := range authors {
+		if author.UserId == userId {
 			return true, nil
 		}
 	}

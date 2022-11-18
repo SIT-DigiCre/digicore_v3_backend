@@ -16,7 +16,7 @@ func GetUser(ctx echo.Context, dbClient db.Client, params api.GetUserParams) (ap
 	if err != nil {
 		return api.ResGetUser{}, err
 	}
-	rerr := copier.Copy(&res.User, &user)
+	rerr := copier.Copy(&res.Users, &user)
 	if rerr != nil {
 		return api.ResGetUser{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}

@@ -16,7 +16,7 @@ func GetWorkTag(ctx echo.Context, dbClient db.Client, params api.GetWorkTagParam
 	if err != nil {
 		return api.ResGetWorkTag{}, err
 	}
-	rerr := copier.Copy(&res.Tag, &tag)
+	rerr := copier.Copy(&res.Tags, &tag)
 	if rerr != nil {
 		return api.ResGetWorkTag{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}

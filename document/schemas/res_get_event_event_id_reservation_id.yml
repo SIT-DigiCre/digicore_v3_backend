@@ -11,7 +11,7 @@ required:
   - reservationStartDate
   - capacity
   - freeCapacity
-  - user
+  - users
 properties:
   eventId:
     type: string
@@ -37,7 +37,7 @@ properties:
     type: integer
   freeCapacity:
     type: integer
-  user:
+  users:
     type: array
     items:
       $ref: './res_get_event_event_id_reservation_id.user.yml'

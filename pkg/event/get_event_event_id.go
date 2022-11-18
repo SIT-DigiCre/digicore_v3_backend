@@ -32,7 +32,7 @@ type eventDetail struct {
 	CalendarView bool   `db:"calendar_view"`
 	Reservable   bool   `db:"reservable"`
 	Reservated   bool   `db:"reservated"`
-	Reservation  []eventDetailObjectReservation
+	Reservations []eventDetailObjectReservation
 }
 
 type eventDetailObjectReservation struct {
@@ -86,6 +86,6 @@ func getEventFromEventId(dbClient db.Client, eventId string, userId string) (eve
 			eventReservations[i].Reservable = true
 		}
 	}
-	eventDetails[0].Reservation = eventReservations
+	eventDetails[0].Reservations = eventReservations
 	return eventDetails[0], nil
 }
