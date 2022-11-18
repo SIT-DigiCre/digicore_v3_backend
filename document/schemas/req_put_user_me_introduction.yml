@@ -1,8 +1,7 @@
 required:
-  - introduction
 properties:
   introduction:
     type: string
     x-oapi-codegen-extra-tags:
-      validate: required,min=1
+      validate:
       ja: 自己紹介

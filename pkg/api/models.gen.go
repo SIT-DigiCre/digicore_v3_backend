@@ -73,7 +73,7 @@ type ReqPutUserMeDiscordCallback struct {
 
 // ReqPutUserMeIntroduction defines model for ReqPutUserMeIntroduction.
 type ReqPutUserMeIntroduction struct {
-	Introduction string `ja:"自己紹介" json:"introduction" validate:"required,min=1"`
+	Introduction *string `ja:"自己紹介" json:"introduction,omitempty" validate:""`
 }
 
 // ReqPutUserMePayment defines model for ReqPutUserMePayment.
