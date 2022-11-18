@@ -17,7 +17,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func PostStorage(ctx echo.Context, dbTransactionClient db.TransactionClient, requestBody api.ReqPostStorage) (api.ResGetStorageFileId, *response.Error) {
+func PostStorageMyfile(ctx echo.Context, dbTransactionClient db.TransactionClient, requestBody api.ReqPostStorageMyfile) (api.ResGetStorageFileId, *response.Error) {
 	userId := ctx.Get("user_id").(string)
 	data, rerr := base64.StdEncoding.DecodeString(requestBody.File)
 	if rerr != nil {
@@ -30,7 +30,7 @@ func PostStorage(ctx echo.Context, dbTransactionClient db.TransactionClient, req
 	return GetStorageFileId(ctx, dbTransactionClient, fileId)
 }
 
-func createUserFile(dbTransactionClient db.TransactionClient, userId string, requestBody api.ReqPostStorage, data []byte) (string, *response.Error) {
+func createUserFile(dbTransactionClient db.TransactionClient, userId string, requestBody api.ReqPostStorageMyfile, data []byte) (string, *response.Error) {
 	extension := getExtension(requestBody.Name)
 	md5Hash := fmt.Sprintf("%x", md5.Sum(data))
 	kSize := len(data) / 1024

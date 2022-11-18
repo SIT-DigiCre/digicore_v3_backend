@@ -47,11 +47,11 @@ type ServerInterface interface {
 	// (GET /status)
 	GetStatus(ctx echo.Context) error
 
-	// (GET /storage)
-	GetStorage(ctx echo.Context) error
+	// (GET /storage/myfile)
+	GetStorageMyfile(ctx echo.Context) error
 
-	// (POST /storage)
-	PostStorage(ctx echo.Context) error
+	// (POST /storage/myfile)
+	PostStorageMyfile(ctx echo.Context) error
 
 	// (GET /storage/{fileId})
 	GetStorageFileId(ctx echo.Context, fileId string) error
@@ -306,25 +306,25 @@ func (w *ServerInterfaceWrapper) GetStatus(ctx echo.Context) error {
 	return err
 }
 
-// GetStorage converts echo context to params.
-func (w *ServerInterfaceWrapper) GetStorage(ctx echo.Context) error {
+// GetStorageMyfile converts echo context to params.
+func (w *ServerInterfaceWrapper) GetStorageMyfile(ctx echo.Context) error {
 	var err error
 
 	ctx.Set(BearerAuthScopes, []string{""})
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetStorage(ctx)
+	err = w.Handler.GetStorageMyfile(ctx)
 	return err
 }
 
-// PostStorage converts echo context to params.
-func (w *ServerInterfaceWrapper) PostStorage(ctx echo.Context) error {
+// PostStorageMyfile converts echo context to params.
+func (w *ServerInterfaceWrapper) PostStorageMyfile(ctx echo.Context) error {
 	var err error
 
 	ctx.Set(BearerAuthScopes, []string{""})
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.PostStorage(ctx)
+	err = w.Handler.PostStorageMyfile(ctx)
 	return err
 }
 
@@ -746,8 +746,8 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/signup", wrapper.GetSignup)
 	router.POST(baseURL+"/signup/callback", wrapper.PostSignupCallback)
 	router.GET(baseURL+"/status", wrapper.GetStatus)
-	router.GET(baseURL+"/storage", wrapper.GetStorage)
-	router.POST(baseURL+"/storage", wrapper.PostStorage)
+	router.GET(baseURL+"/storage/myfile", wrapper.GetStorageMyfile)
+	router.POST(baseURL+"/storage/myfile", wrapper.PostStorageMyfile)
 	router.GET(baseURL+"/storage/:fileId", wrapper.GetStorageFileId)
 	router.GET(baseURL+"/tool", wrapper.GetTool)
 	router.GET(baseURL+"/user", wrapper.GetUser)

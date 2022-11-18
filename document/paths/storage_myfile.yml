@@ -10,7 +10,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/res_get_storage.yml"
+            $ref: "../schemas/res_get_storage_myfile.yml"
     403:
       $ref: "../responses/unauthorized.yml"
     404:
@@ -29,7 +29,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: "../schemas/req_post_storage.yml"
+          $ref: "../schemas/req_post_storage_myfile.yml"
   responses:
     200:
       description: "Create file"

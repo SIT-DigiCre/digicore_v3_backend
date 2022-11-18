@@ -56,12 +56,12 @@ ResGetEventEventIdReservationIdObjectUser:
   $ref: "./schemas/res_get_event_event_id_reservation_id.user.yml"
 ReqPutEventEventIdReservationIdMe:
   $ref: "./schemas/req_put_event_event_id_reservation_id_me.yml"
-ResGetStorage:
-  $ref: "./schemas/res_get_storage.yml"
-ResGetStorageObjectFile:
-  $ref: "./schemas/res_get_storage.file.yml"
-ReqPostStorage:
-  $ref: "./schemas/req_post_storage.yml"
+ResGetStorageMyfile:
+  $ref: "./schemas/res_get_storage_myfile.yml"
+ResGetStorageMyfileObjectFile:
+  $ref: "./schemas/res_get_storage_myfile.file.yml"
+ReqPostStorageMyfile:
+  $ref: "./schemas/req_post_storage_myfile.yml"
 ResGetStorageFileId:
   $ref: "./schemas/res_get_storage_file_id.yml"
 ReqPostMattermostCreateuser:

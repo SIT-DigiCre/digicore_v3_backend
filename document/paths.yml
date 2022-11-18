@@ -36,8 +36,8 @@
   $ref: "./paths/event_event_id_reservation_id.yml"
 /event/{eventId}/{reservationId}/me:
   $ref: "./paths/event_event_id_reservation_id_me.yml"
-/storage:
-  $ref: "./paths/storage.yml"
+/storage/myfile:
+  $ref: "./paths/storage_myfile.yml"
 /storage/{fileId}:
   $ref: "./paths/storage_file_id.yml"
 /mattermost/create_user:

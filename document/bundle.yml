@@ -567,7 +567,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
-  /storage:
+  /storage/myfile:
     get:
       tags:
         - storage
@@ -580,7 +580,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResGetStorage'
+                $ref: '#/components/schemas/ResGetStorageMyfile'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -599,7 +599,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReqPostStorage'
+              $ref: '#/components/schemas/ReqPostStorageMyfile'
       responses:
         '200':
           description: Create file
@@ -1400,15 +1400,15 @@ components:
           x-oapi-codegen-extra-tags:
             validate: max=255
             ja: URL
-    ResGetStorage:
+    ResGetStorageMyfile:
       required:
         - files
       properties:
         files:
           type: array
           items:
-            $ref: '#/components/schemas/ResGetStorageObjectFile'
-    ResGetStorageObjectFile:
+            $ref: '#/components/schemas/ResGetStorageMyfileObjectFile'
+    ResGetStorageMyfileObjectFile:
       required:
         - fileId
         - userId
@@ -1435,7 +1435,7 @@ components:
           type: string
         updatedAt:
           type: string
-    ReqPostStorage:
+    ReqPostStorageMyfile:
       required:
         - name
         - file

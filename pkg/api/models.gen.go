@@ -30,8 +30,8 @@ type ReqPostSignupCallback struct {
 	Code string `ja:"認証コード" json:"code" validate:"required"`
 }
 
-// ReqPostStorage defines model for ReqPostStorage.
-type ReqPostStorage struct {
+// ReqPostStorageMyfile defines model for ReqPostStorageMyfile.
+type ReqPostStorageMyfile struct {
 	File     string `ja:"ファイル" json:"file" validate:"required,max=104857600"`
 	IsPublic bool   `ja:"公開" json:"isPublic" validate:""`
 	Name     string `ja:"ファイル名" json:"name" validate:"required,max=255"`
@@ -190,11 +190,6 @@ type ResGetStatus struct {
 	Status bool `json:"status"`
 }
 
-// ResGetStorage defines model for ResGetStorage.
-type ResGetStorage struct {
-	Files []ResGetStorageObjectFile `json:"files"`
-}
-
 // ResGetStorageFileId defines model for ResGetStorageFileId.
 type ResGetStorageFileId struct {
 	CreatedAt string `json:"createdAt"`
@@ -208,8 +203,13 @@ type ResGetStorageFileId struct {
 	UserId    string `json:"userId"`
 }
 
-// ResGetStorageObjectFile defines model for ResGetStorageObjectFile.
-type ResGetStorageObjectFile struct {
+// ResGetStorageMyfile defines model for ResGetStorageMyfile.
+type ResGetStorageMyfile struct {
+	Files []ResGetStorageMyfileObjectFile `json:"files"`
+}
+
+// ResGetStorageMyfileObjectFile defines model for ResGetStorageMyfileObjectFile.
+type ResGetStorageMyfileObjectFile struct {
 	CreatedAt string `json:"createdAt"`
 	Extension string `json:"extension"`
 	FileId    string `json:"fileId"`
@@ -447,8 +447,8 @@ type PostMattermostCreateUserJSONRequestBody = ReqPostMattermostCreateuser
 // PostSignupCallbackJSONRequestBody defines body for PostSignupCallback for application/json ContentType.
 type PostSignupCallbackJSONRequestBody = ReqPostSignupCallback
 
-// PostStorageJSONRequestBody defines body for PostStorage for application/json ContentType.
-type PostStorageJSONRequestBody = ReqPostStorage
+// PostStorageMyfileJSONRequestBody defines body for PostStorageMyfile for application/json ContentType.
+type PostStorageMyfileJSONRequestBody = ReqPostStorageMyfile
 
 // PutUserMeJSONRequestBody defines body for PutUserMe for application/json ContentType.
 type PutUserMeJSONRequestBody = ReqPutUserMe

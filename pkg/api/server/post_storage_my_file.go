@@ -9,8 +9,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *server) PostStorage(ctx echo.Context) error {
-	var requestBody api.ReqPostStorage
+func (s *server) PostStorageMyfile(ctx echo.Context) error {
+	var requestBody api.ReqPostStorageMyfile
 	ctx.Bind(&requestBody)
 	err := validator.Validate(requestBody)
 	if err != nil {
@@ -23,7 +23,7 @@ func (s *server) PostStorage(ctx echo.Context) error {
 	}
 	defer dbTranisactionClient.Rollback()
 
-	res, err := storage.PostStorage(ctx, &dbTranisactionClient, requestBody)
+	res, err := storage.PostStorageMyfile(ctx, &dbTranisactionClient, requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

@@ -7,10 +7,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *server) GetStorage(ctx echo.Context) error {
+func (s *server) GetStorageMyfile(ctx echo.Context) error {
 	dbClient := db.Open()
 
-	res, err := storage.GetStorage(ctx, &dbClient)
+	res, err := storage.GetStorageMyfile(ctx, &dbClient)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

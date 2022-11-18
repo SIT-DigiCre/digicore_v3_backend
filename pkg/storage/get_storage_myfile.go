@@ -10,16 +10,16 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GetStorage(ctx echo.Context, dbClient db.Client) (api.ResGetStorage, *response.Error) {
-	res := api.ResGetStorage{}
+func GetStorageMyfile(ctx echo.Context, dbClient db.Client) (api.ResGetStorageMyfile, *response.Error) {
+	res := api.ResGetStorageMyfile{}
 	userId := ctx.Get("user_id").(string)
 	files, err := getFileListFromUserID(dbClient, userId)
 	if err != nil {
-		return api.ResGetStorage{}, err
+		return api.ResGetStorageMyfile{}, err
 	}
 	rerr := copier.Copy(&res.Files, &files)
 	if rerr != nil {
-		return api.ResGetStorage{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
+		return api.ResGetStorageMyfile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
 	return res, nil
 }
