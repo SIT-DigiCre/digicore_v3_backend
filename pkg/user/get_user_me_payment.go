@@ -42,8 +42,5 @@ func getUserPaymentFromUserId(dbClient db.Client, userId string) ([]payment, *re
 	if err != nil {
 		return []payment{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
-	if len(payments) == 0 {
-		return []payment{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "支払い情報が有りません", Log: "no rows in result"}
-	}
 	return payments, nil
 }
