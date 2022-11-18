@@ -9,12 +9,17 @@ generate_api:
 
 .PHONY: migrate-dry
 migrate-dry:
-	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/schema admin bash -c 'cat `ls | grep -v foreign_key.sql` | go run github.com/k0kubun/sqldef/cmd/mysqldef@v0.13.19 --user=${DB_USER} --password=${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} --dry-run'
+	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/schema admin bash -c 'cat `ls -F | grep -v / | sed s/\*$$//g | grep -v foreign_key.sql` | go run github.com/k0kubun/sqldef/cmd/mysqldef@v0.13.19 --user=${DB_USER} --password=${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} --dry-run'
 
 .PHONY: migrate
 migrate:
-	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/schema admin bash -c 'cat `ls | grep -v foreign_key.sql` | go run github.com/k0kubun/sqldef/cmd/mysqldef@v0.13.19 --user=${DB_USER} --password=${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE}'
-	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/schema admin bash -c 'mysql -u ${DB_USER} -p${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} -vvv < foreign_key.sql'
+	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/schema admin bash -c 'cat `ls -F | grep -v / | sed s/\*$$//g | grep -v foreign_key.sql` | go run github.com/k0kubun/sqldef/cmd/mysqldef@v0.13.19 --user=${DB_USER} --password=${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE}'
+	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/schema admin bash -c 'cat foreign_key.sql | mysql -u ${DB_USER} -p${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} -vvv'
+
+.PHONY: migrate
+insert_test:
+	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/schema/test admin bash -c 'cat `ls -F | grep -v / | sed s/\*$$//g | mysql -u ${DB_USER} -p${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} -vvv'
+
 
 .PHONY: up
 up:
