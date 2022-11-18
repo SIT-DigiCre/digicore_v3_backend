@@ -396,10 +396,7 @@ paths:
           description: Success update my payment
           content:
             application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ResGetUserMePayment'
+              $ref: '#/components/schemas/ResGetUserMePayment'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
