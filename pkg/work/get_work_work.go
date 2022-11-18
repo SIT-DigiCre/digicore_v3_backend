@@ -52,12 +52,12 @@ func getWorkList(dbClient db.Client, offset *int, authorId *string) ([]workOverv
 		if err != nil {
 			return []workOverview{}, err
 		}
-		workOverviews[i].Author = workAuthors
+		workOverviews[i].Authors = workAuthors
 		workTags, err := getWorkWorkTagList(dbClient, workId)
 		if err != nil {
 			return []workOverview{}, err
 		}
-		workOverviews[i].Tag = workTags
+		workOverviews[i].Tags = workTags
 	}
 	return workOverviews, nil
 }
