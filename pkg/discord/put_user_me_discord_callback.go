@@ -3,6 +3,7 @@ package discord
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 
@@ -45,15 +46,19 @@ func getAccessToken(code string) (string, *response.Error) {
 	if err != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+	}
 	accessToken := struct {
 		AccessToken string `json:"access_token"`
 	}{}
-	err = json.NewDecoder(res.Body).Decode(&accessToken)
+	err = json.NewDecoder(strings.NewReader(string(body))).Decode(&accessToken)
 	if err != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
 	if res.StatusCode != 200 {
-		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: fmt.Sprintf("return %d not 200", res.StatusCode)}
+		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: fmt.Sprintf("return %d not 200 (%s)", res.StatusCode, body)}
 	}
 	return accessToken.AccessToken, nil
 }
