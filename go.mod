@@ -3,7 +3,7 @@ module github.com/SIT-DigiCre/digicore_v3_backend
 go 1.19
 
 require (
-	github.com/aws/aws-sdk-go v1.44.136
+	github.com/aws/aws-sdk-go v1.44.142
 	github.com/deepmap/oapi-codegen v1.12.2
 	github.com/future-architect/go-twowaysql v1.7.1
 	github.com/getkin/kin-openapi v0.108.0
@@ -18,12 +18,11 @@ require (
 	github.com/mattermost/mattermost-server/v5 v5.39.3
 	github.com/rubenv/sql-migrate v1.2.0
 	github.com/sirupsen/logrus v1.9.0
-	golang.org/x/oauth2 v0.0.0-20221014153046-6fdb5e3db783
+	golang.org/x/oauth2 v0.0.0-20220622183110-fd043fe589d2
 )
 
 require (
-	cloud.google.com/go/compute v1.12.1 // indirect
-	cloud.google.com/go/compute/metadata v0.1.0 // indirect
+	cloud.google.com/go/compute v1.9.0 // indirect
 	github.com/Masterminds/goutils v1.1.0 // indirect
 	github.com/Masterminds/semver/v3 v3.1.1 // indirect
 	github.com/Masterminds/sprig/v3 v3.2.0 // indirect
