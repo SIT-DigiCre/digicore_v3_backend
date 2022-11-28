@@ -10,3 +10,5 @@
   description: Storage system
 - name: work
   description: Work system
+- name: blog
+  description: Blog system

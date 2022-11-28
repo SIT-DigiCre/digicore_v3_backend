@@ -96,9 +96,38 @@ ReqPostWorkTag:
   $ref: "./schemas/req_post_work_tag.yml"
 ResGetWorkTagTagId:
   $ref: "./schemas/res_get_work_tag_tag_id.yml"
-
 ReqPutWorkTagTagId:
   $ref: "./schemas/req_put_work_tag_tag_id.yml"
+ResGetBlogBlog:
+  $ref: "./schemas/res_get_blog_blog.yml"
+ResGetBlogBlogObjectBlog:
+  $ref: "./schemas/res_get_blog_blog.blog.yml"
+ResGetBlogBlogObjectBlogObjectAuthor:
+  $ref: "./schemas/res_get_blog_blog.blog.author.yml"
+ResGetBlogBlogObjectBlogObjectTag:
+  $ref: "./schemas/res_get_blog_blog.blog.tag.yml"
+ReqPostBlogBlog:
+  $ref: "./schemas/req_post_blog_blog.yml"
+ResGetBlogBlogBlogId:
+  $ref: "./schemas/res_get_blog_blog_blog_id.yml"
+ResGetBlogBlogBlogIdObjectAuthor:
+  $ref: "./schemas/res_get_blog_blog_blog_id.author.yml"
+ResGetBlogBlogBlogIdObjectTag:
+  $ref: "./schemas/res_get_blog_blog_blog_id.file.yml"
+ResGetBlogBlogBlogIdObjectFile:
+  $ref: "./schemas/res_get_blog_blog_blog_id.tag.yml"
+ReqPutBlogBlogBlogId:
+  $ref: "./schemas/req_put_blog_blog_blog_id.yml"
+ResGetBlogTag:
+  $ref: "./schemas/res_get_blog_tag.yml"
+ResGetBlogTagObjectTag:
+  $ref: "./schemas/res_get_blog_tag.tag.yml"
+ReqPostBlogTag:
+  $ref: "./schemas/req_post_blog_tag.yml"
+ResGetBlogTagTagId:
+  $ref: "./schemas/res_get_blog_tag_tag_id.yml"
+ReqPutBlogTagTagId:
+  $ref: "./schemas/req_put_blog_tag_tag_id.yml"
 
 Error:
   $ref: "./schemas/error.yml"

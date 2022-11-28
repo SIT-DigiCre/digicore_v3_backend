@@ -50,3 +50,11 @@
   $ref: "./paths/work_tag.yml"
 /work/tag/{tagId}:
   $ref: "./paths/work_tag_tag_id.yml"
+/blog/blog:
+  $ref: "./paths/blog_blog.yml"
+/blog/blog/{blogId}:
+  $ref: "./paths/blog_blog_blog_id.yml"
+/blog/tag:
+  $ref: "./paths/blog_tag.yml"
+/blog/tag/{tagId}:
+  $ref: "./paths/blog_tag_tag_id.yml"

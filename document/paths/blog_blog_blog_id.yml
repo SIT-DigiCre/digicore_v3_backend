@@ -1,0 +1,68 @@
+get:
+  tags:
+    - blog
+  description: "Get blog"
+  parameters:
+    - name: blogId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      description: "Get blog"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_blog_blog_blog_id.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+put:
+  tags:
+    - blog
+  description: "Update blog"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: blogId
+      in: path
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: "Update blog"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_put_blog_blog_blog_id.yml"
+  responses:
+    200:
+      description: "Create blog"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_blog_blog_blog_id.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+delete:
+  tags:
+    - blog
+  description: "Delete blog"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: blogId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      $ref: "../responses/blank_success.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

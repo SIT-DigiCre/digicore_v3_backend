@@ -13,6 +13,20 @@ type Error struct {
 	Message string `json:"message"`
 }
 
+// ReqPostBlogBlog defines model for ReqPostBlogBlog.
+type ReqPostBlogBlog struct {
+	Content string   `ja:"本文" json:"content" validate:"required"`
+	Files   []string `ja:"ファイル" json:"files" validate:"dive,uuid"`
+	Tags    []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
+	Title   string   `ja:"タイトル" json:"title" validate:"required"`
+}
+
+// ReqPostBlogTag defines model for ReqPostBlogTag.
+type ReqPostBlogTag struct {
+	Description string `ja:"説明" json:"description" validate:"required"`
+	Name        string `ja:"タグ名" json:"name" validate:"required"`
+}
+
 // ReqPostLoginCallback defines model for ReqPostLoginCallback.
 type ReqPostLoginCallback struct {
 	Code string `ja:"認証コード" json:"code" validate:"required"`
@@ -50,6 +64,20 @@ type ReqPostWorkWork struct {
 	Files       []string `ja:"ファイル" json:"files" validate:"dive,uuid"`
 	Name        string   `ja:"作品名" json:"name" validate:"required"`
 	Tags        []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
+}
+
+// ReqPutBlogBlogBlogId defines model for ReqPutBlogBlogBlogId.
+type ReqPutBlogBlogBlogId struct {
+	Content string   `ja:"本文" json:"content" validate:"required"`
+	Files   []string `ja:"ファイル" json:"files" validate:"dive,uuid"`
+	Tags    []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
+	Title   string   `ja:"タイトル" json:"title" validate:"required"`
+}
+
+// ReqPutBlogTagTagId defines model for ReqPutBlogTagTagId.
+type ReqPutBlogTagTagId struct {
+	Description string `ja:"説明" json:"description" validate:"required"`
+	Name        string `ja:"タグ名" json:"name" validate:"required"`
 }
 
 // ReqPutEventEventIdReservationIdMe defines model for ReqPutEventEventIdReservationIdMe.
@@ -109,6 +137,81 @@ type ReqPutWorkWorkWorkId struct {
 	Files       []string `ja:"ファイル" json:"files" validate:"dive,uuid"`
 	Name        string   `ja:"作品名" json:"name" validate:"required"`
 	Tags        []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
+}
+
+// ResGetBlogBlog defines model for ResGetBlogBlog.
+type ResGetBlogBlog struct {
+	Blogs []ResGetBlogBlogObjectBlog `json:"blogs"`
+}
+
+// ResGetBlogBlogBlogId defines model for ResGetBlogBlogBlogId.
+type ResGetBlogBlogBlogId struct {
+	Author    ResGetBlogBlogBlogIdObjectAuthor `json:"author"`
+	BlogId    string                           `json:"blogId"`
+	Content   string                           `json:"content"`
+	CreatedAt string                           `json:"createdAt"`
+	Files     []ResGetBlogBlogBlogIdObjectTag  `json:"files"`
+	Tags      []ResGetBlogBlogBlogIdObjectFile `json:"tags"`
+	Title     string                           `json:"title"`
+	UpdateAt  *string                          `json:"updateAt,omitempty"`
+}
+
+// ResGetBlogBlogBlogIdObjectAuthor defines model for ResGetBlogBlogBlogIdObjectAuthor.
+type ResGetBlogBlogBlogIdObjectAuthor struct {
+	IconUrl  string `json:"iconUrl"`
+	UserId   string `json:"userId"`
+	Username string `json:"username"`
+}
+
+// ResGetBlogBlogBlogIdObjectFile defines model for ResGetBlogBlogBlogIdObjectFile.
+type ResGetBlogBlogBlogIdObjectFile struct {
+	Name  string `json:"name"`
+	TagId string `json:"tagId"`
+}
+
+// ResGetBlogBlogBlogIdObjectTag defines model for ResGetBlogBlogBlogIdObjectTag.
+type ResGetBlogBlogBlogIdObjectTag struct {
+	FileId string `json:"fileId"`
+	Name   string `json:"name"`
+}
+
+// ResGetBlogBlogObjectBlog defines model for ResGetBlogBlogObjectBlog.
+type ResGetBlogBlogObjectBlog struct {
+	Author ResGetBlogBlogObjectBlogObjectAuthor `json:"author"`
+	BlogId string                               `json:"blogId"`
+	Tags   []ResGetBlogBlogObjectBlogObjectTag  `json:"tags"`
+	Title  string                               `json:"title"`
+}
+
+// ResGetBlogBlogObjectBlogObjectAuthor defines model for ResGetBlogBlogObjectBlogObjectAuthor.
+type ResGetBlogBlogObjectBlogObjectAuthor struct {
+	IconUrl  string `json:"iconUrl"`
+	UserId   string `json:"userId"`
+	Username string `json:"username"`
+}
+
+// ResGetBlogBlogObjectBlogObjectTag defines model for ResGetBlogBlogObjectBlogObjectTag.
+type ResGetBlogBlogObjectBlogObjectTag struct {
+	Name  string `json:"name"`
+	TagId string `json:"tagId"`
+}
+
+// ResGetBlogTag defines model for ResGetBlogTag.
+type ResGetBlogTag struct {
+	Tags []ResGetBlogTagObjectTag `json:"tags"`
+}
+
+// ResGetBlogTagObjectTag defines model for ResGetBlogTagObjectTag.
+type ResGetBlogTagObjectTag struct {
+	Name  string `json:"name"`
+	TagId string `json:"tagId"`
+}
+
+// ResGetBlogTagTagId defines model for ResGetBlogTagTagId.
+type ResGetBlogTagTagId struct {
+	Description string `json:"description"`
+	Name        string `json:"name"`
+	TagId       string `json:"tagId"`
 }
 
 // ResGetEvent defines model for ResGetEvent.
@@ -413,6 +516,17 @@ type NotFound = Error
 // Unauthorized defines model for Unauthorized.
 type Unauthorized = Error
 
+// GetBlogBlogParams defines parameters for GetBlogBlog.
+type GetBlogBlogParams struct {
+	Offset   *int    `form:"offset,omitempty" json:"offset,omitempty"`
+	AuthorId *string `form:"authorId,omitempty" json:"authorId,omitempty"`
+}
+
+// GetBlogTagParams defines parameters for GetBlogTag.
+type GetBlogTagParams struct {
+	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+}
+
 // GetEventParams defines parameters for GetEvent.
 type GetEventParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
@@ -434,6 +548,18 @@ type GetWorkWorkParams struct {
 	Offset   *int    `form:"offset,omitempty" json:"offset,omitempty"`
 	AuthorId *string `form:"authorId,omitempty" json:"authorId,omitempty"`
 }
+
+// PostBlogBlogJSONRequestBody defines body for PostBlogBlog for application/json ContentType.
+type PostBlogBlogJSONRequestBody = ReqPostBlogBlog
+
+// PutBlogBlogBlogIdJSONRequestBody defines body for PutBlogBlogBlogId for application/json ContentType.
+type PutBlogBlogBlogIdJSONRequestBody = ReqPutBlogBlogBlogId
+
+// PostBlogTagJSONRequestBody defines body for PostBlogTag for application/json ContentType.
+type PostBlogTagJSONRequestBody = ReqPostBlogTag
+
+// PutBlogTagTagIdJSONRequestBody defines body for PutBlogTagTagId for application/json ContentType.
+type PutBlogTagTagIdJSONRequestBody = ReqPutBlogTagTagId
 
 // PutEventEventIdReservationIdMeJSONRequestBody defines body for PutEventEventIdReservationIdMe for application/json ContentType.
 type PutEventEventIdReservationIdMeJSONRequestBody = ReqPutEventEventIdReservationIdMe

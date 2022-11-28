@@ -14,6 +14,36 @@ import (
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
+	// (GET /blog/blog)
+	GetBlogBlog(ctx echo.Context, params GetBlogBlogParams) error
+
+	// (POST /blog/blog)
+	PostBlogBlog(ctx echo.Context) error
+
+	// (DELETE /blog/blog/{blogId})
+	DeleteBlogBlogBlogId(ctx echo.Context, blogId string) error
+
+	// (GET /blog/blog/{blogId})
+	GetBlogBlogBlogId(ctx echo.Context, blogId string) error
+
+	// (PUT /blog/blog/{blogId})
+	PutBlogBlogBlogId(ctx echo.Context, blogId string) error
+
+	// (GET /blog/tag)
+	GetBlogTag(ctx echo.Context, params GetBlogTagParams) error
+
+	// (POST /blog/tag)
+	PostBlogTag(ctx echo.Context) error
+
+	// (DELETE /blog/tag/{tagId})
+	DeleteBlogTagTagId(ctx echo.Context, tagId string) error
+
+	// (GET /blog/tag/{tagId})
+	GetBlogTagTagId(ctx echo.Context, tagId string) error
+
+	// (PUT /blog/tag/{tagId})
+	PutBlogTagTagId(ctx echo.Context, tagId string) error
+
 	// (GET /event)
 	GetEvent(ctx echo.Context, params GetEventParams) error
 
@@ -132,6 +162,175 @@ type ServerInterface interface {
 // ServerInterfaceWrapper converts echo contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler ServerInterface
+}
+
+// GetBlogBlog converts echo context to params.
+func (w *ServerInterfaceWrapper) GetBlogBlog(ctx echo.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetBlogBlogParams
+	// ------------- Optional query parameter "offset" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "offset", ctx.QueryParams(), &params.Offset)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter offset: %s", err))
+	}
+
+	// ------------- Optional query parameter "authorId" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "authorId", ctx.QueryParams(), &params.AuthorId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter authorId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetBlogBlog(ctx, params)
+	return err
+}
+
+// PostBlogBlog converts echo context to params.
+func (w *ServerInterfaceWrapper) PostBlogBlog(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostBlogBlog(ctx)
+	return err
+}
+
+// DeleteBlogBlogBlogId converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteBlogBlogBlogId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "blogId" -------------
+	var blogId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "blogId", runtime.ParamLocationPath, ctx.Param("blogId"), &blogId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter blogId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteBlogBlogBlogId(ctx, blogId)
+	return err
+}
+
+// GetBlogBlogBlogId converts echo context to params.
+func (w *ServerInterfaceWrapper) GetBlogBlogBlogId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "blogId" -------------
+	var blogId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "blogId", runtime.ParamLocationPath, ctx.Param("blogId"), &blogId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter blogId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetBlogBlogBlogId(ctx, blogId)
+	return err
+}
+
+// PutBlogBlogBlogId converts echo context to params.
+func (w *ServerInterfaceWrapper) PutBlogBlogBlogId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "blogId" -------------
+	var blogId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "blogId", runtime.ParamLocationPath, ctx.Param("blogId"), &blogId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter blogId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutBlogBlogBlogId(ctx, blogId)
+	return err
+}
+
+// GetBlogTag converts echo context to params.
+func (w *ServerInterfaceWrapper) GetBlogTag(ctx echo.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetBlogTagParams
+	// ------------- Optional query parameter "offset" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "offset", ctx.QueryParams(), &params.Offset)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter offset: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetBlogTag(ctx, params)
+	return err
+}
+
+// PostBlogTag converts echo context to params.
+func (w *ServerInterfaceWrapper) PostBlogTag(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostBlogTag(ctx)
+	return err
+}
+
+// DeleteBlogTagTagId converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteBlogTagTagId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "tagId" -------------
+	var tagId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "tagId", runtime.ParamLocationPath, ctx.Param("tagId"), &tagId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter tagId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteBlogTagTagId(ctx, tagId)
+	return err
+}
+
+// GetBlogTagTagId converts echo context to params.
+func (w *ServerInterfaceWrapper) GetBlogTagTagId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "tagId" -------------
+	var tagId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "tagId", runtime.ParamLocationPath, ctx.Param("tagId"), &tagId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter tagId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetBlogTagTagId(ctx, tagId)
+	return err
+}
+
+// PutBlogTagTagId converts echo context to params.
+func (w *ServerInterfaceWrapper) PutBlogTagTagId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "tagId" -------------
+	var tagId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "tagId", runtime.ParamLocationPath, ctx.Param("tagId"), &tagId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter tagId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutBlogTagTagId(ctx, tagId)
+	return err
 }
 
 // GetEvent converts echo context to params.
@@ -735,6 +934,16 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
+	router.GET(baseURL+"/blog/blog", wrapper.GetBlogBlog)
+	router.POST(baseURL+"/blog/blog", wrapper.PostBlogBlog)
+	router.DELETE(baseURL+"/blog/blog/:blogId", wrapper.DeleteBlogBlogBlogId)
+	router.GET(baseURL+"/blog/blog/:blogId", wrapper.GetBlogBlogBlogId)
+	router.PUT(baseURL+"/blog/blog/:blogId", wrapper.PutBlogBlogBlogId)
+	router.GET(baseURL+"/blog/tag", wrapper.GetBlogTag)
+	router.POST(baseURL+"/blog/tag", wrapper.PostBlogTag)
+	router.DELETE(baseURL+"/blog/tag/:tagId", wrapper.DeleteBlogTagTagId)
+	router.GET(baseURL+"/blog/tag/:tagId", wrapper.GetBlogTagTagId)
+	router.PUT(baseURL+"/blog/tag/:tagId", wrapper.PutBlogTagTagId)
 	router.GET(baseURL+"/event", wrapper.GetEvent)
 	router.GET(baseURL+"/event/:eventId", wrapper.GetEventEventId)
 	router.GET(baseURL+"/event/:eventId/:reservationId", wrapper.GetEventEventIdReservationId)

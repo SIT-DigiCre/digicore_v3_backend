@@ -1,0 +1,49 @@
+get:
+  tags:
+    - blog
+  description: "Get blog list"
+  parameters:
+    - name: offset
+      in: query
+      schema:
+        type: integer
+    - name: authorId
+      in: query
+      required: false
+      schema:
+        type: string
+  responses:
+    200:
+      description: "blog list"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_blog_blog.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+post:
+  tags:
+    - blog
+  description: "Post blog"
+  security:
+    - BearerAuth: []
+  requestBody:
+    description: "Create blog"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_post_blog_blog.yml"
+  responses:
+    200:
+      description: "Create blog"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_blog_blog_blog_id.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

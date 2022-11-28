@@ -1,0 +1,17 @@
+required:
+  - blogId
+  - title
+  - author
+  - tags
+properties:
+  blogId:
+    type: string
+  title:
+    type: string
+  author:
+    type: object
+    $ref: './res_get_blog_blog.blog.author.yml'
+  tags:
+    type: array
+    items:
+      $ref: './res_get_blog_blog.blog.tag.yml'

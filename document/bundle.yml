@@ -15,6 +15,8 @@ tags:
     description: Storage system
   - name: work
     description: Work system
+  - name: blog
+    description: Blog system
 paths:
   /status:
     get:
@@ -895,6 +897,239 @@ paths:
           $ref: '#/components/responses/BlankSuccess'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /blog/blog:
+    get:
+      tags:
+        - blog
+      description: Get blog list
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+        - name: authorId
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: blog list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBlogBlog'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    post:
+      tags:
+        - blog
+      description: Post blog
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Create blog
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostBlogBlog'
+      responses:
+        '200':
+          description: Create blog
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBlogBlogBlogId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/blog/blog/{blogId}':
+    get:
+      tags:
+        - blog
+      description: Get blog
+      parameters:
+        - name: blogId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Get blog
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBlogBlogBlogId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - blog
+      description: Update blog
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: blogId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update blog
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutBlogBlogBlogId'
+      responses:
+        '200':
+          description: Create blog
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBlogBlogBlogId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - blog
+      description: Delete blog
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: blogId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /blog/tag:
+    get:
+      tags:
+        - blog
+      description: Get tag list
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: tag list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBlogTag'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    post:
+      tags:
+        - blog
+      description: Post tag
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Create tag
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostBlogTag'
+      responses:
+        '200':
+          description: Create tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBlogTagTagId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/blog/tag/{tagId}':
+    get:
+      tags:
+        - blog
+      description: Get tag
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Get tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBlogTagTagId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - blog
+      description: Update tag
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update tag
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutBlogTagTagId'
+      responses:
+        '200':
+          description: Update tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBlogTagTagId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - blog
+      description: Delete tag
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -1733,6 +1968,236 @@ components:
         description:
           type: string
     ReqPutWorkTagTagId:
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: タグ名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 説明
+    ResGetBlogBlog:
+      required:
+        - blogs
+      properties:
+        blogs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetBlogBlogObjectBlog'
+    ResGetBlogBlogObjectBlog:
+      required:
+        - blogId
+        - title
+        - author
+        - tags
+      properties:
+        blogId:
+          type: string
+        title:
+          type: string
+        author:
+          type: object
+          $ref: '#/components/schemas/ResGetBlogBlogObjectBlogObjectAuthor'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetBlogBlogObjectBlogObjectTag'
+    ResGetBlogBlogObjectBlogObjectAuthor:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+    ResGetBlogBlogObjectBlogObjectTag:
+      required:
+        - tagId
+        - name
+      properties:
+        tagId:
+          type: string
+        name:
+          type: string
+    ReqPostBlogBlog:
+      required:
+        - title
+        - content
+        - files
+        - tags
+      properties:
+        title:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: タイトル
+        content:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 本文
+        files:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: ファイル
+        tags:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: タグ
+    ResGetBlogBlogBlogId:
+      required:
+        - blogId
+        - title
+        - content
+        - author
+        - files
+        - tags
+        - createdAt
+        - updatedAt
+      properties:
+        blogId:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        author:
+          type: object
+          $ref: '#/components/schemas/ResGetBlogBlogBlogIdObjectAuthor'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetBlogBlogBlogIdObjectTag'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetBlogBlogBlogIdObjectFile'
+        createdAt:
+          type: string
+        updateAt:
+          type: string
+    ResGetBlogBlogBlogIdObjectAuthor:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+    ResGetBlogBlogBlogIdObjectTag:
+      required:
+        - fileId
+        - name
+      properties:
+        fileId:
+          type: string
+        name:
+          type: string
+    ResGetBlogBlogBlogIdObjectFile:
+      required:
+        - tagId
+        - name
+      properties:
+        tagId:
+          type: string
+        name:
+          type: string
+    ReqPutBlogBlogBlogId:
+      required:
+        - title
+        - content
+        - files
+        - tags
+      properties:
+        title:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: タイトル
+        content:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 本文
+        files:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: ファイル
+        tags:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: タグ
+    ResGetBlogTag:
+      required:
+        - tags
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetBlogTagObjectTag'
+    ResGetBlogTagObjectTag:
+      required:
+        - tagId
+        - name
+      properties:
+        tagId:
+          type: string
+        name:
+          type: string
+    ReqPostBlogTag:
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: タグ名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 説明
+    ResGetBlogTagTagId:
+      required:
+        - tagId
+        - name
+        - description
+      properties:
+        tagId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    ReqPutBlogTagTagId:
       required:
         - name
         - description

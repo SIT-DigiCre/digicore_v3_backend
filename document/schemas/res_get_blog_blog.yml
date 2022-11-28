@@ -1,0 +1,7 @@
+required:
+  - blogs
+properties:
+  blogs:
+    type: array
+    items:
+      $ref: './res_get_blog_blog.blog.yml'
