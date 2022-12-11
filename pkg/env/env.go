@@ -10,6 +10,8 @@ var LoginRedirectPath = os.Getenv("LOGIN_REDIRECT_PATH")
 
 var DiscordLoginRedirectPath = os.Getenv("DISCORD_LOGIN_REDIRECT_PATH")
 
+var DefaultIconUrl = os.Getenv("DEFAULT_ICON_URL")
+
 var DiscordClientId = os.Getenv("DISCORD_CLIENT_ID")
 var DiscordClientSecret = os.Getenv("DISCORD_CLIENT_SECRET")
 

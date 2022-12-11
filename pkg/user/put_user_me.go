@@ -11,7 +11,7 @@ import (
 
 func PutUserMe(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPutUserMe) (api.ResGetUserMe, *response.Error) {
 	userId := ctx.Get("user_id").(string)
-	err := updateUserProfile(dbClient, userId, requestBody)
+	err := UpdateUserProfile(dbClient, userId, requestBody)
 	if err != nil {
 		return api.ResGetUserMe{}, err
 	}
@@ -19,7 +19,7 @@ func PutUserMe(ctx echo.Context, dbClient db.TransactionClient, requestBody api.
 	return GetUserMe(ctx, dbClient)
 }
 
-func updateUserProfile(dbClient db.TransactionClient, userId string, requestBody api.ReqPutUserMe) *response.Error {
+func UpdateUserProfile(dbClient db.TransactionClient, userId string, requestBody api.ReqPutUserMe) *response.Error {
 	params := struct {
 		UserId            string `twowaysql:"userId"`
 		IconUrl           string `twowaysql:"iconUrl"`
