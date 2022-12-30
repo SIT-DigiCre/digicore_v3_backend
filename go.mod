@@ -14,7 +14,7 @@ require (
 	github.com/jinzhu/copier v0.3.5
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/labstack/echo/v4 v4.10.0
-	github.com/lestrrat-go/jwx/v2 v2.0.7
+	github.com/lestrrat-go/jwx/v2 v2.0.8
 	github.com/mattermost/mattermost-server/v5 v5.39.3
 	github.com/rubenv/sql-migrate v1.2.0
 	github.com/sirupsen/logrus v1.9.0
