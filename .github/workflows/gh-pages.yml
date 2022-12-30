@@ -13,16 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Go 1.17
-        uses: actions/setup-go@v3
-        with:
-          go-version: 1.17
-
-      - name: Get dependencies
-        run: go install github.com/swaggo/swag/cmd/swag@latest
-
-      - name: Build swagger
-        run: swag init
+      - name: Copy publish file
+        run: |
+          mkdir docs
+          cp document/index.html docs/
+          cp document/bundle.yml docs/
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
