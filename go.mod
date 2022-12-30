@@ -6,7 +6,7 @@ require (
 	github.com/aws/aws-sdk-go v1.44.170
 	github.com/deepmap/oapi-codegen v1.12.2
 	github.com/future-architect/go-twowaysql v1.7.1
-	github.com/getkin/kin-openapi v0.108.0
+	github.com/getkin/kin-openapi v0.112.0
 	github.com/go-playground/locales v0.14.0
 	github.com/go-playground/universal-translator v0.18.0
 	github.com/go-playground/validator/v10 v10.11.1
