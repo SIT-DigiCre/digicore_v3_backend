@@ -3,7 +3,7 @@ module github.com/SIT-DigiCre/digicore_v3_backend
 go 1.19
 
 require (
-	github.com/aws/aws-sdk-go v1.44.170
+	github.com/aws/aws-sdk-go v1.44.171
 	github.com/deepmap/oapi-codegen v1.12.4
 	github.com/future-architect/go-twowaysql v1.7.1
 	github.com/getkin/kin-openapi v0.112.0
