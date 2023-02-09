@@ -56,3 +56,4 @@ networks:
   https_network:
     external: true
   digicoreapi:
+    external: true
