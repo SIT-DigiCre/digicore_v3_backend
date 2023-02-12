@@ -1,6 +1,6 @@
 [build]
   bin = "./tmp/digicore_v3_backend"
-  cmd = "go build -o ./tmp/digicore_v3_backend ./cmd/digicore_v3_backend"
+  cmd = "go build -buildvcs=false -o ./tmp/digicore_v3_backend ./cmd/digicore_v3_backend"
 
 [misc]
   clean_on_exit = true
