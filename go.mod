@@ -6,7 +6,7 @@ require (
 	github.com/aws/aws-sdk-go v1.44.199
 	github.com/deepmap/oapi-codegen v1.12.4
 	github.com/future-architect/go-twowaysql v1.7.1
-	github.com/getkin/kin-openapi v0.112.0
+	github.com/getkin/kin-openapi v0.114.0
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.0
 	github.com/go-playground/validator/v10 v10.11.1
@@ -94,6 +94,7 @@ require (
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/pborman/uuid v1.2.1 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
+	github.com/perimeterx/marshmallow v1.1.4 // indirect
 	github.com/philhofer/fwd v1.1.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/posener/complete v1.2.3 // indirect
