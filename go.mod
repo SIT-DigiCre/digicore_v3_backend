@@ -8,7 +8,7 @@ require (
 	github.com/future-architect/go-twowaysql v1.7.1
 	github.com/getkin/kin-openapi v0.112.0
 	github.com/go-playground/locales v0.14.1
-	github.com/go-playground/universal-translator v0.18.0
+	github.com/go-playground/universal-translator v0.18.1
 	github.com/go-playground/validator/v10 v10.11.1
 	github.com/go-sql-driver/mysql v1.7.0
 	github.com/jinzhu/copier v0.3.5
