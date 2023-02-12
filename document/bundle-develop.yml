@@ -396,7 +396,8 @@ paths:
           description: Success update my payment
           content:
             application/json:
-              $ref: '#/components/schemas/ResGetUserMePayment'
+              schema:
+                $ref: '#/components/schemas/ResGetUserMePayment'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -1076,7 +1077,8 @@ components:
         introduction:
           type: string
     ReqPutUserMeIntroduction:
-      required: null
+      required:
+        - introduction
       properties:
         introduction:
           type: string
