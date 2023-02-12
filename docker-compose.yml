@@ -44,7 +44,7 @@ services:
       - "./:/app"
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5.2.0
+    image: phpmyadmin/phpmyadmin:5.2.1
     environment:
       PMA_HOST: db
     ports:
