@@ -18,6 +18,6 @@ RUN apt-get update && apt-get install -y default-mysql-client-core
 
 COPY . .
 
-FROM node:19.3.0 as node_tool
+FROM node:19.6.0 as node_tool
 
 RUN npm install -g @apidevtools/swagger-cli@4.0.4
