@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/aws/aws-sdk-go v1.44.199
 	github.com/deepmap/oapi-codegen v1.12.4
-	github.com/future-architect/go-twowaysql v1.7.1
+	github.com/future-architect/go-twowaysql v1.7.2
 	github.com/getkin/kin-openapi v0.114.0
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.0
@@ -40,7 +40,7 @@ require (
 	github.com/dyatlov/go-opengraph v0.0.0-20210112100619-dae8665a5b09 // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/francoispqt/gojay v1.2.13 // indirect
-	github.com/future-architect/tagscanner v1.0.1 // indirect
+	github.com/future-architect/tagscanner v1.0.3 // indirect
 	github.com/go-asn1-ber/asn1-ber v1.5.3 // indirect
 	github.com/go-gorp/gorp/v3 v3.0.5 // indirect
 	github.com/go-logfmt/logfmt v0.5.1 // indirect
