@@ -1,0 +1,7 @@
+required:
+  - groups
+properties:
+  groups:
+    type: array
+    items:
+      $ref: './res_get_group.group.yml'

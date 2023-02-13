@@ -50,3 +50,7 @@
   $ref: "./paths/work_tag.yml"
 /work/tag/{tagId}:
   $ref: "./paths/work_tag_tag_id.yml"
+/group:
+  $ref: "./paths/group.yml"
+/group/{groupId}:
+  $ref: "./paths/group_group_id.yml"

@@ -1,0 +1,28 @@
+get:
+  tags:
+    - group
+  description: "Get group list"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: offset
+      in: query
+      schema:
+        type: integer
+    - name: seed
+      in: query
+      schema:
+        type: integer
+  responses:
+    200:
+      description: "Success get group list"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_group.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

@@ -175,6 +175,36 @@ type ResGetEventEventIdReservationIdObjectUser struct {
 	UserId   string `json:"userId"`
 }
 
+// ResGetGroup defines model for ResGetGroup.
+type ResGetGroup struct {
+	Groups []ResGetGroupObjectGroup `json:"groups"`
+}
+
+// ResGetGroupGroupId defines model for ResGetGroupGroupId.
+type ResGetGroupGroupId struct {
+	Description string                         `json:"description"`
+	GroupId     string                         `json:"groupId"`
+	Joinable    bool                           `json:"joinable"`
+	Name        string                         `json:"name"`
+	UserCount   int                            `json:"userCount"`
+	Users       []ResGetGroupGroupIdObjectUser `json:"users"`
+}
+
+// ResGetGroupGroupIdObjectUser defines model for ResGetGroupGroupIdObjectUser.
+type ResGetGroupGroupIdObjectUser struct {
+	Name     string `json:"name"`
+	UserIcon string `json:"userIcon"`
+	UserId   string `json:"userId"`
+}
+
+// ResGetGroupObjectGroup defines model for ResGetGroupObjectGroup.
+type ResGetGroupObjectGroup struct {
+	GroupId   string `json:"groupId"`
+	Joinable  bool   `json:"joinable"`
+	Name      string `json:"name"`
+	UserCount int    `json:"userCount"`
+}
+
 // ResGetLogin defines model for ResGetLogin.
 type ResGetLogin struct {
 	Url string `json:"url"`
@@ -416,6 +446,12 @@ type Unauthorized = Error
 // GetEventParams defines parameters for GetEvent.
 type GetEventParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+}
+
+// GetGroupParams defines parameters for GetGroup.
+type GetGroupParams struct {
+	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+	Seed   *int `form:"seed,omitempty" json:"seed,omitempty"`
 }
 
 // GetUserParams defines parameters for GetUser.

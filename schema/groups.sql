@@ -5,5 +5,6 @@ CREATE TABLE `groups`
     description TEXT NOT NULL,
     claim       BOOLEAN      NOT NULL DEFAULT false,
     joinable    BOOLEAN      NOT NULL DEFAULT false,
+    user_count  INT          NOT NULL DEFAULT 0,
     PRIMARY KEY (id)
 );
