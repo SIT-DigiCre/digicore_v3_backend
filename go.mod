@@ -16,7 +16,6 @@ require (
 	github.com/labstack/echo/v4 v4.10.0
 	github.com/lestrrat-go/jwx/v2 v2.0.8
 	github.com/mattermost/mattermost-server/v5 v5.39.3
-	github.com/mattermost/mattermost-server/v6 v6.7.2
 	github.com/rubenv/sql-migrate v1.3.1
 	github.com/sirupsen/logrus v1.9.0
 	golang.org/x/oauth2 v0.5.0
