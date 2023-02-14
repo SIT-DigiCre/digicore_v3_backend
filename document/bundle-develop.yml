@@ -1830,6 +1830,7 @@ components:
         - name
         - userCount
         - joinable
+        - joined
       properties:
         groupId:
           type: string
@@ -1838,6 +1839,8 @@ components:
         userCount:
           type: integer
         joinable:
+          type: boolean
+        joined:
           type: boolean
     ResGetGroupGroupId:
       required:

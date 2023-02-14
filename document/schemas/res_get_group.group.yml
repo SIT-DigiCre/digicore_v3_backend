@@ -3,6 +3,7 @@ required:
   - name
   - userCount
   - joinable
+  - joined
 properties:
   groupId:
     type: string
@@ -11,4 +12,6 @@ properties:
   userCount:
     type: integer
   joinable:
+    type: boolean
+  joined:
     type: boolean
