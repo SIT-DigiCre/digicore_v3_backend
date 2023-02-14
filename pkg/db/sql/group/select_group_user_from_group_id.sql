@@ -1,0 +1,1 @@
+SELECT BIN_TO_UUID(groups_users.user_id) AS user_id, username, icon_url FROM groups_users LEFT JOIN user_profiles ON groups_users.user_id = user_profiles.user_id WHERE group_id = UUID_TO_BIN(/*groupId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');
