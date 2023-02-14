@@ -188,6 +188,7 @@ type ResGetGroupGroupId struct {
 	Description string                         `json:"description"`
 	GroupId     string                         `json:"groupId"`
 	Joinable    bool                           `json:"joinable"`
+	Joined      bool                           `json:"joined"`
 	Name        string                         `json:"name"`
 	UserCount   int                            `json:"userCount"`
 	Users       []ResGetGroupGroupIdObjectUser `json:"users"`

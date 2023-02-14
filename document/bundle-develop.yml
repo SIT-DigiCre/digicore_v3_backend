@@ -1847,8 +1847,9 @@ components:
         - groupId
         - name
         - description
-        - joinable
         - userCount
+        - joinable
+        - joined
         - users
       properties:
         groupId:
@@ -1857,10 +1858,12 @@ components:
           type: string
         description:
           type: string
-        joinable:
-          type: boolean
         userCount:
           type: integer
+        joinable:
+          type: boolean
+        joined:
+          type: boolean
         users:
           type: array
           items:

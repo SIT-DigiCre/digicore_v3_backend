@@ -2,8 +2,9 @@ required:
   - groupId
   - name
   - description
-  - joinable
   - userCount
+  - joinable
+  - joined
   - users
 properties:
   groupId:
@@ -12,10 +13,12 @@ properties:
     type: string
   description:
     type: string
-  joinable:
-    type: boolean
   userCount:
     type: integer
+  joinable:
+    type: boolean
+  joined:
+    type: boolean
   users:
     type: array
     items:
