@@ -113,14 +113,7 @@ type ReqPutWorkWorkWorkId struct {
 
 // ResGetEvent defines model for ResGetEvent.
 type ResGetEvent struct {
-	Events []struct {
-		CalendarView bool   `json:"calendarView"`
-		Description  string `json:"description"`
-		EventId      string `json:"eventId"`
-		Name         string `json:"name"`
-		Reservable   bool   `json:"reservable"`
-		Reservated   bool   `json:"reservated"`
-	} `json:"events"`
+	Events []ResGetEventObjectEvent `json:"events"`
 }
 
 // ResGetEventEventId defines model for ResGetEventEventId.
@@ -173,6 +166,16 @@ type ResGetEventEventIdReservationIdObjectUser struct {
 	Url      string `json:"url"`
 	UserIcon string `json:"userIcon"`
 	UserId   string `json:"userId"`
+}
+
+// ResGetEventObjectEvent defines model for ResGetEventObjectEvent.
+type ResGetEventObjectEvent struct {
+	CalendarView bool   `json:"calendarView"`
+	Description  string `json:"description"`
+	EventId      string `json:"eventId"`
+	Name         string `json:"name"`
+	Reservable   bool   `json:"reservable"`
+	Reservated   bool   `json:"reservated"`
 }
 
 // ResGetGroup defines model for ResGetGroup.

@@ -1300,26 +1300,28 @@ components:
         events:
           type: array
           items:
-            required:
-              - eventId
-              - name
-              - description
-              - calendarView
-              - reservable
-              - reservated
-            properties:
-              eventId:
-                type: string
-              name:
-                type: string
-              description:
-                type: string
-              calendarView:
-                type: boolean
-              reservable:
-                type: boolean
-              reservated:
-                type: boolean
+            $ref: '#/components/schemas/ResGetEventObjectEvent'
+    ResGetEventObjectEvent:
+      required:
+        - eventId
+        - name
+        - description
+        - calendarView
+        - reservable
+        - reservated
+      properties:
+        eventId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        calendarView:
+          type: boolean
+        reservable:
+          type: boolean
+        reservated:
+          type: boolean
     ResGetEventEventId:
       required:
         - eventId

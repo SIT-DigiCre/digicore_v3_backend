@@ -46,6 +46,8 @@ ReqPutUserMeDiscordCallback:
   $ref: "./schemas/req_put_user_me_discord_callback.yml"
 ResGetEvent:
   $ref: "./schemas/res_get_event.yml"
+ResGetEventObjectEvent:
+  $ref: "./schemas/res_get_event.event.yml"
 ResGetEventEventId:
   $ref: "./schemas/res_get_event_event_id.yml"
 ResGetEventEventIdObjectReservation:
