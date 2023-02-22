@@ -17,6 +17,8 @@ tags:
     description: Work system
   - name: group
     description: Group system
+  - name: budget
+    description: Budget system
 paths:
   /status:
     get:
@@ -953,6 +955,32 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}':
+    get:
+      tags:
+        - budget
+      description: Get my budget
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -1871,6 +1899,83 @@ components:
         userIcon:
           type: string
         name:
+          type: string
+    ResGetBudgetBudgetId:
+      required:
+        - budgetId
+        - title
+        - class
+        - status
+        - applicant
+        - budget
+        - settlement
+        - purpose
+        - authorizer
+        - files
+        - createdAd
+        - authorizedAt
+        - updatedAt
+      properties:
+        budgetId:
+          type: string
+        title:
+          type: string
+        class:
+          type: string
+        status:
+          type: string
+        applicant:
+          $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectApplicant'
+        budget:
+          type: integer
+        settlement:
+          type: integer
+        purpose:
+          type: string
+        authorizer:
+          $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectAuthorizer'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectFile'
+        createdAd:
+          type: string
+        authorizedAt:
+          type: string
+        updatedAt:
+          type: string
+    ResGetBudgetBudgetIdObjectFile:
+      required:
+        - fileId
+        - name
+      properties:
+        fileId:
+          type: string
+        name:
+          type: string
+    ResGetBudgetBudgetIdObjectAuthorizer:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+    ResGetBudgetBudgetIdObjectApplicant:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
           type: string
     Error:
       required:

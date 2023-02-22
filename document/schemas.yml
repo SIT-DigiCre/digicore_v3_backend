@@ -108,6 +108,14 @@ ResGetGroupGroupId:
   $ref: "./schemas/res_get_group_group_id.yml"
 ResGetGroupGroupIdObjectUser:
   $ref: "./schemas/res_get_group_group_id.user.yml"
+ResGetBudgetBudgetId:
+  $ref: "./schemas/res_get_budget_budget_id.yml"
+ResGetBudgetBudgetIdObjectFile:
+  $ref: "./schemas/res_get_budget_budget_id.file.yml"
+ResGetBudgetBudgetIdObjectAuthorizer:
+  $ref: "./schemas/res_get_budget_budget_id.authorizer.yml"
+ResGetBudgetBudgetIdObjectApplicant:
+  $ref: "./schemas/res_get_budget_budget_id.applicant.yml"
 
 Error:
   $ref: "./schemas/error.yml"

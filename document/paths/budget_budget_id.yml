@@ -1,0 +1,51 @@
+get:
+  tags:
+    - budget
+  description: "Get my budget"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: budgetId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      description: "Success get budget"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_budget_budget_id.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+# put:
+#   tags:
+#     - budget
+#   description: "Update my budget"
+#   security:
+#     - BearerAuth: []
+#   requestBody:
+#     description: "Budget"
+#     required: true
+#     content:
+#       application/json:
+#         schema:
+#           $ref: "../schemas/req_put_budget_budget_id.yml"
+#   responses:
+#     200:
+#       description: "Success update budget"
+#       content:
+#         application/json:
+#           schema:
+#             $ref: "../schemas/res_get_budget_budget_id.yml"
+#     400:
+#       $ref: "../responses/bad_request.yml"
+#     403:
+#       $ref: "../responses/unauthorized.yml"
+#     500:
+#       $ref: "../responses/internal_server.yml"

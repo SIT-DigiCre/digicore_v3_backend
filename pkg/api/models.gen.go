@@ -111,6 +111,43 @@ type ReqPutWorkWorkWorkId struct {
 	Tags        []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
 }
 
+// ResGetBudgetBudgetId defines model for ResGetBudgetBudgetId.
+type ResGetBudgetBudgetId struct {
+	Applicant    ResGetBudgetBudgetIdObjectApplicant  `json:"applicant"`
+	AuthorizedAt string                               `json:"authorizedAt"`
+	Authorizer   ResGetBudgetBudgetIdObjectAuthorizer `json:"authorizer"`
+	Budget       int                                  `json:"budget"`
+	BudgetId     string                               `json:"budgetId"`
+	Class        string                               `json:"class"`
+	CreatedAd    string                               `json:"createdAd"`
+	Files        []ResGetBudgetBudgetIdObjectFile     `json:"files"`
+	Purpose      string                               `json:"purpose"`
+	Settlement   int                                  `json:"settlement"`
+	Status       string                               `json:"status"`
+	Title        string                               `json:"title"`
+	UpdatedAt    string                               `json:"updatedAt"`
+}
+
+// ResGetBudgetBudgetIdObjectApplicant defines model for ResGetBudgetBudgetIdObjectApplicant.
+type ResGetBudgetBudgetIdObjectApplicant struct {
+	IconUrl  string `json:"iconUrl"`
+	UserId   string `json:"userId"`
+	Username string `json:"username"`
+}
+
+// ResGetBudgetBudgetIdObjectAuthorizer defines model for ResGetBudgetBudgetIdObjectAuthorizer.
+type ResGetBudgetBudgetIdObjectAuthorizer struct {
+	IconUrl  string `json:"iconUrl"`
+	UserId   string `json:"userId"`
+	Username string `json:"username"`
+}
+
+// ResGetBudgetBudgetIdObjectFile defines model for ResGetBudgetBudgetIdObjectFile.
+type ResGetBudgetBudgetIdObjectFile struct {
+	FileId string `json:"fileId"`
+	Name   string `json:"name"`
+}
+
 // ResGetEvent defines model for ResGetEvent.
 type ResGetEvent struct {
 	Events []ResGetEventObjectEvent `json:"events"`
