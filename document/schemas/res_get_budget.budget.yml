@@ -1,0 +1,26 @@
+required:
+  - budgetId
+  - applicant
+  - title
+  - class
+  - status
+  - settlement
+  - budget
+  - updatedAt
+properties:
+  budgetId:
+    type: string
+  applicant:
+    $ref: "./res_get_budget.budget.applicant.yml"
+  title:
+    type: string
+  class:
+    type: string
+  status:
+    type: string
+  settlement:
+    type: integer
+  budget:
+    type: integer
+  updatedAt:
+    type: string

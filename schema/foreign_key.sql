@@ -21,3 +21,6 @@ ALTER TABLE work_users ADD CONSTRAINT fk_work_users_work_id_works_id FOREIGN KEY
 
 ALTER TABLE work_files ADD CONSTRAINT fk_work_files_file_id_user_files_id FOREIGN KEY (file_id) REFERENCES user_files(id);
 ALTER TABLE work_files ADD CONSTRAINT fk_work_files_work_id_works_id FOREIGN KEY (work_id) REFERENCES works(id);
+
+ALTER TABLE budgets ADD CONSTRAINT fk_budgets_applicant_user_id_users_id FOREIGN KEY (applicant_user_id) REFERENCES users(id);
+ALTER TABLE budgets ADD CONSTRAINT fk_budgets_authorizer_user_id_users_id FOREIGN KEY (authorizer_user_id) REFERENCES users(id);

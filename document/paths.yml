@@ -54,8 +54,8 @@
   $ref: "./paths/group.yml"
 /group/{groupId}:
   $ref: "./paths/group_group_id.yml"
-# /budget:
-#   $ref: "./paths/budget.yml"
+/budget:
+  $ref: "./paths/budget.yml"
 /budget/{budgetId}:
   $ref: "./paths/budget_budget_id.yml"
 # /budget/{budgetId}/admin:

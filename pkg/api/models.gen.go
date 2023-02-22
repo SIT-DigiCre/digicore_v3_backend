@@ -111,6 +111,11 @@ type ReqPutWorkWorkWorkId struct {
 	Tags        []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
 }
 
+// ResGetBudget defines model for ResGetBudget.
+type ResGetBudget struct {
+	Budgets []ResGetBudgetObjectBudget `json:"budgets"`
+}
+
 // ResGetBudgetBudgetId defines model for ResGetBudgetBudgetId.
 type ResGetBudgetBudgetId struct {
 	Applicant    ResGetBudgetBudgetIdObjectApplicant  `json:"applicant"`
@@ -146,6 +151,25 @@ type ResGetBudgetBudgetIdObjectAuthorizer struct {
 type ResGetBudgetBudgetIdObjectFile struct {
 	FileId string `json:"fileId"`
 	Name   string `json:"name"`
+}
+
+// ResGetBudgetObjectBudget defines model for ResGetBudgetObjectBudget.
+type ResGetBudgetObjectBudget struct {
+	Applicant  ResGetBudgetObjectBudgetObjectApplicant `json:"applicant"`
+	Budget     int                                     `json:"budget"`
+	BudgetId   string                                  `json:"budgetId"`
+	Class      string                                  `json:"class"`
+	Settlement int                                     `json:"settlement"`
+	Status     string                                  `json:"status"`
+	Title      string                                  `json:"title"`
+	UpdatedAt  string                                  `json:"updatedAt"`
+}
+
+// ResGetBudgetObjectBudgetObjectApplicant defines model for ResGetBudgetObjectBudgetObjectApplicant.
+type ResGetBudgetObjectBudgetObjectApplicant struct {
+	IconUrl  string `json:"iconUrl"`
+	UserId   string `json:"userId"`
+	Username string `json:"username"`
 }
 
 // ResGetEvent defines model for ResGetEvent.
@@ -484,6 +508,11 @@ type NotFound = Error
 
 // Unauthorized defines model for Unauthorized.
 type Unauthorized = Error
+
+// GetBudgetParams defines parameters for GetBudget.
+type GetBudgetParams struct {
+	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+}
 
 // GetEventParams defines parameters for GetEvent.
 type GetEventParams struct {
