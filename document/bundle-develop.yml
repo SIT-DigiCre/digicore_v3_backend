@@ -961,6 +961,31 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /budget:
+    get:
+      tags:
+        - budget
+      description: Get budget list
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success budget list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudget'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -1879,6 +1904,42 @@ components:
         userIcon:
           type: string
         name:
+          type: string
+    ResGetBudget:
+      required:
+        - budgetId
+        - title
+        - class
+        - status
+        - applicant
+        - settlement
+        - updatedAt
+      properties:
+        budgetId:
+          type: string
+        title:
+          type: string
+        class:
+          type: string
+        status:
+          type: string
+        applicant:
+          $ref: '#/components/schemas/ResGetBudgetObjectApplicant'
+        settlement:
+          type: string
+        updatedAt:
+          type: string
+    ResGetBudgetObjectApplicant:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
           type: string
     Error:
       required:

@@ -14,6 +14,9 @@ import (
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
+	// (GET /budget)
+	GetBudget(ctx echo.Context, params GetBudgetParams) error
+
 	// (GET /event)
 	GetEvent(ctx echo.Context, params GetEventParams) error
 
@@ -138,6 +141,26 @@ type ServerInterface interface {
 // ServerInterfaceWrapper converts echo contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler ServerInterface
+}
+
+// GetBudget converts echo context to params.
+func (w *ServerInterfaceWrapper) GetBudget(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetBudgetParams
+	// ------------- Optional query parameter "offset" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "offset", ctx.QueryParams(), &params.Offset)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter offset: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetBudget(ctx, params)
+	return err
 }
 
 // GetEvent converts echo context to params.
@@ -786,6 +809,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
+	router.GET(baseURL+"/budget", wrapper.GetBudget)
 	router.GET(baseURL+"/event", wrapper.GetEvent)
 	router.GET(baseURL+"/event/:eventId", wrapper.GetEventEventId)
 	router.GET(baseURL+"/event/:eventId/:reservationId", wrapper.GetEventEventIdReservationId)
