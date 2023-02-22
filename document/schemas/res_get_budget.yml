@@ -5,6 +5,7 @@ required:
   - status
   - applicant
   - settlement
+  - budget
   - updatedAt
 properties:
   budgetId:
@@ -19,5 +20,7 @@ properties:
     $ref: "./res_get_budget.applicant.yml"
   settlement:
     type: string
+  budget:
+    $ref: string
   updatedAt:
     type: string

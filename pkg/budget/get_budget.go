@@ -12,8 +12,7 @@ import (
 
 func GetBudget(ctx echo.Context, dbClient db.Client, params api.GetBudgetParams) (api.ResGetBudget, *response.Error) {
 	res := api.ResGetBudget{}
-	userId := ctx.Get("user_id").(string)
-	budget, err := getBudgetList(dbClient, userId, params.Offset)
+	budget, err := getBudgetList(dbClient, params.Offset)
 	if err != nil {
 		return api.ResGetBudget{}, err
 	}
@@ -33,15 +32,14 @@ type budget struct {
 	Class      string `db:"class"`
 	Status     string `db:"status"`
 	Settlement string `db:"settlement"`
+	Budget     string `db:"budget"`
 	UpdatedAt  string `db:"updated_at"`
 }
 
-func getBudgetList(dbClient db.Client, userId string, offset *int) ([]budget, *response.Error) {
+func getBudgetList(dbClient db.Client, offset *int) ([]budget, *response.Error) {
 	params := struct {
-		UserId string `twowaysql:"userId"`
-		Offset *int   `twowaysql:"offset"`
+		Offset *int `twowaysql:"offset"`
 	}{
-		UserId: userId,
 		Offset: offset,
 	}
 	budget := []budget{}
