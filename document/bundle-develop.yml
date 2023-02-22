@@ -1944,8 +1944,8 @@ components:
     ResGetBudgetObjectBudget:
       required:
         - budgetId
-        - applicant
-        - title
+        - Proposer
+        - name
         - class
         - status
         - settlement
@@ -1954,9 +1954,9 @@ components:
       properties:
         budgetId:
           type: string
-        applicant:
-          $ref: '#/components/schemas/ResGetBudgetObjectBudgetObjectApplicant'
-        title:
+        proposer:
+          $ref: '#/components/schemas/ResGetBudgetObjectBudgetObjectproposer'
+        name:
           type: string
         class:
           type: string
@@ -1968,7 +1968,7 @@ components:
           type: integer
         updatedAt:
           type: string
-    ResGetBudgetObjectBudgetObjectApplicant:
+    ResGetBudgetObjectBudgetObjectproposer:
       required:
         - userId
         - username
@@ -1983,42 +1983,42 @@ components:
     ResGetBudgetBudgetId:
       required:
         - budgetId
-        - title
+        - name
         - class
         - status
-        - applicant
+        - proposer
         - budget
         - settlement
         - purpose
-        - authorizer
+        - approver
         - files
-        - createdAd
+        - createdAt
         - authorizedAt
         - updatedAt
       properties:
         budgetId:
           type: string
-        title:
+        name:
           type: string
         class:
           type: string
         status:
           type: string
-        applicant:
-          $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectApplicant'
+        proposer:
+          $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectProposer'
         budget:
           type: integer
         settlement:
           type: integer
         purpose:
           type: string
-        authorizer:
-          $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectAuthorizer'
+        approver:
+          $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectApprover'
         files:
           type: array
           items:
             $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectFile'
-        createdAd:
+        createdAt:
           type: string
         authorizedAt:
           type: string
@@ -2033,7 +2033,7 @@ components:
           type: string
         name:
           type: string
-    ResGetBudgetBudgetIdObjectAuthorizer:
+    ResGetBudgetBudgetIdObjectApprover:
       required:
         - userId
         - username
@@ -2045,7 +2045,7 @@ components:
           type: string
         iconUrl:
           type: string
-    ResGetBudgetBudgetIdObjectApplicant:
+    ResGetBudgetBudgetIdObjectProposer:
       required:
         - userId
         - username

@@ -118,30 +118,23 @@ type ResGetBudget struct {
 
 // ResGetBudgetBudgetId defines model for ResGetBudgetBudgetId.
 type ResGetBudgetBudgetId struct {
-	Applicant    ResGetBudgetBudgetIdObjectApplicant  `json:"applicant"`
-	AuthorizedAt string                               `json:"authorizedAt"`
-	Authorizer   ResGetBudgetBudgetIdObjectAuthorizer `json:"authorizer"`
-	Budget       int                                  `json:"budget"`
-	BudgetId     string                               `json:"budgetId"`
-	Class        string                               `json:"class"`
-	CreatedAd    string                               `json:"createdAd"`
-	Files        []ResGetBudgetBudgetIdObjectFile     `json:"files"`
-	Purpose      string                               `json:"purpose"`
-	Settlement   int                                  `json:"settlement"`
-	Status       string                               `json:"status"`
-	Title        string                               `json:"title"`
-	UpdatedAt    string                               `json:"updatedAt"`
+	Approver     ResGetBudgetBudgetIdObjectApprover `json:"approver"`
+	AuthorizedAt string                             `json:"authorizedAt"`
+	Budget       int                                `json:"budget"`
+	BudgetId     string                             `json:"budgetId"`
+	Class        string                             `json:"class"`
+	CreatedAt    string                             `json:"createdAt"`
+	Files        []ResGetBudgetBudgetIdObjectFile   `json:"files"`
+	Name         string                             `json:"name"`
+	Proposer     ResGetBudgetBudgetIdObjectProposer `json:"proposer"`
+	Purpose      string                             `json:"purpose"`
+	Settlement   int                                `json:"settlement"`
+	Status       string                             `json:"status"`
+	UpdatedAt    string                             `json:"updatedAt"`
 }
 
-// ResGetBudgetBudgetIdObjectApplicant defines model for ResGetBudgetBudgetIdObjectApplicant.
-type ResGetBudgetBudgetIdObjectApplicant struct {
-	IconUrl  string `json:"iconUrl"`
-	UserId   string `json:"userId"`
-	Username string `json:"username"`
-}
-
-// ResGetBudgetBudgetIdObjectAuthorizer defines model for ResGetBudgetBudgetIdObjectAuthorizer.
-type ResGetBudgetBudgetIdObjectAuthorizer struct {
+// ResGetBudgetBudgetIdObjectApprover defines model for ResGetBudgetBudgetIdObjectApprover.
+type ResGetBudgetBudgetIdObjectApprover struct {
 	IconUrl  string `json:"iconUrl"`
 	UserId   string `json:"userId"`
 	Username string `json:"username"`
@@ -153,20 +146,27 @@ type ResGetBudgetBudgetIdObjectFile struct {
 	Name   string `json:"name"`
 }
 
+// ResGetBudgetBudgetIdObjectProposer defines model for ResGetBudgetBudgetIdObjectProposer.
+type ResGetBudgetBudgetIdObjectProposer struct {
+	IconUrl  string `json:"iconUrl"`
+	UserId   string `json:"userId"`
+	Username string `json:"username"`
+}
+
 // ResGetBudgetObjectBudget defines model for ResGetBudgetObjectBudget.
 type ResGetBudgetObjectBudget struct {
-	Applicant  ResGetBudgetObjectBudgetObjectApplicant `json:"applicant"`
 	Budget     int                                     `json:"budget"`
 	BudgetId   string                                  `json:"budgetId"`
 	Class      string                                  `json:"class"`
+	Name       string                                  `json:"name"`
+	Proposer   *ResGetBudgetObjectBudgetObjectproposer `json:"proposer,omitempty"`
 	Settlement int                                     `json:"settlement"`
 	Status     string                                  `json:"status"`
-	Title      string                                  `json:"title"`
 	UpdatedAt  string                                  `json:"updatedAt"`
 }
 
-// ResGetBudgetObjectBudgetObjectApplicant defines model for ResGetBudgetObjectBudgetObjectApplicant.
-type ResGetBudgetObjectBudgetObjectApplicant struct {
+// ResGetBudgetObjectBudgetObjectproposer defines model for ResGetBudgetObjectBudgetObjectproposer.
+type ResGetBudgetObjectBudgetObjectproposer struct {
 	IconUrl  string `json:"iconUrl"`
 	UserId   string `json:"userId"`
 	Username string `json:"username"`

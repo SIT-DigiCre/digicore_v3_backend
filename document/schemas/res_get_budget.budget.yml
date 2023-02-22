@@ -1,7 +1,7 @@
 required:
   - budgetId
-  - applicant
-  - title
+  - Proposer
+  - name
   - class
   - status
   - settlement
@@ -10,9 +10,9 @@ required:
 properties:
   budgetId:
     type: string
-  applicant:
-    $ref: "./res_get_budget.budget.applicant.yml"
-  title:
+  proposer:
+    $ref: "./res_get_budget.budget.proposer.yml"
+  name:
     type: string
   class:
     type: string

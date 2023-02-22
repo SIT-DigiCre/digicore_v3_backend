@@ -1,1 +1,1 @@
-SELECT BIN_TO_UUID(`budgets`.id) as budget_id, BIN_TO_UUID(applicant_user_id) as user_id, username as user_name, icon_url, `status`, class, title, budget, settlement, updated_at  FROM `budgets` LEFT JOIN `user_profiles` ON `budgets`.applicant_user_id=`user_profiles`.user_id;
+SELECT BIN_TO_UUID(`budgets`.id) as budget_id, BIN_TO_UUID(proposer_user_id) as user_id, username as user_name, icon_url, `status`, class, name, budget, settlement, updated_at FROM `budgets` LEFT JOIN `user_profiles` ON `budgets`.proposer_user_id = `user_profiles`.user_id;

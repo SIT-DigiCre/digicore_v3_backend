@@ -28,16 +28,16 @@ type budget struct {
 	Username   string `db:"user_name"`
 	IconUrl    string `db:"icon_url"`
 	BudgetId   string `db:"budget_id"`
-	Title      string `db:"title"`
+	Name       string `db:"name"`
 	Class      string `db:"class"`
 	Status     string `db:"status"`
 	Settlement int    `db:"settlement"`
 	Budget     int    `db:"budget"`
 	UpdatedAt  string `db:"updated_at"`
-	Applicant  budgetObjectApplicant
+	Proposer   budgetObjectProposer
 }
 
-type budgetObjectApplicant struct {
+type budgetObjectProposer struct {
 	UserId   string
 	Username string
 	IconUrl  string
@@ -58,9 +58,9 @@ func getBudgetList(dbClient db.Client, offset *int) ([]budget, *response.Error) 
 		return nil, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "稟議がありません。", Log: "no rows in result"}
 	}
 	for i := range budget {
-		budget[i].Applicant.IconUrl = budget[i].IconUrl
-		budget[i].Applicant.UserId = budget[i].UserId
-		budget[i].Applicant.Username = budget[i].Username
+		budget[i].Proposer.IconUrl = budget[i].IconUrl
+		budget[i].Proposer.UserId = budget[i].UserId
+		budget[i].Proposer.Username = budget[i].Username
 	}
 	return budget, nil
 }

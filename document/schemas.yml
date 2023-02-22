@@ -112,16 +112,16 @@ ResGetBudget:
   $ref: "./schemas/res_get_budget.yml"
 ResGetBudgetObjectBudget:
   $ref: "./schemas/res_get_budget.budget.yml"
-ResGetBudgetObjectBudgetObjectApplicant:
-  $ref: "./schemas/res_get_budget.budget.applicant.yml"
+ResGetBudgetObjectBudgetObjectproposer:
+  $ref: "./schemas/res_get_budget.budget.proposer.yml"
 ResGetBudgetBudgetId:
   $ref: "./schemas/res_get_budget_budget_id.yml"
 ResGetBudgetBudgetIdObjectFile:
   $ref: "./schemas/res_get_budget_budget_id.file.yml"
-ResGetBudgetBudgetIdObjectAuthorizer:
-  $ref: "./schemas/res_get_budget_budget_id.authorizer.yml"
-ResGetBudgetBudgetIdObjectApplicant:
-  $ref: "./schemas/res_get_budget_budget_id.applicant.yml"
+ResGetBudgetBudgetIdObjectApprover:
+  $ref: "./schemas/res_get_budget_budget_id.approver.yml"
+ResGetBudgetBudgetIdObjectProposer:
+  $ref: "./schemas/res_get_budget_budget_id.proposer.yml"
 
 Error:
   $ref: "./schemas/error.yml"

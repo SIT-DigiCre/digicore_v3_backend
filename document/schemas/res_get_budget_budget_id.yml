@@ -1,43 +1,43 @@
 required:
   - budgetId
-  - title
+  - name
   - class
   - status
-  - applicant
+  - proposer
   - budget
   - settlement
   - purpose
-  - authorizer
+  - approver
   - files
-  - createdAd
-  - authorizedAt
+  - createdAt
+  - approvedAt
   - updatedAt
 properties:
   budgetId:
     type: string
-  title:
+  name:
     type: string
   class:
     type: string
   status:
     type: string
-  applicant:
-    $ref: './res_get_budget_budget_id.applicant.yml'
+  proposer:
+    $ref: './res_get_budget_budget_id.proposer.yml'
   budget:
     type: integer
   settlement:
     type: integer
   purpose:
     type: string
-  authorizer:
-    $ref: './res_get_budget_budget_id.authorizer.yml'
+  approver:
+    $ref: './res_get_budget_budget_id.approver.yml'
   files:
     type: array
     items:
       $ref: './res_get_budget_budget_id.file.yml'
-  createdAd:
+  createdAt:
     type: string
-  authorizedAt:
+  approvedAt:
     type: string
   updatedAt:
     type: string
