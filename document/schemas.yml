@@ -110,8 +110,10 @@ ResGetGroupGroupIdObjectUser:
   $ref: "./schemas/res_get_group_group_id.user.yml"
 ResGetBudget:
   $ref: "./schemas/res_get_budget.yml"
-ResGetBudgetObjectApplicant:
-  $ref: "./schemas/res_get_budget.applicant.yml"
+ResGetBudgetObjectBudget:
+  $ref: "./schemas/res_get_budget.budget.yml"
+ResGetBudgetObjectBudgetObjectApplicant:
+  $ref: "./schemas/res_get_budget.budget.applicant.yml"
 
 Error:
   $ref: "./schemas/error.yml"

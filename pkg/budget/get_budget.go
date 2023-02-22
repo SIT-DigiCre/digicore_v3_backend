@@ -16,7 +16,7 @@ func GetBudget(ctx echo.Context, dbClient db.Client, params api.GetBudgetParams)
 	if err != nil {
 		return api.ResGetBudget{}, err
 	}
-	rerr := copier.Copy(&res, &budget)
+	rerr := copier.Copy(&res.Budgets, &budget)
 	if rerr != nil {
 		return api.ResGetBudget{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "稟議一覧の取得に失敗しました", Log: rerr.Error()}
 	}
@@ -25,15 +25,22 @@ func GetBudget(ctx echo.Context, dbClient db.Client, params api.GetBudgetParams)
 
 type budget struct {
 	UserId     string `db:"user_id"`
-	UserName   string `db:"user_name"`
+	Username   string `db:"user_name"`
 	IconUrl    string `db:"icon_url"`
 	BudgetId   string `db:"budget_id"`
 	Title      string `db:"title"`
 	Class      string `db:"class"`
 	Status     string `db:"status"`
-	Settlement string `db:"settlement"`
-	Budget     string `db:"budget"`
+	Settlement int    `db:"settlement"`
+	Budget     int    `db:"budget"`
 	UpdatedAt  string `db:"updated_at"`
+	Applicant  budgetObjectApplicant
+}
+
+type budgetObjectApplicant struct {
+	UserId   string
+	Username string
+	IconUrl  string
 }
 
 func getBudgetList(dbClient db.Client, offset *int) ([]budget, *response.Error) {
@@ -49,6 +56,11 @@ func getBudgetList(dbClient db.Client, offset *int) ([]budget, *response.Error) 
 	}
 	if len(budget) == 0 {
 		return nil, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "稟議がありません。", Log: "no rows in result"}
+	}
+	for i := range budget {
+		budget[i].Applicant.IconUrl = budget[i].IconUrl
+		budget[i].Applicant.UserId = budget[i].UserId
+		budget[i].Applicant.Username = budget[i].Username
 	}
 	return budget, nil
 }

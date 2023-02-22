@@ -113,17 +113,23 @@ type ReqPutWorkWorkWorkId struct {
 
 // ResGetBudget defines model for ResGetBudget.
 type ResGetBudget struct {
-	Applicant  ResGetBudgetObjectApplicant `json:"applicant"`
-	BudgetId   string                      `json:"budgetId"`
-	Class      string                      `json:"class"`
-	Settlement string                      `json:"settlement"`
-	Status     string                      `json:"status"`
-	Title      string                      `json:"title"`
-	UpdatedAt  string                      `json:"updatedAt"`
+	Budgets []ResGetBudgetObjectBudget `json:"budgets"`
 }
 
-// ResGetBudgetObjectApplicant defines model for ResGetBudgetObjectApplicant.
-type ResGetBudgetObjectApplicant struct {
+// ResGetBudgetObjectBudget defines model for ResGetBudgetObjectBudget.
+type ResGetBudgetObjectBudget struct {
+	Applicant  ResGetBudgetObjectBudgetObjectApplicant `json:"applicant"`
+	Budget     int                                     `json:"budget"`
+	BudgetId   string                                  `json:"budgetId"`
+	Class      string                                  `json:"class"`
+	Settlement int                                     `json:"settlement"`
+	Status     string                                  `json:"status"`
+	Title      string                                  `json:"title"`
+	UpdatedAt  string                                  `json:"updatedAt"`
+}
+
+// ResGetBudgetObjectBudgetObjectApplicant defines model for ResGetBudgetObjectBudgetObjectApplicant.
+type ResGetBudgetObjectBudgetObjectApplicant struct {
 	IconUrl  string `json:"iconUrl"`
 	UserId   string `json:"userId"`
 	Username string `json:"username"`

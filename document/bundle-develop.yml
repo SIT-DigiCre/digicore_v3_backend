@@ -1907,29 +1907,40 @@ components:
           type: string
     ResGetBudget:
       required:
+        - budgets
+      properties:
+        budgets:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetBudgetObjectBudget'
+    ResGetBudgetObjectBudget:
+      required:
         - budgetId
+        - applicant
         - title
         - class
         - status
-        - applicant
         - settlement
+        - budget
         - updatedAt
       properties:
         budgetId:
           type: string
+        applicant:
+          $ref: '#/components/schemas/ResGetBudgetObjectBudgetObjectApplicant'
         title:
           type: string
         class:
           type: string
         status:
           type: string
-        applicant:
-          $ref: '#/components/schemas/ResGetBudgetObjectApplicant'
         settlement:
-          type: string
+          type: integer
+        budget:
+          type: integer
         updatedAt:
           type: string
-    ResGetBudgetObjectApplicant:
+    ResGetBudgetObjectBudgetObjectApplicant:
       required:
         - userId
         - username
