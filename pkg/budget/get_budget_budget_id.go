@@ -7,6 +7,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/utils"
 	"github.com/jinzhu/copier"
 	"github.com/labstack/echo/v4"
 )
@@ -19,7 +20,7 @@ func GetBudgetBudgetId(ctx echo.Context, dbClient db.Client, budgetId string) (a
 	}
 	rerr := copier.Copy(&res, &budget)
 	if rerr != nil {
-		return api.ResGetBudgetBudgetId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "稟議一覧の取得に失敗しました", Log: rerr.Error()}
+		return api.ResGetBudgetBudgetId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "稟議の取得に失敗しました", Log: rerr.Error()}
 	}
 	return res, nil
 }
@@ -45,7 +46,7 @@ type budgetDetail struct {
 	ApproverIconUrl  sql.NullString `db:"approver_icon_url"`
 	ApproverUsername sql.NullString `db:"approver_username"`
 
-	Files []UserInfo
+	Files []utils.FileInfo
 
 	ApprovedAt sql.NullString `db:"approved_at"`
 	CreatedAt  string         `db:"created_at"`
@@ -65,14 +66,39 @@ func getBudgetFromBudgetId(dbClient db.Client, budgetId string) (budgetDetail, *
 		BudgetId: budgetId,
 	}
 	budgetDetails := []budgetDetail{}
-	err := dbClient.Select(&budgetDetails, "sql/budget/select_budget_from_budget_id.sql", &params)
-	if err != nil {
-		return budgetDetail{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントの取得に失敗しました", Log: err.Error()}
+	rerr := dbClient.Select(&budgetDetails, "sql/budget/select_budget_from_budget_id.sql", &params)
+	if rerr != nil {
+		return budgetDetail{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "稟議の取得に失敗しました", Log: rerr.Error()}
 	}
 	if len(budgetDetails) == 0 {
-		return budgetDetail{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "イベントがありません。", Log: "no rows in result"}
+		return budgetDetail{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "稟議がありません。", Log: "no rows in result"}
 	}
 	budgetDetails[0].Proposer = UserInfo{UserId: budgetDetails[0].ProposerUserId, IconUrl: budgetDetails[0].ProposerIconUrl, Username: budgetDetails[0].ProposerUsername}
 	budgetDetails[0].Approver = UserInfo{UserId: budgetDetails[0].ApproverUserId.String, IconUrl: budgetDetails[0].ApproverIconUrl.String, Username: budgetDetails[0].ApproverUsername.String}
+	files, err := getBudgetFileInfo(dbClient, budgetId)
+	if err != nil {
+		return budgetDetail{}, err
+	}
+	budgetDetails[0].Files = files
 	return budgetDetails[0], nil
+}
+
+func getBudgetFileInfo(dbClient db.Client, budgetId string) ([]utils.FileInfo, *response.Error) {
+	params := struct {
+		BudgetId string `twowaysql:"budgetId"`
+	}{
+		BudgetId: budgetId,
+	}
+	rowFileIds := []struct {
+		fileId string `db:"file_id"`
+	}{}
+	err := dbClient.Select(&rowFileIds, "sql/budget/select_budget_file_from_budget_id.sql", &params)
+	if err != nil {
+		return []utils.FileInfo{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "稟議の取得に失敗しました", Log: err.Error()}
+	}
+	fileIds := []string{}
+	for _, v := range rowFileIds {
+		fileIds = append(fileIds, v.fileId)
+	}
+	return utils.GetFileInfo(dbClient, fileIds)
 }
