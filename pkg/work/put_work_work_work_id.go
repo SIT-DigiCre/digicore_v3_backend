@@ -6,13 +6,13 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/utils"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/util"
 	"github.com/labstack/echo/v4"
 )
 
 func PutWorkWorkWorkId(ctx echo.Context, dbClient db.TransactionClient, workId string, requestBody api.ReqPutWorkWorkWorkId) (api.ResGetWorkWorkWorkId, *response.Error) {
 	userId := ctx.Get("user_id").(string)
-	requestBody.Authors = utils.GetUniqueString(append(requestBody.Authors, userId))
+	requestBody.Authors = util.GetUniqueString(append(requestBody.Authors, userId))
 	permission, err := checkWorkAuthor(dbClient, workId, userId)
 	if err != nil {
 		return api.ResGetWorkWorkWorkId{}, err

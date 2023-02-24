@@ -10,7 +10,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/utils"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/util"
 	"github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
 )
@@ -60,9 +60,9 @@ func createUser(studentNumber string, dbClient db.TransactionClient) (string, *r
 func createDefaultUser(dbClient db.TransactionClient, userId string, studentNumber string) *response.Error {
 	enterYear, err := strconv.Atoi(studentNumber[2:4])
 	if err != nil {
-		enterYear = utils.GetSchoolYear()
+		enterYear = util.GetSchoolYear()
 	}
-	schoolGrade := utils.GetSchoolYear() - 2000 - enterYear + 1
+	schoolGrade := util.GetSchoolYear() - 2000 - enterYear + 1
 	if studentNumber[0] == 'm' {
 		schoolGrade += 4
 	} else if studentNumber[0] == 'n' {

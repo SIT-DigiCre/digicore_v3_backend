@@ -1,4 +1,4 @@
-package utils
+package util
 
 import (
 	"net/http"
@@ -30,6 +30,10 @@ func GetUniqueString(str []string) []string {
 	return uniq
 }
 
+type FileId struct {
+	FileId string `db:"file_id"`
+}
+
 type FileInfo struct {
 	FileId string `db:"file_id"`
 	Name   string `db:"name"`
@@ -52,10 +56,14 @@ func GetFileInfo(dbClient db.Client, fileIds []string) ([]FileInfo, *response.Er
 	return fileInfos, nil
 }
 
+type UserID struct {
+	UserId string `db:"user_id"`
+}
+
 type UserInfo struct {
-	IconUrl  string `json:"iconUrl"`
-	UserId   string `json:"userId"`
-	Username string `json:"username"`
+	IconUrl  string `db:"icon_url"`
+	UserId   string `db:"user_id"`
+	Username string `db:"username"`
 }
 
 func GetUserInfo(dbClient db.Client, userIds []string) ([]UserInfo, *response.Error) {
