@@ -10,6 +10,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/util"
 	"github.com/jinzhu/copier"
 	"github.com/labstack/echo/v4"
+	"golang.org/x/exp/maps"
 )
 
 func GetBudgetBudgetId(ctx echo.Context, dbClient db.Client, budgetId string) (api.ResGetBudgetBudgetId, *response.Error) {
@@ -90,13 +91,17 @@ func getBudgetFileInfo(dbClient db.Client, budgetId string) ([]util.FileInfo, *r
 		BudgetId: budgetId,
 	}
 	rowFileIds := []util.FileId{}
-	err := dbClient.Select(&rowFileIds, "sql/budget/select_budget_file_from_budget_id.sql", &params)
-	if err != nil {
-		return []util.FileInfo{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "稟議の取得に失敗しました", Log: err.Error()}
+	rerr := dbClient.Select(&rowFileIds, "sql/budget/select_budget_file_from_budget_id.sql", &params)
+	if rerr != nil {
+		return []util.FileInfo{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "稟議の取得に失敗しました", Log: rerr.Error()}
 	}
 	fileIds := []string{}
 	for _, v := range rowFileIds {
 		fileIds = append(fileIds, v.FileId)
 	}
-	return util.GetFileInfo(dbClient, fileIds)
+	res, err := util.GetFileInfo(dbClient, fileIds)
+	if err != nil {
+		return []util.FileInfo{}, err
+	}
+	return maps.Values(res), nil
 }

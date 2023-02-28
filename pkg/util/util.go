@@ -39,9 +39,9 @@ type FileInfo struct {
 	Name   string `db:"name"`
 }
 
-func GetFileInfo(dbClient db.Client, fileIds []string) ([]FileInfo, *response.Error) {
+func GetFileInfo(dbClient db.Client, fileIds []string) (map[string]FileInfo, *response.Error) {
 	if len(fileIds) == 0 {
-		return []FileInfo{}, nil
+		return map[string]FileInfo{}, nil
 	}
 	params := struct {
 		FileIds []string `twowaysql:"fileIds"`
@@ -51,9 +51,13 @@ func GetFileInfo(dbClient db.Client, fileIds []string) ([]FileInfo, *response.Er
 	fileInfos := []FileInfo{}
 	err := dbClient.Select(&fileInfos, "sql/util/select_file.sql", &params)
 	if err != nil {
-		return []FileInfo{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "ファイルの取得に失敗しました", Log: err.Error()}
+		return map[string]FileInfo{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "ファイルの取得に失敗しました", Log: err.Error()}
 	}
-	return fileInfos, nil
+	res := map[string]FileInfo{}
+	for _, v := range fileInfos {
+		res[v.FileId] = v
+	}
+	return res, nil
 }
 
 type UserID struct {
@@ -66,9 +70,9 @@ type UserInfo struct {
 	Username string `db:"username"`
 }
 
-func GetUserInfo(dbClient db.Client, userIds []string) ([]UserInfo, *response.Error) {
+func GetUserInfo(dbClient db.Client, userIds []string) (map[string]UserInfo, *response.Error) {
 	if len(userIds) == 0 {
-		return []UserInfo{}, nil
+		return map[string]UserInfo{}, nil
 	}
 	params := struct {
 		UserIds []string `twowaysql:"userIds"`
@@ -78,7 +82,11 @@ func GetUserInfo(dbClient db.Client, userIds []string) ([]UserInfo, *response.Er
 	userInfos := []UserInfo{}
 	err := dbClient.Select(&userInfos, "sql/util/select_user_profile.sql", &params)
 	if err != nil {
-		return []UserInfo{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "ファイルの取得に失敗しました", Log: err.Error()}
+		return map[string]UserInfo{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "ファイルの取得に失敗しました", Log: err.Error()}
 	}
-	return userInfos, nil
+	res := map[string]UserInfo{}
+	for _, v := range userInfos {
+		res[v.UserId] = v
+	}
+	return res, nil
 }

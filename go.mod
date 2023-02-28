@@ -18,6 +18,7 @@ require (
 	github.com/mattermost/mattermost-server/v5 v5.39.3
 	github.com/rubenv/sql-migrate v1.3.1
 	github.com/sirupsen/logrus v1.9.0
+	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e
 	golang.org/x/oauth2 v0.5.0
 )
 
