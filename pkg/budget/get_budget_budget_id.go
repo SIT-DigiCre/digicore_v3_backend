@@ -27,13 +27,15 @@ func GetBudgetBudgetId(ctx echo.Context, dbClient db.Client, budgetId string) (a
 }
 
 type budgetDetail struct {
-	BudgetId   string `db:"budget_id"`
-	Name       string `db:"name"`
-	Class      string `db:"class"`
-	Status     string `db:"status"`
-	Purpose    string `db:"purpose"`
-	Budget     int    `db:"budget"`
-	Settlement int    `db:"settlement"`
+	BudgetId      string `db:"budget_id"`
+	Name          string `db:"name"`
+	Class         string `db:"class"`
+	Status        string `db:"status"`
+	Purpose       string `db:"purpose"`
+	Budget        int    `db:"budget"`
+	Settlement    int    `db:"settlement"`
+	MattermostUrl string `db:"mattermost_url"`
+	Remark        string `db:"remark"`
 
 	Proposer UserInfo
 

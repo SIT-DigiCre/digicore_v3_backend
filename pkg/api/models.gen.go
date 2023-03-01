@@ -158,7 +158,7 @@ type ResGetBudgetBudgetId struct {
 	Name          string                             `json:"name"`
 	Proposer      ResGetBudgetBudgetIdObjectProposer `json:"proposer"`
 	Purpose       string                             `json:"purpose"`
-	Remark        *string                            `json:"remark,omitempty"`
+	Remark        string                             `json:"remark"`
 	Settlement    int                                `json:"settlement"`
 	Status        string                             `json:"status"`
 	UpdatedAt     string                             `json:"updatedAt"`

@@ -8,10 +8,10 @@ CREATE TABLE budgets (
     budget INT NOT NULL,
     settlement INT NOT NULL,
     purpose TEXT NOT NULL,
+    mattermost_url VARCHAR(255) NOT NULL,
+    remark TEXT NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     approved_at DATETIME,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    remarks TEXT,
-    mattermost_url VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );

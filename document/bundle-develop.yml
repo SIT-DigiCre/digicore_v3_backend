@@ -2083,6 +2083,7 @@ components:
         - settlement
         - purpose
         - mattermostUrl
+        - remark
         - approver
         - files
         - createdAt
