@@ -122,6 +122,12 @@ ResGetBudgetBudgetIdObjectApprover:
   $ref: "./schemas/res_get_budget_budget_id.approver.yml"
 ResGetBudgetBudgetIdObjectProposer:
   $ref: "./schemas/res_get_budget_budget_id.proposer.yml"
+ReqPostBudget:
+  $ref: "./schemas/req_post_budget.yml"
+ReqPutBudgetBudgetId:
+  $ref: "./schemas/req_put_budget_budget_id.yml"
+ReqPutBudgetBudgetIdAdmin:
+  $ref: "./schemas/req_put_budget_budget_id_admin.yml"
 
 Error:
   $ref: "./schemas/error.yml"

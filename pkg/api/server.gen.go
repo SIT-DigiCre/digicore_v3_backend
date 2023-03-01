@@ -17,8 +17,17 @@ type ServerInterface interface {
 	// (GET /budget)
 	GetBudget(ctx echo.Context, params GetBudgetParams) error
 
+	// (POST /budget)
+	PostBudget(ctx echo.Context) error
+
 	// (GET /budget/{budgetId})
 	GetBudgetBudgetId(ctx echo.Context, budgetId string) error
+
+	// (PUT /budget/{budgetId})
+	PutBudgetBudgetId(ctx echo.Context, budgetId string) error
+
+	// (PUT /budget/{budgetId}/admin)
+	PutBudgetBudgetIdAdmin(ctx echo.Context, budgetId string) error
 
 	// (GET /event)
 	GetEvent(ctx echo.Context, params GetEventParams) error
@@ -166,6 +175,17 @@ func (w *ServerInterfaceWrapper) GetBudget(ctx echo.Context) error {
 	return err
 }
 
+// PostBudget converts echo context to params.
+func (w *ServerInterfaceWrapper) PostBudget(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostBudget(ctx)
+	return err
+}
+
 // GetBudgetBudgetId converts echo context to params.
 func (w *ServerInterfaceWrapper) GetBudgetBudgetId(ctx echo.Context) error {
 	var err error
@@ -181,6 +201,42 @@ func (w *ServerInterfaceWrapper) GetBudgetBudgetId(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetBudgetBudgetId(ctx, budgetId)
+	return err
+}
+
+// PutBudgetBudgetId converts echo context to params.
+func (w *ServerInterfaceWrapper) PutBudgetBudgetId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "budgetId" -------------
+	var budgetId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "budgetId", runtime.ParamLocationPath, ctx.Param("budgetId"), &budgetId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter budgetId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutBudgetBudgetId(ctx, budgetId)
+	return err
+}
+
+// PutBudgetBudgetIdAdmin converts echo context to params.
+func (w *ServerInterfaceWrapper) PutBudgetBudgetIdAdmin(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "budgetId" -------------
+	var budgetId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "budgetId", runtime.ParamLocationPath, ctx.Param("budgetId"), &budgetId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter budgetId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{"admin"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutBudgetBudgetIdAdmin(ctx, budgetId)
 	return err
 }
 
@@ -831,7 +887,10 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	}
 
 	router.GET(baseURL+"/budget", wrapper.GetBudget)
+	router.POST(baseURL+"/budget", wrapper.PostBudget)
 	router.GET(baseURL+"/budget/:budgetId", wrapper.GetBudgetBudgetId)
+	router.PUT(baseURL+"/budget/:budgetId", wrapper.PutBudgetBudgetId)
+	router.PUT(baseURL+"/budget/:budgetId/admin", wrapper.PutBudgetBudgetIdAdmin)
 	router.GET(baseURL+"/event", wrapper.GetEvent)
 	router.GET(baseURL+"/event/:eventId", wrapper.GetEventEventId)
 	router.GET(baseURL+"/event/:eventId/:reservationId", wrapper.GetEventEventIdReservationId)

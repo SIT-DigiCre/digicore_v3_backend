@@ -1,0 +1,41 @@
+required:
+  - bought
+  - budget
+  - settlement
+  - purpose
+  - mattermostUrl
+  - remark
+  - files
+properties:
+  bought:
+    type: boolean
+    x-oapi-codegen-extra-tags:
+      ja: 購入済み
+  budget:
+    type: integer
+    x-oapi-codegen-extra-tags:
+      ja: 予算
+  settlement:
+    type: integer
+    x-oapi-codegen-extra-tags:
+      ja: 決算
+  purpose:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 目的
+  mattermostUrl:
+    type: string
+    x-oapi-codegen-extra-tags:
+      ja: Mattermost投稿URL
+  remark:
+    type: string
+    x-oapi-codegen-extra-tags:
+      ja: 備考
+  files:
+    type: array
+    items:
+      type: string
+    x-oapi-codegen-extra-tags:
+      validate: dive,uuid
+      ja: ファイル

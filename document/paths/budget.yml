@@ -22,3 +22,29 @@ get:
       $ref: "../responses/not_found.yml"
     500:
       $ref: "../responses/internal_server.yml"
+post:
+  tags:
+    - budget
+  description: "Create budget"
+  security:
+    - BearerAuth: []
+  requestBody:
+    description: "Budget"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_post_budget.yml"
+  responses:
+    200:
+      description: "Success update budget"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_budget_budget_id.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
