@@ -1,0 +1,1 @@
+UPDATE budgets SET name = /*name*/'name', budget = /*budget*/0, mattermost_url = /*mattermostUrl*/'https:', purpose = /*purpose*/'purpose', remark = /*remark*/'remark'  WHERE id = UUID_TO_BIN(/*budgetId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');
