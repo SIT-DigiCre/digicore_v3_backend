@@ -1032,10 +1032,11 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_pending':
     put:
       tags:
         - budget
-      description: Update budget
+      description: Update budget(status pending)
       security:
         - BearerAuth: []
       parameters:
@@ -1050,7 +1051,106 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReqPutBudgetBudgetId'
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusPending'
+      responses:
+        '200':
+          description: Success update budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_approve':
+    put:
+      tags:
+        - budget
+      description: Update budget(status approve)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Budget
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusApprove'
+      responses:
+        '200':
+          description: Success update budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_bought':
+    put:
+      tags:
+        - budget
+      description: Update budget(status bought)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Budget
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusBought'
+      responses:
+        '200':
+          description: Success update budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_paid':
+    put:
+      tags:
+        - budget
+      description: Update budget(status paid)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Budget
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusPaid'
       responses:
         '200':
           description: Success update budget
@@ -2150,46 +2250,54 @@ components:
     ReqPostBudget:
       required:
         - name
-        - bought
         - class
-        - budget
-        - settlement
-        - purpose
-        - mattermostUrl
-        - remark
-        - files
       properties:
         name:
           type: string
           x-oapi-codegen-extra-tags:
             validate: required
             ja: 名前
-        bought:
-          type: boolean
-          x-oapi-codegen-extra-tags:
-            ja: 購入済み
         class:
           type: string
           x-oapi-codegen-extra-tags:
             validate: oneof=festival fixed project outside room
             ja: 分類
-        budget:
-          type: integer
-          x-oapi-codegen-extra-tags:
-            ja: 予算
+    ReqPutBudgetBudgetIdStatusApprove:
+      required:
+        - settlement
+        - remark
+        - bought
+        - files
+      properties:
         settlement:
           type: integer
           x-oapi-codegen-extra-tags:
             ja: 決算
-        purpose:
+        remark:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: required
-            ja: 目的
-        mattermostUrl:
-          type: string
+            ja: 備考
+        bought:
+          type: boolean
           x-oapi-codegen-extra-tags:
-            ja: Mattermost投稿URL
+            ja: 購入済み
+        files:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: ファイル
+    ReqPutBudgetBudgetIdStatusBought:
+      required:
+        - settlement
+        - remark
+        - files
+      properties:
+        settlement:
+          type: integer
+          x-oapi-codegen-extra-tags:
+            ja: 決算
         remark:
           type: string
           x-oapi-codegen-extra-tags:
@@ -2201,28 +2309,33 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'dive,uuid'
             ja: ファイル
-    ReqPutBudgetBudgetId:
+    ReqPutBudgetBudgetIdStatusPaid:
       required:
-        - bought
+        - remark
+      properties:
+        remark:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: 備考
+    ReqPutBudgetBudgetIdStatusPending:
+      required:
+        - name
         - budget
-        - settlement
         - purpose
         - mattermostUrl
         - remark
         - files
       properties:
-        bought:
-          type: boolean
+        name:
+          type: string
           x-oapi-codegen-extra-tags:
-            ja: 購入済み
+            validate: required
+            ja: 名前
         budget:
           type: integer
           x-oapi-codegen-extra-tags:
+            validate: required
             ja: 予算
-        settlement:
-          type: integer
-          x-oapi-codegen-extra-tags:
-            ja: 決算
         purpose:
           type: string
           x-oapi-codegen-extra-tags:
@@ -2250,7 +2363,7 @@ components:
         status:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: oneof=reject accept paid
+            validate: oneof=reject approve paid
             ja: ステータス
     Error:
       required:

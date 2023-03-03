@@ -124,8 +124,14 @@ ResGetBudgetBudgetIdObjectProposer:
   $ref: "./schemas/res_get_budget_budget_id.proposer.yml"
 ReqPostBudget:
   $ref: "./schemas/req_post_budget.yml"
-ReqPutBudgetBudgetId:
-  $ref: "./schemas/req_put_budget_budget_id.yml"
+ReqPutBudgetBudgetIdStatusApprove:
+  $ref: "./schemas/req_put_budget_budget_id_status_approve.yml"
+ReqPutBudgetBudgetIdStatusBought:
+  $ref: "./schemas/req_put_budget_budget_id_status_bought.yml"
+ReqPutBudgetBudgetIdStatusPaid:
+  $ref: "./schemas/req_put_budget_budget_id_status_paid.yml"
+ReqPutBudgetBudgetIdStatusPending:
+  $ref: "./schemas/req_put_budget_budget_id_status_pending.yml"
 ReqPutBudgetBudgetIdAdmin:
   $ref: "./schemas/req_put_budget_budget_id_admin.yml"
 

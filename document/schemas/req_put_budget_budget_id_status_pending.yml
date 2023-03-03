@@ -1,24 +1,21 @@
 required:
-  - bought
+  - name
   - budget
-  - settlement
   - purpose
   - mattermostUrl
   - remark
   - files
 properties:
-  bought:
-    type: boolean
+  name:
+    type: string
     x-oapi-codegen-extra-tags:
-      ja: 購入済み
+      validate: required
+      ja: 名前
   budget:
     type: integer
     x-oapi-codegen-extra-tags:
+      validate: required
       ja: 予算
-  settlement:
-    type: integer
-    x-oapi-codegen-extra-tags:
-      ja: 決算
   purpose:
     type: string
     x-oapi-codegen-extra-tags:

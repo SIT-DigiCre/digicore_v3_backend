@@ -1,0 +1,20 @@
+required:
+  - settlement
+  - remark
+  - files
+properties:
+  settlement:
+    type: integer
+    x-oapi-codegen-extra-tags:
+      ja: 決算
+  remark:
+    type: string
+    x-oapi-codegen-extra-tags:
+      ja: 備考
+  files:
+    type: array
+    items:
+      type: string
+    x-oapi-codegen-extra-tags:
+      validate: dive,uuid
+      ja: ファイル

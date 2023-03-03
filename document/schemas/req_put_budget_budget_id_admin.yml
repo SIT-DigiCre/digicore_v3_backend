@@ -4,5 +4,5 @@ properties:
   status:
     type: string
     x-oapi-codegen-extra-tags:
-      validate: oneof=reject accept paid
+      validate: oneof=reject approve paid
       ja: ステータス

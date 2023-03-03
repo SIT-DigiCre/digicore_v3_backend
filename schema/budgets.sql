@@ -3,7 +3,7 @@ CREATE TABLE budgets (
     name VARCHAR(255) NOT NULL,
     proposer_user_id BINARY(16) NOT NULL,
     approver_user_id BINARY(16),
-    `status` VARCHAR(255) NOT NULL,
+    `status` VARCHAR(255) NOT NULL, /* pending reject approve bought paid */
     class VARCHAR(255) NOT NULL,
     budget INT NOT NULL,
     settlement INT NOT NULL,

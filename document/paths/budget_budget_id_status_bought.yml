@@ -1,7 +1,7 @@
-get:
+put:
   tags:
     - budget
-  description: "Get budget"
+  description: "Update budget(status bought)"
   security:
     - BearerAuth: []
   parameters:
@@ -10,16 +10,23 @@ get:
       required: true
       schema:
         type: string
+  requestBody:
+    description: "Budget"
+    required: true
+    content:
+      application/json:
+        schema:
+            $ref: "../schemas/req_put_budget_budget_id_status_bought.yml"
   responses:
     200:
-      description: "Success get budget"
+      description: "Success update budget"
       content:
         application/json:
           schema:
             $ref: "../schemas/res_get_budget_budget_id.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
     403:
       $ref: "../responses/unauthorized.yml"
-    404:
-      $ref: "../responses/not_found.yml"
     500:
       $ref: "../responses/internal_server.yml"

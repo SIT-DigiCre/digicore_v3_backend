@@ -9,8 +9,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *server) PutBudgetBudgetId(ctx echo.Context, budgetId string) error {
-	var requestBody api.ReqPutBudgetBudgetId
+func (s *server) PutBudgetBudgetIdStatusPaid(ctx echo.Context, budgetId string) error {
+	var requestBody api.ReqPutBudgetBudgetIdStatusPaid
 	ctx.Bind(&requestBody)
 	err := validator.Validate(requestBody)
 	if err != nil {
@@ -23,7 +23,7 @@ func (s *server) PutBudgetBudgetId(ctx echo.Context, budgetId string) error {
 	}
 	defer dbTranisactionClient.Rollback()
 
-	res, err := budget.PutBudgetBudgetId(ctx, &dbTranisactionClient, budgetId, requestBody)
+	res, err := budget.PutBudgetBudgetIdStatusPaid(ctx, &dbTranisactionClient, budgetId, requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}
