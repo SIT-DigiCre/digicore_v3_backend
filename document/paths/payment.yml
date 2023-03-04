@@ -10,6 +10,10 @@ get:
       in: query
       schema:
         type: integer
+    - name: offset
+      in: query
+      schema:
+        type: integer
   responses:
     200:
       description: "Success get payment list"

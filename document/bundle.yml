@@ -432,6 +432,10 @@ paths:
           in: query
           schema:
             type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
       responses:
         '200':
           description: Success get payment list
@@ -483,6 +487,13 @@ paths:
           required: true
           schema:
             type: string
+      requestBody:
+        description: Check user payment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutPaymentPaymentId'
       responses:
         '200':
           description: Success check user payment
@@ -1980,11 +1991,14 @@ components:
             $ref: '#/components/schemas/ResGetPaymentObjectPayment'
     ResGetPaymentObjectPayment:
       required:
+        - paymentId
         - userId
         - studentNumber
         - transferName
         - checked
       properties:
+        paymentId:
+          type: string
         userId:
           type: string
         studentNumber:
@@ -2011,6 +2025,14 @@ components:
           type: string
         checked:
           type: boolean
+    ReqPutPaymentPaymentId:
+      required:
+        - checked
+      properties:
+        checked:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: チェック
     Error:
       required:
         - level

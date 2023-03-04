@@ -58,6 +58,11 @@ type ReqPutEventEventIdReservationIdMe struct {
 	Url     string `ja:"URL" json:"url" validate:"max=255"`
 }
 
+// ReqPutPaymentPaymentId defines model for ReqPutPaymentPaymentId.
+type ReqPutPaymentPaymentId struct {
+	Checked bool `ja:"チェック" json:"checked"`
+}
+
 // ReqPutUserMe defines model for ReqPutUserMe.
 type ReqPutUserMe struct {
 	IconUrl           string `ja:"アイコンURL" json:"iconUrl" validate:"required,min=1,max=255"`
@@ -223,6 +228,7 @@ type ResGetPayment struct {
 // ResGetPaymentObjectPayment defines model for ResGetPaymentObjectPayment.
 type ResGetPaymentObjectPayment struct {
 	Checked       bool   `json:"checked"`
+	PaymentId     string `json:"paymentId"`
 	StudentNumber string `json:"studentNumber"`
 	TransferName  string `json:"transferName"`
 	UserId        string `json:"userId"`
@@ -483,7 +489,8 @@ type GetGroupParams struct {
 
 // GetPaymentParams defines parameters for GetPayment.
 type GetPaymentParams struct {
-	Year *int `form:"year,omitempty" json:"year,omitempty"`
+	Year   *int `form:"year,omitempty" json:"year,omitempty"`
+	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
 }
 
 // GetUserParams defines parameters for GetUser.
@@ -511,6 +518,9 @@ type PostLoginCallbackJSONRequestBody = ReqPostLoginCallback
 
 // PostMattermostCreateUserJSONRequestBody defines body for PostMattermostCreateUser for application/json ContentType.
 type PostMattermostCreateUserJSONRequestBody = ReqPostMattermostCreateuser
+
+// PutPaymentPaymentIdJSONRequestBody defines body for PutPaymentPaymentId for application/json ContentType.
+type PutPaymentPaymentIdJSONRequestBody = ReqPutPaymentPaymentId
 
 // PostSignupCallbackJSONRequestBody defines body for PostSignupCallback for application/json ContentType.
 type PostSignupCallbackJSONRequestBody = ReqPostSignupCallback

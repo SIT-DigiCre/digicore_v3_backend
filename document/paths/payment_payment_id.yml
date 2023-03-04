@@ -37,6 +37,13 @@ put:
       required: true
       schema:
         type: string
+  requestBody:
+    description: "Check user payment"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_put_payment_payment_id.yml"
   responses:
     200:
       description: "Success check user payment"

@@ -1,9 +1,12 @@
 required:
+  - paymentId
   - userId
   - studentNumber
   - transferName
   - checked
 properties:
+  paymentId:
+    type: string
   userId:
     type: string
   studentNumber:

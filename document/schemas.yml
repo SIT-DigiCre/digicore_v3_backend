@@ -114,6 +114,8 @@ ResGetPaymentObjectPayment:
   $ref: "./schemas/res_get_payment.payment.yml"
 ResGetPaymentPaymentId:
   $ref: "./schemas/res_get_payment_payment_id.yml"
+ReqPutPaymentPaymentId:
+  $ref: "./schemas/req_put_payment_payment_id.yml"
 
 Error:
   $ref: "./schemas/error.yml"
