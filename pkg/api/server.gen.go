@@ -98,6 +98,9 @@ type ServerInterface interface {
 	// (PUT /user/me/private)
 	PutUserMePrivate(ctx echo.Context) error
 
+	// (PUT /user/me/renewal)
+	PutUserMeRenewal(ctx echo.Context) error
+
 	// (GET /user/{userId})
 	GetUserUserId(ctx echo.Context, userId string) error
 
@@ -545,6 +548,17 @@ func (w *ServerInterfaceWrapper) PutUserMePrivate(ctx echo.Context) error {
 	return err
 }
 
+// PutUserMeRenewal converts echo context to params.
+func (w *ServerInterfaceWrapper) PutUserMeRenewal(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutUserMeRenewal(ctx)
+	return err
+}
+
 // GetUserUserId converts echo context to params.
 func (w *ServerInterfaceWrapper) GetUserUserId(ctx echo.Context) error {
 	var err error
@@ -814,6 +828,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.PUT(baseURL+"/user/me/payment", wrapper.PutUserMePayment)
 	router.GET(baseURL+"/user/me/private", wrapper.GetUserMePrivate)
 	router.PUT(baseURL+"/user/me/private", wrapper.PutUserMePrivate)
+	router.PUT(baseURL+"/user/me/renewal", wrapper.PutUserMeRenewal)
 	router.GET(baseURL+"/user/:userId", wrapper.GetUserUserId)
 	router.GET(baseURL+"/user/:userId/introduction", wrapper.GetUserUserIdIntroduction)
 	router.GET(baseURL+"/work/tag", wrapper.GetWorkTag)

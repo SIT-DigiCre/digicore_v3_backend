@@ -11,6 +11,11 @@ func GetSchoolYear() int {
 	return now.Year()
 }
 
+func GetYear() int {
+	now := time.Now()
+	return now.Year()
+}
+
 func GetUniqueString(str []string) []string {
 	m := make(map[string]bool)
 	uniq := []string{}

@@ -223,6 +223,26 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /user/me/renewal:
+    put:
+      tags:
+        - user
+      description: Renewal active limit
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success update my private profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMe'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me/discord:
     get:
       tags:
