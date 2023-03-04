@@ -215,6 +215,28 @@ type ResGetLogin struct {
 	Url string `json:"url"`
 }
 
+// ResGetPayment defines model for ResGetPayment.
+type ResGetPayment struct {
+	Payments []ResGetPaymentObjectPayment `json:"payments"`
+}
+
+// ResGetPaymentObjectPayment defines model for ResGetPaymentObjectPayment.
+type ResGetPaymentObjectPayment struct {
+	Checked       bool   `json:"checked"`
+	StudentNumber string `json:"studentNumber"`
+	TransferName  string `json:"transferName"`
+	UserId        string `json:"userId"`
+}
+
+// ResGetPaymentPaymentId defines model for ResGetPaymentPaymentId.
+type ResGetPaymentPaymentId struct {
+	Checked       bool   `json:"checked"`
+	PaymentId     string `json:"paymentId"`
+	StudentNumber string `json:"studentNumber"`
+	TransferName  string `json:"transferName"`
+	UserId        string `json:"userId"`
+}
+
 // ResGetSignup defines model for ResGetSignup.
 type ResGetSignup struct {
 	Url string `json:"url"`
@@ -457,6 +479,11 @@ type GetEventParams struct {
 type GetGroupParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
 	Seed   *int `form:"seed,omitempty" json:"seed,omitempty"`
+}
+
+// GetPaymentParams defines parameters for GetPayment.
+type GetPaymentParams struct {
+	Year *int `form:"year,omitempty" json:"year,omitempty"`
 }
 
 // GetUserParams defines parameters for GetUser.

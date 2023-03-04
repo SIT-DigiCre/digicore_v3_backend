@@ -108,6 +108,12 @@ ResGetGroupGroupId:
   $ref: "./schemas/res_get_group_group_id.yml"
 ResGetGroupGroupIdObjectUser:
   $ref: "./schemas/res_get_group_group_id.user.yml"
+ResGetPayment:
+  $ref: "./schemas/res_get_payment.yml"
+ResGetPaymentObjectPayment:
+  $ref: "./schemas/res_get_payment.payment.yml"
+ResGetPaymentPaymentId:
+  $ref: "./schemas/res_get_payment_payment_id.yml"
 
 Error:
   $ref: "./schemas/error.yml"

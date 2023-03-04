@@ -1,0 +1,14 @@
+required:
+  - userId
+  - studentNumber
+  - transferName
+  - checked
+properties:
+  userId:
+    type: string
+  studentNumber:
+    type: string
+  transferName:
+    type: string
+  checked:
+    type: boolean

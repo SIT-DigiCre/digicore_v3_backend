@@ -17,6 +17,8 @@ tags:
     description: Work system
   - name: group
     description: Group system
+  - name: payment
+    description: Payment system
 paths:
   /status:
     get:
@@ -412,6 +414,82 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetUserMePayment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /payment:
+    get:
+      tags:
+        - payment
+      description: Get payment list
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: year
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success get payment list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPayment'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/payment/{paymentId}':
+    get:
+      tags:
+        - payment
+      description: Get user payment
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success check user payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPaymentPaymentId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - payment
+      description: Check user payment
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success check user payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPaymentPaymentId'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -1892,6 +1970,47 @@ components:
           type: string
         name:
           type: string
+    ResGetPayment:
+      required:
+        - payments
+      properties:
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetPaymentObjectPayment'
+    ResGetPaymentObjectPayment:
+      required:
+        - userId
+        - studentNumber
+        - transferName
+        - checked
+      properties:
+        userId:
+          type: string
+        studentNumber:
+          type: string
+        transferName:
+          type: string
+        checked:
+          type: boolean
+    ResGetPaymentPaymentId:
+      required:
+        - paymentId
+        - userId
+        - studentNumber
+        - transferName
+        - checked
+      properties:
+        paymentId:
+          type: string
+        userId:
+          type: string
+        studentNumber:
+          type: string
+        transferName:
+          type: string
+        checked:
+          type: boolean
     Error:
       required:
         - level

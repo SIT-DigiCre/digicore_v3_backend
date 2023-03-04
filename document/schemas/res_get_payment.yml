@@ -1,0 +1,7 @@
+required:
+  - payments
+properties:
+  payments:
+    type: array
+    items:
+      $ref: './res_get_payment.payment.yml'

@@ -44,6 +44,15 @@ type ServerInterface interface {
 	// (POST /mattermost/create_user)
 	PostMattermostCreateUser(ctx echo.Context) error
 
+	// (GET /payment)
+	GetPayment(ctx echo.Context, params GetPaymentParams) error
+
+	// (GET /payment/{paymentId})
+	GetPaymentPaymentId(ctx echo.Context, paymentId string) error
+
+	// (PUT /payment/{paymentId})
+	PutPaymentPaymentId(ctx echo.Context, paymentId string) error
+
 	// (GET /signup)
 	GetSignup(ctx echo.Context) error
 
@@ -330,6 +339,62 @@ func (w *ServerInterfaceWrapper) PostMattermostCreateUser(ctx echo.Context) erro
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PostMattermostCreateUser(ctx)
+	return err
+}
+
+// GetPayment converts echo context to params.
+func (w *ServerInterfaceWrapper) GetPayment(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetPaymentParams
+	// ------------- Optional query parameter "year" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "year", ctx.QueryParams(), &params.Year)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter year: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetPayment(ctx, params)
+	return err
+}
+
+// GetPaymentPaymentId converts echo context to params.
+func (w *ServerInterfaceWrapper) GetPaymentPaymentId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "paymentId" -------------
+	var paymentId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "paymentId", runtime.ParamLocationPath, ctx.Param("paymentId"), &paymentId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter paymentId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetPaymentPaymentId(ctx, paymentId)
+	return err
+}
+
+// PutPaymentPaymentId converts echo context to params.
+func (w *ServerInterfaceWrapper) PutPaymentPaymentId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "paymentId" -------------
+	var paymentId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "paymentId", runtime.ParamLocationPath, ctx.Param("paymentId"), &paymentId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter paymentId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutPaymentPaymentId(ctx, paymentId)
 	return err
 }
 
@@ -810,6 +875,9 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/login", wrapper.GetLogin)
 	router.POST(baseURL+"/login/callback", wrapper.PostLoginCallback)
 	router.POST(baseURL+"/mattermost/create_user", wrapper.PostMattermostCreateUser)
+	router.GET(baseURL+"/payment", wrapper.GetPayment)
+	router.GET(baseURL+"/payment/:paymentId", wrapper.GetPaymentPaymentId)
+	router.PUT(baseURL+"/payment/:paymentId", wrapper.PutPaymentPaymentId)
 	router.GET(baseURL+"/signup", wrapper.GetSignup)
 	router.POST(baseURL+"/signup/callback", wrapper.PostSignupCallback)
 	router.GET(baseURL+"/status", wrapper.GetStatus)

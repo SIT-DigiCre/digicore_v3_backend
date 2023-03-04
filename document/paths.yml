@@ -28,6 +28,10 @@
   $ref: "./paths/user_me_private.yml"
 /user/me/payment:
   $ref: "./paths/user_me_payment.yml"
+/payment:
+  $ref: "./paths/payment.yml"
+/payment/{paymentId}:
+  $ref: "./paths/payment_payment_id.yml"
 /tool:
   $ref: "./paths/tool.yml"
 /event:
