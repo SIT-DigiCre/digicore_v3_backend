@@ -62,7 +62,7 @@ func getJWT(input *openapi3filter.AuthenticationInput) string {
 }
 
 func getClaims(t jwt.Token) ([]string, error) {
-	rawPerms, found := t.Get("perm")
+	rawPerms, found := t.Get(PermissionsClaim)
 	if !found {
 		return make([]string, 0), nil
 	}

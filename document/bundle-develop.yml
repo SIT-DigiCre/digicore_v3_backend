@@ -23,6 +23,8 @@ tags:
     description: Storage system
   - name: work
     description: Work system
+  - name: group
+    description: Group system
 paths:
   /status:
     get:
@@ -904,6 +906,61 @@ paths:
           $ref: '#/components/responses/BlankSuccess'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /group:
+    get:
+      tags:
+        - group
+      description: Get group list
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+        - name: seed
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success get group list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetGroup'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/group/{groupId}':
+    get:
+      tags:
+        - group
+      description: Get group id's profile
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get group id's profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetGroupGroupId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -1243,26 +1300,28 @@ components:
         events:
           type: array
           items:
-            required:
-              - eventId
-              - name
-              - description
-              - calendarView
-              - reservable
-              - reservated
-            properties:
-              eventId:
-                type: string
-              name:
-                type: string
-              description:
-                type: string
-              calendarView:
-                type: boolean
-              reservable:
-                type: boolean
-              reservated:
-                type: boolean
+            $ref: '#/components/schemas/ResGetEventObjectEvent'
+    ResGetEventObjectEvent:
+      required:
+        - eventId
+        - name
+        - description
+        - calendarView
+        - reservable
+        - reservated
+      properties:
+        eventId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        calendarView:
+          type: boolean
+        reservable:
+          type: boolean
+        reservated:
+          type: boolean
     ResGetEventEventId:
       required:
         - eventId
@@ -1757,6 +1816,70 @@ components:
           x-oapi-codegen-extra-tags:
             validate: required
             ja: 説明
+    ResGetGroup:
+      required:
+        - groups
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetGroupObjectGroup'
+    ResGetGroupObjectGroup:
+      required:
+        - groupId
+        - name
+        - userCount
+        - joinable
+        - joined
+      properties:
+        groupId:
+          type: string
+        name:
+          type: string
+        userCount:
+          type: integer
+        joinable:
+          type: boolean
+        joined:
+          type: boolean
+    ResGetGroupGroupId:
+      required:
+        - groupId
+        - name
+        - description
+        - userCount
+        - joinable
+        - joined
+        - users
+      properties:
+        groupId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        userCount:
+          type: integer
+        joinable:
+          type: boolean
+        joined:
+          type: boolean
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetGroupGroupIdObjectUser'
+    ResGetGroupGroupIdObjectUser:
+      required:
+        - userId
+        - userIcon
+        - name
+      properties:
+        userId:
+          type: string
+        userIcon:
+          type: string
+        name:
+          type: string
     Error:
       required:
         - level

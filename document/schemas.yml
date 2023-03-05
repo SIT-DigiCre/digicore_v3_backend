@@ -46,6 +46,8 @@ ReqPutUserMeDiscordCallback:
   $ref: "./schemas/req_put_user_me_discord_callback.yml"
 ResGetEvent:
   $ref: "./schemas/res_get_event.yml"
+ResGetEventObjectEvent:
+  $ref: "./schemas/res_get_event.event.yml"
 ResGetEventEventId:
   $ref: "./schemas/res_get_event_event_id.yml"
 ResGetEventEventIdObjectReservation:
@@ -96,9 +98,16 @@ ReqPostWorkTag:
   $ref: "./schemas/req_post_work_tag.yml"
 ResGetWorkTagTagId:
   $ref: "./schemas/res_get_work_tag_tag_id.yml"
-
 ReqPutWorkTagTagId:
   $ref: "./schemas/req_put_work_tag_tag_id.yml"
+ResGetGroup:
+  $ref: "./schemas/res_get_group.yml"
+ResGetGroupObjectGroup:
+  $ref: "./schemas/res_get_group.group.yml"
+ResGetGroupGroupId:
+  $ref: "./schemas/res_get_group_group_id.yml"
+ResGetGroupGroupIdObjectUser:
+  $ref: "./schemas/res_get_group_group_id.user.yml"
 
 Error:
   $ref: "./schemas/error.yml"

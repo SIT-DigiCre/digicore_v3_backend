@@ -113,14 +113,7 @@ type ReqPutWorkWorkWorkId struct {
 
 // ResGetEvent defines model for ResGetEvent.
 type ResGetEvent struct {
-	Events []struct {
-		CalendarView bool   `json:"calendarView"`
-		Description  string `json:"description"`
-		EventId      string `json:"eventId"`
-		Name         string `json:"name"`
-		Reservable   bool   `json:"reservable"`
-		Reservated   bool   `json:"reservated"`
-	} `json:"events"`
+	Events []ResGetEventObjectEvent `json:"events"`
 }
 
 // ResGetEventEventId defines model for ResGetEventEventId.
@@ -173,6 +166,48 @@ type ResGetEventEventIdReservationIdObjectUser struct {
 	Url      string `json:"url"`
 	UserIcon string `json:"userIcon"`
 	UserId   string `json:"userId"`
+}
+
+// ResGetEventObjectEvent defines model for ResGetEventObjectEvent.
+type ResGetEventObjectEvent struct {
+	CalendarView bool   `json:"calendarView"`
+	Description  string `json:"description"`
+	EventId      string `json:"eventId"`
+	Name         string `json:"name"`
+	Reservable   bool   `json:"reservable"`
+	Reservated   bool   `json:"reservated"`
+}
+
+// ResGetGroup defines model for ResGetGroup.
+type ResGetGroup struct {
+	Groups []ResGetGroupObjectGroup `json:"groups"`
+}
+
+// ResGetGroupGroupId defines model for ResGetGroupGroupId.
+type ResGetGroupGroupId struct {
+	Description string                         `json:"description"`
+	GroupId     string                         `json:"groupId"`
+	Joinable    bool                           `json:"joinable"`
+	Joined      bool                           `json:"joined"`
+	Name        string                         `json:"name"`
+	UserCount   int                            `json:"userCount"`
+	Users       []ResGetGroupGroupIdObjectUser `json:"users"`
+}
+
+// ResGetGroupGroupIdObjectUser defines model for ResGetGroupGroupIdObjectUser.
+type ResGetGroupGroupIdObjectUser struct {
+	Name     string `json:"name"`
+	UserIcon string `json:"userIcon"`
+	UserId   string `json:"userId"`
+}
+
+// ResGetGroupObjectGroup defines model for ResGetGroupObjectGroup.
+type ResGetGroupObjectGroup struct {
+	GroupId   string `json:"groupId"`
+	Joinable  bool   `json:"joinable"`
+	Joined    bool   `json:"joined"`
+	Name      string `json:"name"`
+	UserCount int    `json:"userCount"`
 }
 
 // ResGetLogin defines model for ResGetLogin.
@@ -416,6 +451,12 @@ type Unauthorized = Error
 // GetEventParams defines parameters for GetEvent.
 type GetEventParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+}
+
+// GetGroupParams defines parameters for GetGroup.
+type GetGroupParams struct {
+	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+	Seed   *int `form:"seed,omitempty" json:"seed,omitempty"`
 }
 
 // GetUserParams defines parameters for GetUser.
