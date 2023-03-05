@@ -3,8 +3,8 @@ get:
     - payment
   description: "Get user payment"
   security:
-    - BearerAuth: []
-    # 会計のみアクセス可
+    - BearerAuth:
+      - "account"
   parameters:
     - name: paymentId
       in: path
@@ -29,8 +29,8 @@ put:
     - payment
   description: "Check user payment"
   security:
-    - BearerAuth: []
-    # 会計のみアクセス可
+    - BearerAuth:
+      - "account"
   parameters:
     - name: paymentId
       in: path

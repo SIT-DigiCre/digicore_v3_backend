@@ -3,8 +3,8 @@ get:
     - payment
   description: "Get payment list"
   security:
-    - BearerAuth: []
-    # 会計のみアクセス可
+    - BearerAuth:
+      - "account"
   parameters:
     - name: year
       in: query

@@ -426,7 +426,8 @@ paths:
         - payment
       description: Get payment list
       security:
-        - BearerAuth: []
+        - BearerAuth:
+            - account
       parameters:
         - name: year
           in: query
@@ -455,7 +456,8 @@ paths:
         - payment
       description: Get user payment
       security:
-        - BearerAuth: []
+        - BearerAuth:
+            - account
       parameters:
         - name: paymentId
           in: path
@@ -480,7 +482,8 @@ paths:
         - payment
       description: Check user payment
       security:
-        - BearerAuth: []
+        - BearerAuth:
+            - account
       parameters:
         - name: paymentId
           in: path
