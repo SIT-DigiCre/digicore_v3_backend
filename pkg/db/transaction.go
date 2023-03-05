@@ -62,18 +62,18 @@ func (t *transactionClient) GetId() (string, error) {
 	return id[0].Id, nil
 }
 
-func (t *transactionClient) DuplicateUpdate(insertQueryPath string, updateQueryPath string, params interface{}) (sql.Result, error) {
+func (t *transactionClient) DuplicateUpdate(insertQueryPath string, updateQueryPath string, params interface{}) (sql.Result, bool, error) {
 	res, err := t.Exec(insertQueryPath, params, false)
 	if err != nil {
 		mysqlErr, ok := err.(*mysql.MySQLError)
 		if ok && mysqlErr.Number == 1062 {
 			res, err := t.Exec(updateQueryPath, params, false)
 			if err != nil {
-				return nil, err
+				return nil, true, err
 			}
-			return res, nil
+			return res, false, nil
 		}
-		return nil, err
+		return nil, false, err
 	}
-	return res, nil
+	return res, false, nil
 }

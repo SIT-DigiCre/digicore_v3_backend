@@ -12,9 +12,12 @@ import (
 
 func PutUserMePayment(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPutUserMePayment) (api.ResGetUserMePayment, *response.Error) {
 	userId := ctx.Get("user_id").(string)
-	err := updateUserPayment(dbClient, userId, requestBody)
+	update, err := updateUserPayment(dbClient, userId, requestBody)
 	if err != nil {
 		return api.ResGetUserMePayment{}, err
+	}
+	if update {
+		return GetUserMePayment(ctx, dbClient)
 	}
 	err = utils.RenewalActiveLimit(dbClient, userId, utils.GetAfterDate(0, 1, 0))
 	if err != nil {
@@ -23,7 +26,7 @@ func PutUserMePayment(ctx echo.Context, dbClient db.TransactionClient, requestBo
 	return GetUserMePayment(ctx, dbClient)
 }
 
-func updateUserPayment(dbClient db.TransactionClient, userId string, requestBody api.ReqPutUserMePayment) *response.Error {
+func updateUserPayment(dbClient db.TransactionClient, userId string, requestBody api.ReqPutUserMePayment) (bool, *response.Error) {
 	params := struct {
 		UserId       string `twowaysql:"userId"`
 		Year         int    `twowaysql:"year"`
@@ -33,9 +36,9 @@ func updateUserPayment(dbClient db.TransactionClient, userId string, requestBody
 		Year:         utils.GetSchoolYear(),
 		TransferName: requestBody.TransferName,
 	}
-	_, err := dbClient.DuplicateUpdate("sql/user/insert_user_payment.sql", "sql/user/update_user_payment.sql", &params)
+	_, update, err := dbClient.DuplicateUpdate("sql/user/insert_user_payment.sql", "sql/user/update_user_payment.sql", &params)
 	if err != nil {
-		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+		return false, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
-	return nil
+	return update, nil
 }
