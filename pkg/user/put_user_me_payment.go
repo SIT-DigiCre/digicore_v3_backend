@@ -16,7 +16,10 @@ func PutUserMePayment(ctx echo.Context, dbClient db.TransactionClient, requestBo
 	if err != nil {
 		return api.ResGetUserMePayment{}, err
 	}
-
+	err = utils.RenewalActiveLimit(dbClient, userId, utils.GetAfterDate(0, 1, 0))
+	if err != nil {
+		return api.ResGetUserMePayment{}, err
+	}
 	return GetUserMePayment(ctx, dbClient)
 }
 

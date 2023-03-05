@@ -2,15 +2,22 @@ package payment
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/utils"
 	"github.com/labstack/echo/v4"
 )
 
 func PutPaymentPaymentId(ctx echo.Context, dbClient db.TransactionClient, paymentId string, requestBody api.ReqPutPaymentPaymentId) (api.ResGetPaymentPaymentId, *response.Error) {
+	userId := ctx.Get("user_id").(string)
 	err := updatePayment(dbClient, paymentId, requestBody)
+	if err != nil {
+		return api.ResGetPaymentPaymentId{}, err
+	}
+	err = utils.RenewalActiveLimit(dbClient, userId, strconv.Itoa(utils.GetSchoolYear()+1)+"-05-01")
 	if err != nil {
 		return api.ResGetPaymentPaymentId{}, err
 	}
