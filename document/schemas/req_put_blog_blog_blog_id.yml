@@ -1,8 +1,8 @@
 required:
   - title
   - content
-  - files
   - tags
+  - isPublic
 properties:
   title:
     type: string
@@ -14,13 +14,6 @@ properties:
     x-oapi-codegen-extra-tags:
       validate: required
       ja: 本文
-  files:
-    type: array
-    items:
-      type: string
-    x-oapi-codegen-extra-tags:
-      validate: dive,uuid
-      ja: ファイル
   tags:
     type: array
     items:
@@ -28,3 +21,8 @@ properties:
     x-oapi-codegen-extra-tags:
       validate: dive,uuid
       ja: タグ
+  isPublic:
+    type: boolean
+    x-oapi-codegen-extra-tags:
+      validate:
+      ja: 公開

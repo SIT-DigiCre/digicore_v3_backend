@@ -2004,6 +2004,7 @@ components:
         - title
         - author
         - tags
+        - isPublic
       properties:
         blogId:
           type: string
@@ -2016,6 +2017,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ResGetBlogBlogObjectBlogObjectTag'
+        isPublic:
+          type: boolean
     ResGetBlogBlogObjectBlogObjectAuthor:
       required:
         - userId
@@ -2041,8 +2044,8 @@ components:
       required:
         - title
         - content
-        - files
         - tags
+        - isPublic
       properties:
         title:
           type: string
@@ -2054,13 +2057,6 @@ components:
           x-oapi-codegen-extra-tags:
             validate: required
             ja: 本文
-        files:
-          type: array
-          items:
-            type: string
-          x-oapi-codegen-extra-tags:
-            validate: 'dive,uuid'
-            ja: ファイル
         tags:
           type: array
           items:
@@ -2068,14 +2064,19 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'dive,uuid'
             ja: タグ
+        isPublic:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            validate: null
+            ja: 公開
     ResGetBlogBlogBlogId:
       required:
         - blogId
         - title
         - content
         - author
-        - files
         - tags
+        - isPublic
         - createdAt
         - updatedAt
       properties:
@@ -2088,14 +2089,12 @@ components:
         author:
           type: object
           $ref: '#/components/schemas/ResGetBlogBlogBlogIdObjectAuthor'
-        files:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResGetBlogBlogBlogIdObjectTag'
         tags:
           type: array
           items:
-            $ref: '#/components/schemas/ResGetBlogBlogBlogIdObjectFile'
+            $ref: '#/components/schemas/ResGetBlogBlogBlogIdObjectTag'
+        isPublic:
+          type: boolean
         createdAt:
           type: string
         updateAt:
@@ -2114,15 +2113,6 @@ components:
           type: string
     ResGetBlogBlogBlogIdObjectTag:
       required:
-        - fileId
-        - name
-      properties:
-        fileId:
-          type: string
-        name:
-          type: string
-    ResGetBlogBlogBlogIdObjectFile:
-      required:
         - tagId
         - name
       properties:
@@ -2134,8 +2124,8 @@ components:
       required:
         - title
         - content
-        - files
         - tags
+        - isPublic
       properties:
         title:
           type: string
@@ -2147,13 +2137,6 @@ components:
           x-oapi-codegen-extra-tags:
             validate: required
             ja: 本文
-        files:
-          type: array
-          items:
-            type: string
-          x-oapi-codegen-extra-tags:
-            validate: 'dive,uuid'
-            ja: ファイル
         tags:
           type: array
           items:
@@ -2161,6 +2144,11 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'dive,uuid'
             ja: タグ
+        isPublic:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            validate: null
+            ja: 公開
     ResGetBlogTag:
       required:
         - tags

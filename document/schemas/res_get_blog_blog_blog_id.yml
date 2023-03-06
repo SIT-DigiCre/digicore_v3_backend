@@ -3,8 +3,8 @@ required:
   - title
   - content
   - author
-  - files
   - tags
+  - isPublic
   - createdAt
   - updatedAt
 properties:
@@ -17,14 +17,12 @@ properties:
   author:
     type: object
     $ref: './res_get_blog_blog_blog_id.author.yml'
-  files:
-    type: array
-    items:
-      $ref: './res_get_blog_blog_blog_id.file.yml'
   tags:
     type: array
     items:
       $ref: './res_get_blog_blog_blog_id.tag.yml'
+  isPublic:
+    type: boolean
   createdAt:
     type: string
   updateAt:

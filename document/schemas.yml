@@ -113,8 +113,6 @@ ResGetBlogBlogBlogId:
 ResGetBlogBlogBlogIdObjectAuthor:
   $ref: "./schemas/res_get_blog_blog_blog_id.author.yml"
 ResGetBlogBlogBlogIdObjectTag:
-  $ref: "./schemas/res_get_blog_blog_blog_id.file.yml"
-ResGetBlogBlogBlogIdObjectFile:
   $ref: "./schemas/res_get_blog_blog_blog_id.tag.yml"
 ReqPutBlogBlogBlogId:
   $ref: "./schemas/req_put_blog_blog_blog_id.yml"

@@ -3,6 +3,7 @@ required:
   - title
   - author
   - tags
+  - isPublic
 properties:
   blogId:
     type: string
@@ -15,3 +16,5 @@ properties:
     type: array
     items:
       $ref: './res_get_blog_blog.blog.tag.yml'
+  isPublic:
+    type: boolean
