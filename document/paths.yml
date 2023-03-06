@@ -58,3 +58,7 @@
   $ref: "./paths/blog_tag.yml"
 /blog/tag/{tagId}:
   $ref: "./paths/blog_tag_tag_id.yml"
+/group:
+  $ref: "./paths/group.yml"
+/group/{groupId}:
+  $ref: "./paths/group_group_id.yml"

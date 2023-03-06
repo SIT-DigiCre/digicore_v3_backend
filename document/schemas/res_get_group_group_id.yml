@@ -1,0 +1,25 @@
+required:
+  - groupId
+  - name
+  - description
+  - userCount
+  - joinable
+  - joined
+  - users
+properties:
+  groupId:
+    type: string
+  name:
+    type: string
+  description:
+    type: string
+  userCount:
+    type: integer
+  joinable:
+    type: boolean
+  joined:
+    type: boolean
+  users:
+    type: array
+    items:
+      $ref: './res_get_group_group_id.user.yml'

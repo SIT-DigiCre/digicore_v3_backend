@@ -12,3 +12,5 @@
   description: Work system
 - name: blog
   description: Blog system
+- name: group
+  description: Group system

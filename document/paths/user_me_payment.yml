@@ -35,7 +35,8 @@ put:
       description: "Success update my payment"
       content:
         application/json:
-          $ref: "../schemas/res_get_user_me_payment.yml"
+          schema:
+            $ref: "../schemas/res_get_user_me_payment.yml"
     400:
       $ref: "../responses/bad_request.yml"
     403:

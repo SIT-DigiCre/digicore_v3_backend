@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   db:
-    image: mysql:8.0.31
+    image: mysql:8.0.32
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     ports:
       - "${DB_PORT}:3306"
@@ -44,7 +44,7 @@ services:
       - "./:/app"
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5.2.0
+    image: phpmyadmin/phpmyadmin:5.2.1
     environment:
       PMA_HOST: db
     ports:

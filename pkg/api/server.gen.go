@@ -59,6 +59,12 @@ type ServerInterface interface {
 	// (PUT /event/{eventId}/{reservationId}/me)
 	PutEventEventIdReservationIdMe(ctx echo.Context, eventId string, reservationId string) error
 
+	// (GET /group)
+	GetGroup(ctx echo.Context, params GetGroupParams) error
+
+	// (GET /group/{groupId})
+	GetGroupGroupId(ctx echo.Context, groupId string) error
+
 	// (GET /login)
 	GetLogin(ctx echo.Context) error
 
@@ -446,6 +452,51 @@ func (w *ServerInterfaceWrapper) PutEventEventIdReservationIdMe(ctx echo.Context
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PutEventEventIdReservationIdMe(ctx, eventId, reservationId)
+	return err
+}
+
+// GetGroup converts echo context to params.
+func (w *ServerInterfaceWrapper) GetGroup(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetGroupParams
+	// ------------- Optional query parameter "offset" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "offset", ctx.QueryParams(), &params.Offset)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter offset: %s", err))
+	}
+
+	// ------------- Optional query parameter "seed" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "seed", ctx.QueryParams(), &params.Seed)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter seed: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetGroup(ctx, params)
+	return err
+}
+
+// GetGroupGroupId converts echo context to params.
+func (w *ServerInterfaceWrapper) GetGroupGroupId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "groupId" -------------
+	var groupId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "groupId", runtime.ParamLocationPath, ctx.Param("groupId"), &groupId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter groupId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetGroupGroupId(ctx, groupId)
 	return err
 }
 
@@ -949,6 +1000,8 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/event/:eventId/:reservationId", wrapper.GetEventEventIdReservationId)
 	router.DELETE(baseURL+"/event/:eventId/:reservationId/me", wrapper.DeleteEventEventIdReservationIdMe)
 	router.PUT(baseURL+"/event/:eventId/:reservationId/me", wrapper.PutEventEventIdReservationIdMe)
+	router.GET(baseURL+"/group", wrapper.GetGroup)
+	router.GET(baseURL+"/group/:groupId", wrapper.GetGroupGroupId)
 	router.GET(baseURL+"/login", wrapper.GetLogin)
 	router.POST(baseURL+"/login/callback", wrapper.PostLoginCallback)
 	router.POST(baseURL+"/mattermost/create_user", wrapper.PostMattermostCreateUser)
