@@ -15,10 +15,10 @@ tags:
     description: Storage system
   - name: work
     description: Work system
-  - name: group
-    description: Group system
   - name: blog
     description: Blog system
+  - name: group
+    description: Group system
 paths:
   /status:
     get:
@@ -900,61 +900,6 @@ paths:
           $ref: '#/components/responses/BlankSuccess'
         '500':
           $ref: '#/components/responses/InternalServer'
-  /group:
-    get:
-      tags:
-        - group
-      description: Get group list
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: offset
-          in: query
-          schema:
-            type: integer
-        - name: seed
-          in: query
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Success get group list
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResGetGroup'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServer'
-  '/group/{groupId}':
-    get:
-      tags:
-        - group
-      description: Get group id's profile
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: groupId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success get group id's profile
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResGetGroupGroupId'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServer'
   /blog/blog:
     get:
       tags:
@@ -1186,6 +1131,61 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/BlankSuccess'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /group:
+    get:
+      tags:
+        - group
+      description: Get group list
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+        - name: seed
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success get group list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetGroup'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/group/{groupId}':
+    get:
+      tags:
+        - group
+      description: Get group id's profile
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get group id's profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetGroupGroupId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
 components:
@@ -2029,224 +2029,6 @@ components:
         description:
           type: string
     ReqPutWorkTagTagId:
-      required:
-        - name
-        - description
-      properties:
-        name:
-          type: string
-          x-oapi-codegen-extra-tags:
-            validate: required
-            ja: タグ名
-        description:
-          type: string
-          x-oapi-codegen-extra-tags:
-            validate: required
-            ja: 説明
-    ResGetBlogBlog:
-      required:
-        - blogs
-      properties:
-        blogs:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResGetBlogBlogObjectBlog'
-    ResGetBlogBlogObjectBlog:
-      required:
-        - blogId
-        - title
-        - author
-        - tags
-        - isPublic
-      properties:
-        blogId:
-          type: string
-        title:
-          type: string
-        author:
-          type: object
-          $ref: '#/components/schemas/ResGetBlogBlogObjectBlogObjectAuthor'
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResGetBlogBlogObjectBlogObjectTag'
-        isPublic:
-          type: boolean
-    ResGetBlogBlogObjectBlogObjectAuthor:
-      required:
-        - userId
-        - username
-        - iconUrl
-      properties:
-        userId:
-          type: string
-        username:
-          type: string
-        iconUrl:
-          type: string
-    ResGetBlogBlogObjectBlogObjectTag:
-      required:
-        - tagId
-        - name
-      properties:
-        tagId:
-          type: string
-        name:
-          type: string
-    ReqPostBlogBlog:
-      required:
-        - title
-        - content
-        - tags
-        - isPublic
-      properties:
-        title:
-          type: string
-          x-oapi-codegen-extra-tags:
-            validate: required
-            ja: タイトル
-        content:
-          type: string
-          x-oapi-codegen-extra-tags:
-            validate: required
-            ja: 本文
-        tags:
-          type: array
-          items:
-            type: string
-          x-oapi-codegen-extra-tags:
-            validate: 'dive,uuid'
-            ja: タグ
-        isPublic:
-          type: boolean
-          x-oapi-codegen-extra-tags:
-            validate: null
-            ja: 公開
-    ResGetBlogBlogBlogId:
-      required:
-        - blogId
-        - title
-        - content
-        - author
-        - tags
-        - isPublic
-        - createdAt
-        - updatedAt
-      properties:
-        blogId:
-          type: string
-        title:
-          type: string
-        content:
-          type: string
-        author:
-          type: object
-          $ref: '#/components/schemas/ResGetBlogBlogBlogIdObjectAuthor'
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResGetBlogBlogBlogIdObjectTag'
-        isPublic:
-          type: boolean
-        createdAt:
-          type: string
-        updateAt:
-          type: string
-    ResGetBlogBlogBlogIdObjectAuthor:
-      required:
-        - userId
-        - username
-        - iconUrl
-      properties:
-        userId:
-          type: string
-        username:
-          type: string
-        iconUrl:
-          type: string
-    ResGetBlogBlogBlogIdObjectTag:
-      required:
-        - tagId
-        - name
-      properties:
-        tagId:
-          type: string
-        name:
-          type: string
-    ReqPutBlogBlogBlogId:
-      required:
-        - title
-        - content
-        - tags
-        - isPublic
-      properties:
-        title:
-          type: string
-          x-oapi-codegen-extra-tags:
-            validate: required
-            ja: タイトル
-        content:
-          type: string
-          x-oapi-codegen-extra-tags:
-            validate: required
-            ja: 本文
-        tags:
-          type: array
-          items:
-            type: string
-          x-oapi-codegen-extra-tags:
-            validate: 'dive,uuid'
-            ja: タグ
-        isPublic:
-          type: boolean
-          x-oapi-codegen-extra-tags:
-            validate: null
-            ja: 公開
-    ResGetBlogTag:
-      required:
-        - tags
-      properties:
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResGetBlogTagObjectTag'
-    ResGetBlogTagObjectTag:
-      required:
-        - tagId
-        - name
-      properties:
-        tagId:
-          type: string
-        name:
-          type: string
-    ReqPostBlogTag:
-      required:
-        - name
-        - description
-      properties:
-        name:
-          type: string
-          x-oapi-codegen-extra-tags:
-            validate: required
-            ja: タグ名
-        description:
-          type: string
-          x-oapi-codegen-extra-tags:
-            validate: required
-            ja: 説明
-    ResGetBlogTagTagId:
-      required:
-        - tagId
-        - name
-        - description
-      properties:
-        tagId:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-    ReqPutBlogTagTagId:
       required:
         - name
         - description
