@@ -2055,6 +2055,7 @@ components:
       required:
         - blogId
         - title
+        - abstract
         - author
         - tags
         - isPublic
@@ -2062,6 +2063,8 @@ components:
         blogId:
           type: string
         title:
+          type: string
+        abstract:
           type: string
         author:
           type: object
@@ -2098,6 +2101,7 @@ components:
         - title
         - content
         - tags
+        - topImage
         - isPublic
       properties:
         title:
@@ -2117,6 +2121,11 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'dive,uuid'
             ja: タグ
+        topImage:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 本文
         isPublic:
           type: boolean
           x-oapi-codegen-extra-tags:
@@ -2130,6 +2139,7 @@ components:
         - author
         - tags
         - isPublic
+        - topImage
         - createdAt
         - updatedAt
       properties:
@@ -2148,6 +2158,8 @@ components:
             $ref: '#/components/schemas/ResGetBlogBlogBlogIdObjectTag'
         isPublic:
           type: boolean
+        topImage:
+          type: string
         createdAt:
           type: string
         updateAt:
@@ -2178,6 +2190,7 @@ components:
         - title
         - content
         - tags
+        - topImage
         - isPublic
       properties:
         title:
@@ -2197,6 +2210,11 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'dive,uuid'
             ja: タグ
+        topImage:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: サムネイル
         isPublic:
           type: boolean
           x-oapi-codegen-extra-tags:

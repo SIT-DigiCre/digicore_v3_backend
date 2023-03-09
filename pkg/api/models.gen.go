@@ -19,6 +19,7 @@ type ReqPostBlogBlog struct {
 	IsPublic bool     `ja:"公開" json:"isPublic" validate:""`
 	Tags     []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
 	Title    string   `ja:"タイトル" json:"title" validate:"required"`
+	TopImage string   `ja:"本文" json:"topImage" validate:"required"`
 }
 
 // ReqPostBlogTag defines model for ReqPostBlogTag.
@@ -72,6 +73,7 @@ type ReqPutBlogBlogBlogId struct {
 	IsPublic bool     `ja:"公開" json:"isPublic" validate:""`
 	Tags     []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
 	Title    string   `ja:"タイトル" json:"title" validate:"required"`
+	TopImage string   `ja:"サムネイル" json:"topImage" validate:"required"`
 }
 
 // ReqPutBlogTagTagId defines model for ReqPutBlogTagTagId.
@@ -153,6 +155,7 @@ type ResGetBlogBlogBlogId struct {
 	IsPublic  bool                             `json:"isPublic"`
 	Tags      []ResGetBlogBlogBlogIdObjectTag  `json:"tags"`
 	Title     string                           `json:"title"`
+	TopImage  string                           `json:"topImage"`
 	UpdateAt  *string                          `json:"updateAt,omitempty"`
 }
 
@@ -171,6 +174,7 @@ type ResGetBlogBlogBlogIdObjectTag struct {
 
 // ResGetBlogBlogObjectBlog defines model for ResGetBlogBlogObjectBlog.
 type ResGetBlogBlogObjectBlog struct {
+	Abstract string                               `json:"abstract"`
 	Author   ResGetBlogBlogObjectBlogObjectAuthor `json:"author"`
 	BlogId   string                               `json:"blogId"`
 	IsPublic bool                                 `json:"isPublic"`

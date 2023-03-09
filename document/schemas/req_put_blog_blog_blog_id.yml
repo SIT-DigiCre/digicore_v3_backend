@@ -2,6 +2,7 @@ required:
   - title
   - content
   - tags
+  - topImage
   - isPublic
 properties:
   title:
@@ -21,6 +22,11 @@ properties:
     x-oapi-codegen-extra-tags:
       validate: dive,uuid
       ja: タグ
+  topImage:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: サムネイル
   isPublic:
     type: boolean
     x-oapi-codegen-extra-tags:

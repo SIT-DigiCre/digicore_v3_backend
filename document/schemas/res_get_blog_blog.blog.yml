@@ -1,6 +1,7 @@
 required:
   - blogId
   - title
+  - abstract
   - author
   - tags
   - isPublic
@@ -8,6 +9,8 @@ properties:
   blogId:
     type: string
   title:
+    type: string
+  abstract:
     type: string
   author:
     type: object
