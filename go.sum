@@ -288,6 +288,8 @@ github.com/garyburd/redigo v1.6.0/go.mod h1:NR3MbYisc3/PwhQ00EMzDiPmrwpPxAn5GI05
 github.com/gavv/httpexpect v2.0.0+incompatible/go.mod h1:x+9tiU1YnrOvnB725RkpoLv1M62hOWzwo5OXotisrKc=
 github.com/getkin/kin-openapi v0.114.0 h1:ar7QiJpDdlR+zSyPjrLf8mNnpoFP/lI90XcywMCFNe8=
 github.com/getkin/kin-openapi v0.114.0/go.mod h1:l5e9PaFUo9fyLJCPGQeXI2ML8c3P8BHOEV2VaAVf/pc=
+github.com/getkin/kin-openapi v0.115.0 h1:c8WHRLVY3G8m9jQTy0/DnIuljgRwTCB5twZytQS4JyU=
+github.com/getkin/kin-openapi v0.115.0/go.mod h1:l5e9PaFUo9fyLJCPGQeXI2ML8c3P8BHOEV2VaAVf/pc=
 github.com/getsentry/sentry-go v0.11.0/go.mod h1:KBQIxiZAetw62Cj8Ri964vAEWVdgfaUCn30Q3bCvANo=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/gigawattio/window v0.0.0-20180317192513-0f5467e35573/go.mod h1:eBvb3i++NHDH4Ugo9qCvMw8t0mTSctaEa5blJbWcNxs=
