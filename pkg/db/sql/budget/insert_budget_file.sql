@@ -1,0 +1,1 @@
+INSERT INTO budget_files (budget_id, file_id) VALUES (UUID_TO_BIN(/*budgetId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'), UUID_TO_BIN(/*fileId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee')) ON DUPLICATE KEY UPDATE id=id;

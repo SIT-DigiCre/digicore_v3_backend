@@ -90,3 +90,12 @@ func GetUserInfo(dbClient db.Client, userIds []string) (map[string]UserInfo, *re
 	}
 	return res, nil
 }
+
+func CheckUserId(userIds []string, targetUserId string) bool {
+	for _, userId := range userIds {
+		if userId == targetUserId {
+			return true
+		}
+	}
+	return false
+}
