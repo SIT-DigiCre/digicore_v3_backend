@@ -17,7 +17,7 @@ func PutBudgetBudgetIdStatusPaid(ctx echo.Context, dbClient db.TransactionClient
 		return api.ResGetBudgetBudgetId{}, err
 	}
 	ownerUserIds := []string{now_detail.Proposer.UserId}
-	if util.CheckUserId(ownerUserIds, userId) {
+	if !util.CheckUserId(ownerUserIds, userId) {
 		return api.ResGetBudgetBudgetId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "編集権限があリません", Log: "Permission error"}
 	}
 	if now_detail.Status != "paid" {
