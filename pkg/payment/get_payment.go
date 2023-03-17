@@ -6,7 +6,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/utils"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/util"
 	"github.com/jinzhu/copier"
 	"github.com/labstack/echo/v4"
 )
@@ -25,7 +25,7 @@ func GetPayment(ctx echo.Context, dbClient db.Client, params api.GetPaymentParam
 }
 
 func getPaymentList(dbClient db.Client, offset *int, year *int) ([]paymtent, *response.Error) {
-	searchYear := utils.GetSchoolYear()
+	searchYear := util.GetSchoolYear()
 	if year != nil {
 		searchYear = *year
 	}
