@@ -27,6 +27,8 @@ tags:
     description: Group system
   - name: budget
     description: Budget system
+  - name: payment
+    description: Payment system
 paths:
   /status:
     get:
@@ -233,6 +235,26 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /user/me/renewal:
+    put:
+      tags:
+        - user
+      description: Renewal active limit
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success update my private profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMe'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me/discord:
     get:
       tags:
@@ -402,6 +424,96 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetUserMePayment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /payment:
+    get:
+      tags:
+        - payment
+      description: Get payment list
+      security:
+        - BearerAuth:
+            - account
+      parameters:
+        - name: year
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success get payment list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPayment'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/payment/{paymentId}':
+    get:
+      tags:
+        - payment
+      description: Get user payment
+      security:
+        - BearerAuth:
+            - account
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success check user payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPaymentPaymentId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - payment
+      description: Check user payment
+      security:
+        - BearerAuth:
+            - account
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Check user payment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutPaymentPaymentId'
+      responses:
+        '200':
+          description: Success check user payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPaymentPaymentId'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -2373,6 +2485,58 @@ components:
           x-oapi-codegen-extra-tags:
             validate: oneof=reject approve paid
             ja: ステータス
+    ResGetPayment:
+      required:
+        - payments
+      properties:
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetPaymentObjectPayment'
+    ResGetPaymentObjectPayment:
+      required:
+        - paymentId
+        - userId
+        - studentNumber
+        - transferName
+        - checked
+      properties:
+        paymentId:
+          type: string
+        userId:
+          type: string
+        studentNumber:
+          type: string
+        transferName:
+          type: string
+        checked:
+          type: boolean
+    ResGetPaymentPaymentId:
+      required:
+        - paymentId
+        - userId
+        - studentNumber
+        - transferName
+        - checked
+      properties:
+        paymentId:
+          type: string
+        userId:
+          type: string
+        studentNumber:
+          type: string
+        transferName:
+          type: string
+        checked:
+          type: boolean
+    ReqPutPaymentPaymentId:
+      required:
+        - checked
+      properties:
+        checked:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: チェック
     Error:
       required:
         - level

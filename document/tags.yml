@@ -14,3 +14,5 @@
   description: Group system
 - name: budget
   description: Budget system
+- name: payment
+  description: Payment system

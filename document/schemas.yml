@@ -134,6 +134,14 @@ ReqPutBudgetBudgetIdStatusPending:
   $ref: "./schemas/req_put_budget_budget_id_status_pending.yml"
 ReqPutBudgetBudgetIdAdmin:
   $ref: "./schemas/req_put_budget_budget_id_admin.yml"
+ResGetPayment:
+  $ref: "./schemas/res_get_payment.yml"
+ResGetPaymentObjectPayment:
+  $ref: "./schemas/res_get_payment.payment.yml"
+ResGetPaymentPaymentId:
+  $ref: "./schemas/res_get_payment_payment_id.yml"
+ReqPutPaymentPaymentId:
+  $ref: "./schemas/req_put_payment_payment_id.yml"
 
 Error:
   $ref: "./schemas/error.yml"

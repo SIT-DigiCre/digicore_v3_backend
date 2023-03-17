@@ -1,0 +1,7 @@
+required:
+  - checked
+properties:
+  checked:
+    type: boolean
+    x-oapi-codegen-extra-tags:
+      ja: チェック
