@@ -441,10 +441,6 @@ paths:
           in: query
           schema:
             type: integer
-        - name: offset
-          in: query
-          schema:
-            type: integer
       responses:
         '200':
           description: Success get payment list
@@ -2006,7 +2002,7 @@ components:
         - userId
         - studentNumber
         - transferName
-        - checked
+        - note
       properties:
         paymentId:
           type: string
@@ -2018,6 +2014,8 @@ components:
           type: string
         checked:
           type: boolean
+        note:
+          type: string
     ResGetPaymentPaymentId:
       required:
         - paymentId
@@ -2025,6 +2023,7 @@ components:
         - studentNumber
         - transferName
         - checked
+        - note
       properties:
         paymentId:
           type: string
@@ -2034,16 +2033,21 @@ components:
           type: string
         transferName:
           type: string
-        checked:
-          type: boolean
+        note:
+          type: string
     ReqPutPaymentPaymentId:
       required:
         - checked
+        - note
       properties:
         checked:
           type: boolean
           x-oapi-codegen-extra-tags:
             ja: チェック
+        note:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: 備考
     Error:
       required:
         - level

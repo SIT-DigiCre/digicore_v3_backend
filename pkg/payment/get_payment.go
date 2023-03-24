@@ -13,7 +13,7 @@ import (
 
 func GetPayment(ctx echo.Context, dbClient db.Client, params api.GetPaymentParams) (api.ResGetPayment, *response.Error) {
 	res := api.ResGetPayment{}
-	payments, err := getPaymentList(dbClient, params.Offset, params.Year)
+	payments, err := getPaymentList(dbClient, params.Year)
 	if err != nil {
 		return api.ResGetPayment{}, err
 	}
@@ -24,17 +24,15 @@ func GetPayment(ctx echo.Context, dbClient db.Client, params api.GetPaymentParam
 	return res, nil
 }
 
-func getPaymentList(dbClient db.Client, offset *int, year *int) ([]paymtent, *response.Error) {
+func getPaymentList(dbClient db.Client, year *int) ([]paymtent, *response.Error) {
 	searchYear := utils.GetSchoolYear()
 	if year != nil {
 		searchYear = *year
 	}
 	params := struct {
-		Offset *int `twowaysql:"offset"`
-		Year   int  `twowaysql:"year"`
+		Year int `twowaysql:"year"`
 	}{
-		Offset: offset,
-		Year:   searchYear,
+		Year: searchYear,
 	}
 	paymtents := []paymtent{}
 	err := dbClient.Select(&paymtents, "sql/payment/select_payment.sql", &params)

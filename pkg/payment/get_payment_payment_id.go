@@ -29,6 +29,7 @@ type paymtent struct {
 	StudentNumber string `db:"student_number"`
 	TransferName  string `db:"transfer_name"`
 	UserId        string `db:"user_id"`
+	Note          string `db:"note"`
 }
 
 func getPaymentFromPaymentId(dbClient db.Client, paymentId string) (paymtent, *response.Error) {

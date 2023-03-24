@@ -60,7 +60,8 @@ type ReqPutEventEventIdReservationIdMe struct {
 
 // ReqPutPaymentPaymentId defines model for ReqPutPaymentPaymentId.
 type ReqPutPaymentPaymentId struct {
-	Checked bool `ja:"チェック" json:"checked"`
+	Checked bool   `ja:"チェック" json:"checked"`
+	Note    string `ja:"備考" json:"note"`
 }
 
 // ReqPutUserMe defines model for ReqPutUserMe.
@@ -227,7 +228,8 @@ type ResGetPayment struct {
 
 // ResGetPaymentObjectPayment defines model for ResGetPaymentObjectPayment.
 type ResGetPaymentObjectPayment struct {
-	Checked       bool   `json:"checked"`
+	Checked       *bool  `json:"checked,omitempty"`
+	Note          string `json:"note"`
 	PaymentId     string `json:"paymentId"`
 	StudentNumber string `json:"studentNumber"`
 	TransferName  string `json:"transferName"`
@@ -236,7 +238,7 @@ type ResGetPaymentObjectPayment struct {
 
 // ResGetPaymentPaymentId defines model for ResGetPaymentPaymentId.
 type ResGetPaymentPaymentId struct {
-	Checked       bool   `json:"checked"`
+	Note          string `json:"note"`
 	PaymentId     string `json:"paymentId"`
 	StudentNumber string `json:"studentNumber"`
 	TransferName  string `json:"transferName"`
@@ -489,8 +491,7 @@ type GetGroupParams struct {
 
 // GetPaymentParams defines parameters for GetPayment.
 type GetPaymentParams struct {
-	Year   *int `form:"year,omitempty" json:"year,omitempty"`
-	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+	Year *int `form:"year,omitempty" json:"year,omitempty"`
 }
 
 // GetUserParams defines parameters for GetUser.

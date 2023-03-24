@@ -3,7 +3,7 @@ required:
   - userId
   - studentNumber
   - transferName
-  - checked
+  - note
 properties:
   paymentId:
     type: string
@@ -15,3 +15,5 @@ properties:
     type: string
   checked:
     type: boolean
+  note:
+    type: string

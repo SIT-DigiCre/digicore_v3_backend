@@ -28,9 +28,11 @@ func updatePayment(dbClient db.TransactionClient, paymentId string, requestBody 
 	params := struct {
 		PaymentId string `twowaysql:"paymentId"`
 		Checked   bool   `twowaysql:"checked"`
+		Note      string `twowaysql:"note"`
 	}{
 		PaymentId: paymentId,
 		Checked:   requestBody.Checked,
+		Note:      requestBody.Note,
 	}
 	_, err := dbClient.Exec("sql/payment/update_payment.sql", &params, false)
 	if err != nil {
