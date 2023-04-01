@@ -31,3 +31,4 @@ var MattermostURL = "https://mm.digicre.net"
 var MattermostDigicreTeamID = os.Getenv("MATTERMOST_DIGICRE_TEAM_ID")
 var MattermostAdminAccount = os.Getenv("MATTERMOST_ADMIN_ACCOUNT")
 var MattermostAdminPassword = os.Getenv("MATTERMOST_ADMIN_PASSWORD")
+var MattermostWebHookURL = os.Getenv("MATTERMOST_WEB_HOOK_URL")

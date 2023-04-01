@@ -1,11 +1,15 @@
 package utils
 
 import (
+	"bytes"
+	"encoding/json"
 	"net/http"
 	"time"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
+	"github.com/sirupsen/logrus"
 )
 
 func GetSchoolYear() int {
@@ -54,4 +58,25 @@ func RenewalActiveLimit(dbClient db.TransactionClient, userId string, activeLimi
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
 	return nil
+}
+
+func NoticeMattermost(text string) {
+	if env.MattermostWebHookURL == "" {
+		logrus.Error("Not set mattermost web hook url")
+		return
+	}
+	payload := struct {
+		Text string `json:"text"`
+	}{Text: text}
+	p, err := json.Marshal(payload)
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	resp, err := http.Post(env.MattermostWebHookURL, "application/json", bytes.NewBuffer(p))
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	defer resp.Body.Close()
 }
