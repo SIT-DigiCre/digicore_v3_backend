@@ -1,4 +1,4 @@
-FROM golang:1.20.0 as development
+FROM golang:1.20.3 as development
 
 WORKDIR "/app"
 COPY go.mod go.sum ./
@@ -9,7 +9,7 @@ COPY . .
 
 CMD ["air", "-c", "./config/.air.toml"]
 
-FROM golang:1.20.0 as admin
+FROM golang:1.20.3 as admin
 
 WORKDIR "/app"
 RUN go install github.com/k0kubun/sqldef/cmd/mysqldef@v0.15.10
