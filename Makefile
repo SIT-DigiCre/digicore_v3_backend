@@ -32,6 +32,10 @@ up-d:
 
 .PHONY: logs
 up-d:
+	docker compose -f ${DOCKER_COMPOSE} logs --since $(date +%Y-%m-%d --date '1 day ago')
+
+.PHONY: logs-all
+up-d:
 	docker compose -f ${DOCKER_COMPOSE} logs
 
 .PHONY: down
