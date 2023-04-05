@@ -30,6 +30,10 @@ up:
 up-d:
 	docker compose -f ${DOCKER_COMPOSE} up -d
 
+.PHONY: logs
+up-d:
+	docker compose -f ${DOCKER_COMPOSE} logs
+
 .PHONY: down
 down:
 	docker compose -f ${DOCKER_COMPOSE} down
@@ -41,3 +45,7 @@ pull:
 .PHONY: build
 build:
 	docker compose -f ${DOCKER_COMPOSE} build
+
+.PHONY: ls
+build:
+	docker compose -f ${DOCKER_COMPOSE} ls
