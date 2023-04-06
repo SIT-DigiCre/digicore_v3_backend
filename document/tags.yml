@@ -13,4 +13,4 @@
 - name: group
   description: Group system
 - name: payment
-  description: Payment system
+  description: Payment system (need 'account' permission)

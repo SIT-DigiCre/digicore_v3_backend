@@ -35,7 +35,7 @@ make migrate
 
 ### apiパッケージの更新
 
-**./document/bundle.ymlと./pkg/api/*.gen.goは自動生成であるため直接編集しない**
+**./document/*.gen.ymlと./pkg/api/*.gen.goは自動生成であるため直接編集しない**
 
 ```sh
 make generate_api
