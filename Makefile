@@ -31,11 +31,11 @@ up-d:
 	docker compose -f ${DOCKER_COMPOSE} up -d
 
 .PHONY: logs
-up-d:
+logs:
 	docker compose -f ${DOCKER_COMPOSE} logs --since $(date +%Y-%m-%d --date '1 day ago')
 
 .PHONY: logs-all
-up-d:
+logs-all:
 	docker compose -f ${DOCKER_COMPOSE} logs
 
 .PHONY: down
@@ -51,5 +51,5 @@ build:
 	docker compose -f ${DOCKER_COMPOSE} build
 
 .PHONY: ls
-build:
+ls:
 	docker compose -f ${DOCKER_COMPOSE} ls
