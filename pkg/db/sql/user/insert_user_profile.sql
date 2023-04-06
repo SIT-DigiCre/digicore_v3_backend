@@ -1,1 +1,1 @@
-INSERT INTO user_profiles (user_id, username, school_grade, icon_url, short_introduction, introduction) VALUE (UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'), /*username*/'name', /*schoolGrade*/1, /*iconUrl*/'', /*shortIntroduction*/'intro', '');
+INSERT INTO user_profiles (user_id, username, school_grade, icon_url, active_limit, short_introduction, introduction) VALUE (UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'), /*username*/'name', /*schoolGrade*/1, /*iconUrl*/'', CURRENT_DATE + INTERVAL 1 MONTH, /*shortIntroduction*/'intro', '');
