@@ -15,17 +15,17 @@ import (
 
 func Authenticate(ctx context.Context, input *openapi3filter.AuthenticationInput) error {
 	if input.SecuritySchemeName != "BearerAuth" {
-		return fmt.Errorf("security scheme %s != 'BearerAuth'", input.SecuritySchemeName)
+		return echo.ErrUnauthorized
 	}
 	tokenString := getJWT(input)
 	token, err := validateJWT(tokenString)
 	if err != nil {
-		return fmt.Errorf("security scheme %s != 'BearerAuth'", input.SecuritySchemeName)
+		return echo.ErrUnauthorized
 	}
 
 	err = checkClaims(input.Scopes, token)
 	if err != nil {
-		return fmt.Errorf("security scheme %s != 'BearerAuth'", input.SecuritySchemeName)
+		return echo.ErrForbidden
 	}
 	return nil
 }
@@ -85,6 +85,7 @@ func getClaims(t jwt.Token) ([]string, error) {
 
 func checkClaims(expectedClaims []string, t jwt.Token) error {
 	claims, err := getClaims(t)
+	fmt.Printf("%v %v\n", claims, expectedClaims)
 	if err != nil {
 		return fmt.Errorf("getting claims from token: %w", err)
 	}

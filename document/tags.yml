@@ -12,3 +12,5 @@
   description: Work system
 - name: group
   description: Group system
+- name: payment
+  description: Payment system (need 'account' permission)

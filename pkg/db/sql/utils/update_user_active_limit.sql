@@ -1,0 +1,1 @@
+UPDATE user_profiles SET active_limit = /*activeLimit*/'2023-04-05 02:30:40' WHERE user_id = UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee') AND active_limit <= /*activeLimit*/'2023-04-05 02:30:40';

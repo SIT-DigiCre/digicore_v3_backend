@@ -58,6 +58,12 @@ type ReqPutEventEventIdReservationIdMe struct {
 	Url     string `ja:"URL" json:"url" validate:"max=255"`
 }
 
+// ReqPutPaymentPaymentId defines model for ReqPutPaymentPaymentId.
+type ReqPutPaymentPaymentId struct {
+	Checked bool   `ja:"チェック" json:"checked"`
+	Note    string `ja:"備考" json:"note"`
+}
+
 // ReqPutUserMe defines model for ReqPutUserMe.
 type ReqPutUserMe struct {
 	IconUrl           string `ja:"アイコンURL" json:"iconUrl" validate:"required,min=1,max=255"`
@@ -213,6 +219,30 @@ type ResGetGroupObjectGroup struct {
 // ResGetLogin defines model for ResGetLogin.
 type ResGetLogin struct {
 	Url string `json:"url"`
+}
+
+// ResGetPayment defines model for ResGetPayment.
+type ResGetPayment struct {
+	Payments []ResGetPaymentObjectPayment `json:"payments"`
+}
+
+// ResGetPaymentObjectPayment defines model for ResGetPaymentObjectPayment.
+type ResGetPaymentObjectPayment struct {
+	Checked       *bool  `json:"checked,omitempty"`
+	Note          string `json:"note"`
+	PaymentId     string `json:"paymentId"`
+	StudentNumber string `json:"studentNumber"`
+	TransferName  string `json:"transferName"`
+	UserId        string `json:"userId"`
+}
+
+// ResGetPaymentPaymentId defines model for ResGetPaymentPaymentId.
+type ResGetPaymentPaymentId struct {
+	Note          string `json:"note"`
+	PaymentId     string `json:"paymentId"`
+	StudentNumber string `json:"studentNumber"`
+	TransferName  string `json:"transferName"`
+	UserId        string `json:"userId"`
 }
 
 // ResGetSignup defines model for ResGetSignup.
@@ -459,6 +489,11 @@ type GetGroupParams struct {
 	Seed   *int `form:"seed,omitempty" json:"seed,omitempty"`
 }
 
+// GetPaymentParams defines parameters for GetPayment.
+type GetPaymentParams struct {
+	Year *int `form:"year,omitempty" json:"year,omitempty"`
+}
+
 // GetUserParams defines parameters for GetUser.
 type GetUserParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
@@ -484,6 +519,9 @@ type PostLoginCallbackJSONRequestBody = ReqPostLoginCallback
 
 // PostMattermostCreateUserJSONRequestBody defines body for PostMattermostCreateUser for application/json ContentType.
 type PostMattermostCreateUserJSONRequestBody = ReqPostMattermostCreateuser
+
+// PutPaymentPaymentIdJSONRequestBody defines body for PutPaymentPaymentId for application/json ContentType.
+type PutPaymentPaymentIdJSONRequestBody = ReqPutPaymentPaymentId
 
 // PostSignupCallbackJSONRequestBody defines body for PostSignupCallback for application/json ContentType.
 type PostSignupCallbackJSONRequestBody = ReqPostSignupCallback

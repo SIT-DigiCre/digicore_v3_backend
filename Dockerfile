@@ -14,7 +14,7 @@ CMD ["/digicore_v3_backend"]
 FROM golang:1.20.0 as admin
 
 WORKDIR "/app"
-RUN go install github.com/k0kubun/sqldef/cmd/mysqldef@v0.15.10
+RUN go install github.com/k0kubun/sqldef/cmd/mysqldef@v0.15.12
 RUN apt-get update && apt-get install -y default-mysql-client-core
 
 COPY . .

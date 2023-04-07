@@ -31,7 +31,7 @@ func updateReservationUser(dbClient db.TransactionClient, reservationId string, 
 		Url:           requestBody.Url,
 		Comment:       requestBody.Comment,
 	}
-	_, err := dbClient.DuplicateUpdate("sql/event/insert_reservation_user.sql", "sql/event/update_reservation_user.sql", &params)
+	_, _, err := dbClient.DuplicateUpdate("sql/event/insert_reservation_user.sql", "sql/event/update_reservation_user.sql", &params)
 	if err != nil {
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}

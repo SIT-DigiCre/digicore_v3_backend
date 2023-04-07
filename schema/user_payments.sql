@@ -5,6 +5,7 @@ CREATE TABLE user_payments
     `year`        INT          NOT NULL,
     transfer_name VARCHAR(255) NOT NULL,
     checked       BOOLEAN      NOT NULL DEFAULT false,
+    note          VARCHAR(255) NOT NULL DEFAULT '',
     created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),

@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
@@ -14,7 +15,8 @@ func IdFromStudentNumber(dbClient db.Client, studentNumber string) (string, *res
 		StudentNumber: studentNumber,
 	}
 	user := []struct {
-		Id string `db:"id"`
+		Id     string `db:"id"`
+		Active bool   `db:"active"`
 	}{}
 	err := dbClient.Select(&user, "sql/user/select_id_from_student_number.sql", &params)
 	if err != nil {
@@ -22,6 +24,9 @@ func IdFromStudentNumber(dbClient db.Client, studentNumber string) (string, *res
 	}
 	if len(user) == 0 {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "ユーザーが存在しません", Log: "ユーザーが存在しません"}
+	}
+	if !user[0].Active {
+		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "無効なアカウントです", Log: fmt.Sprintf("non active user login(%s)", user[0].Id)}
 	}
 	return user[0].Id, nil
 }
