@@ -16,6 +16,7 @@ func PutUserMePayment(ctx echo.Context, dbClient db.TransactionClient, requestBo
 	if err != nil {
 		return api.ResGetUserMePayment{}, err
 	}
+	utils.NoticeMattermost(fmt.Sprintf("%sが振込申請を行いました", userId))
 	if update {
 		return GetUserMePayment(ctx, dbClient)
 	}
