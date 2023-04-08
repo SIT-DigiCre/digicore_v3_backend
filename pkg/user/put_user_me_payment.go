@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
@@ -16,6 +17,8 @@ func PutUserMePayment(ctx echo.Context, dbClient db.TransactionClient, requestBo
 	if err != nil {
 		return api.ResGetUserMePayment{}, err
 	}
+	profile, _ := GetUserProfileFromUserId(dbClient, userId)
+	utils.NoticeMattermost(fmt.Sprintf("%s(%s)が振込申請を行いました", profile.StudentNumber, userId))
 	if update {
 		return GetUserMePayment(ctx, dbClient)
 	}
