@@ -1,4 +1,4 @@
-FROM golang:1.20.0 as build
+FROM golang:1.20.3 as build
 
 WORKDIR /work
 COPY . .
@@ -11,7 +11,7 @@ COPY --from=build /work/digicore_v3_backend /
 
 CMD ["/digicore_v3_backend"]
 
-FROM golang:1.20.0 as admin
+FROM golang:1.20.3 as admin
 
 WORKDIR "/app"
 RUN go install github.com/k0kubun/sqldef/cmd/mysqldef@v0.15.12
