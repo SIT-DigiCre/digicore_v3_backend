@@ -16,7 +16,7 @@ require (
 	github.com/labstack/echo/v4 v4.10.2
 	github.com/lestrrat-go/jwx/v2 v2.0.8
 	github.com/mattermost/mattermost-server/v5 v5.39.3
-	github.com/rubenv/sql-migrate v1.3.1
+	github.com/rubenv/sql-migrate v1.4.0
 	github.com/sirupsen/logrus v1.9.0
 	golang.org/x/oauth2 v0.7.0
 )
@@ -41,7 +41,7 @@ require (
 	github.com/francoispqt/gojay v1.2.13 // indirect
 	github.com/future-architect/tagscanner v1.0.3 // indirect
 	github.com/go-asn1-ber/asn1-ber v1.5.3 // indirect
-	github.com/go-gorp/gorp/v3 v3.0.5 // indirect
+	github.com/go-gorp/gorp/v3 v3.1.0 // indirect
 	github.com/go-logfmt/logfmt v0.5.1 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/swag v0.21.1 // indirect
