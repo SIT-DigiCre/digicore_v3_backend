@@ -1,0 +1,5 @@
+required:
+  - lock
+properties:
+  lock:
+    type: boolean

@@ -1,5 +1,9 @@
 ResGetStatus:
   $ref: "./schemas/res_get_status.yml"
+ReqPutStatusClubRoom:
+  $ref: "./schemas/req_put_status_club_room.yml"
+ResGetStatusClubRoom:
+  $ref: "./schemas/res_get_status_club_room.yml"
 ResGetSignup:
   $ref: "./schemas/res_get_signup.yml"
 ReqPostSignupCallback:

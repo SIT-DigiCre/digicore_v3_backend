@@ -64,6 +64,11 @@ type ReqPutPaymentPaymentId struct {
 	Note    string `ja:"備考" json:"note"`
 }
 
+// ReqPutStatusClubRoom defines model for ReqPutStatusClubRoom.
+type ReqPutStatusClubRoom struct {
+	Lock bool `ja:"ロック状態" json:"lock"`
+}
+
 // ReqPutUserMe defines model for ReqPutUserMe.
 type ReqPutUserMe struct {
 	IconUrl           string `ja:"アイコンURL" json:"iconUrl" validate:"required,min=1,max=255"`
@@ -253,6 +258,11 @@ type ResGetSignup struct {
 // ResGetStatus defines model for ResGetStatus.
 type ResGetStatus struct {
 	Status bool `json:"status"`
+}
+
+// ResGetStatusClubRoom defines model for ResGetStatusClubRoom.
+type ResGetStatusClubRoom struct {
+	Lock bool `json:"lock"`
 }
 
 // ResGetStorageFileId defines model for ResGetStorageFileId.
@@ -525,6 +535,9 @@ type PutPaymentPaymentIdJSONRequestBody = ReqPutPaymentPaymentId
 
 // PostSignupCallbackJSONRequestBody defines body for PostSignupCallback for application/json ContentType.
 type PostSignupCallbackJSONRequestBody = ReqPostSignupCallback
+
+// PutStatusClubRoomJSONRequestBody defines body for PutStatusClubRoom for application/json ContentType.
+type PutStatusClubRoomJSONRequestBody = ReqPutStatusClubRoom
 
 // PostStorageMyfileJSONRequestBody defines body for PostStorageMyfile for application/json ContentType.
 type PostStorageMyfileJSONRequestBody = ReqPostStorageMyfile

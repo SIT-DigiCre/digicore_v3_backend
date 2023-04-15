@@ -1,0 +1,7 @@
+required:
+  - lock
+properties:
+  lock:
+    type: boolean
+    x-oapi-codegen-extra-tags:
+      ja: ロック状態
