@@ -10,7 +10,15 @@ import (
 )
 
 func DeleteWorkWorkWorkId(ctx echo.Context, dbClient db.TransactionClient, workId string) (api.BlankSuccess, *response.Error) {
-	err := deleteWorkAuthor(dbClient, workId)
+	userId := ctx.Get("user_id").(string)
+	permission, err := checkWorkAuthor(dbClient, workId, userId)
+	if err != nil {
+		return api.BlankSuccess{}, err
+	}
+	if !permission {
+		return api.BlankSuccess{}, &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "編集権限がありません", Log: "no edit permission"}
+	}
+	err = deleteWorkAuthor(dbClient, workId)
 	if err != nil {
 		return api.BlankSuccess{}, err
 	}
