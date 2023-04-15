@@ -1,7 +1,13 @@
 required:
   - lock
+  - token
 properties:
   lock:
     type: boolean
     x-oapi-codegen-extra-tags:
       ja: ロック状態
+  token:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 認証トーク

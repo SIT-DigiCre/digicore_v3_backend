@@ -66,7 +66,8 @@ type ReqPutPaymentPaymentId struct {
 
 // ReqPutStatusClubRoom defines model for ReqPutStatusClubRoom.
 type ReqPutStatusClubRoom struct {
-	Lock bool `ja:"ロック状態" json:"lock"`
+	Lock  bool   `ja:"ロック状態" json:"lock"`
+	Token string `ja:"認証トーク" json:"token" validate:"required"`
 }
 
 // ReqPutUserMe defines model for ReqPutUserMe.
