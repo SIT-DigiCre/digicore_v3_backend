@@ -1,0 +1,1 @@
+SELECT BIN_TO_UUID(tag_id) AS tag_id, name FROM blog_blog_tags LEFT JOIN blog_tags ON blog_tags.id = blog_blog_tags.tag_id WHERE blog_id = UUID_TO_BIN(/*blogId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');

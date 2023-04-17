@@ -1,0 +1,1 @@
+SELECT BIN_TO_UUID(id) AS blog_id, name, LEFT(content, 100) as abstract, top_image, created_at, updated_at, is_public FROM blogs WHERE is_public = true /* IF authorId */ OR user_id = UUID_TO_BIN(/*authorId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee') /* END */ ORDER BY updated_at DESC LIMIT 100 /* IF offset */ OFFSET /*offset*/0 /* END */;

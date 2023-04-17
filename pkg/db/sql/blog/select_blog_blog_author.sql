@@ -1,0 +1,1 @@
+SELECT BIN_TO_UUID(blogs.user_id) AS user_id, username, icon_url FROM blogs LEFT JOIN user_profiles ON user_profiles.user_id = blogs.user_id WHERE blogs.id = UUID_TO_BIN(/*blogId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');
