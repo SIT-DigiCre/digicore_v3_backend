@@ -60,14 +60,17 @@ func RenewalActiveLimit(dbClient db.TransactionClient, userId string, activeLimi
 	return nil
 }
 
-func NoticeMattermost(text string) {
+func NoticeMattermost(text string, channel string, username string, iconEmoji string) {
 	if env.MattermostWebHookURL == "" {
 		logrus.Error("Not set mattermost web hook url")
 		return
 	}
 	payload := struct {
-		Text string `json:"text"`
-	}{Text: text}
+		Text      string `json:"text"`
+		Channel   string `json:"channel"`
+		Username  string `json:"username"`
+		IconEmoji string `json:"icon_emoji"`
+	}{Text: text, Channel: channel, Username: username, IconEmoji: iconEmoji}
 	p, err := json.Marshal(payload)
 	if err != nil {
 		logrus.Error(err)

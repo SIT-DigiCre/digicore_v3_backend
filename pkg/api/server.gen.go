@@ -62,6 +62,12 @@ type ServerInterface interface {
 	// (GET /status)
 	GetStatus(ctx echo.Context) error
 
+	// (GET /status/club_room)
+	GetStatusClubRoom(ctx echo.Context) error
+
+	// (PUT /status/club_room)
+	PutStatusClubRoom(ctx echo.Context) error
+
 	// (GET /storage/myfile)
 	GetStorageMyfile(ctx echo.Context) error
 
@@ -422,6 +428,24 @@ func (w *ServerInterfaceWrapper) GetStatus(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetStatus(ctx)
+	return err
+}
+
+// GetStatusClubRoom converts echo context to params.
+func (w *ServerInterfaceWrapper) GetStatusClubRoom(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetStatusClubRoom(ctx)
+	return err
+}
+
+// PutStatusClubRoom converts echo context to params.
+func (w *ServerInterfaceWrapper) PutStatusClubRoom(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutStatusClubRoom(ctx)
 	return err
 }
 
@@ -881,6 +905,8 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/signup", wrapper.GetSignup)
 	router.POST(baseURL+"/signup/callback", wrapper.PostSignupCallback)
 	router.GET(baseURL+"/status", wrapper.GetStatus)
+	router.GET(baseURL+"/status/club_room", wrapper.GetStatusClubRoom)
+	router.PUT(baseURL+"/status/club_room", wrapper.PutStatusClubRoom)
 	router.GET(baseURL+"/storage/myfile", wrapper.GetStorageMyfile)
 	router.POST(baseURL+"/storage/myfile", wrapper.PostStorageMyfile)
 	router.GET(baseURL+"/storage/:fileId", wrapper.GetStorageFileId)

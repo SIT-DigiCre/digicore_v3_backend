@@ -19,9 +19,13 @@ tags:
     description: Group system
   - name: payment
     description: Payment system (need 'account' permission)
+  - name: status
+    description: status system
 paths:
   /status:
     get:
+      tags:
+        - status
       description: Server status check
       responses:
         '200':
@@ -30,6 +34,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetStatus'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /status/club_room:
+    get:
+      tags:
+        - status
+      description: Get club room status
+      responses:
+        '200':
+          description: Success get club room status page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetStatusClubRoom'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - status
+      description: Update club room status
+      requestBody:
+        description: club room status
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutStatusClubRoom'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
   /signup:
@@ -1068,6 +1110,26 @@ components:
         - status
       properties:
         status:
+          type: boolean
+    ReqPutStatusClubRoom:
+      required:
+        - lock
+        - token
+      properties:
+        lock:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: ロック状態
+        token:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 認証トーク
+    ResGetStatusClubRoom:
+      required:
+        - lock
+      properties:
+        lock:
           type: boolean
     ResGetSignup:
       required:

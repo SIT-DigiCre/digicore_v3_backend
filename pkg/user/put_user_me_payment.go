@@ -18,7 +18,7 @@ func PutUserMePayment(ctx echo.Context, dbClient db.TransactionClient, requestBo
 		return api.ResGetUserMePayment{}, err
 	}
 	profile, _ := GetUserProfileFromUserId(dbClient, userId)
-	utils.NoticeMattermost(fmt.Sprintf("%s(%s)が振込申請を行いました", profile.StudentNumber, userId))
+	utils.NoticeMattermost(fmt.Sprintf("%s(%s)が振込申請を行いました", profile.StudentNumber, userId), "digicore-notice", "digicore-notice", "bell")
 	if update {
 		return GetUserMePayment(ctx, dbClient)
 	}

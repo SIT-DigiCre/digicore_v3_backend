@@ -22,7 +22,7 @@ func PutPaymentPaymentId(ctx echo.Context, dbClient db.TransactionClient, paymen
 	if err != nil {
 		return api.ResGetPaymentPaymentId{}, err
 	}
-	utils.NoticeMattermost(fmt.Sprintf("部費振込申請(%s)が行われました", userId))
+	utils.NoticeMattermost(fmt.Sprintf("部費振込申請(%s)が行われました", userId), "digicore-notice", "digicore-notice", "bell")
 	return GetPaymentPaymentId(ctx, dbClient, paymentId)
 }
 

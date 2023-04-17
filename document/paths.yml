@@ -1,5 +1,7 @@
 /status:
   $ref: "./paths/status.yml"
+/status/club_room:
+  $ref: "./paths/status_club_room.yml"
 /signup:
   $ref: "./paths/signup.yml"
 /signup/callback:
