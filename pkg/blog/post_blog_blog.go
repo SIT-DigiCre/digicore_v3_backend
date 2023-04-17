@@ -27,15 +27,17 @@ func PostBlogBlog(ctx echo.Context, dbClient db.TransactionClient, requestBody a
 
 func createBlog(dbClient db.TransactionClient, requestBody api.ReqPostBlogBlog, userId string) (string, *response.Error) {
 	params := struct {
-		Title    string `twowaysql:"title"`
+		Name     string `twowaysql:"name"`
 		Content  string `twowaysql:"content"`
-		IsPublic bool   `twowaysql:"is_public"`
-		UserId   string `twowaysql:"user_id"`
+		IsPublic bool   `twowaysql:"isPublic"`
+		UserId   string `twowaysql:"userId"`
+		TopImage string `twowaysql:"topImage"`
 	}{
-		Title:    requestBody.Title,
+		Name:     requestBody.Name,
 		Content:  requestBody.Content,
 		IsPublic: requestBody.IsPublic,
 		UserId:   userId,
+		TopImage: requestBody.TopImage,
 	}
 	_, rerr := dbClient.Exec("sql/blog/insert_blog.sql", &params, true)
 	if rerr != nil {
@@ -62,9 +64,9 @@ func createBlogBlogTag(dbClient db.TransactionClient, blogId string, tagIds []st
 			BlogId: blogId,
 			TagId:  tagId,
 		}
-		_, rerr := dbClient.Exec("sql/work/insert_blog_blog_tag.sql", &params, false)
+		_, rerr := dbClient.Exec("sql/blog/insert_blog_blog_tag.sql", &params, false)
 		if rerr != nil {
-			return &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: rerr.Error()}
+			return &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました1", Log: rerr.Error()}
 		}
 	}
 	return nil

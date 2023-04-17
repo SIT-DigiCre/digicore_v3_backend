@@ -19,16 +19,21 @@ func GetBlogBlog(ctx echo.Context, dbClient db.Client, params api.GetBlogBlogPar
 	}
 	rerr := copier.Copy(&res.Blogs, &blog)
 	if rerr != nil {
-		return api.ResGetBlogBlog{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました4", Log: rerr.Error()}
+		return api.ResGetBlogBlog{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
 	return res, nil
 }
 
 type blogOverview struct {
-	Author blogObjectAuthor
-	Title  string `db:"title"`
-	Tags   []blogObjectTag
-	BlogId string `db:"blog_id"`
+	Author    blogObjectAuthor
+	Name      string `db:"name"`
+	Tags      []blogObjectTag
+	BlogId    string `db:"blog_id"`
+	Abstract  string `db:"abstract"`
+	IsPublic  string `db:"is_public"`
+	TopImage  string `db:"top_image"`
+	CreatedAt string `db:"created_at"`
+	UpdatedAt string `db:"updated_at"`
 }
 
 func getBlogList(dbClient db.Client, offset *int, authorId *string) ([]blogOverview, *response.Error) {
@@ -41,8 +46,9 @@ func getBlogList(dbClient db.Client, offset *int, authorId *string) ([]blogOverv
 	}
 	blogOverviews := []blogOverview{}
 	err := dbClient.Select(&blogOverviews, "sql/blog/select_blog.sql", &params)
+	fmt.Printf("%+v", err)
 	if err != nil {
-		return []blogOverview{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+		return []blogOverview{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました1", Log: err.Error()}
 	}
 	if len(blogOverviews) == 0 {
 		return []blogOverview{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "作品が存在しません", Log: "no rows in result"}
@@ -60,6 +66,5 @@ func getBlogList(dbClient db.Client, offset *int, authorId *string) ([]blogOverv
 		}
 		blogOverviews[i].Tags = blogTags
 	}
-	fmt.Printf("%+v", blogOverviews[0])
 	return blogOverviews, nil
 }

@@ -47,12 +47,12 @@ func checkBlogAuthor(dbClient db.Client, blogId string, userId string) (bool, *r
 func updateBlog(dbClient db.TransactionClient, blogId string, requestBody api.ReqPutBlogBlogBlogId) *response.Error {
 	params := struct {
 		BlogId   string `twowaysql:"blogId"`
-		Title    string `twowaysql:"title"`
+		Name     string `twowaysql:"name"`
 		Content  string `twowaysql:"content"`
 		IsPublic bool   `twowaysql:"is_public"`
 	}{
 		BlogId:   blogId,
-		Title:    requestBody.Title,
+		Name:     requestBody.Name,
 		Content:  requestBody.Content,
 		IsPublic: requestBody.IsPublic,
 	}

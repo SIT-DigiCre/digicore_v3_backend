@@ -1,6 +1,6 @@
 required:
   - blogId
-  - title
+  - name
   - content
   - author
   - tags
@@ -11,7 +11,7 @@ required:
 properties:
   blogId:
     type: string
-  title:
+  name:
     type: string
   content:
     type: string
@@ -28,5 +28,5 @@ properties:
     type: string
   createdAt:
     type: string
-  updateAt:
+  updatedAt:
     type: string

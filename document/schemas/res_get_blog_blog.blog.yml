@@ -1,14 +1,17 @@
 required:
   - blogId
-  - title
+  - name
   - abstract
   - author
   - tags
   - isPublic
+  - topImage
+  - createdAt
+  - updatedAt
 properties:
   blogId:
     type: string
-  title:
+  name:
     type: string
   abstract:
     type: string
@@ -21,3 +24,9 @@ properties:
       $ref: './res_get_blog_blog.blog.tag.yml'
   isPublic:
     type: boolean
+  topImage:
+    type: string
+  createdAt:
+    type: string
+  updatedAt:
+    type: string

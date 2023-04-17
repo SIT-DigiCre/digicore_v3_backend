@@ -1,6 +1,7 @@
 package blog
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
@@ -18,18 +19,21 @@ func GetBlogBlogBlogId(ctx echo.Context, dbClient db.Client, blogId string) (api
 	}
 	rerr := copier.Copy(&res, &blog)
 	if rerr != nil {
-		return api.ResGetBlogBlogBlogId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
+		return api.ResGetBlogBlogBlogId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました4", Log: rerr.Error()}
 	}
 	return res, nil
 }
 
 type blog struct {
-	Author   blogObjectAuthor `db:"author"`
-	Title    string           `db:"title"`
-	Content  string           `db:"content"`
-	IdPublic bool             `db:"is_public"`
-	Tags     []blogObjectTag  `db:"tag"`
-	WorkId   string           `db:"blog_id"`
+	Author    blogObjectAuthor
+	Name      string `db:"name"`
+	Tags      []blogObjectTag
+	BlogId    string `db:"blog_id"`
+	Content   string `db:"content"`
+	IsPublic  string `db:"is_public"`
+	TopImage  string `db:"top_image"`
+	CreatedAt string `db:"created_at"`
+	UpdatedAt string `db:"updated_at"`
 }
 
 type blogObjectAuthor struct {
@@ -51,8 +55,9 @@ func getBlogFromTagId(dbClient db.Client, blogId string) (blog, *response.Error)
 	}
 	blogs := []blog{}
 	rerr := dbClient.Select(&blogs, "sql/blog/select_blog_from_blog_id.sql", &params)
+	fmt.Printf("%+v", params)
 	if rerr != nil {
-		return blog{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
+		return blog{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました3", Log: rerr.Error()}
 	}
 	if len(blogs) == 0 {
 		return blog{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "作品が存在しません", Log: "no rows in result"}
@@ -93,7 +98,7 @@ func getBlogBlogAuthorId(dbClient db.Client, blogId string) (blogObjectAuthor, *
 	blogAuthor := []blogObjectAuthor{}
 	err := dbClient.Select(&blogAuthor, "sql/blog/select_blog_blog_author.sql", &params)
 	if err != nil {
-		return blogObjectAuthor{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+		return blogObjectAuthor{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました2", Log: err.Error()}
 	}
 	return blogAuthor[0], nil
 }

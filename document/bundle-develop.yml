@@ -2062,15 +2062,18 @@ components:
     ResGetBlogBlogObjectBlog:
       required:
         - blogId
-        - title
+        - name
         - abstract
         - author
         - tags
         - isPublic
+        - topImage
+        - createdAt
+        - updatedAt
       properties:
         blogId:
           type: string
-        title:
+        name:
           type: string
         abstract:
           type: string
@@ -2083,6 +2086,12 @@ components:
             $ref: '#/components/schemas/ResGetBlogBlogObjectBlogObjectTag'
         isPublic:
           type: boolean
+        topImage:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
     ResGetBlogBlogObjectBlogObjectAuthor:
       required:
         - userId
@@ -2106,13 +2115,13 @@ components:
           type: string
     ReqPostBlogBlog:
       required:
-        - title
+        - name
         - content
         - tags
         - topImage
         - isPublic
       properties:
-        title:
+        name:
           type: string
           x-oapi-codegen-extra-tags:
             validate: required
@@ -2132,8 +2141,8 @@ components:
         topImage:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: required
-            ja: 本文
+            validate: null
+            ja: サムネイル
         isPublic:
           type: boolean
           x-oapi-codegen-extra-tags:
@@ -2142,7 +2151,7 @@ components:
     ResGetBlogBlogBlogId:
       required:
         - blogId
-        - title
+        - name
         - content
         - author
         - tags
@@ -2153,7 +2162,7 @@ components:
       properties:
         blogId:
           type: string
-        title:
+        name:
           type: string
         content:
           type: string
@@ -2170,7 +2179,7 @@ components:
           type: string
         createdAt:
           type: string
-        updateAt:
+        updatedAt:
           type: string
     ResGetBlogBlogBlogIdObjectAuthor:
       required:
@@ -2195,13 +2204,13 @@ components:
           type: string
     ReqPutBlogBlogBlogId:
       required:
-        - title
+        - name
         - content
         - tags
         - topImage
         - isPublic
       properties:
-        title:
+        name:
           type: string
           x-oapi-codegen-extra-tags:
             validate: required
@@ -2221,7 +2230,7 @@ components:
         topImage:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: required
+            validate: null
             ja: サムネイル
         isPublic:
           type: boolean

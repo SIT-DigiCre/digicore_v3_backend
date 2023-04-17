@@ -17,9 +17,9 @@ type Error struct {
 type ReqPostBlogBlog struct {
 	Content  string   `ja:"本文" json:"content" validate:"required"`
 	IsPublic bool     `ja:"公開" json:"isPublic" validate:""`
+	Name     string   `ja:"タイトル" json:"name" validate:"required"`
 	Tags     []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
-	Title    string   `ja:"タイトル" json:"title" validate:"required"`
-	TopImage string   `ja:"本文" json:"topImage" validate:"required"`
+	TopImage string   `ja:"サムネイル" json:"topImage" validate:""`
 }
 
 // ReqPostBlogTag defines model for ReqPostBlogTag.
@@ -71,9 +71,9 @@ type ReqPostWorkWork struct {
 type ReqPutBlogBlogBlogId struct {
 	Content  string   `ja:"本文" json:"content" validate:"required"`
 	IsPublic bool     `ja:"公開" json:"isPublic" validate:""`
+	Name     string   `ja:"タイトル" json:"name" validate:"required"`
 	Tags     []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
-	Title    string   `ja:"タイトル" json:"title" validate:"required"`
-	TopImage string   `ja:"サムネイル" json:"topImage" validate:"required"`
+	TopImage string   `ja:"サムネイル" json:"topImage" validate:""`
 }
 
 // ReqPutBlogTagTagId defines model for ReqPutBlogTagTagId.
@@ -153,10 +153,10 @@ type ResGetBlogBlogBlogId struct {
 	Content   string                           `json:"content"`
 	CreatedAt string                           `json:"createdAt"`
 	IsPublic  bool                             `json:"isPublic"`
+	Name      string                           `json:"name"`
 	Tags      []ResGetBlogBlogBlogIdObjectTag  `json:"tags"`
-	Title     string                           `json:"title"`
 	TopImage  string                           `json:"topImage"`
-	UpdateAt  *string                          `json:"updateAt,omitempty"`
+	UpdatedAt string                           `json:"updatedAt"`
 }
 
 // ResGetBlogBlogBlogIdObjectAuthor defines model for ResGetBlogBlogBlogIdObjectAuthor.
@@ -174,12 +174,15 @@ type ResGetBlogBlogBlogIdObjectTag struct {
 
 // ResGetBlogBlogObjectBlog defines model for ResGetBlogBlogObjectBlog.
 type ResGetBlogBlogObjectBlog struct {
-	Abstract string                               `json:"abstract"`
-	Author   ResGetBlogBlogObjectBlogObjectAuthor `json:"author"`
-	BlogId   string                               `json:"blogId"`
-	IsPublic bool                                 `json:"isPublic"`
-	Tags     []ResGetBlogBlogObjectBlogObjectTag  `json:"tags"`
-	Title    string                               `json:"title"`
+	Abstract  string                               `json:"abstract"`
+	Author    ResGetBlogBlogObjectBlogObjectAuthor `json:"author"`
+	BlogId    string                               `json:"blogId"`
+	CreatedAt string                               `json:"createdAt"`
+	IsPublic  bool                                 `json:"isPublic"`
+	Name      string                               `json:"name"`
+	Tags      []ResGetBlogBlogObjectBlogObjectTag  `json:"tags"`
+	TopImage  string                               `json:"topImage"`
+	UpdatedAt string                               `json:"updatedAt"`
 }
 
 // ResGetBlogBlogObjectBlogObjectAuthor defines model for ResGetBlogBlogObjectBlogObjectAuthor.

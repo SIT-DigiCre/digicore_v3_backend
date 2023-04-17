@@ -1,0 +1,1 @@
+INSERT INTO blog_blog_tags (id, blog_id, tag_id) VALUES (UUID_TO_BIN(@id), UUID_TO_BIN(/*blogId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'), UUID_TO_BIN(/*tagId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'));

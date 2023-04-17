@@ -1,11 +1,11 @@
 required:
-  - title
+  - name
   - content
   - tags
   - topImage
   - isPublic
 properties:
-  title:
+  name:
     type: string
     x-oapi-codegen-extra-tags:
       validate: required
@@ -25,7 +25,7 @@ properties:
   topImage:
     type: string
     x-oapi-codegen-extra-tags:
-      validate: required
+      validate:
       ja: サムネイル
   isPublic:
     type: boolean
