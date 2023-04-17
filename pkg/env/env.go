@@ -31,5 +31,6 @@ var MattermostURL = "https://mm.digicre.net"
 var MattermostDigicreTeamID = os.Getenv("MATTERMOST_DIGICRE_TEAM_ID")
 var MattermostAdminAccount = os.Getenv("MATTERMOST_ADMIN_ACCOUNT")
 var MattermostAdminPassword = os.Getenv("MATTERMOST_ADMIN_PASSWORD")
+var MattermostWebHookURL = os.Getenv("MATTERMOST_WEB_HOOK_URL")
 
-var AdminGroup = os.Getenv("ADMIN_GROUP")
+var ClubRoomStatusToken = os.Getenv("CLUB_ROOM_STATUS_TOKEN")

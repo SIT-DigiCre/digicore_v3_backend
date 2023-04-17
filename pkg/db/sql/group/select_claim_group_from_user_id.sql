@@ -1,1 +1,1 @@
-SELECT BIN_TO_UUID(groups.id) AS group_id FROM `groups` RIGHT JOIN groups_users ON groups.id = groups_users.group_id WHERE claim = TRUE AND user_id = UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee')
+SELECT claim FROM groups_users RIGHT JOIN group_claims ON groups_users.group_id = group_claims.group_id WHERE user_id = UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee')

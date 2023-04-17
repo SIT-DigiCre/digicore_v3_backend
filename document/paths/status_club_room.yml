@@ -1,0 +1,37 @@
+get:
+  tags:
+    - status
+  description: "Get club room status"
+  responses:
+    200:
+      description: "Success get club room status page"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_status_club_room.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+put:
+  tags:
+    - status
+  description: "Update club room status"
+  requestBody:
+    description: "club room status"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_put_status_club_room.yml"
+  responses:
+    200:
+      description: OK
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

@@ -10,7 +10,6 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 	"github.com/deepmap/oapi-codegen/pkg/middleware"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/labstack/echo/v4"
@@ -48,7 +47,15 @@ func init() {
 
 func handler(c echo.Context, err *echo.HTTPError) error {
 	message := err.Message.(string)
-	res := response.Error{Code: http.StatusUnauthorized, Level: "Info", Message: message, Log: message}
+	if err.Code == http.StatusForbidden {
+		res := response.Error{Code: http.StatusForbidden, Level: "Info", Message: "閲覧する権限がありません", Log: message}
+		return response.ErrorResponse(c, &res)
+	}
+	if err.Code == http.StatusUnauthorized {
+		res := response.Error{Code: http.StatusUnauthorized, Level: "Info", Message: "ログインされていません", Log: message}
+		return response.ErrorResponse(c, &res)
+	}
+	res := response.Error{Code: err.Code, Level: "Info", Message: message, Log: message}
 	return response.ErrorResponse(c, &res)
 }
 
@@ -78,26 +85,18 @@ func GetClaims(userId string) ([]string, *response.Error) {
 	}{
 		UserId: userId,
 	}
-	groups := []group{}
-	err := dbClient.Select(&groups, "sql/group/select_claim_group_from_user_id.sql", &params)
+	claims := []claim{}
+	err := dbClient.Select(&claims, "sql/group/select_claim_group_from_user_id.sql", &params)
 	if err != nil {
 		return nil, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "権限一覧の取得に失敗しました", Log: err.Error()}
 	}
-	claims := []string{}
-	for _, group := range groups {
-		groupId := convertClaimGroupID(group.GroupId)
-		claims = append(claims, groupId)
+	claims_str := []string{}
+	for _, claim := range claims {
+		claims_str = append(claims_str, claim.Claim)
 	}
-	return claims, nil
+	return claims_str, nil
 }
 
-type group struct {
-	GroupId string `db:"group_id"`
-}
-
-func convertClaimGroupID(groupId string) string {
-	if groupId == env.AdminGroup {
-		return "admin"
-	}
-	return groupId
+type claim struct {
+	Claim string `db:"claim"`
 }

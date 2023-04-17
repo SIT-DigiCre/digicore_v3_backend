@@ -1,4 +1,6 @@
 get:
+  tags:
+    - status
   description: "Server status check"
   responses:
     200:

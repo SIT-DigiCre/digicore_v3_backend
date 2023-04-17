@@ -1,5 +1,9 @@
 ResGetStatus:
   $ref: "./schemas/res_get_status.yml"
+ReqPutStatusClubRoom:
+  $ref: "./schemas/req_put_status_club_room.yml"
+ResGetStatusClubRoom:
+  $ref: "./schemas/res_get_status_club_room.yml"
 ResGetSignup:
   $ref: "./schemas/res_get_signup.yml"
 ReqPostSignupCallback:
@@ -136,6 +140,14 @@ ResGetGroupGroupId:
   $ref: "./schemas/res_get_group_group_id.yml"
 ResGetGroupGroupIdObjectUser:
   $ref: "./schemas/res_get_group_group_id.user.yml"
+ResGetPayment:
+  $ref: "./schemas/res_get_payment.yml"
+ResGetPaymentObjectPayment:
+  $ref: "./schemas/res_get_payment.payment.yml"
+ResGetPaymentPaymentId:
+  $ref: "./schemas/res_get_payment_payment_id.yml"
+ReqPutPaymentPaymentId:
+  $ref: "./schemas/req_put_payment_payment_id.yml"
 
 Error:
   $ref: "./schemas/error.yml"

@@ -1,0 +1,25 @@
+get:
+  tags:
+    - payment
+  description: "Get payment list"
+  security:
+    - BearerAuth:
+      - "account"
+  parameters:
+    - name: year
+      in: query
+      schema:
+        type: integer
+  responses:
+    200:
+      description: "Success get payment list"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_payment.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

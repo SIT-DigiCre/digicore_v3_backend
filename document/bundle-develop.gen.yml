@@ -2,6 +2,14 @@ openapi: 3.0.3
 info:
   version: 3.1.0
   title: Digicore
+servers:
+  - url: 'http://{host}:{port}/'
+    description: develop
+    variables:
+      host:
+        default: localhost
+      port:
+        default: '8000'
 tags:
   - name: auth
     description: Authentication system
@@ -19,9 +27,15 @@ tags:
     description: Blog system
   - name: group
     description: Group system
+  - name: payment
+    description: Payment system (need 'account' permission)
+  - name: status
+    description: status system
 paths:
   /status:
     get:
+      tags:
+        - status
       description: Server status check
       responses:
         '200':
@@ -30,6 +44,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetStatus'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /status/club_room:
+    get:
+      tags:
+        - status
+      description: Get club room status
+      responses:
+        '200':
+          description: Success get club room status page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetStatusClubRoom'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - status
+      description: Update club room status
+      requestBody:
+        description: club room status
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutStatusClubRoom'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
   /signup:
@@ -225,6 +277,26 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /user/me/renewal:
+    put:
+      tags:
+        - user
+      description: Renewal active limit
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success update my private profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMe'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me/discord:
     get:
       tags:
@@ -394,6 +466,92 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetUserMePayment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /payment:
+    get:
+      tags:
+        - payment
+      description: Get payment list
+      security:
+        - BearerAuth:
+            - account
+      parameters:
+        - name: year
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success get payment list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPayment'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/payment/{paymentId}':
+    get:
+      tags:
+        - payment
+      description: Get user payment
+      security:
+        - BearerAuth:
+            - account
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success check user payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPaymentPaymentId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - payment
+      description: Check user payment
+      security:
+        - BearerAuth:
+            - account
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Check user payment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutPaymentPaymentId'
+      responses:
+        '200':
+          description: Success check user payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPaymentPaymentId'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -1195,6 +1353,26 @@ components:
         - status
       properties:
         status:
+          type: boolean
+    ReqPutStatusClubRoom:
+      required:
+        - lock
+        - token
+      properties:
+        lock:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: ロック状態
+        token:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 認証トーク
+    ResGetStatusClubRoom:
+      required:
+        - lock
+      properties:
+        lock:
           type: boolean
     ResGetSignup:
       required:
@@ -2352,6 +2530,66 @@ components:
           type: string
         name:
           type: string
+    ResGetPayment:
+      required:
+        - payments
+      properties:
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetPaymentObjectPayment'
+    ResGetPaymentObjectPayment:
+      required:
+        - paymentId
+        - userId
+        - studentNumber
+        - transferName
+        - note
+      properties:
+        paymentId:
+          type: string
+        userId:
+          type: string
+        studentNumber:
+          type: string
+        transferName:
+          type: string
+        checked:
+          type: boolean
+        note:
+          type: string
+    ResGetPaymentPaymentId:
+      required:
+        - paymentId
+        - userId
+        - studentNumber
+        - transferName
+        - checked
+        - note
+      properties:
+        paymentId:
+          type: string
+        userId:
+          type: string
+        studentNumber:
+          type: string
+        transferName:
+          type: string
+        note:
+          type: string
+    ReqPutPaymentPaymentId:
+      required:
+        - checked
+        - note
+      properties:
+        checked:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: チェック
+        note:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: 備考
     Error:
       required:
         - level

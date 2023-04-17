@@ -9,5 +9,7 @@ CREATE TABLE event_reservations
     reservation_start_date  DATETIME     NOT NULL,
     reservation_finish_date DATETIME     NOT NULL,
     capacity                INT          NOT NULL,
+    created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );

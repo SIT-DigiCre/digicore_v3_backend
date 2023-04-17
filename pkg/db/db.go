@@ -54,5 +54,5 @@ type TransactionClient interface {
 	Select(dest interface{}, queryPath string, params interface{}) error
 	Exec(queryPath string, params interface{}, generateId bool) (sql.Result, error)
 	GetId() (string, error)
-	DuplicateUpdate(insertQueryPath string, updateQueryPath string, params interface{}) (sql.Result, error)
+	DuplicateUpdate(insertQueryPath string, updateQueryPath string, params interface{}) (sql.Result, bool, error)
 }

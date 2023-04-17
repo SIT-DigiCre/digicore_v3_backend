@@ -1,6 +1,7 @@
 package google_auth
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -28,6 +29,7 @@ func PostSignupCallback(ctx echo.Context, dbTransactionClient db.TransactionClie
 	if err != nil {
 		return api.ResPostSignupCallback{}, err
 	}
+	utils.NoticeMattermost(fmt.Sprintf("%s(%s)がデジコアに登録しました", studentNumber, userId), "digicore-notice", "digicore-notice", "bell")
 	return api.ResPostSignupCallback{Jwt: jwt}, nil
 }
 

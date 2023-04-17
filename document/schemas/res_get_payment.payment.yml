@@ -1,0 +1,19 @@
+required:
+  - paymentId
+  - userId
+  - studentNumber
+  - transferName
+  - note
+properties:
+  paymentId:
+    type: string
+  userId:
+    type: string
+  studentNumber:
+    type: string
+  transferName:
+    type: string
+  checked:
+    type: boolean
+  note:
+    type: string

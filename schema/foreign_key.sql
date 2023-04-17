@@ -26,3 +26,5 @@ ALTER TABLE blogs ADD CONSTRAINT fk_blogs_user_id_users_id FOREIGN KEY (user_id)
 
 ALTER TABLE blog_blog_tags ADD CONSTRAINT fk_blog_blog_tags_tag_id_blog_tags_id FOREIGN KEY (tag_id) REFERENCES blog_tags(id);
 ALTER TABLE blog_blog_tags ADD CONSTRAINT fk_blog_blog_tags_blog_id_blogs_id FOREIGN KEY (blog_id) REFERENCES blogs(id);
+
+ALTER TABLE group_claims ADD CONSTRAINT fk_group_claims_group_id_groups_id FOREIGN KEY (group_id) REFERENCES `groups`(id);

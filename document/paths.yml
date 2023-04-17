@@ -1,5 +1,7 @@
 /status:
   $ref: "./paths/status.yml"
+/status/club_room:
+  $ref: "./paths/status_club_room.yml"
 /signup:
   $ref: "./paths/signup.yml"
 /signup/callback:
@@ -16,6 +18,8 @@
   $ref: "./paths/user_user_id_introduction.yml"
 /user/me:
   $ref: "./paths/user_me.yml"
+/user/me/renewal:
+  $ref: "./paths/user_me_renewal.yml"
 /user/me/discord:
   $ref: "./paths/user_me_discord.yml"
 /user/me/discord/callback:
@@ -26,6 +30,10 @@
   $ref: "./paths/user_me_private.yml"
 /user/me/payment:
   $ref: "./paths/user_me_payment.yml"
+/payment:
+  $ref: "./paths/payment.yml"
+/payment/{paymentId}:
+  $ref: "./paths/payment_payment_id.yml"
 /tool:
   $ref: "./paths/tool.yml"
 /event:
