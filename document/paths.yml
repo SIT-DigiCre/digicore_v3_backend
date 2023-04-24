@@ -54,6 +54,8 @@
   $ref: "./paths/work_work.yml"
 /work/work/{workId}:
   $ref: "./paths/work_work_work_id.yml"
+/work/work/{workId}/public:
+  $ref: "./paths/work_work_work_id_public.yml"
 /work/tag:
   $ref: "./paths/work_tag.yml"
 /work/tag/{tagId}:
