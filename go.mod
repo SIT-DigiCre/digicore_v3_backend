@@ -18,7 +18,7 @@ require (
 	github.com/lestrrat-go/jwx/v2 v2.0.9
 	github.com/mattermost/mattermost-server/v5 v5.39.3
 	github.com/rubenv/sql-migrate v1.4.0
-	github.com/sirupsen/logrus v1.9.0
+	github.com/sirupsen/logrus v1.9.3
 	golang.org/x/oauth2 v0.7.0
 )
 
