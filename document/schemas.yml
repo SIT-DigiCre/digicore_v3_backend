@@ -74,6 +74,10 @@ ReqPostMattermostCreateuser:
   $ref: "./schemas/req_post_mattermost_create_user.yml"
 ResPostMattermostCreateuser:
   $ref: "./schemas/res_post_mattermost_create_user.yml"
+ReqPostMattermostCmd:
+  $ref: "./schemas/req_post_mattermost_cmd.yml"
+ResPostMattermostCmd:
+  $ref: "./schemas/res_post_mattermost_cmd.yml"
 ResGetWorkWork:
   $ref: "./schemas/res_get_work_work.yml"
 ResGetWorkWorkObjectWork:

@@ -50,6 +50,8 @@
   $ref: "./paths/storage_file_id.yml"
 /mattermost/create_user:
   $ref: "./paths/mattermost_create_user.yml"
+/mattermost/cmd:
+  $ref: "./paths/mattermost_cmd.yml"
 /work/work:
   $ref: "./paths/work_work.yml"
 /work/work/{workId}:
