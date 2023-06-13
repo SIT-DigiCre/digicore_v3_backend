@@ -104,5 +104,5 @@ type claim struct {
 }
 
 func urlSkipper(c echo.Context) bool {
-	return strings.HasPrefix(c.Path(), "/metrics")
+	return strings.HasPrefix(c.Path(), "/metrics") || strings.HasPrefix(c.Path(), "/mattermost/cmd")
 }

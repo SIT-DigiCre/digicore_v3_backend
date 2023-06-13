@@ -817,27 +817,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
-  /mattermost/cmd:
-    post:
-      tags:
-        - mattermost
-      description: Mattermost slash cmd
-      requestBody:
-        description: Slash cmd request
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReqPostMattermostCmd'
-      responses:
-        '200':
-          description: Success slash cmd
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResPostMattermostCmd'
-        '500':
-          $ref: '#/components/responses/InternalServer'
   /work/work:
     get:
       tags:
@@ -1790,56 +1769,6 @@ components:
         - username
       properties:
         username:
-          type: string
-    ReqPostMattermostCmd:
-      required:
-        - token
-        - channel_name
-        - user_name
-        - text
-        - command
-      properties:
-        token:
-          type: string
-          x-oapi-codegen-extra-tags:
-            form: token
-            validate: required
-            ja: トークン
-        channel_name:
-          type: string
-          x-oapi-codegen-extra-tags:
-            form: channel_name
-            validate: required
-            ja: チャンネル名
-        user_name:
-          type: string
-          x-oapi-codegen-extra-tags:
-            form: user_name
-            validate: required
-            ja: ユーザー名
-        text:
-          type: string
-          x-oapi-codegen-extra-tags:
-            form: text
-            validate: required
-            ja: テキスト
-        command:
-          type: string
-          x-oapi-codegen-extra-tags:
-            form: command
-            validate: required
-            ja: コマンド
-    ResPostMattermostCmd:
-      required:
-        - text
-        - username
-        - icon_emoji
-      properties:
-        text:
-          type: string
-        username:
-          type: string
-        icon_emoji:
           type: string
     ResGetWorkWork:
       required:
