@@ -1,4 +1,4 @@
-package server
+package irregular
 
 import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *server) PostMattermostCmd(ctx echo.Context) error {
+func PostMattermostCmd(ctx echo.Context) error {
 	var requestBody api.ReqPostMattermostCmd
 	ctx.Bind(&requestBody)
 	err := validator.Validate(requestBody)

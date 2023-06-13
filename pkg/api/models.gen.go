@@ -18,15 +18,6 @@ type ReqPostLoginCallback struct {
 	Code string `ja:"認証コード" json:"code" validate:"required"`
 }
 
-// ReqPostMattermostCmd defines model for ReqPostMattermostCmd.
-type ReqPostMattermostCmd struct {
-	ChannelName string `form:"channel_name" ja:"チャンネル名" json:"channel_name" validate:"required"`
-	Command     string `form:"command" ja:"コマンド" json:"command" validate:"required"`
-	Text        string `form:"text" ja:"テキスト" json:"text" validate:"required"`
-	Token       string `form:"token" ja:"トークン" json:"token" validate:"required"`
-	UserName    string `form:"user_name" ja:"ユーザー名" json:"user_name" validate:"required"`
-}
-
 // ReqPostMattermostCreateuser defines model for ReqPostMattermostCreateuser.
 type ReqPostMattermostCreateuser struct {
 	Nickname string `ja:"ニックネーム" json:"nickname" validate:"required,min=3,max=22"`
@@ -479,13 +470,6 @@ type ResPostLoginCallback struct {
 	Jwt string `json:"jwt"`
 }
 
-// ResPostMattermostCmd defines model for ResPostMattermostCmd.
-type ResPostMattermostCmd struct {
-	IconEmoji string `json:"icon_emoji"`
-	Text      string `json:"text"`
-	Username  string `json:"username"`
-}
-
 // ResPostMattermostCreateuser defines model for ResPostMattermostCreateuser.
 type ResPostMattermostCreateuser struct {
 	Username string `json:"username"`
@@ -554,9 +538,6 @@ type PutEventEventIdReservationIdMeJSONRequestBody = ReqPutEventEventIdReservati
 
 // PostLoginCallbackJSONRequestBody defines body for PostLoginCallback for application/json ContentType.
 type PostLoginCallbackJSONRequestBody = ReqPostLoginCallback
-
-// PostMattermostCmdJSONRequestBody defines body for PostMattermostCmd for application/json ContentType.
-type PostMattermostCmdJSONRequestBody = ReqPostMattermostCmd
 
 // PostMattermostCreateUserJSONRequestBody defines body for PostMattermostCreateUser for application/json ContentType.
 type PostMattermostCreateUserJSONRequestBody = ReqPostMattermostCreateuser
