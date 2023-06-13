@@ -1,0 +1,1 @@
+INSERT INTO mattermost_remind_post (user_name, channel_name, body, remind_date) VALUES (/*user_name*/'user_name', /*channel_name*/'channel_name', /*body*/'body', /*remind_date*/'2023-01-01 00:00:00');

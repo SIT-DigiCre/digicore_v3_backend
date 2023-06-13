@@ -1,0 +1,11 @@
+required:
+  - text
+  - username
+  - icon_emoji
+properties:
+  text:
+    type: string
+  username:
+    type: string
+  icon_emoji:
+    type: string
