@@ -34,7 +34,7 @@ func Login(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		tokenString := c.Request().Header.Get("Authorization")
 		tokenString = strings.TrimPrefix(tokenString, "Bearer ")
-		if tokenString == "" {
+		if tokenString == "" || urlSkipper(c) {
 			return next(c)
 		}
 		token, err := jwt.Parse([]byte(tokenString), jwt.WithVerify(false))
