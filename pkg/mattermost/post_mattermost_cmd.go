@@ -21,10 +21,10 @@ func PostMattermostCmd(ctx echo.Context, dbClient db.TransactionClient, requestB
 	lines := strings.Split(decode, "\n")
 	infos := strings.Split(lines[0], " ")
 	if requestBody.Command == "/remind" {
-		remindDate, rerr := time.Parse("2006-01-02T15:04", infos[1])
+		remindDate, rerr := time.Parse("2006-01-02T15:04", infos[0])
 		channelName := requestBody.ChannelName
 		if 3 <= len(infos) {
-			channelName = infos[2][1:]
+			channelName = infos[1][1:]
 		}
 		if rerr != nil {
 			return api.ResPostMattermostCmd{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "時刻のパースに失敗しました", Log: rerr.Error()}
