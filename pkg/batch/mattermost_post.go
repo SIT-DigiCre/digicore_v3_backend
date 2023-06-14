@@ -35,7 +35,7 @@ type post struct {
 
 func run_mattermost_post(dbClient db.TransactionClient) {
 	params := struct {
-		RemindDate time.Time `twowaysql:"remind_date"`
+		RemindDate time.Time `twowaysql:"remindDate"`
 	}{
 		RemindDate: time.Now(),
 	}
