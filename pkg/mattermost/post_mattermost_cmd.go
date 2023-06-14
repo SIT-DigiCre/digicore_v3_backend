@@ -57,6 +57,9 @@ func mattermostCmdRemindList(dbClient db.Client, requestBody api.ReqPostMattermo
 	for _, remind := range reminds {
 		text += fmt.Sprintf("- %s(%s)\n%s\n", remind.RemindDate.Format("2006-01-02T15:04"), remind.Id, remind.Body)
 	}
+	if text == "" {
+		text = "予約済み投稿はありません"
+	}
 	return api.ResPostMattermostCmd{Text: text, IconEmoji: "alarm_clock", Username: "remind"}, nil
 }
 
