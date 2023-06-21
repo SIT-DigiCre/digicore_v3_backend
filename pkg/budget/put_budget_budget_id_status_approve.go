@@ -6,7 +6,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/util"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/utils"
 	"github.com/labstack/echo/v4"
 )
 
@@ -17,7 +17,7 @@ func PutBudgetBudgetIdStatusApprove(ctx echo.Context, dbClient db.TransactionCli
 		return api.ResGetBudgetBudgetId{}, err
 	}
 	ownerUserIds := []string{now_detail.Proposer.UserId}
-	if !util.CheckUserId(ownerUserIds, userId) {
+	if !utils.CheckUserId(ownerUserIds, userId) {
 		return api.ResGetBudgetBudgetId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "編集権限があリません", Log: "Permission error"}
 	}
 	if now_detail.Status != "approve" {

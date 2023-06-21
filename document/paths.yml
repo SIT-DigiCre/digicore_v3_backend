@@ -1,5 +1,7 @@
 /status:
   $ref: "./paths/status.yml"
+/status/club_room:
+  $ref: "./paths/status_club_room.yml"
 /signup:
   $ref: "./paths/signup.yml"
 /signup/callback:
@@ -52,6 +54,8 @@
   $ref: "./paths/work_work.yml"
 /work/work/{workId}:
   $ref: "./paths/work_work_work_id.yml"
+/work/work/{workId}/public:
+  $ref: "./paths/work_work_work_id_public.yml"
 /work/tag:
   $ref: "./paths/work_tag.yml"
 /work/tag/{tagId}:

@@ -1,7 +1,12 @@
 required:
   - checked
+  - note
 properties:
   checked:
     type: boolean
     x-oapi-codegen-extra-tags:
       ja: チェック
+  note:
+    type: string
+    x-oapi-codegen-extra-tags:
+      ja: 備考

@@ -101,7 +101,14 @@ type ReqPutEventEventIdReservationIdMe struct {
 
 // ReqPutPaymentPaymentId defines model for ReqPutPaymentPaymentId.
 type ReqPutPaymentPaymentId struct {
-	Checked bool `ja:"チェック" json:"checked"`
+	Checked bool   `ja:"チェック" json:"checked"`
+	Note    string `ja:"備考" json:"note"`
+}
+
+// ReqPutStatusClubRoom defines model for ReqPutStatusClubRoom.
+type ReqPutStatusClubRoom struct {
+	Lock  bool   `ja:"ロック状態" json:"lock"`
+	Token string `ja:"認証トーク" json:"token" validate:"required"`
 }
 
 // ReqPutUserMe defines model for ReqPutUserMe.
@@ -331,7 +338,8 @@ type ResGetPayment struct {
 
 // ResGetPaymentObjectPayment defines model for ResGetPaymentObjectPayment.
 type ResGetPaymentObjectPayment struct {
-	Checked       bool   `json:"checked"`
+	Checked       *bool  `json:"checked,omitempty"`
+	Note          string `json:"note"`
 	PaymentId     string `json:"paymentId"`
 	StudentNumber string `json:"studentNumber"`
 	TransferName  string `json:"transferName"`
@@ -340,7 +348,7 @@ type ResGetPaymentObjectPayment struct {
 
 // ResGetPaymentPaymentId defines model for ResGetPaymentPaymentId.
 type ResGetPaymentPaymentId struct {
-	Checked       bool   `json:"checked"`
+	Note          string `json:"note"`
 	PaymentId     string `json:"paymentId"`
 	StudentNumber string `json:"studentNumber"`
 	TransferName  string `json:"transferName"`
@@ -355,6 +363,11 @@ type ResGetSignup struct {
 // ResGetStatus defines model for ResGetStatus.
 type ResGetStatus struct {
 	Status bool `json:"status"`
+}
+
+// ResGetStatusClubRoom defines model for ResGetStatusClubRoom.
+type ResGetStatusClubRoom struct {
+	Lock bool `json:"lock"`
 }
 
 // ResGetStorageFileId defines model for ResGetStorageFileId.
@@ -520,9 +533,9 @@ type ResGetWorkWorkObjectWorkObjectTag struct {
 type ResGetWorkWorkWorkId struct {
 	Authors     []ResGetWorkWorkWorkIdObjectAuthor `json:"authors"`
 	Description string                             `json:"description"`
-	Files       []ResGetWorkWorkWorkIdObjectTag    `json:"files"`
+	Files       []ResGetWorkWorkWorkIdObjectFile   `json:"files"`
 	Name        string                             `json:"name"`
-	Tags        []ResGetWorkWorkWorkIdObjectFile   `json:"tags"`
+	Tags        []ResGetWorkWorkWorkIdObjectTag    `json:"tags"`
 	WorkId      string                             `json:"workId"`
 }
 
@@ -535,14 +548,25 @@ type ResGetWorkWorkWorkIdObjectAuthor struct {
 
 // ResGetWorkWorkWorkIdObjectFile defines model for ResGetWorkWorkWorkIdObjectFile.
 type ResGetWorkWorkWorkIdObjectFile struct {
-	Name  string `json:"name"`
-	TagId string `json:"tagId"`
+	FileId string `json:"fileId"`
+	Name   string `json:"name"`
 }
 
 // ResGetWorkWorkWorkIdObjectTag defines model for ResGetWorkWorkWorkIdObjectTag.
 type ResGetWorkWorkWorkIdObjectTag struct {
-	FileId string `json:"fileId"`
-	Name   string `json:"name"`
+	Name  string `json:"name"`
+	TagId string `json:"tagId"`
+}
+
+// ResGetWorkWorkWorkIdPublic defines model for ResGetWorkWorkWorkIdPublic.
+type ResGetWorkWorkWorkIdPublic struct {
+	Authors     []ResGetWorkWorkWorkIdObjectAuthor `json:"authors"`
+	Description string                             `json:"description"`
+	FileName    *string                            `json:"fileName,omitempty"`
+	FileUrl     *string                            `json:"fileUrl,omitempty"`
+	Name        string                             `json:"name"`
+	Tags        []ResGetWorkWorkWorkIdObjectTag    `json:"tags"`
+	WorkId      string                             `json:"workId"`
 }
 
 // ResPostLoginCallback defines model for ResPostLoginCallback.
@@ -598,8 +622,7 @@ type GetGroupParams struct {
 
 // GetPaymentParams defines parameters for GetPayment.
 type GetPaymentParams struct {
-	Year   *int `form:"year,omitempty" json:"year,omitempty"`
-	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+	Year *int `form:"year,omitempty" json:"year,omitempty"`
 }
 
 // GetUserParams defines parameters for GetUser.
@@ -651,6 +674,9 @@ type PutPaymentPaymentIdJSONRequestBody = ReqPutPaymentPaymentId
 
 // PostSignupCallbackJSONRequestBody defines body for PostSignupCallback for application/json ContentType.
 type PostSignupCallbackJSONRequestBody = ReqPostSignupCallback
+
+// PutStatusClubRoomJSONRequestBody defines body for PutStatusClubRoom for application/json ContentType.
+type PutStatusClubRoomJSONRequestBody = ReqPutStatusClubRoom
 
 // PostStorageMyfileJSONRequestBody defines body for PostStorageMyfile for application/json ContentType.
 type PostStorageMyfileJSONRequestBody = ReqPostStorageMyfile

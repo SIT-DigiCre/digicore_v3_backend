@@ -28,10 +28,16 @@ tags:
   - name: budget
     description: Budget system
   - name: payment
-    description: Payment system
+    description: Payment system (need 'account' permission)
+  - name: status
+    description: Status system
+  - name: mattermost
+    description: Mattermost system
 paths:
   /status:
     get:
+      tags:
+        - status
       description: Server status check
       responses:
         '200':
@@ -40,6 +46,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetStatus'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /status/club_room:
+    get:
+      tags:
+        - status
+      description: Get club room status
+      responses:
+        '200':
+          description: Success get club room status page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetStatusClubRoom'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - status
+      description: Update club room status
+      requestBody:
+        description: club room status
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutStatusClubRoom'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
   /signup:
@@ -440,10 +484,6 @@ paths:
             - account
       parameters:
         - name: year
-          in: query
-          schema:
-            type: integer
-        - name: offset
           in: query
           schema:
             type: integer
@@ -902,6 +942,30 @@ paths:
           $ref: '#/components/responses/BlankSuccess'
         '500':
           $ref: '#/components/responses/InternalServer'
+  '/work/work/{workId}/public':
+    get:
+      tags:
+        - work
+      description: Get work(public)
+      parameters:
+        - name: workId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Get work
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkWorkWorkIdPublic'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /work/tag:
     get:
       tags:
@@ -1325,6 +1389,26 @@ components:
         - status
       properties:
         status:
+          type: boolean
+    ReqPutStatusClubRoom:
+      required:
+        - lock
+        - token
+      properties:
+        lock:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: ロック状態
+        token:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 認証トーク
+    ResGetStatusClubRoom:
+      required:
+        - lock
+      properties:
+        lock:
           type: boolean
     ResGetSignup:
       required:
@@ -2018,6 +2102,53 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'dive,uuid'
             ja: タグ
+    ResGetWorkWorkWorkIdPublic:
+      required:
+        - workId
+        - name
+        - description
+        - authors
+        - tags
+      properties:
+        workId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectAuthor'
+        fileUrl:
+          type: string
+        fileName:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectTag'
+    ResGetWorkWorkWorkIdPublicObjectAuthor:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+    ResGetWorkWorkWorkIdPublicObjectTag:
+      required:
+        - tagId
+        - name
+      properties:
+        tagId:
+          type: string
+        name:
+          type: string
     ResGetWorkWorkWorkId:
       required:
         - workId
@@ -2040,11 +2171,11 @@ components:
         files:
           type: array
           items:
-            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectTag'
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectFile'
         tags:
           type: array
           items:
-            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectFile'
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectTag'
     ResGetWorkWorkWorkIdObjectAuthor:
       required:
         - userId
@@ -2059,19 +2190,19 @@ components:
           type: string
     ResGetWorkWorkWorkIdObjectTag:
       required:
-        - fileId
+        - tagId
         - name
       properties:
-        fileId:
+        tagId:
           type: string
         name:
           type: string
     ResGetWorkWorkWorkIdObjectFile:
       required:
-        - tagId
+        - fileId
         - name
       properties:
-        tagId:
+        fileId:
           type: string
         name:
           type: string
@@ -2499,7 +2630,7 @@ components:
         - userId
         - studentNumber
         - transferName
-        - checked
+        - note
       properties:
         paymentId:
           type: string
@@ -2511,6 +2642,8 @@ components:
           type: string
         checked:
           type: boolean
+        note:
+          type: string
     ResGetPaymentPaymentId:
       required:
         - paymentId
@@ -2518,6 +2651,7 @@ components:
         - studentNumber
         - transferName
         - checked
+        - note
       properties:
         paymentId:
           type: string
@@ -2527,16 +2661,21 @@ components:
           type: string
         transferName:
           type: string
-        checked:
-          type: boolean
+        note:
+          type: string
     ReqPutPaymentPaymentId:
       required:
         - checked
+        - note
       properties:
         checked:
           type: boolean
           x-oapi-codegen-extra-tags:
             ja: チェック
+        note:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: 備考
     Error:
       required:
         - level

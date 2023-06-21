@@ -1,11 +1,15 @@
-package util
+package utils
 
 import (
+	"bytes"
+	"encoding/json"
 	"net/http"
 	"time"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
+	"github.com/sirupsen/logrus"
 )
 
 func GetSchoolYear() int {
@@ -56,6 +60,30 @@ func RenewalActiveLimit(dbClient db.TransactionClient, userId string, activeLimi
 	return nil
 }
 
+func NoticeMattermost(text string, channel string, username string, iconEmoji string) {
+	if env.MattermostWebHookURL == "" {
+		logrus.Error("Not set mattermost web hook url")
+		return
+	}
+	payload := struct {
+		Text      string `json:"text"`
+		Channel   string `json:"channel"`
+		Username  string `json:"username"`
+		IconEmoji string `json:"icon_emoji"`
+	}{Text: text, Channel: channel, Username: username, IconEmoji: iconEmoji}
+	p, err := json.Marshal(payload)
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	resp, err := http.Post(env.MattermostWebHookURL, "application/json", bytes.NewBuffer(p))
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	defer resp.Body.Close()
+}
+
 type FileId struct {
 	FileId string `db:"file_id"`
 }
@@ -75,7 +103,7 @@ func GetFileInfo(dbClient db.Client, fileIds []string) (map[string]FileInfo, *re
 		FileIds: fileIds,
 	}
 	fileInfos := []FileInfo{}
-	err := dbClient.Select(&fileInfos, "sql/util/select_file.sql", &params)
+	err := dbClient.Select(&fileInfos, "sql/utils/select_file.sql", &params)
 	if err != nil {
 		return map[string]FileInfo{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "ファイルの取得に失敗しました", Log: err.Error()}
 	}
@@ -106,7 +134,7 @@ func GetUserInfo(dbClient db.Client, userIds []string) (map[string]UserInfo, *re
 		UserIds: userIds,
 	}
 	userInfos := []UserInfo{}
-	err := dbClient.Select(&userInfos, "sql/util/select_user_profile.sql", &params)
+	err := dbClient.Select(&userInfos, "sql/utils/select_user_profile.sql", &params)
 	if err != nil {
 		return map[string]UserInfo{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "ファイルの取得に失敗しました", Log: err.Error()}
 	}

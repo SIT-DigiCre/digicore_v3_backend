@@ -2,11 +2,11 @@ include .env
 
 .PHONY: generate_api
 generate_api:
-	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/document node_tool swagger-cli bundle -o ./bundle.yml -t yaml ./openapi.yml
-	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/document node_tool swagger-cli bundle -o ./bundle-develop.yml -t yaml ./openapi-develop.yml
-	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app admin oapi-codegen --config ./config/models.yml ./document/bundle.yml
-	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app admin oapi-codegen --config ./config/server.yml ./document/bundle.yml
-	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app admin oapi-codegen --config ./config/spec.yml ./document/bundle.yml
+	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/document node_tool swagger-cli bundle -o ./bundle.gen.yml -t yaml ./openapi.yml
+	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/document node_tool swagger-cli bundle -o ./bundle-develop.gen.yml -t yaml ./openapi-develop.yml
+	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app admin oapi-codegen --config ./config/models.yml ./document/bundle.gen.yml
+	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app admin oapi-codegen --config ./config/server.yml ./document/bundle.gen.yml
+	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app admin oapi-codegen --config ./config/spec.yml ./document/bundle.gen.yml
 
 .PHONY: migrate-dry
 migrate-dry:
@@ -30,6 +30,14 @@ up:
 up-d:
 	docker compose -f ${DOCKER_COMPOSE} up -d
 
+.PHONY: logs
+logs:
+	docker compose -f ${DOCKER_COMPOSE} logs --since $(date +%Y-%m-%d --date '1 day ago')
+
+.PHONY: logs-all
+logs-all:
+	docker compose -f ${DOCKER_COMPOSE} logs
+
 .PHONY: down
 down:
 	docker compose -f ${DOCKER_COMPOSE} down
@@ -41,3 +49,7 @@ pull:
 .PHONY: build
 build:
 	docker compose -f ${DOCKER_COMPOSE} build
+
+.PHONY: ls
+ls:
+	docker compose -f ${DOCKER_COMPOSE} ls

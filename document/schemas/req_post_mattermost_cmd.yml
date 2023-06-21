@@ -1,0 +1,37 @@
+required:
+  - token
+  - channel_name
+  - user_name
+  - text
+  - command
+properties:
+  token:
+    type: string
+    x-oapi-codegen-extra-tags:
+      form: token
+      validate: required
+      ja: トークン
+  channel_name:
+    type: string
+    x-oapi-codegen-extra-tags:
+      form: channel_name
+      validate: required
+      ja: チャンネル名
+  user_name:
+    type: string
+    x-oapi-codegen-extra-tags:
+      form: user_name
+      validate: required
+      ja: ユーザー名
+  text:
+    type: string
+    x-oapi-codegen-extra-tags:
+      form: text
+      validate: required
+      ja: テキスト
+  command:
+    type: string
+    x-oapi-codegen-extra-tags:
+      form: command
+      validate: required
+      ja: コマンド

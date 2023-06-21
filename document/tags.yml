@@ -15,4 +15,8 @@
 - name: budget
   description: Budget system
 - name: payment
-  description: Payment system
+  description: Payment system (need 'account' permission)
+- name: status
+  description: Status system
+- name: mattermost
+  description: Mattermost system

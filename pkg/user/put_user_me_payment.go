@@ -1,12 +1,13 @@
 package user
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/util"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/utils"
 	"github.com/labstack/echo/v4"
 )
 
@@ -16,10 +17,12 @@ func PutUserMePayment(ctx echo.Context, dbClient db.TransactionClient, requestBo
 	if err != nil {
 		return api.ResGetUserMePayment{}, err
 	}
+	profile, _ := GetUserProfileFromUserId(dbClient, userId)
+	utils.NoticeMattermost(fmt.Sprintf("%s(%s)が振込申請を行いました", profile.StudentNumber, userId), "digicore-notice", "digicore-notice", "bell")
 	if update {
 		return GetUserMePayment(ctx, dbClient)
 	}
-	err = util.RenewalActiveLimit(dbClient, userId, util.GetAfterDate(0, 1, 0))
+	err = utils.RenewalActiveLimit(dbClient, userId, utils.GetAfterDate(0, 1, 0))
 	if err != nil {
 		return api.ResGetUserMePayment{}, err
 	}
@@ -33,7 +36,7 @@ func updateUserPayment(dbClient db.TransactionClient, userId string, requestBody
 		TransferName string `twowaysql:"transferName"`
 	}{
 		UserId:       userId,
-		Year:         util.GetSchoolYear(),
+		Year:         utils.GetSchoolYear(),
 		TransferName: requestBody.TransferName,
 	}
 	_, update, err := dbClient.DuplicateUpdate("sql/user/insert_user_payment.sql", "sql/user/update_user_payment.sql", &params)

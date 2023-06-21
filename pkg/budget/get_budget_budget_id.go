@@ -7,7 +7,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/util"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/utils"
 	"github.com/jinzhu/copier"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/exp/maps"
@@ -49,7 +49,7 @@ type budgetDetail struct {
 	ApproverIconUrl  sql.NullString `db:"approver_icon_url"`
 	ApproverUsername sql.NullString `db:"approver_username"`
 
-	Files []util.FileInfo
+	Files []utils.FileInfo
 
 	ApprovedAt sql.NullString `db:"approved_at"`
 	CreatedAt  string         `db:"created_at"`
@@ -86,24 +86,24 @@ func getBudgetFromBudgetId(dbClient db.Client, budgetId string) (budgetDetail, *
 	return budgetDetails[0], nil
 }
 
-func getBudgetFileInfo(dbClient db.Client, budgetId string) ([]util.FileInfo, *response.Error) {
+func getBudgetFileInfo(dbClient db.Client, budgetId string) ([]utils.FileInfo, *response.Error) {
 	params := struct {
 		BudgetId string `twowaysql:"budgetId"`
 	}{
 		BudgetId: budgetId,
 	}
-	rowFileIds := []util.FileId{}
+	rowFileIds := []utils.FileId{}
 	rerr := dbClient.Select(&rowFileIds, "sql/budget/select_budget_file_from_budget_id.sql", &params)
 	if rerr != nil {
-		return []util.FileInfo{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "稟議の取得に失敗しました", Log: rerr.Error()}
+		return []utils.FileInfo{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "稟議の取得に失敗しました", Log: rerr.Error()}
 	}
 	fileIds := []string{}
 	for _, v := range rowFileIds {
 		fileIds = append(fileIds, v.FileId)
 	}
-	res, err := util.GetFileInfo(dbClient, fileIds)
+	res, err := utils.GetFileInfo(dbClient, fileIds)
 	if err != nil {
-		return []util.FileInfo{}, err
+		return []utils.FileInfo{}, err
 	}
 	return maps.Values(res), nil
 }

@@ -86,6 +86,12 @@ type ServerInterface interface {
 	// (GET /status)
 	GetStatus(ctx echo.Context) error
 
+	// (GET /status/club_room)
+	GetStatusClubRoom(ctx echo.Context) error
+
+	// (PUT /status/club_room)
+	PutStatusClubRoom(ctx echo.Context) error
+
 	// (GET /storage/myfile)
 	GetStorageMyfile(ctx echo.Context) error
 
@@ -169,6 +175,9 @@ type ServerInterface interface {
 
 	// (PUT /work/work/{workId})
 	PutWorkWorkWorkId(ctx echo.Context, workId string) error
+
+	// (GET /work/work/{workId}/public)
+	GetWorkWorkWorkIdPublic(ctx echo.Context, workId string) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
@@ -520,13 +529,6 @@ func (w *ServerInterfaceWrapper) GetPayment(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter year: %s", err))
 	}
 
-	// ------------- Optional query parameter "offset" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "offset", ctx.QueryParams(), &params.Offset)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter offset: %s", err))
-	}
-
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetPayment(ctx, params)
 	return err
@@ -592,6 +594,24 @@ func (w *ServerInterfaceWrapper) GetStatus(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetStatus(ctx)
+	return err
+}
+
+// GetStatusClubRoom converts echo context to params.
+func (w *ServerInterfaceWrapper) GetStatusClubRoom(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetStatusClubRoom(ctx)
+	return err
+}
+
+// PutStatusClubRoom converts echo context to params.
+func (w *ServerInterfaceWrapper) PutStatusClubRoom(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutStatusClubRoom(ctx)
 	return err
 }
 
@@ -1007,6 +1027,22 @@ func (w *ServerInterfaceWrapper) PutWorkWorkWorkId(ctx echo.Context) error {
 	return err
 }
 
+// GetWorkWorkWorkIdPublic converts echo context to params.
+func (w *ServerInterfaceWrapper) GetWorkWorkWorkIdPublic(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "workId" -------------
+	var workId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "workId", runtime.ParamLocationPath, ctx.Param("workId"), &workId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter workId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetWorkWorkWorkIdPublic(ctx, workId)
+	return err
+}
+
 // This is a simple interface which specifies echo.Route addition functions which
 // are present on both echo.Echo and echo.Group, since we want to allow using
 // either of them for path registration
@@ -1059,6 +1095,8 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/signup", wrapper.GetSignup)
 	router.POST(baseURL+"/signup/callback", wrapper.PostSignupCallback)
 	router.GET(baseURL+"/status", wrapper.GetStatus)
+	router.GET(baseURL+"/status/club_room", wrapper.GetStatusClubRoom)
+	router.PUT(baseURL+"/status/club_room", wrapper.PutStatusClubRoom)
 	router.GET(baseURL+"/storage/myfile", wrapper.GetStorageMyfile)
 	router.POST(baseURL+"/storage/myfile", wrapper.PostStorageMyfile)
 	router.GET(baseURL+"/storage/:fileId", wrapper.GetStorageFileId)
@@ -1087,5 +1125,6 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.DELETE(baseURL+"/work/work/:workId", wrapper.DeleteWorkWorkWorkId)
 	router.GET(baseURL+"/work/work/:workId", wrapper.GetWorkWorkWorkId)
 	router.PUT(baseURL+"/work/work/:workId", wrapper.PutWorkWorkWorkId)
+	router.GET(baseURL+"/work/work/:workId/public", wrapper.GetWorkWorkWorkIdPublic)
 
 }

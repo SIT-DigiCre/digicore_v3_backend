@@ -6,16 +6,16 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/util"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/utils"
 	"github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
 )
 
 func PostWorkWork(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPostWorkWork) (api.ResGetWorkWorkWorkId, *response.Error) {
 	userId := ctx.Get("user_id").(string)
-	requestBody.Authors = util.GetUniqueString(append(requestBody.Authors, userId))
-	requestBody.Files = util.GetUniqueString(requestBody.Files)
-	requestBody.Tags = util.GetUniqueString(requestBody.Tags)
+	requestBody.Authors = utils.GetUniqueString(append(requestBody.Authors, userId))
+	requestBody.Files = utils.GetUniqueString(requestBody.Files)
+	requestBody.Tags = utils.GetUniqueString(requestBody.Tags)
 	workId, err := createWork(dbClient, requestBody)
 	if err != nil {
 		return api.ResGetWorkWorkWorkId{}, err

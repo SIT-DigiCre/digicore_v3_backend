@@ -1,6 +1,7 @@
 package google_auth
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -10,7 +11,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/util"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/utils"
 	"github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
 )
@@ -28,6 +29,7 @@ func PostSignupCallback(ctx echo.Context, dbTransactionClient db.TransactionClie
 	if err != nil {
 		return api.ResPostSignupCallback{}, err
 	}
+	utils.NoticeMattermost(fmt.Sprintf("%s(%s)がデジコアに登録しました", studentNumber, userId), "digicore-notice", "digicore-notice", "bell")
 	return api.ResPostSignupCallback{Jwt: jwt}, nil
 }
 
@@ -60,9 +62,9 @@ func createUser(studentNumber string, dbClient db.TransactionClient) (string, *r
 func createDefaultUser(dbClient db.TransactionClient, userId string, studentNumber string) *response.Error {
 	enterYear, err := strconv.Atoi(studentNumber[2:4])
 	if err != nil {
-		enterYear = util.GetSchoolYear()
+		enterYear = utils.GetSchoolYear()
 	}
-	schoolGrade := util.GetSchoolYear() - 2000 - enterYear + 1
+	schoolGrade := utils.GetSchoolYear() - 2000 - enterYear + 1
 	if studentNumber[0] == 'm' {
 		schoolGrade += 4
 	} else if studentNumber[0] == 'n' {
