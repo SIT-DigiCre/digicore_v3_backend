@@ -3,7 +3,7 @@ FROM golang:1.20.5 as build
 WORKDIR /work
 COPY . .
 RUN go mod download
-RUN go build -buildvcs=false -o ./digicore_v3_backend ./cmd/digicore_v3_backend
+RUN CGO_ENABLED=0 go build -buildvcs=false -o ./digicore_v3_backend ./cmd/digicore_v3_backend
 
 FROM gcr.io/distroless/base-debian10 as production
 
