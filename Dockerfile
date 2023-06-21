@@ -5,7 +5,7 @@ COPY . .
 RUN go mod download
 RUN go build -buildvcs=false -o ./digicore_v3_backend ./cmd/digicore_v3_backend
 
-FROM gcr.io/distroless/base-debian10 as production
+FROM gcr.io/distroless/base-debian11 as production
 
 COPY --from=build /work/digicore_v3_backend /
 
