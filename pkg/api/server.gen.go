@@ -181,6 +181,9 @@ type ServerInterface interface {
 
 	// (PUT /work/work/{workId})
 	PutWorkWorkWorkId(ctx echo.Context, workId string) error
+
+	// (GET /work/work/{workId}/public)
+	GetWorkWorkWorkIdPublic(ctx echo.Context, workId string) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
@@ -1060,6 +1063,22 @@ func (w *ServerInterfaceWrapper) PutWorkWorkWorkId(ctx echo.Context) error {
 	return err
 }
 
+// GetWorkWorkWorkIdPublic converts echo context to params.
+func (w *ServerInterfaceWrapper) GetWorkWorkWorkIdPublic(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "workId" -------------
+	var workId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "workId", runtime.ParamLocationPath, ctx.Param("workId"), &workId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter workId: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetWorkWorkWorkIdPublic(ctx, workId)
+	return err
+}
+
 // This is a simple interface which specifies echo.Route addition functions which
 // are present on both echo.Echo and echo.Group, since we want to allow using
 // either of them for path registration
@@ -1144,5 +1163,6 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.DELETE(baseURL+"/work/work/:workId", wrapper.DeleteWorkWorkWorkId)
 	router.GET(baseURL+"/work/work/:workId", wrapper.GetWorkWorkWorkId)
 	router.PUT(baseURL+"/work/work/:workId", wrapper.PutWorkWorkWorkId)
+	router.GET(baseURL+"/work/work/:workId/public", wrapper.GetWorkWorkWorkIdPublic)
 
 }

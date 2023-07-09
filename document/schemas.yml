@@ -84,14 +84,20 @@ ResGetWorkWorkObjectWorkObjectTag:
   $ref: "./schemas/res_get_work_work.work.tag.yml"
 ReqPostWorkWork:
   $ref: "./schemas/req_post_work_work.yml"
+ResGetWorkWorkWorkIdPublic:
+  $ref: "./schemas/res_get_work_work_work_id_public.yml"
+ResGetWorkWorkWorkIdPublicObjectAuthor:
+  $ref: "./schemas/res_get_work_work_work_id_public.author.yml"
+ResGetWorkWorkWorkIdPublicObjectTag:
+  $ref: "./schemas/res_get_work_work_work_id_public.tag.yml"
 ResGetWorkWorkWorkId:
   $ref: "./schemas/res_get_work_work_work_id.yml"
 ResGetWorkWorkWorkIdObjectAuthor:
   $ref: "./schemas/res_get_work_work_work_id.author.yml"
 ResGetWorkWorkWorkIdObjectTag:
-  $ref: "./schemas/res_get_work_work_work_id.file.yml"
-ResGetWorkWorkWorkIdObjectFile:
   $ref: "./schemas/res_get_work_work_work_id.tag.yml"
+ResGetWorkWorkWorkIdObjectFile:
+  $ref: "./schemas/res_get_work_work_work_id.file.yml"
 ReqPutWorkWorkWorkId:
   $ref: "./schemas/req_put_work_work_work_id.yml"
 ResGetWorkTag:

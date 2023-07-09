@@ -1,17 +1,17 @@
-FROM golang:1.20.3 as build
+FROM golang:1.20.5 as build
 
 WORKDIR /work
 COPY . .
 RUN go mod download
-RUN go build -buildvcs=false -o ./digicore_v3_backend ./cmd/digicore_v3_backend
+RUN CGO_ENABLED=0 go build -buildvcs=false -o ./digicore_v3_backend ./cmd/digicore_v3_backend
 
-FROM gcr.io/distroless/base-debian10 as production
+FROM gcr.io/distroless/base-debian11 as production
 
 COPY --from=build /work/digicore_v3_backend /
 
 CMD ["/digicore_v3_backend"]
 
-FROM golang:1.20.3 as admin
+FROM golang:1.20.5 as admin
 
 WORKDIR "/app"
 RUN go install github.com/k0kubun/sqldef/cmd/mysqldef@v0.15.12

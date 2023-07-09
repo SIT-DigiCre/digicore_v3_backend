@@ -5,6 +5,7 @@ import (
 	"crypto/rsa"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
@@ -33,6 +34,7 @@ func CreateAuthenticator() ([]echo.MiddlewareFunc, error) {
 			Options: openapi3filter.Options{
 				AuthenticationFunc: Authenticate,
 			},
+			Skipper: urlSkipper,
 		})
 	return []echo.MiddlewareFunc{authenticator, Login}, nil
 }
@@ -99,4 +101,8 @@ func GetClaims(userId string) ([]string, *response.Error) {
 
 type claim struct {
 	Claim string `db:"claim"`
+}
+
+func urlSkipper(c echo.Context) bool {
+	return strings.HasPrefix(c.Path(), "/metrics") || strings.HasPrefix(c.Path(), "/mattermost/cmd")
 }

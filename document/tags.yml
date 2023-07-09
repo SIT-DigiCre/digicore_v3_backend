@@ -17,4 +17,6 @@
 - name: payment
   description: Payment system (need 'account' permission)
 - name: status
-  description: status system
+  description: Status system
+- name: mattermost
+  description: Mattermost system

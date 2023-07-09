@@ -21,7 +21,7 @@ func PutUserMeIntroduction(ctx echo.Context, dbClient db.TransactionClient, requ
 
 func updateUserIntroduction(dbClient db.TransactionClient, userId string, requestBody api.ReqPutUserMeIntroduction) *response.Error {
 	params := struct {
-		UserId       string  `twowaysql:"userId"`
+		UserId       string `twowaysql:"userId"`
 		Introduction string `twowaysql:"introduction"`
 	}{
 		UserId:       userId,

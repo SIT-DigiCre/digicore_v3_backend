@@ -30,7 +30,9 @@ tags:
   - name: payment
     description: Payment system (need 'account' permission)
   - name: status
-    description: status system
+    description: Status system
+  - name: mattermost
+    description: Mattermost system
 paths:
   /status:
     get:
@@ -938,6 +940,30 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/BlankSuccess'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/work/work/{workId}/public':
+    get:
+      tags:
+        - work
+      description: Get work(public)
+      parameters:
+        - name: workId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Get work
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkWorkWorkIdPublic'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
   /work/tag:
@@ -2066,6 +2092,53 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'dive,uuid'
             ja: タグ
+    ResGetWorkWorkWorkIdPublic:
+      required:
+        - workId
+        - name
+        - description
+        - authors
+        - tags
+      properties:
+        workId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectAuthor'
+        fileUrl:
+          type: string
+        fileName:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectTag'
+    ResGetWorkWorkWorkIdPublicObjectAuthor:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+    ResGetWorkWorkWorkIdPublicObjectTag:
+      required:
+        - tagId
+        - name
+      properties:
+        tagId:
+          type: string
+        name:
+          type: string
     ResGetWorkWorkWorkId:
       required:
         - workId
@@ -2088,11 +2161,11 @@ components:
         files:
           type: array
           items:
-            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectTag'
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectFile'
         tags:
           type: array
           items:
-            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectFile'
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectTag'
     ResGetWorkWorkWorkIdObjectAuthor:
       required:
         - userId
@@ -2107,19 +2180,19 @@ components:
           type: string
     ResGetWorkWorkWorkIdObjectTag:
       required:
-        - fileId
+        - tagId
         - name
       properties:
-        fileId:
+        tagId:
           type: string
         name:
           type: string
     ResGetWorkWorkWorkIdObjectFile:
       required:
-        - tagId
+        - fileId
         - name
       properties:
-        tagId:
+        fileId:
           type: string
         name:
           type: string

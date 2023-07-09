@@ -534,9 +534,9 @@ type ResGetWorkWorkObjectWorkObjectTag struct {
 type ResGetWorkWorkWorkId struct {
 	Authors     []ResGetWorkWorkWorkIdObjectAuthor `json:"authors"`
 	Description string                             `json:"description"`
-	Files       []ResGetWorkWorkWorkIdObjectTag    `json:"files"`
+	Files       []ResGetWorkWorkWorkIdObjectFile   `json:"files"`
 	Name        string                             `json:"name"`
-	Tags        []ResGetWorkWorkWorkIdObjectFile   `json:"tags"`
+	Tags        []ResGetWorkWorkWorkIdObjectTag    `json:"tags"`
 	WorkId      string                             `json:"workId"`
 }
 
@@ -549,14 +549,25 @@ type ResGetWorkWorkWorkIdObjectAuthor struct {
 
 // ResGetWorkWorkWorkIdObjectFile defines model for ResGetWorkWorkWorkIdObjectFile.
 type ResGetWorkWorkWorkIdObjectFile struct {
-	Name  string `json:"name"`
-	TagId string `json:"tagId"`
+	FileId string `json:"fileId"`
+	Name   string `json:"name"`
 }
 
 // ResGetWorkWorkWorkIdObjectTag defines model for ResGetWorkWorkWorkIdObjectTag.
 type ResGetWorkWorkWorkIdObjectTag struct {
-	FileId string `json:"fileId"`
-	Name   string `json:"name"`
+	Name  string `json:"name"`
+	TagId string `json:"tagId"`
+}
+
+// ResGetWorkWorkWorkIdPublic defines model for ResGetWorkWorkWorkIdPublic.
+type ResGetWorkWorkWorkIdPublic struct {
+	Authors     []ResGetWorkWorkWorkIdObjectAuthor `json:"authors"`
+	Description string                             `json:"description"`
+	FileName    *string                            `json:"fileName,omitempty"`
+	FileUrl     *string                            `json:"fileUrl,omitempty"`
+	Name        string                             `json:"name"`
+	Tags        []ResGetWorkWorkWorkIdObjectTag    `json:"tags"`
+	WorkId      string                             `json:"workId"`
 }
 
 // ResPostLoginCallback defines model for ResPostLoginCallback.
