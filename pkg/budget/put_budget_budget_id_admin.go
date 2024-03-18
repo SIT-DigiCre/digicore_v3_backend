@@ -54,14 +54,17 @@ func updateStatus(dbClient db.TransactionClient, budgetId string, status string)
 }
 
 func setApprove(dbClient db.TransactionClient, budgetId string, approverUserId string) *response.Error {
+	status := "approve"
 	params := struct {
 		BudgetId       string `twowaysql:"budgetId"`
 		ApproverUserId string `twowaysql:"approverUserId"`
+		Status         string `twowaysql:"status"`
 	}{
 		BudgetId:       budgetId,
 		ApproverUserId: approverUserId,
+		Status:         status,
 	}
-	_, err := dbClient.Exec("sql/budget/update_budget_status.sql", &params, false)
+	_, err := dbClient.Exec("sql/budget/update_budget_approver.sql", &params, false)
 	if err != nil {
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
