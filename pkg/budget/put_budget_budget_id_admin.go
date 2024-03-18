@@ -61,7 +61,7 @@ func setApprove(dbClient db.TransactionClient, budgetId string, approverUserId s
 		BudgetId:       budgetId,
 		ApproverUserId: approverUserId,
 	}
-	_, err := dbClient.Exec("sql/budget/update_budget_status.sql", &params, false)
+	_, err := dbClient.Exec("sql/budget/update_budget_approver.sql", &params, false)
 	if err != nil {
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
