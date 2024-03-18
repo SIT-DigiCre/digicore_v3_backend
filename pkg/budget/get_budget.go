@@ -12,7 +12,7 @@ import (
 
 func GetBudget(ctx echo.Context, dbClient db.Client, params api.GetBudgetParams) (api.ResGetBudget, *response.Error) {
 	res := api.ResGetBudget{}
-	budget, err := getBudgetList(dbClient, params.Offset)
+	budget, err := getBudgetList(dbClient, params.Offset, params.ProposerId)
 	if err != nil {
 		return api.ResGetBudget{}, err
 	}
@@ -43,11 +43,13 @@ type budgetObjectProposer struct {
 	IconUrl  string
 }
 
-func getBudgetList(dbClient db.Client, offset *int) ([]budget, *response.Error) {
+func getBudgetList(dbClient db.Client, offset *int, proposerId *string) ([]budget, *response.Error) {
 	params := struct {
-		Offset *int `twowaysql:"offset"`
+		Offset     *int    `twowaysql:"offset"`
+		ProposerId *string `twowaysql:"proposerId"`
 	}{
-		Offset: offset,
+		Offset:     offset,
+		ProposerId: proposerId,
 	}
 	budget := []budget{}
 	err := dbClient.Select(&budget, "sql/budget/select_budget.sql", &params)
