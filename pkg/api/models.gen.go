@@ -606,7 +606,8 @@ type Unauthorized = Error
 
 // GetBudgetParams defines parameters for GetBudget.
 type GetBudgetParams struct {
-	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+	Offset     *int    `form:"offset,omitempty" json:"offset,omitempty"`
+	ProposerId *string `form:"proposerId,omitempty" json:"proposerId,omitempty"`
 }
 
 // GetEventParams defines parameters for GetEvent.
