@@ -9,6 +9,10 @@ get:
       in: query
       schema:
         type: integer
+    - name: proposerId
+      in: query
+      schema:
+        type: string
   responses:
     200:
       description: "Success budget list"
