@@ -1,0 +1,7 @@
+required:
+  - budgets
+properties:
+  budgets:
+    type: array
+    items:
+      $ref: './res_get_budget.budget.yml'

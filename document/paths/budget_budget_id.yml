@@ -1,0 +1,25 @@
+get:
+  tags:
+    - budget
+  description: "Get budget"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: budgetId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      description: "Success get budget"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_budget_budget_id.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

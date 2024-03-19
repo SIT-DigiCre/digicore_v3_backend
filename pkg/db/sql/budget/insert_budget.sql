@@ -1,0 +1,1 @@
+INSERT INTO budgets (id, name, class, `status`, proposer_user_id, budget, settlement, purpose, mattermost_url, remark) VALUES (UUID_TO_BIN(@id), /*name*/'name', /*class*/'fixed', /*status*/'approve', UUID_TO_BIN(/*proposerUserId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'), 0, 0, '', '', '');

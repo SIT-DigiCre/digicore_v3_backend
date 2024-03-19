@@ -13,6 +13,12 @@ type Error struct {
 	Message string `json:"message"`
 }
 
+// ReqPostBudget defines model for ReqPostBudget.
+type ReqPostBudget struct {
+	Class string `ja:"分類" json:"class" validate:"oneof=festival fixed project outside room"`
+	Name  string `ja:"名前" json:"name" validate:"required"`
+}
+
 // ReqPostLoginCallback defines model for ReqPostLoginCallback.
 type ReqPostLoginCallback struct {
 	Code string `ja:"認証コード" json:"code" validate:"required"`
@@ -50,6 +56,41 @@ type ReqPostWorkWork struct {
 	Files       []string `ja:"ファイル" json:"files" validate:"dive,uuid"`
 	Name        string   `ja:"作品名" json:"name" validate:"required"`
 	Tags        []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
+}
+
+// ReqPutBudgetBudgetIdAdmin defines model for ReqPutBudgetBudgetIdAdmin.
+type ReqPutBudgetBudgetIdAdmin struct {
+	Status string `ja:"ステータス" json:"status" validate:"oneof=reject approve paid"`
+}
+
+// ReqPutBudgetBudgetIdStatusApprove defines model for ReqPutBudgetBudgetIdStatusApprove.
+type ReqPutBudgetBudgetIdStatusApprove struct {
+	Bought     bool     `ja:"購入済み" json:"bought"`
+	Files      []string `ja:"ファイル" json:"files" validate:"dive,uuid"`
+	Remark     string   `ja:"備考" json:"remark"`
+	Settlement int      `ja:"決算" json:"settlement"`
+}
+
+// ReqPutBudgetBudgetIdStatusBought defines model for ReqPutBudgetBudgetIdStatusBought.
+type ReqPutBudgetBudgetIdStatusBought struct {
+	Files      []string `ja:"ファイル" json:"files" validate:"dive,uuid"`
+	Remark     string   `ja:"備考" json:"remark"`
+	Settlement int      `ja:"決算" json:"settlement"`
+}
+
+// ReqPutBudgetBudgetIdStatusPaid defines model for ReqPutBudgetBudgetIdStatusPaid.
+type ReqPutBudgetBudgetIdStatusPaid struct {
+	Remark string `ja:"備考" json:"remark"`
+}
+
+// ReqPutBudgetBudgetIdStatusPending defines model for ReqPutBudgetBudgetIdStatusPending.
+type ReqPutBudgetBudgetIdStatusPending struct {
+	Budget        int      `ja:"予算" json:"budget" validate:"required"`
+	Files         []string `ja:"ファイル" json:"files" validate:"dive,uuid"`
+	MattermostUrl string   `ja:"Mattermost投稿URL" json:"mattermostUrl"`
+	Name          string   `ja:"名前" json:"name" validate:"required"`
+	Purpose       string   `ja:"目的" json:"purpose" validate:"required"`
+	Remark        string   `ja:"備考" json:"remark"`
 }
 
 // ReqPutEventEventIdReservationIdMe defines model for ReqPutEventEventIdReservationIdMe.
@@ -121,6 +162,69 @@ type ReqPutWorkWorkWorkId struct {
 	Files       []string `ja:"ファイル" json:"files" validate:"dive,uuid"`
 	Name        string   `ja:"作品名" json:"name" validate:"required"`
 	Tags        []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
+}
+
+// ResGetBudget defines model for ResGetBudget.
+type ResGetBudget struct {
+	Budgets []ResGetBudgetObjectBudget `json:"budgets"`
+}
+
+// ResGetBudgetBudgetId defines model for ResGetBudgetBudgetId.
+type ResGetBudgetBudgetId struct {
+	ApprovedAt    string                             `json:"approvedAt"`
+	Approver      ResGetBudgetBudgetIdObjectApprover `json:"approver"`
+	Budget        int                                `json:"budget"`
+	BudgetId      string                             `json:"budgetId"`
+	Class         string                             `json:"class"`
+	CreatedAt     string                             `json:"createdAt"`
+	Files         []ResGetBudgetBudgetIdObjectFile   `json:"files"`
+	MattermostUrl string                             `json:"mattermostUrl"`
+	Name          string                             `json:"name"`
+	Proposer      ResGetBudgetBudgetIdObjectProposer `json:"proposer"`
+	Purpose       string                             `json:"purpose"`
+	Remark        string                             `json:"remark"`
+	Settlement    int                                `json:"settlement"`
+	Status        string                             `json:"status"`
+	UpdatedAt     string                             `json:"updatedAt"`
+}
+
+// ResGetBudgetBudgetIdObjectApprover defines model for ResGetBudgetBudgetIdObjectApprover.
+type ResGetBudgetBudgetIdObjectApprover struct {
+	IconUrl  string `json:"iconUrl"`
+	UserId   string `json:"userId"`
+	Username string `json:"username"`
+}
+
+// ResGetBudgetBudgetIdObjectFile defines model for ResGetBudgetBudgetIdObjectFile.
+type ResGetBudgetBudgetIdObjectFile struct {
+	FileId string `json:"fileId"`
+	Name   string `json:"name"`
+}
+
+// ResGetBudgetBudgetIdObjectProposer defines model for ResGetBudgetBudgetIdObjectProposer.
+type ResGetBudgetBudgetIdObjectProposer struct {
+	IconUrl  string `json:"iconUrl"`
+	UserId   string `json:"userId"`
+	Username string `json:"username"`
+}
+
+// ResGetBudgetObjectBudget defines model for ResGetBudgetObjectBudget.
+type ResGetBudgetObjectBudget struct {
+	Budget     int                                     `json:"budget"`
+	BudgetId   string                                  `json:"budgetId"`
+	Class      string                                  `json:"class"`
+	Name       string                                  `json:"name"`
+	Proposer   *ResGetBudgetObjectBudgetObjectproposer `json:"proposer,omitempty"`
+	Settlement int                                     `json:"settlement"`
+	Status     string                                  `json:"status"`
+	UpdatedAt  string                                  `json:"updatedAt"`
+}
+
+// ResGetBudgetObjectBudgetObjectproposer defines model for ResGetBudgetObjectBudgetObjectproposer.
+type ResGetBudgetObjectBudgetObjectproposer struct {
+	IconUrl  string `json:"iconUrl"`
+	UserId   string `json:"userId"`
+	Username string `json:"username"`
 }
 
 // ResGetEvent defines model for ResGetEvent.
@@ -500,6 +604,12 @@ type NotFound = Error
 // Unauthorized defines model for Unauthorized.
 type Unauthorized = Error
 
+// GetBudgetParams defines parameters for GetBudget.
+type GetBudgetParams struct {
+	Offset     *int    `form:"offset,omitempty" json:"offset,omitempty"`
+	ProposerId *string `form:"proposerId,omitempty" json:"proposerId,omitempty"`
+}
+
 // GetEventParams defines parameters for GetEvent.
 type GetEventParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
@@ -532,6 +642,24 @@ type GetWorkWorkParams struct {
 	Offset   *int    `form:"offset,omitempty" json:"offset,omitempty"`
 	AuthorId *string `form:"authorId,omitempty" json:"authorId,omitempty"`
 }
+
+// PostBudgetJSONRequestBody defines body for PostBudget for application/json ContentType.
+type PostBudgetJSONRequestBody = ReqPostBudget
+
+// PutBudgetBudgetIdAdminJSONRequestBody defines body for PutBudgetBudgetIdAdmin for application/json ContentType.
+type PutBudgetBudgetIdAdminJSONRequestBody = ReqPutBudgetBudgetIdAdmin
+
+// PutBudgetBudgetIdStatusApproveJSONRequestBody defines body for PutBudgetBudgetIdStatusApprove for application/json ContentType.
+type PutBudgetBudgetIdStatusApproveJSONRequestBody = ReqPutBudgetBudgetIdStatusApprove
+
+// PutBudgetBudgetIdStatusBoughtJSONRequestBody defines body for PutBudgetBudgetIdStatusBought for application/json ContentType.
+type PutBudgetBudgetIdStatusBoughtJSONRequestBody = ReqPutBudgetBudgetIdStatusBought
+
+// PutBudgetBudgetIdStatusPaidJSONRequestBody defines body for PutBudgetBudgetIdStatusPaid for application/json ContentType.
+type PutBudgetBudgetIdStatusPaidJSONRequestBody = ReqPutBudgetBudgetIdStatusPaid
+
+// PutBudgetBudgetIdStatusPendingJSONRequestBody defines body for PutBudgetBudgetIdStatusPending for application/json ContentType.
+type PutBudgetBudgetIdStatusPendingJSONRequestBody = ReqPutBudgetBudgetIdStatusPending
 
 // PutEventEventIdReservationIdMeJSONRequestBody defines body for PutEventEventIdReservationIdMe for application/json ContentType.
 type PutEventEventIdReservationIdMeJSONRequestBody = ReqPutEventEventIdReservationIdMe

@@ -1,0 +1,49 @@
+required:
+  - budgetId
+  - name
+  - class
+  - status
+  - proposer
+  - budget
+  - settlement
+  - purpose
+  - mattermostUrl
+  - remark
+  - approver
+  - files
+  - createdAt
+  - approvedAt
+  - updatedAt
+properties:
+  budgetId:
+    type: string
+  name:
+    type: string
+  class:
+    type: string
+  status:
+    type: string
+  proposer:
+    $ref: './res_get_budget_budget_id.proposer.yml'
+  approver:
+    $ref: './res_get_budget_budget_id.approver.yml'
+  budget:
+    type: integer
+  settlement:
+    type: integer
+  purpose:
+    type: string
+  mattermostUrl:
+    type: string
+  remark:
+    type: string
+  files:
+    type: array
+    items:
+      $ref: './res_get_budget_budget_id.file.yml'
+  createdAt:
+    type: string
+  approvedAt:
+    type: string
+  updatedAt:
+    type: string

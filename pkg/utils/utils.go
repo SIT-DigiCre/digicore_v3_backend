@@ -83,3 +83,73 @@ func NoticeMattermost(text string, channel string, username string, iconEmoji st
 	}
 	defer resp.Body.Close()
 }
+
+type FileId struct {
+	FileId string `db:"file_id"`
+}
+
+type FileInfo struct {
+	FileId string `db:"file_id"`
+	Name   string `db:"name"`
+}
+
+func GetFileInfo(dbClient db.Client, fileIds []string) (map[string]FileInfo, *response.Error) {
+	if len(fileIds) == 0 {
+		return map[string]FileInfo{}, nil
+	}
+	params := struct {
+		FileIds []string `twowaysql:"fileIds"`
+	}{
+		FileIds: fileIds,
+	}
+	fileInfos := []FileInfo{}
+	err := dbClient.Select(&fileInfos, "sql/utils/select_file.sql", &params)
+	if err != nil {
+		return map[string]FileInfo{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "ファイルの取得に失敗しました", Log: err.Error()}
+	}
+	res := map[string]FileInfo{}
+	for _, v := range fileInfos {
+		res[v.FileId] = v
+	}
+	return res, nil
+}
+
+type UserID struct {
+	UserId string `db:"user_id"`
+}
+
+type UserInfo struct {
+	IconUrl  string `db:"icon_url"`
+	UserId   string `db:"user_id"`
+	Username string `db:"username"`
+}
+
+func GetUserInfo(dbClient db.Client, userIds []string) (map[string]UserInfo, *response.Error) {
+	if len(userIds) == 0 {
+		return map[string]UserInfo{}, nil
+	}
+	params := struct {
+		UserIds []string `twowaysql:"userIds"`
+	}{
+		UserIds: userIds,
+	}
+	userInfos := []UserInfo{}
+	err := dbClient.Select(&userInfos, "sql/utils/select_user_profile.sql", &params)
+	if err != nil {
+		return map[string]UserInfo{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "ファイルの取得に失敗しました", Log: err.Error()}
+	}
+	res := map[string]UserInfo{}
+	for _, v := range userInfos {
+		res[v.UserId] = v
+	}
+	return res, nil
+}
+
+func CheckUserId(userIds []string, targetUserId string) bool {
+	for _, userId := range userIds {
+		if userId == targetUserId {
+			return true
+		}
+	}
+	return false
+}

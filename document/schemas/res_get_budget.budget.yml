@@ -1,0 +1,26 @@
+required:
+  - budgetId
+  - Proposer
+  - name
+  - class
+  - status
+  - settlement
+  - budget
+  - updatedAt
+properties:
+  budgetId:
+    type: string
+  proposer:
+    $ref: "./res_get_budget.budget.proposer.yml"
+  name:
+    type: string
+  class:
+    type: string
+  status:
+    type: string
+  settlement:
+    type: integer
+  budget:
+    type: integer
+  updatedAt:
+    type: string

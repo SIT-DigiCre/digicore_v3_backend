@@ -12,6 +12,8 @@
   description: Work system
 - name: group
   description: Group system
+- name: budget
+  description: Budget system
 - name: payment
   description: Payment system (need 'account' permission)
 - name: status

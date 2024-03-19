@@ -118,6 +118,32 @@ ResGetGroupGroupId:
   $ref: "./schemas/res_get_group_group_id.yml"
 ResGetGroupGroupIdObjectUser:
   $ref: "./schemas/res_get_group_group_id.user.yml"
+ResGetBudget:
+  $ref: "./schemas/res_get_budget.yml"
+ResGetBudgetObjectBudget:
+  $ref: "./schemas/res_get_budget.budget.yml"
+ResGetBudgetObjectBudgetObjectproposer:
+  $ref: "./schemas/res_get_budget.budget.proposer.yml"
+ResGetBudgetBudgetId:
+  $ref: "./schemas/res_get_budget_budget_id.yml"
+ResGetBudgetBudgetIdObjectFile:
+  $ref: "./schemas/res_get_budget_budget_id.file.yml"
+ResGetBudgetBudgetIdObjectApprover:
+  $ref: "./schemas/res_get_budget_budget_id.approver.yml"
+ResGetBudgetBudgetIdObjectProposer:
+  $ref: "./schemas/res_get_budget_budget_id.proposer.yml"
+ReqPostBudget:
+  $ref: "./schemas/req_post_budget.yml"
+ReqPutBudgetBudgetIdStatusApprove:
+  $ref: "./schemas/req_put_budget_budget_id_status_approve.yml"
+ReqPutBudgetBudgetIdStatusBought:
+  $ref: "./schemas/req_put_budget_budget_id_status_bought.yml"
+ReqPutBudgetBudgetIdStatusPaid:
+  $ref: "./schemas/req_put_budget_budget_id_status_paid.yml"
+ReqPutBudgetBudgetIdStatusPending:
+  $ref: "./schemas/req_put_budget_budget_id_status_pending.yml"
+ReqPutBudgetBudgetIdAdmin:
+  $ref: "./schemas/req_put_budget_budget_id_admin.yml"
 ResGetPayment:
   $ref: "./schemas/res_get_payment.yml"
 ResGetPaymentObjectPayment:

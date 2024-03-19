@@ -1,0 +1,1 @@
+UPDATE budgets SET approver_user_id = UUID_TO_BIN(/*approverUserId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'), approved_at = CURRENT_TIMESTAMP WHERE id = UUID_TO_BIN(/*budgetId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');

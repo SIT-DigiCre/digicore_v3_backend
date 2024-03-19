@@ -1,0 +1,7 @@
+required:
+  - remark
+properties:
+  remark:
+    type: string
+    x-oapi-codegen-extra-tags:
+      ja: 備考

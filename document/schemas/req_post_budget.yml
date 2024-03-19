@@ -1,0 +1,14 @@
+required:
+  - name
+  - class
+properties:
+  name:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 名前
+  class:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: oneof=festival fixed project outside room
+      ja: 分類

@@ -17,6 +17,8 @@ tags:
     description: Work system
   - name: group
     description: Group system
+  - name: budget
+    description: Budget system
   - name: payment
     description: Payment system (need 'account' permission)
   - name: status
@@ -1129,6 +1131,253 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /budget:
+    get:
+      tags:
+        - budget
+      description: Get budget list
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+        - name: proposerId
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success budget list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudget'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    post:
+      tags:
+        - budget
+      description: Create budget
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Budget
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostBudget'
+      responses:
+        '200':
+          description: Success update budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}':
+    get:
+      tags:
+        - budget
+      description: Get budget
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_pending':
+    put:
+      tags:
+        - budget
+      description: Update budget(status pending)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Budget
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusPending'
+      responses:
+        '200':
+          description: Success update budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_approve':
+    put:
+      tags:
+        - budget
+      description: Update budget(status approve)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Budget
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusApprove'
+      responses:
+        '200':
+          description: Success update budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_bought':
+    put:
+      tags:
+        - budget
+      description: Update budget(status bought)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Budget
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusBought'
+      responses:
+        '200':
+          description: Success update budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_paid':
+    put:
+      tags:
+        - budget
+      description: Update budget(status paid)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Budget
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusPaid'
+      responses:
+        '200':
+          description: Success update budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/admin':
+    put:
+      tags:
+        - budget
+      description: Update budget by admin
+      security:
+        - BearerAuth:
+            - admin
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Budget
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdAdmin'
+      responses:
+        '200':
+          description: Success update budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -2115,6 +2364,254 @@ components:
           type: string
         name:
           type: string
+    ResGetBudget:
+      required:
+        - budgets
+      properties:
+        budgets:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetBudgetObjectBudget'
+    ResGetBudgetObjectBudget:
+      required:
+        - budgetId
+        - Proposer
+        - name
+        - class
+        - status
+        - settlement
+        - budget
+        - updatedAt
+      properties:
+        budgetId:
+          type: string
+        proposer:
+          $ref: '#/components/schemas/ResGetBudgetObjectBudgetObjectproposer'
+        name:
+          type: string
+        class:
+          type: string
+        status:
+          type: string
+        settlement:
+          type: integer
+        budget:
+          type: integer
+        updatedAt:
+          type: string
+    ResGetBudgetObjectBudgetObjectproposer:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+    ResGetBudgetBudgetId:
+      required:
+        - budgetId
+        - name
+        - class
+        - status
+        - proposer
+        - budget
+        - settlement
+        - purpose
+        - mattermostUrl
+        - remark
+        - approver
+        - files
+        - createdAt
+        - approvedAt
+        - updatedAt
+      properties:
+        budgetId:
+          type: string
+        name:
+          type: string
+        class:
+          type: string
+        status:
+          type: string
+        proposer:
+          $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectProposer'
+        approver:
+          $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectApprover'
+        budget:
+          type: integer
+        settlement:
+          type: integer
+        purpose:
+          type: string
+        mattermostUrl:
+          type: string
+        remark:
+          type: string
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectFile'
+        createdAt:
+          type: string
+        approvedAt:
+          type: string
+        updatedAt:
+          type: string
+    ResGetBudgetBudgetIdObjectFile:
+      required:
+        - fileId
+        - name
+      properties:
+        fileId:
+          type: string
+        name:
+          type: string
+    ResGetBudgetBudgetIdObjectApprover:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+    ResGetBudgetBudgetIdObjectProposer:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+    ReqPostBudget:
+      required:
+        - name
+        - class
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 名前
+        class:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: oneof=festival fixed project outside room
+            ja: 分類
+    ReqPutBudgetBudgetIdStatusApprove:
+      required:
+        - settlement
+        - remark
+        - bought
+        - files
+      properties:
+        settlement:
+          type: integer
+          x-oapi-codegen-extra-tags:
+            ja: 決算
+        remark:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: 備考
+        bought:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: 購入済み
+        files:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: ファイル
+    ReqPutBudgetBudgetIdStatusBought:
+      required:
+        - settlement
+        - remark
+        - files
+      properties:
+        settlement:
+          type: integer
+          x-oapi-codegen-extra-tags:
+            ja: 決算
+        remark:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: 備考
+        files:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: ファイル
+    ReqPutBudgetBudgetIdStatusPaid:
+      required:
+        - remark
+      properties:
+        remark:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: 備考
+    ReqPutBudgetBudgetIdStatusPending:
+      required:
+        - name
+        - budget
+        - purpose
+        - mattermostUrl
+        - remark
+        - files
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 名前
+        budget:
+          type: integer
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 予算
+        purpose:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 目的
+        mattermostUrl:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: Mattermost投稿URL
+        remark:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: 備考
+        files:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: ファイル
+    ReqPutBudgetBudgetIdAdmin:
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: oneof=reject approve paid
+            ja: ステータス
     ResGetPayment:
       required:
         - payments

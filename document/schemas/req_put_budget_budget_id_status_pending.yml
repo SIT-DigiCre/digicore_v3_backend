@@ -1,0 +1,38 @@
+required:
+  - name
+  - budget
+  - purpose
+  - mattermostUrl
+  - remark
+  - files
+properties:
+  name:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 名前
+  budget:
+    type: integer
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 予算
+  purpose:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 目的
+  mattermostUrl:
+    type: string
+    x-oapi-codegen-extra-tags:
+      ja: Mattermost投稿URL
+  remark:
+    type: string
+    x-oapi-codegen-extra-tags:
+      ja: 備考
+  files:
+    type: array
+    items:
+      type: string
+    x-oapi-codegen-extra-tags:
+      validate: dive,uuid
+      ja: ファイル
