@@ -1245,6 +1245,23 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - budget
+      description: Delete budget(status pending)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   '/budget/{budgetId}/status_approve':
     put:
       tags:
@@ -1276,6 +1293,23 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '403':
           $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - budget
+      description: Delete budget(status approve)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
         '500':
           $ref: '#/components/responses/InternalServer'
   '/budget/{budgetId}/status_bought':

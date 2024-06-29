@@ -26,6 +26,9 @@ type ServerInterface interface {
 	// (PUT /budget/{budgetId}/admin)
 	PutBudgetBudgetIdAdmin(ctx echo.Context, budgetId string) error
 
+	// (DELETE /budget/{budgetId}/status_approve)
+	DeleteBudgetBudgetIdStatusApprove(ctx echo.Context, budgetId string) error
+
 	// (PUT /budget/{budgetId}/status_approve)
 	PutBudgetBudgetIdStatusApprove(ctx echo.Context, budgetId string) error
 
@@ -34,6 +37,9 @@ type ServerInterface interface {
 
 	// (PUT /budget/{budgetId}/status_paid)
 	PutBudgetBudgetIdStatusPaid(ctx echo.Context, budgetId string) error
+
+	// (DELETE /budget/{budgetId}/status_pending)
+	DeleteBudgetBudgetIdStatusPending(ctx echo.Context, budgetId string) error
 
 	// (PUT /budget/{budgetId}/status_pending)
 	PutBudgetBudgetIdStatusPending(ctx echo.Context, budgetId string) error
@@ -259,6 +265,24 @@ func (w *ServerInterfaceWrapper) PutBudgetBudgetIdAdmin(ctx echo.Context) error 
 	return err
 }
 
+// DeleteBudgetBudgetIdStatusApprove converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteBudgetBudgetIdStatusApprove(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "budgetId" -------------
+	var budgetId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "budgetId", runtime.ParamLocationPath, ctx.Param("budgetId"), &budgetId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter budgetId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteBudgetBudgetIdStatusApprove(ctx, budgetId)
+	return err
+}
+
 // PutBudgetBudgetIdStatusApprove converts echo context to params.
 func (w *ServerInterfaceWrapper) PutBudgetBudgetIdStatusApprove(ctx echo.Context) error {
 	var err error
@@ -310,6 +334,24 @@ func (w *ServerInterfaceWrapper) PutBudgetBudgetIdStatusPaid(ctx echo.Context) e
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PutBudgetBudgetIdStatusPaid(ctx, budgetId)
+	return err
+}
+
+// DeleteBudgetBudgetIdStatusPending converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteBudgetBudgetIdStatusPending(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "budgetId" -------------
+	var budgetId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "budgetId", runtime.ParamLocationPath, ctx.Param("budgetId"), &budgetId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter budgetId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteBudgetBudgetIdStatusPending(ctx, budgetId)
 	return err
 }
 
@@ -1082,9 +1124,11 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.POST(baseURL+"/budget", wrapper.PostBudget)
 	router.GET(baseURL+"/budget/:budgetId", wrapper.GetBudgetBudgetId)
 	router.PUT(baseURL+"/budget/:budgetId/admin", wrapper.PutBudgetBudgetIdAdmin)
+	router.DELETE(baseURL+"/budget/:budgetId/status_approve", wrapper.DeleteBudgetBudgetIdStatusApprove)
 	router.PUT(baseURL+"/budget/:budgetId/status_approve", wrapper.PutBudgetBudgetIdStatusApprove)
 	router.PUT(baseURL+"/budget/:budgetId/status_bought", wrapper.PutBudgetBudgetIdStatusBought)
 	router.PUT(baseURL+"/budget/:budgetId/status_paid", wrapper.PutBudgetBudgetIdStatusPaid)
+	router.DELETE(baseURL+"/budget/:budgetId/status_pending", wrapper.DeleteBudgetBudgetIdStatusPending)
 	router.PUT(baseURL+"/budget/:budgetId/status_pending", wrapper.PutBudgetBudgetIdStatusPending)
 	router.GET(baseURL+"/event", wrapper.GetEvent)
 	router.GET(baseURL+"/event/:eventId", wrapper.GetEventEventId)
