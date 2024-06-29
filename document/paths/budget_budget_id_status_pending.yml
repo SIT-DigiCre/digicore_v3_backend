@@ -30,3 +30,20 @@ put:
       $ref: "../responses/unauthorized.yml"
     500:
       $ref: "../responses/internal_server.yml"
+delete:
+  tags:
+    - budget
+  description: "Delete budget(status pending)"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: budgetId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      $ref: "../responses/blank_success.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
