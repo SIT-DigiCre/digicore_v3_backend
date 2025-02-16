@@ -23,6 +23,9 @@ func PutBudgetBudgetIdStatusApprove(ctx echo.Context, dbClient db.TransactionCli
 	if now_detail.Status != "approve" {
 		return api.ResGetBudgetBudgetId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "ステータスが一致しません", Log: "Unacceptable change"}
 	}
+	if requestBody.Bought && len(now_detail.Files) == 0 {
+		return api.ResGetBudgetBudgetId{}, &response.Error{Code: http.StatusBadRequest, Level: "Error", Message: "購入済みにするには領収書を添付する必要があります", Log: "Receipt not attached"}
+	}
 	err = updateApproveBudget(dbClient, budgetId, requestBody)
 	if err != nil {
 		return api.ResGetBudgetBudgetId{}, err
