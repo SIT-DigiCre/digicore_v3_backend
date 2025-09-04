@@ -4,6 +4,7 @@ required:
   - name
   - comment
   - url
+  - createdAt
 properties:
   userId:
     type: string
@@ -15,3 +16,7 @@ properties:
     type: string
   url:
     type: string
+  createdAt:
+    type: string
+    format: date-time
+    description: ユーザーの登録日時
