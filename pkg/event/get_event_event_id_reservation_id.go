@@ -47,7 +47,6 @@ type eventReservationObjectUser struct {
 	Name      string    `db:"username"`
 	UserIcon  string    `db:"icon_url"`
 	UserId    string    `db:"user_id"`
-	UserName  string    `db:"username"`
 	CreatedAt time.Time `db:"created_at"`
 }
 
