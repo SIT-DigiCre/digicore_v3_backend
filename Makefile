@@ -19,7 +19,7 @@ migrate:
 
 .PHONY: migrate
 insert_test:
-	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/schema/test admin bash -c 'cat `ls -F | grep -v / | sed s/\*$$//g | mysql -u ${DB_USER} -p${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} -vvv'
+	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/schema/test admin bash -c 'cat `ls -F | grep -v / | sed s/\*$$//g` | mysql -u ${DB_USER} -p${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} --default-character-set=utf8mb4 -vvv'
 
 
 .PHONY: up

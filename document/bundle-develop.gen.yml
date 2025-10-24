@@ -1914,6 +1914,7 @@ components:
         - name
         - comment
         - url
+        - createdAt
       properties:
         userId:
           type: string
@@ -1925,6 +1926,10 @@ components:
           type: string
         url:
           type: string
+        createdAt:
+          type: string
+          format: date-time
+          description: ユーザーの登録日時
     ReqPutEventEventIdReservationIdMe:
       required:
         - comment

@@ -42,11 +42,12 @@ type eventReservation struct {
 }
 
 type eventReservationObjectUser struct {
-	Url      string `db:"url"`
-	Comment  string `db:"comment"`
-	Name     string `db:"username"`
-	UserIcon string `db:"icon_url"`
-	UserId   string `db:"user_id"`
+	Url       string    `db:"url"`
+	Comment   string    `db:"comment"`
+	Name      string    `db:"username"`
+	UserIcon  string    `db:"icon_url"`
+	UserId    string    `db:"user_id"`
+	CreatedAt time.Time `db:"created_at"`
 }
 
 func getReservationFromReservationId(dbClient db.Client, eventId string, reservationId string, userId string) (eventReservation, *response.Error) {
