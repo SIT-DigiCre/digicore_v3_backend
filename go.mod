@@ -1,6 +1,8 @@
 module github.com/SIT-DigiCre/digicore_v3_backend
 
-go 1.19
+go 1.21.0
+
+toolchain go1.24.6
 
 require (
 	github.com/aws/aws-sdk-go v1.44.281
@@ -10,7 +12,7 @@ require (
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
 	github.com/go-playground/validator/v10 v10.14.1
-	github.com/go-sql-driver/mysql v1.7.1
+	github.com/go-sql-driver/mysql v1.9.3
 	github.com/jinzhu/copier v0.3.5
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/labstack/echo-contrib v0.14.1
@@ -25,6 +27,7 @@ require (
 
 require (
 	cloud.google.com/go/compute v1.9.0 // indirect
+	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver/v3 v3.2.0 // indirect
 	github.com/Masterminds/sprig/v3 v3.2.3 // indirect
