@@ -2,3 +2,4 @@
 gcp_secret.json
 tmp/
 docs/
+.serena/
