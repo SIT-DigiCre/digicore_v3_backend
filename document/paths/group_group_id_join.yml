@@ -1,0 +1,27 @@
+post:
+  tags:
+    - group
+  description: "Join to group"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: groupId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      description: "Success join to group"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas.yml#/ResPostGroupGroupIdJoin"
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

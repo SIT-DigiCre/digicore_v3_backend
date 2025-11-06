@@ -40,6 +40,7 @@ type profile struct {
 	DiscordUserId     string `db:"discord_userid"`
 	ActiveLimit       string `db:"active_limit"`
 	ShortIntroduction string `db:"short_introduction"`
+	IsAdmin           bool   `db:"is_admin"`
 }
 
 func GetUserProfileFromUserId(dbClient db.Client, userId string) (profile, *response.Error) {

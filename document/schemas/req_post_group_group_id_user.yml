@@ -1,0 +1,8 @@
+required:
+  - userId
+properties:
+  userId:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,uuid
+      ja: ユーザーID

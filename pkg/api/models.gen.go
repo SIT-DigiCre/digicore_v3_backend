@@ -23,6 +23,19 @@ type ReqPostBudget struct {
 	Name  string `ja:"名前" json:"name" validate:"required"`
 }
 
+// ReqPostGroup defines model for ReqPostGroup.
+type ReqPostGroup struct {
+	Description  string `ja:"グループの説明" json:"description" validate:"required,min=1,max=1000"`
+	IsAdminGroup bool   `ja:"管理者グループフラグ" json:"isAdminGroup" validate:"required"`
+	Joinable     bool   `ja:"参加可能フラグ" json:"joinable" validate:"required"`
+	Name         string `ja:"グループ名" json:"name" validate:"required,min=1,max=255"`
+}
+
+// ReqPostGroupGroupIdUser defines model for ReqPostGroupGroupIdUser.
+type ReqPostGroupGroupIdUser struct {
+	UserId string `ja:"ユーザーID" json:"userId" validate:"required,uuid"`
+}
+
 // ReqPostLoginCallback defines model for ReqPostLoginCallback.
 type ReqPostLoginCallback struct {
 	Code string `ja:"認証コード" json:"code" validate:"required"`
@@ -422,6 +435,7 @@ type ResGetUserMe struct {
 	ActiveLimit       string `json:"activeLimit"`
 	DiscordUserId     string `json:"discordUserId"`
 	IconUrl           string `json:"iconUrl"`
+	IsAdmin           bool   `json:"isAdmin"`
 	SchoolGrade       int    `json:"schoolGrade"`
 	ShortIntroduction string `json:"shortIntroduction"`
 	StudentNumber     string `json:"studentNumber"`
@@ -576,6 +590,25 @@ type ResGetWorkWorkWorkIdPublic struct {
 	WorkId      string                             `json:"workId"`
 }
 
+// ResPostGroup defines model for ResPostGroup.
+type ResPostGroup struct {
+	Description string `json:"description"`
+	GroupId     string `json:"groupId"`
+	Joinable    bool   `json:"joinable"`
+	Name        string `json:"name"`
+	UserCount   int    `json:"userCount"`
+}
+
+// ResPostGroupGroupIdJoin defines model for ResPostGroupGroupIdJoin.
+type ResPostGroupGroupIdJoin struct {
+	Message string `json:"message"`
+}
+
+// ResPostGroupGroupIdUser defines model for ResPostGroupGroupIdUser.
+type ResPostGroupGroupIdUser struct {
+	Message string `json:"message"`
+}
+
 // ResPostLoginCallback defines model for ResPostLoginCallback.
 type ResPostLoginCallback struct {
 	Jwt string `json:"jwt"`
@@ -670,6 +703,12 @@ type PutBudgetBudgetIdStatusPendingJSONRequestBody = ReqPutBudgetBudgetIdStatusP
 
 // PutEventEventIdReservationIdMeJSONRequestBody defines body for PutEventEventIdReservationIdMe for application/json ContentType.
 type PutEventEventIdReservationIdMeJSONRequestBody = ReqPutEventEventIdReservationIdMe
+
+// PostGroupJSONRequestBody defines body for PostGroup for application/json ContentType.
+type PostGroupJSONRequestBody = ReqPostGroup
+
+// PostGroupGroupIdUserJSONRequestBody defines body for PostGroupGroupIdUser for application/json ContentType.
+type PostGroupGroupIdUserJSONRequestBody = ReqPostGroupGroupIdUser
 
 // PostLoginCallbackJSONRequestBody defines body for PostLoginCallback for application/json ContentType.
 type PostLoginCallbackJSONRequestBody = ReqPostLoginCallback

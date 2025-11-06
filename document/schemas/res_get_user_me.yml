@@ -7,6 +7,7 @@ required:
   - discordUserId
   - shortIntroduction
   - activeLimit
+  - isAdmin
 properties:
   userId:
     type: string
@@ -24,3 +25,5 @@ properties:
     type: string
   activeLimit:
     type: string
+  isAdmin:
+    type: boolean

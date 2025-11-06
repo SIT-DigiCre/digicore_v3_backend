@@ -1,0 +1,26 @@
+required:
+  - name
+  - description
+  - joinable
+  - isAdminGroup
+properties:
+  name:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: グループ名
+  description:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=1000
+      ja: グループの説明
+  joinable:
+    type: boolean
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 参加可能フラグ
+  isAdminGroup:
+    type: boolean
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 管理者グループフラグ

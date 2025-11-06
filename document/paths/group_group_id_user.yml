@@ -1,0 +1,33 @@
+post:
+  tags:
+    - group
+  description: "Add user to group"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: groupId
+      in: path
+      required: true
+      schema:
+        type: string
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas.yml#/ReqPostGroupGroupIdUser"
+  responses:
+    200:
+      description: "Success add user to group"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas.yml#/ResPostGroupGroupIdUser"
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
