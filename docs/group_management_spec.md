@@ -283,21 +283,31 @@ AUTH=disable
 
 ### Postman コレクション設定
 
-#### 環境変数設定
-
-Postman で以下の環境変数を設定：
-
-- `base_url`: `http://localhost:8080`
-- `user_id_1`: `11111111-1111-1111-1111-111111111111` (田中太郎)
-- `user_id_2`: `22222222-2222-2222-2222-222222222222` (佐藤花子)
-- `user_id_3`: `33333333-3333-3333-3333-333333333333` (山田次郎)
-
 #### 認証ヘッダー設定
 
 認証が無効化されていても、JWT トークンの subject から user_id を取得するため、有効な JWT 形式のトークンが必要です。以下のようなダミートークンを生成：
 
 ```
 Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMTExMTExMS0xMTExLTExMTEtMTExMS0xMTExMTExMTExMTEiLCJleHAiOjk5OTk5OTk5OTl9.dummy
+```
+
+トークンの生成は https://www.jwt.io/ja から行ってください。
+
+#### ヘッダーの例
+
+```json
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+```
+
+#### ペイロードの例
+
+```json
+{
+  "sub": "55555555-5555-5555-5555-555555555555"
+}
 ```
 
 ### テストシナリオ
