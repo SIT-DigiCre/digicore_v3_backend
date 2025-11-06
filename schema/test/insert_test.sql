@@ -83,6 +83,18 @@ INSERT INTO groups_users (id, group_id, user_id) VALUES
   (UUID_TO_BIN('a0000007-7777-7777-7777-777777777777'), UUID_TO_BIN('f3333333-3333-3333-3333-333333333333'), UUID_TO_BIN('11111111-1111-1111-1111-111111111111')),
   (UUID_TO_BIN('a0000008-8888-8888-8888-888888888888'), UUID_TO_BIN('f4444444-4444-4444-4444-444444444444'), UUID_TO_BIN('22222222-2222-2222-2222-222222222222'));
 
+-- 管理者グループ作成
+INSERT INTO `groups` (id, name, description, joinable, user_count) VALUES
+  (UUID_TO_BIN('aaaaa111-1111-1111-1111-111111111111'), '管理者グループ', '管理者専用', false, 1);
+
+-- 管理者権限付与
+INSERT INTO group_claims (id, group_id, claim) VALUES
+  (UUID_TO_BIN('ccccc111-1111-1111-1111-111111111111'), UUID_TO_BIN('aaaaa111-1111-1111-1111-111111111111'), 'admin');
+
+-- ユーザーを管理者グループに追加
+INSERT INTO groups_users (id, group_id, user_id) VALUES
+  (UUID_TO_BIN('ggggg111-1111-1111-1111-111111111111'), UUID_TO_BIN('aaaaa111-1111-1111-1111-111111111111'), UUID_TO_BIN('11111111-1111-1111-1111-111111111111'));
+
 -- 予算データの投入
 INSERT INTO budgets (id, name, proposer_user_id, approver_user_id, status, class, budget, settlement, purpose, mattermost_url, remark) VALUES
   (UUID_TO_BIN('a0000011-1111-1111-1111-111111111111'), '開発用ノートPC', UUID_TO_BIN('11111111-1111-1111-1111-111111111111'), UUID_TO_BIN('33333333-3333-3333-3333-333333333333'), 'approve', '機材', 150000, 148000, 'プログラミング勉強会とハッカソンで使用する開発環境整備', 'https://mattermost.example.com/digicore/pl/budget001', 'MacBook Air M2を購入予定'),

@@ -17,10 +17,8 @@ properties:
   joinable:
     type: boolean
     x-oapi-codegen-extra-tags:
-      validate: required
       ja: 参加可能フラグ
   isAdminGroup:
     type: boolean
     x-oapi-codegen-extra-tags:
-      validate: required
       ja: 管理者グループフラグ

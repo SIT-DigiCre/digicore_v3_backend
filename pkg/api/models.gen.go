@@ -26,8 +26,8 @@ type ReqPostBudget struct {
 // ReqPostGroup defines model for ReqPostGroup.
 type ReqPostGroup struct {
 	Description  string `ja:"グループの説明" json:"description" validate:"required,min=1,max=1000"`
-	IsAdminGroup bool   `ja:"管理者グループフラグ" json:"isAdminGroup" validate:"required"`
-	Joinable     bool   `ja:"参加可能フラグ" json:"joinable" validate:"required"`
+	IsAdminGroup bool   `ja:"管理者グループフラグ" json:"isAdminGroup"`
+	Joinable     bool   `ja:"参加可能フラグ" json:"joinable"`
 	Name         string `ja:"グループ名" json:"name" validate:"required,min=1,max=255"`
 }
 

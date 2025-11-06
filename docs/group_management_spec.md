@@ -249,8 +249,8 @@ WHERE groups_users.user_id = UUID_TO_BIN(?)
 - `pkg/db/sql/group/insert_group_claims.sql` - 新規作成
 - `pkg/db/sql/group/select_user_is_admin.sql` - 新規作成
 - `pkg/db/sql/group/select_is_group_member.sql` - 新規作成
-- `pkg/db/sql/group/select_group_is_admin_group.sql` - 新規作成（グループがadminグループか確認）
-- `pkg/db/sql/group/select_group_joinable.sql` - 新規作成（グループのjoinable状態を取得）
+- `pkg/db/sql/group/select_group_is_admin_group.sql` - 新規作成（グループが admin グループか確認）
+- `pkg/db/sql/group/select_group_joinable.sql` - 新規作成（グループの joinable 状態を取得）
 - `pkg/db/sql/group/update_group_user_count_increment.sql` - 新規作成
 
 ## 備考
@@ -259,3 +259,234 @@ WHERE groups_users.user_id = UUID_TO_BIN(?)
 - エラーハンドリングは既存の `pkg/api/response` パッケージのパターンに従います
 - 全てのエラーメッセージは日本語で記述します
 - グループ参加機能では、管理者グループへの参加を防ぐため、`group_claims` テーブルの確認を必ず行います
+
+## Postman での動作確認手順
+
+### 環境準備
+
+#### 開発環境の起動
+
+```bash
+# プロジェクトルートで実行
+make build && make up
+make migrate
+make insert_test
+```
+
+#### 認証の無効化設定
+
+`.env`ファイルで以下を設定：
+
+```
+AUTH=disable
+```
+
+### Postman コレクション設定
+
+#### 環境変数設定
+
+Postman で以下の環境変数を設定：
+
+- `base_url`: `http://localhost:8080`
+- `user_id_1`: `11111111-1111-1111-1111-111111111111` (田中太郎)
+- `user_id_2`: `22222222-2222-2222-2222-222222222222` (佐藤花子)
+- `user_id_3`: `33333333-3333-3333-3333-333333333333` (山田次郎)
+
+#### 認証ヘッダー設定
+
+認証が無効化されていても、JWT トークンの subject から user_id を取得するため、有効な JWT 形式のトークンが必要です。以下のようなダミートークンを生成：
+
+```
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMTExMTExMS0xMTExLTExMTEtMTExMS0xMTExMTExMTExMTEiLCJleHAiOjk5OTk5OTk5OTl9.dummy
+```
+
+### テストシナリオ
+
+#### 1. 事前確認：自分の情報取得
+
+```
+GET {{base_url}}/user/me
+Authorization: Bearer [上記のトークン]
+```
+
+**期待結果**: `isAdmin: false` が含まれる
+
+#### 2. 通常グループの作成
+
+```
+POST {{base_url}}/group
+Content-Type: application/json
+Authorization: Bearer [user_id_1のトークン]
+
+{
+  "name": "テストグループ1",
+  "description": "Postmanテスト用のグループです",
+  "joinable": true,
+  "isAdminGroup": false
+}
+```
+
+**期待結果**:
+
+- ステータス: 200
+- レスポンスに `groupId`, `userCount: 1` が含まれる
+
+#### 3. 管理者グループの作成（権限不足でエラー）
+
+```
+POST {{base_url}}/group
+Content-Type: application/json
+Authorization: Bearer [user_id_1のトークン]
+
+{
+  "name": "管理者グループ",
+  "description": "管理者専用グループ",
+  "joinable": false,
+  "isAdminGroup": true
+}
+```
+
+**期待結果**:
+
+- ステータス: 403
+- エラーメッセージ: "管理者グループを作成する権限がありません"
+
+#### 4. グループメンバー追加
+
+```
+POST {{base_url}}/group/{{group_id}}/user
+Content-Type: application/json
+Authorization: Bearer [user_id_1のトークン]
+
+{
+  "userId": "22222222-2222-2222-2222-222222222222"
+}
+```
+
+**期待結果**:
+
+- ステータス: 200
+- メッセージ: "ユーザーをグループに追加しました"
+
+#### 5. グループ自発参加
+
+```
+POST {{base_url}}/group/{{group_id}}/join
+Authorization: Bearer [user_id_3のトークン]
+```
+
+**期待結果**:
+
+- ステータス: 200
+- メッセージ: "グループに参加しました"
+
+#### 6. 既存グループへの重複参加（エラー）
+
+```
+POST {{base_url}}/group/{{group_id}}/join
+Authorization: Bearer [user_id_3のトークン]
+```
+
+**期待結果**:
+
+- ステータス: 400
+- エラーメッセージ: "既にグループに参加しています"
+
+### 管理者権限のテスト
+
+#### 管理者グループの手動作成
+
+データベースに直接管理者グループを作成：
+
+```sql
+-- 管理者グループ作成
+INSERT INTO `groups` (id, name, description, joinable, user_count) VALUES
+  (UUID_TO_BIN('admin111-1111-1111-1111-111111111111'), '管理者グループ', '管理者専用', false, 1);
+
+-- 管理者権限付与
+INSERT INTO group_claims (id, group_id, claim) VALUES
+  (UUID_TO_BIN('claim111-1111-1111-1111-111111111111'), UUID_TO_BIN('admin111-1111-1111-1111-111111111111'), 'admin');
+
+-- ユーザーを管理者グループに追加
+INSERT INTO groups_users (id, group_id, user_id) VALUES
+  (UUID_TO_BIN('gu111111-1111-1111-1111-111111111111'), UUID_TO_BIN('admin111-1111-1111-1111-111111111111'), UUID_TO_BIN('11111111-1111-1111-1111-111111111111'));
+```
+
+#### 管理者権限確認
+
+```
+GET {{base_url}}/user/me
+Authorization: Bearer [user_id_1のトークン]
+```
+
+**期待結果**: `isAdmin: true` が含まれる
+
+#### 管理者による管理者グループ作成
+
+```
+POST {{base_url}}/group
+Content-Type: application/json
+Authorization: Bearer [user_id_1のトークン]
+
+{
+  "name": "新しい管理者グループ",
+  "description": "管理者が作成した管理者グループ",
+  "joinable": false,
+  "isAdminGroup": true
+}
+```
+
+**期待結果**:
+
+- ステータス: 200
+- 正常にグループが作成される
+
+### エラーケースのテスト
+
+#### 存在しないユーザーの追加
+
+```
+POST {{base_url}}/group/{{group_id}}/user
+Content-Type: application/json
+Authorization: Bearer [user_id_1のトークン]
+
+{
+  "userId": "99999999-9999-9999-9999-999999999999"
+}
+```
+
+**期待結果**:
+
+- ステータス: 404
+- エラーメッセージ: "指定されたユーザーが存在しません"
+
+#### 存在しないグループへの参加
+
+```
+POST {{base_url}}/group/99999999-9999-9999-9999-999999999999/join
+Authorization: Bearer [user_id_1のトークン]
+```
+
+**期待結果**:
+
+- ステータス: 404
+- エラーメッセージ: "指定されたグループが存在しません"
+
+#### 管理者グループへの自発参加（エラー）
+
+```
+POST {{base_url}}/group/{{admin_group_id}}/join
+Authorization: Bearer [user_id_2のトークン]
+```
+
+**期待結果**:
+
+- ステータス: 403
+- エラーメッセージ: "このグループには参加できません"
+
+### テスト時の注意事項
+
+1. **認証トークン**: `AUTH=disable`設定時でも、JWT トークンの subject から user_id を取得するため、有効な JWT 形式のトークンが必要です
+2. **データベース確認**: 各操作後にデータベースを直接確認して、データが正しく挿入されているか確認してください
+3. **ログ確認**: `make logs`でサーバーログを確認し、エラーの詳細を把握してください
+4. **グループ ID**: テスト中に作成されたグループの ID は、レスポンスから取得して後続のテストで使用してください
