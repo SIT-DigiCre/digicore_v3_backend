@@ -62,8 +62,17 @@ type ServerInterface interface {
 	// (GET /group)
 	GetGroup(ctx echo.Context, params GetGroupParams) error
 
+	// (POST /group)
+	PostGroup(ctx echo.Context) error
+
 	// (GET /group/{groupId})
 	GetGroupGroupId(ctx echo.Context, groupId string) error
+
+	// (POST /group/{groupId}/join)
+	PostGroupGroupIdJoin(ctx echo.Context, groupId string) error
+
+	// (POST /group/{groupId}/user)
+	PostGroupGroupIdUser(ctx echo.Context, groupId string) error
 
 	// (GET /login)
 	GetLogin(ctx echo.Context) error
@@ -516,6 +525,17 @@ func (w *ServerInterfaceWrapper) GetGroup(ctx echo.Context) error {
 	return err
 }
 
+// PostGroup converts echo context to params.
+func (w *ServerInterfaceWrapper) PostGroup(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostGroup(ctx)
+	return err
+}
+
 // GetGroupGroupId converts echo context to params.
 func (w *ServerInterfaceWrapper) GetGroupGroupId(ctx echo.Context) error {
 	var err error
@@ -531,6 +551,42 @@ func (w *ServerInterfaceWrapper) GetGroupGroupId(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetGroupGroupId(ctx, groupId)
+	return err
+}
+
+// PostGroupGroupIdJoin converts echo context to params.
+func (w *ServerInterfaceWrapper) PostGroupGroupIdJoin(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "groupId" -------------
+	var groupId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "groupId", runtime.ParamLocationPath, ctx.Param("groupId"), &groupId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter groupId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostGroupGroupIdJoin(ctx, groupId)
+	return err
+}
+
+// PostGroupGroupIdUser converts echo context to params.
+func (w *ServerInterfaceWrapper) PostGroupGroupIdUser(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "groupId" -------------
+	var groupId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "groupId", runtime.ParamLocationPath, ctx.Param("groupId"), &groupId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter groupId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostGroupGroupIdUser(ctx, groupId)
 	return err
 }
 
@@ -1136,7 +1192,10 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.DELETE(baseURL+"/event/:eventId/:reservationId/me", wrapper.DeleteEventEventIdReservationIdMe)
 	router.PUT(baseURL+"/event/:eventId/:reservationId/me", wrapper.PutEventEventIdReservationIdMe)
 	router.GET(baseURL+"/group", wrapper.GetGroup)
+	router.POST(baseURL+"/group", wrapper.PostGroup)
 	router.GET(baseURL+"/group/:groupId", wrapper.GetGroupGroupId)
+	router.POST(baseURL+"/group/:groupId/join", wrapper.PostGroupGroupIdJoin)
+	router.POST(baseURL+"/group/:groupId/user", wrapper.PostGroupGroupIdUser)
 	router.GET(baseURL+"/login", wrapper.GetLogin)
 	router.POST(baseURL+"/login/callback", wrapper.PostLoginCallback)
 	router.POST(baseURL+"/mattermost/create_user", wrapper.PostMattermostCreateUser)

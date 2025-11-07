@@ -118,6 +118,16 @@ ResGetGroupGroupId:
   $ref: "./schemas/res_get_group_group_id.yml"
 ResGetGroupGroupIdObjectUser:
   $ref: "./schemas/res_get_group_group_id.user.yml"
+ReqPostGroup:
+  $ref: "./schemas/req_post_group.yml"
+ResPostGroup:
+  $ref: "./schemas/res_post_group.yml"
+ReqPostGroupGroupIdUser:
+  $ref: "./schemas/req_post_group_group_id_user.yml"
+ResPostGroupGroupIdUser:
+  $ref: "./schemas/res_post_group_group_id_user.yml"
+ResPostGroupGroupIdJoin:
+  $ref: "./schemas/res_post_group_group_id_join.yml"
 ResGetBudget:
   $ref: "./schemas/res_get_budget.yml"
 ResGetBudgetObjectBudget:

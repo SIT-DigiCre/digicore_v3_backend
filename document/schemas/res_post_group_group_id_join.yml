@@ -1,0 +1,5 @@
+required:
+  - message
+properties:
+  message:
+    type: string

@@ -1,0 +1,17 @@
+required:
+  - groupId
+  - name
+  - description
+  - joinable
+  - userCount
+properties:
+  groupId:
+    type: string
+  name:
+    type: string
+  description:
+    type: string
+  joinable:
+    type: boolean
+  userCount:
+    type: integer

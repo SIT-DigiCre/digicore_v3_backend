@@ -17,7 +17,7 @@ migrate:
 	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/schema admin bash -c 'cat `ls -F | grep -v / | sed s/\*$$//g | grep -v foreign_key.sql` | go run github.com/k0kubun/sqldef/cmd/mysqldef@v0.15.12 --user=${DB_USER} --password=${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE}'
 	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/schema admin bash -c 'cat foreign_key.sql | mysql -u ${DB_USER} -p${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} -vvv'
 
-.PHONY: migrate
+.PHONY: insert_test
 insert_test:
 	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app/schema/test admin bash -c 'cat `ls -F | grep -v / | sed s/\*$$//g` | mysql -u ${DB_USER} -p${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} --default-character-set=utf8mb4 -vvv'
 

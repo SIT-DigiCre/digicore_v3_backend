@@ -64,6 +64,10 @@
   $ref: "./paths/group.yml"
 /group/{groupId}:
   $ref: "./paths/group_group_id.yml"
+/group/{groupId}/user:
+  $ref: "./paths/group_group_id_user.yml"
+/group/{groupId}/join:
+  $ref: "./paths/group_group_id_join.yml"
 /budget:
   $ref: "./paths/budget.yml"
 /budget/{budgetId}:

@@ -1105,6 +1105,31 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+    post:
+      tags:
+        - group
+      description: Create new group
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostGroup'
+      responses:
+        '200':
+          description: Success create group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostGroup'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   '/group/{groupId}':
     get:
       tags:
@@ -1125,6 +1150,68 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetGroupGroupId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/group/{groupId}/user':
+    post:
+      tags:
+        - group
+      description: Add user to group
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostGroupGroupIdUser'
+      responses:
+        '200':
+          description: Success add user to group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostGroupGroupIdUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/group/{groupId}/join':
+    post:
+      tags:
+        - group
+      description: Join to group
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success join to group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostGroupGroupIdJoin'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1554,6 +1641,7 @@ components:
         - discordUserId
         - shortIntroduction
         - activeLimit
+        - isAdmin
       properties:
         userId:
           type: string
@@ -1571,6 +1659,8 @@ components:
           type: string
         activeLimit:
           type: string
+        isAdmin:
+          type: boolean
     ReqPutUserMe:
       required:
         - username
@@ -2402,6 +2492,70 @@ components:
         userIcon:
           type: string
         name:
+          type: string
+    ReqPostGroup:
+      required:
+        - name
+        - description
+        - joinable
+        - isAdminGroup
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: グループ名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=1000'
+            ja: グループの説明
+        joinable:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: 参加可能フラグ
+        isAdminGroup:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: 管理者グループフラグ
+    ResPostGroup:
+      required:
+        - groupId
+        - name
+        - description
+        - joinable
+        - userCount
+      properties:
+        groupId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        joinable:
+          type: boolean
+        userCount:
+          type: integer
+    ReqPostGroupGroupIdUser:
+      required:
+        - userId
+      properties:
+        userId:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,uuid'
+            ja: ユーザーID
+    ResPostGroupGroupIdUser:
+      required:
+        - message
+      properties:
+        message:
+          type: string
+    ResPostGroupGroupIdJoin:
+      required:
+        - message
+      properties:
+        message:
           type: string
     ResGetBudget:
       required:
