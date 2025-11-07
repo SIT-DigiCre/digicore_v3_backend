@@ -12,6 +12,20 @@ import (
 func PostGroupGroupIdUser(ctx echo.Context, dbClient db.TransactionClient, groupId string, req api.ReqPostGroupGroupIdUser) (api.ResPostGroupGroupIdUser, *response.Error) {
 	requestUserId := ctx.Get("user_id").(string)
 
+	// グループが存在するか確認
+	groupExists, err := checkGroupExists(dbClient, groupId)
+	if err != nil {
+		return api.ResPostGroupGroupIdUser{}, err
+	}
+	if !groupExists {
+		return api.ResPostGroupGroupIdUser{}, &response.Error{
+			Code:    http.StatusNotFound,
+			Level:   "Info",
+			Message: "指定されたグループが存在しません",
+			Log:     "group not found",
+		}
+	}
+
 	// リクエストユーザーがグループに所属しているか確認
 	isMember, err := checkUserIsGroupMember(dbClient, requestUserId, groupId)
 	if err != nil {
