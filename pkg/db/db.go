@@ -27,7 +27,9 @@ func init() {
 	if err != nil {
 		logrus.Fatal(err.Error())
 	}
-	if sdb.Ping() != nil {
+
+	err = sdb.Ping()
+	if err != nil {
 		logrus.Fatal(err.Error())
 	}
 	tw = twowaysql.New(sdb)
