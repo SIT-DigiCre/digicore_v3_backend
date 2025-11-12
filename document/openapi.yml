@@ -2,14 +2,8 @@ openapi: "3.0.3"
 info:
   version: "3.1.0"
   title: "Digicore"
-# servers:
-#   - url: "http://{host}:{port}/"
-#     description: "develop"
-#     variables:
-#       host:
-#         default: "localhost"
-#       port:
-#         default: "8000"
+servers:
+  - url: "https://coreapi3.digicre.net/"
 tags:
   $ref: "./tags.yml"
 paths:

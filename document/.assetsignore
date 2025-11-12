@@ -1,0 +1,8 @@
+paths/
+responses/
+schemas/
+openapi.yml
+paths.yml
+responses.yml
+schemas.yml
+tags.yml

@@ -2,7 +2,7 @@
 
 ## 環境構築
 
-1. .env.sample をコピーして.env を作成する
+1. `.env.sample` をコピーして `.env` を作成する
 1. [Discord developers](https://discord.com/developers/applications)で App を作成し、Oauth2 の Redirects に`${FRONTEND_ROOT_URL}/user/discord/callback`を指定する
 1. 上記で作成した App の Client information から Client ID と Client Secret を取得し、.env に追記する。
 1. [Google Cloud Platform](https://console.cloud.google.com/home/dashboard)で App を作成し、OAuth クライアント ID をアプリケーションの種類をウェブアプリケーションにして作成し、承認済みのリダイレクト URI に`${FRONTEND_ROOT_URL}/signup/callback`と`${FRONTEND_ROOT_URL}/login/callback`を指定する。
@@ -20,14 +20,13 @@ make build
 ## 実行
 
 ```sh
-make up
-# make up-d
+make up-d # デタッチモードで起動
 ```
 
 ## DB マイグレーション
 
 ```sh
-make migrate-dry // dryrun
+make migrate-dry # dryrun
 make migrate
 ```
 
@@ -41,7 +40,9 @@ make insert_test
 
 ### api パッケージの更新
 
-**./document/_.gen.yml と./pkg/api/_.gen.go は自動生成であるため直接編集しない**
+> [!WARNING]
+>
+> `./document/_.gen.yml` と `./pkg/api/_.gen.go` は自動生成であるため直接編集しない
 
 ```sh
 make generate_api
@@ -49,4 +50,4 @@ make generate_api
 
 ## 開発時の JWT 検証の無効化
 
-.env の AUTH を disable に書き換えてください。
+`.env` の AUTH を disable に書き換えてください。
