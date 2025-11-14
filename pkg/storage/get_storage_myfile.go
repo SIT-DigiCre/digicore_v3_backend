@@ -46,8 +46,5 @@ func getFileListFromUserID(dbClient db.Client, userId string) ([]file, *response
 	if err != nil {
 		return []file{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
-	if len(files) == 0 {
-		return []file{}, nil
-	}
 	return files, nil
 }
