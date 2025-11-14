@@ -44,10 +44,7 @@ func getEventList(dbClient db.Client, userId string, offset *int) ([]event, *res
 	events := []event{}
 	err := dbClient.Select(&events, "sql/event/select_event.sql", &params)
 	if err != nil {
-		return nil, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベント一覧の取得に失敗しました", Log: err.Error()}
-	}
-	if len(events) == 0 {
-		return nil, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "イベントがありません。", Log: "no rows in result"}
+		return []event{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベント一覧の取得に失敗しました", Log: err.Error()}
 	}
 	return events, nil
 }

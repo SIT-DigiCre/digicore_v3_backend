@@ -44,10 +44,7 @@ func getGroupList(dbClient db.Client, userId string, offset *int) ([]group, *res
 	groups := []group{}
 	err := dbClient.Select(&groups, "sql/group/select_group.sql", &params)
 	if err != nil {
-		return nil, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "グループ一覧の取得に失敗しました", Log: err.Error()}
-	}
-	if len(groups) == 0 {
-		return nil, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "グループがありません。", Log: "no rows in result"}
+		return []group{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "グループ一覧の取得に失敗しました", Log: err.Error()}
 	}
 	return groups, nil
 }
