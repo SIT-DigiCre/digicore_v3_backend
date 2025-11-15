@@ -21,9 +21,6 @@ func GetStorageMyfile(ctx echo.Context, dbClient db.Client) (api.ResGetStorageMy
 	if rerr != nil {
 		return api.ResGetStorageMyfile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
-	if res.Files == nil {
-		res.Files = []api.ResGetStorageMyfileObjectFile{}
-	}
 	return res, nil
 }
 
@@ -48,9 +45,6 @@ func getFileListFromUserID(dbClient db.Client, userId string) ([]file, *response
 	err := dbClient.Select(&files, "sql/storage/select_storage_from_user_id.sql", &params)
 	if err != nil {
 		return []file{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
-	}
-	if len(files) == 0 {
-		return []file{}, nil
 	}
 	return files, nil
 }

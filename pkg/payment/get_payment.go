@@ -39,8 +39,5 @@ func getPaymentList(dbClient db.Client, year *int) ([]paymtent, *response.Error)
 	if err != nil {
 		return []paymtent{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
-	if len(paymtents) == 0 {
-		return []paymtent{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "支払いが存在しません", Log: "no rows in result"}
-	}
 	return paymtents, nil
 }

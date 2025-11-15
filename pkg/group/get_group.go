@@ -13,11 +13,11 @@ import (
 func GetGroup(ctx echo.Context, dbClient db.Client, params api.GetGroupParams) (api.ResGetGroup, *response.Error) {
 	res := api.ResGetGroup{}
 	userId := ctx.Get("user_id").(string)
-	events, err := getGroupList(dbClient, userId, params.Offset)
+	groups, err := getGroupList(dbClient, userId, params.Offset)
 	if err != nil {
 		return api.ResGetGroup{}, err
 	}
-	rerr := copier.Copy(&res.Groups, &events)
+	rerr := copier.Copy(&res.Groups, &groups)
 	if rerr != nil {
 		return api.ResGetGroup{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "グループ一覧の取得に失敗しました", Log: rerr.Error()}
 	}
@@ -44,10 +44,7 @@ func getGroupList(dbClient db.Client, userId string, offset *int) ([]group, *res
 	groups := []group{}
 	err := dbClient.Select(&groups, "sql/group/select_group.sql", &params)
 	if err != nil {
-		return nil, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "グループ一覧の取得に失敗しました", Log: err.Error()}
-	}
-	if len(groups) == 0 {
-		return nil, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "グループがありません。", Log: "no rows in result"}
+		return []group{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "グループ一覧の取得に失敗しました", Log: err.Error()}
 	}
 	return groups, nil
 }

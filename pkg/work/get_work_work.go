@@ -43,9 +43,6 @@ func getWorkList(dbClient db.Client, offset *int, authorId *string) ([]workOverv
 	if err != nil {
 		return []workOverview{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
-	if len(workOverviews) == 0 {
-		return []workOverview{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "作品が存在しません", Log: "no rows in result"}
-	}
 	for i := range workOverviews {
 		workId := workOverviews[i].WorkId
 		workAuthors, err := getWorkWorkAuthorList(dbClient, workId)

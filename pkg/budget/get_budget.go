@@ -51,18 +51,15 @@ func getBudgetList(dbClient db.Client, offset *int, proposerId *string) ([]budge
 		Offset:     offset,
 		ProposerId: proposerId,
 	}
-	budget := []budget{}
-	err := dbClient.Select(&budget, "sql/budget/select_budget.sql", &params)
+	budgets := []budget{}
+	err := dbClient.Select(&budgets, "sql/budget/select_budget.sql", &params)
 	if err != nil {
-		return nil, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "稟議一覧の取得に失敗しました", Log: err.Error()}
+		return []budget{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "稟議一覧の取得に失敗しました", Log: err.Error()}
 	}
-	if len(budget) == 0 {
-		return nil, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "稟議がありません。", Log: "no rows in result"}
+	for i := range budgets {
+		budgets[i].Proposer.IconUrl = budgets[i].IconUrl
+		budgets[i].Proposer.UserId = budgets[i].UserId
+		budgets[i].Proposer.Username = budgets[i].Username
 	}
-	for i := range budget {
-		budget[i].Proposer.IconUrl = budget[i].IconUrl
-		budget[i].Proposer.UserId = budget[i].UserId
-		budget[i].Proposer.Username = budget[i].Username
-	}
-	return budget, nil
+	return budgets, nil
 }

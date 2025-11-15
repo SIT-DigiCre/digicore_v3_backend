@@ -39,8 +39,5 @@ func getWorkTagList(dbClient db.Client, offset *int) ([]tagOverview, *response.E
 	if err != nil {
 		return []tagOverview{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
-	if len(tagOverviews) == 0 {
-		return []tagOverview{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "タグが存在しません", Log: "no rows in result"}
-	}
 	return tagOverviews, nil
 }
