@@ -51,7 +51,6 @@ services:
 volumes:
   db_data:
 
-
 networks:
   https_network:
     external: true
