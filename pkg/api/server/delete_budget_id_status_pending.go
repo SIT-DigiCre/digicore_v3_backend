@@ -5,6 +5,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/budget"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 	"github.com/labstack/echo/v4"
+	"github.com/sirupsen/logrus"
 )
 
 func (s *server) DeleteBudgetBudgetIdStatusPending(ctx echo.Context, budgetId string) error {
@@ -12,7 +13,11 @@ func (s *server) DeleteBudgetBudgetIdStatusPending(ctx echo.Context, budgetId st
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}
-	defer dbTranisactionClient.Rollback()
+	defer func() {
+		if err := dbTranisactionClient.Rollback(); err != nil {
+			logrus.Errorf("トランザクションのロールバックに失敗しました: %v", err)
+		}
+	}()
 
 	res, err := budget.DeleteBudgetBudgetIdStatusPending(ctx, &dbTranisactionClient, budgetId)
 	if err != nil {

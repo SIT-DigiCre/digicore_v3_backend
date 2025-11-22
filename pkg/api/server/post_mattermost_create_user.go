@@ -11,7 +11,9 @@ import (
 
 func (s *server) PostMattermostCreateUser(ctx echo.Context) error {
 	var requestBody api.ReqPostMattermostCreateuser
-	ctx.Bind(&requestBody)
+	if err := ctx.Bind(&requestBody); err != nil {
+		return response.ErrorResponse(ctx, &response.Error{Code: 400, Level: "Info", Message: "リクエストボディの解析に失敗しました。正しい形式で送信してください", Log: err.Error()})
+	}
 	err := validator.Validate(requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)

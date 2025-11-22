@@ -63,17 +63,23 @@ func handler(c echo.Context, err *echo.HTTPError) error {
 
 func CreateToken(user_id string) (string, *response.Error) {
 	t := jwt.New()
-	t.Set(jwt.SubjectKey, user_id)
-	t.Set(jwt.ExpirationKey, time.Now().Add(time.Hour*72).Unix())
+	if err := t.Set(jwt.SubjectKey, user_id); err != nil {
+		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "JWTトークンにユーザーIDを設定できませんでした", Log: err.Error()}
+	}
+	if err := t.Set(jwt.ExpirationKey, time.Now().Add(time.Hour*72).Unix()); err != nil {
+		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "JWTトークンに有効期限を設定できませんでした", Log: err.Error()}
+	}
 	claims, err := GetClaims(user_id)
 	if err != nil {
 		return "", err
 	}
-	t.Set(PermissionsClaim, claims)
+	if err := t.Set(PermissionsClaim, claims); err != nil {
+		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "JWTトークンに権限情報を設定できませんでした", Log: err.Error()}
+	}
 
 	signed, rerr := jwt.Sign(t, jwt.WithKey(jwa.RS256, key))
-	if err != nil {
-		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "JWTの生成に失敗しました", Log: rerr.Error()}
+	if rerr != nil {
+		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "JWTトークンの署名に失敗しました", Log: rerr.Error()}
 	}
 	token := string(signed)
 	return token, nil
