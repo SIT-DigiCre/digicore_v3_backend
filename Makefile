@@ -52,7 +52,3 @@ build:
 .PHONY: ls
 ls:
 	docker compose -f ${DOCKER_COMPOSE} ls
-
-.PHONY: lint
-lint:
-	go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest run --timeout=5m
