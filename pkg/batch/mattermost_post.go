@@ -58,5 +58,8 @@ func remind_mattermost_post(dbClient db.TransactionClient, post post) {
 	}{
 		Id: post.Id,
 	}
-	dbClient.Exec("sql/batch/update_mattermost_remind_post.sql", &params, false)
+	_, err := dbClient.Exec("sql/batch/update_mattermost_remind_post.sql", &params, false)
+	if err != nil {
+		logrus.Error(fmt.Sprintf("Failed to update mattermost remind post(%s): %v", post.Id, err))
+	}
 }

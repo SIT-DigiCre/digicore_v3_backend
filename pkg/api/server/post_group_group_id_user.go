@@ -7,11 +7,14 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/group"
 	"github.com/labstack/echo/v4"
+	"github.com/sirupsen/logrus"
 )
 
 func (s *server) PostGroupGroupIdUser(ctx echo.Context, groupId string) error {
 	var requestBody api.ReqPostGroupGroupIdUser
-	ctx.Bind(&requestBody)
+	if err := ctx.Bind(&requestBody); err != nil {
+		return response.ErrorResponse(ctx, &response.Error{Code: 400, Level: "Info", Message: "リクエストボディの解析に失敗しました。正しい形式で送信してください", Log: err.Error()})
+	}
 	err := validator.Validate(requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
@@ -21,7 +24,11 @@ func (s *server) PostGroupGroupIdUser(ctx echo.Context, groupId string) error {
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}
-	defer dbTransactionClient.Rollback()
+	defer func() {
+		if err := dbTransactionClient.Rollback(); err != nil {
+			logrus.Errorf("トランザクションのロールバックに失敗しました: %v", err)
+		}
+	}()
 
 	res, err := group.PostGroupGroupIdUser(ctx, &dbTransactionClient, groupId, requestBody)
 	if err != nil {

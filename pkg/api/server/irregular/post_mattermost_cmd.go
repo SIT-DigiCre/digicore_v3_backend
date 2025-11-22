@@ -7,11 +7,14 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/mattermost"
 	"github.com/labstack/echo/v4"
+	"github.com/sirupsen/logrus"
 )
 
 func PostMattermostCmd(ctx echo.Context) error {
 	var requestBody api.ReqPostMattermostCmd
-	ctx.Bind(&requestBody)
+	if err := ctx.Bind(&requestBody); err != nil {
+		return response.ErrorResponse(ctx, &response.Error{Code: 400, Level: "Info", Message: "リクエストボディの解析に失敗しました。正しい形式で送信してください", Log: err.Error()})
+	}
 	err := validator.Validate(requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
@@ -21,7 +24,11 @@ func PostMattermostCmd(ctx echo.Context) error {
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}
-	defer dbTranisactionClient.Rollback()
+	defer func() {
+		if err := dbTranisactionClient.Rollback(); err != nil {
+			logrus.Errorf("トランザクションのロールバックに失敗しました: %v", err)
+		}
+	}()
 
 	res, err := mattermost.PostMattermostCmd(ctx, &dbTranisactionClient, requestBody)
 	if err != nil {
