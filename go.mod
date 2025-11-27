@@ -1,6 +1,6 @@
 module github.com/SIT-DigiCre/digicore_v3_backend
 
-go 1.20
+go 1.24.0
 
 require (
 	github.com/aws/aws-sdk-go v1.44.281
@@ -19,7 +19,7 @@ require (
 	github.com/mattermost/mattermost-server/v5 v5.39.3
 	github.com/rubenv/sql-migrate v1.4.0
 	github.com/sirupsen/logrus v1.9.3
-	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e
+	golang.org/x/exp v0.0.0-20251125195548-87e1e737ad39
 	golang.org/x/oauth2 v0.8.0
 )
 
