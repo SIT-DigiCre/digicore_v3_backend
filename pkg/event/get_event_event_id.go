@@ -89,9 +89,6 @@ func getEventFromEventId(dbClient db.Client, eventId string, userId string) (eve
 			eventReservations[i].Reservable = true
 		}
 	}
-	if eventReservations == nil {
-		eventReservations = []eventDetailObjectReservation{}
-	}
 	eventDetails[0].Reservations = eventReservations
 	return eventDetails[0], nil
 }

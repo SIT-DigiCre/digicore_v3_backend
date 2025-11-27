@@ -75,24 +75,15 @@ func getWorkFromTagId(dbClient db.Client, workId string) (work, *response.Error)
 	if err != nil {
 		return work{}, err
 	}
-	if workAuthors == nil {
-		workAuthors = []workObjectAuthor{}
-	}
 	works[0].Authors = workAuthors
 	workTags, err := getWorkWorkTagList(dbClient, workId)
 	if err != nil {
 		return work{}, err
 	}
-	if workTags == nil {
-		workTags = []workObjectTag{}
-	}
 	works[0].Tags = workTags
 	workFiles, err := getWorkWorkFileList(dbClient, workId)
 	if err != nil {
 		return work{}, err
-	}
-	if workFiles == nil {
-		workFiles = []workObjectFile{}
 	}
 	works[0].Files = workFiles
 	return works[0], nil

@@ -85,9 +85,6 @@ func getBudgetFromBudgetId(dbClient db.Client, budgetId string) (budgetDetail, *
 	if err != nil {
 		return budgetDetail{}, err
 	}
-	if files == nil {
-		files = []utils.FileInfo{}
-	}
 	budgetDetails[0].Files = files
 	return budgetDetails[0], nil
 }

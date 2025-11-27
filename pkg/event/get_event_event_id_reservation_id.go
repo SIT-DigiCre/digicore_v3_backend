@@ -87,9 +87,6 @@ func getReservationFromReservationId(dbClient db.Client, eventId string, reserva
 	if err != nil {
 		return eventReservation{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントの取得に失敗しました", Log: err.Error()}
 	}
-	if eventReservationObjectUsers == nil {
-		eventReservationObjectUsers = []eventReservationObjectUser{}
-	}
 	eventReservations[0].Users = eventReservationObjectUsers
 	return eventReservations[0], nil
 }
