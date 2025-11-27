@@ -48,7 +48,11 @@ func PostMattermostCreateUser(ctx echo.Context, dbClient db.Client, requestBody 
 		if err != nil {
 			return res, nil
 		}
-		defer hres.Body.Close()
+		defer func() {
+			if cerr := hres.Body.Close(); cerr != nil {
+				ctx.Logger().Warnf("Mattermostアイコン取得レスポンスのクローズに失敗しました: %v", cerr)
+			}
+		}()
 		iconData, err := io.ReadAll(hres.Body)
 		if err != nil {
 			return res, nil

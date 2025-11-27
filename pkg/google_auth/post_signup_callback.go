@@ -65,9 +65,10 @@ func createDefaultUser(dbClient db.TransactionClient, userId string, studentNumb
 		enterYear = utils.GetSchoolYear()
 	}
 	schoolGrade := utils.GetSchoolYear() - 2000 - enterYear + 1
-	if studentNumber[0] == 'm' {
+	switch studentNumber[0] {
+	case 'm':
 		schoolGrade += 4
-	} else if studentNumber[0] == 'n' {
+	case 'n':
 		schoolGrade += 6
 	}
 	rerr := user.UpdateUserProfile(dbClient, userId, api.ReqPutUserMe{Username: studentNumber, SchoolGrade: schoolGrade, IconUrl: env.DefaultIconUrl})
