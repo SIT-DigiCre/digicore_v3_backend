@@ -15,12 +15,12 @@ func PutBudgetBudgetIdAdmin(ctx echo.Context, dbClient db.TransactionClient, bud
 		return api.ResGetBudgetBudgetId{}, err
 	}
 	if now_detail.Status == "pending" {
-		if !(requestBody.Status == "approve" || requestBody.Status == "reject") {
+		if requestBody.Status != "approve" && requestBody.Status != "reject" {
 			return api.ResGetBudgetBudgetId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "更新不可能なステータスです(acceptかrejectのみ可能)", Log: "Unacceptable change"}
 		}
 	}
 	if now_detail.Status == "bought" {
-		if !(requestBody.Status == "paid") {
+		if requestBody.Status != "paid" {
 			return api.ResGetBudgetBudgetId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "更新不可能なステータスです(paidのみ可能)", Log: "unacceptable change"}
 		}
 	}

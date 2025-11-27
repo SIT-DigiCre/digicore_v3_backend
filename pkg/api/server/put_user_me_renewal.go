@@ -5,6 +5,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
 	"github.com/labstack/echo/v4"
+	"github.com/sirupsen/logrus"
 )
 
 func (s *server) PutUserMeRenewal(ctx echo.Context) error {
@@ -12,7 +13,11 @@ func (s *server) PutUserMeRenewal(ctx echo.Context) error {
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}
-	defer dbTranisactionClient.Rollback()
+	defer func() {
+		if err := dbTranisactionClient.Rollback(); err != nil {
+			logrus.Errorf("トランザクションのロールバックに失敗しました: %v", err)
+		}
+	}()
 
 	res, err := user.PutUserMeRenewal(ctx, &dbTranisactionClient)
 	if err != nil {

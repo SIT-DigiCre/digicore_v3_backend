@@ -18,12 +18,12 @@ func PostMattermostCmd(ctx echo.Context, dbClient db.TransactionClient, requestB
 	if rerr != nil {
 		return api.ResPostMattermostCmd{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "デコードに失敗しました", Log: rerr.Error()}
 	}
-	if requestBody.Command == "/remind" {
+	switch requestBody.Command {
+	case "/remind":
 		return mattermostCmdRemind(dbClient, decode, requestBody)
-	} else if requestBody.Command == "/remind_list" {
+	case "/remind_list":
 		return mattermostCmdRemindList(dbClient, requestBody)
-
-	} else if requestBody.Command == "/remind_delete" {
+	case "/remind_delete":
 		return mattermostCmdRemindDelete(dbClient, decode, requestBody)
 	}
 	return api.ResPostMattermostCmd{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "コマンドが存在しません", Log: "No foud command"}

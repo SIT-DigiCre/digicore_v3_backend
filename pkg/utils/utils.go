@@ -81,7 +81,11 @@ func NoticeMattermost(text string, channel string, username string, iconEmoji st
 		logrus.Error(err)
 		return
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if cerr := resp.Body.Close(); cerr != nil {
+			logrus.WithError(cerr).Warn("Mattermost Webhookレスポンスのクローズに失敗しました")
+		}
+	}()
 }
 
 type FileId struct {

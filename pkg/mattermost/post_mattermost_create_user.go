@@ -2,7 +2,7 @@ package mattermost
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
@@ -48,8 +48,12 @@ func PostMattermostCreateUser(ctx echo.Context, dbClient db.Client, requestBody 
 		if err != nil {
 			return res, nil
 		}
-		defer hres.Body.Close()
-		iconData, err := ioutil.ReadAll(hres.Body)
+		defer func() {
+			if cerr := hres.Body.Close(); cerr != nil {
+				ctx.Logger().Warnf("Mattermostアイコン取得レスポンスのクローズに失敗しました: %v", cerr)
+			}
+		}()
+		iconData, err := io.ReadAll(hres.Body)
 		if err != nil {
 			return res, nil
 		}
