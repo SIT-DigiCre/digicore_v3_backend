@@ -21,6 +21,9 @@ func GetStorageMyfile(ctx echo.Context, dbClient db.Client) (api.ResGetStorageMy
 	if rerr != nil {
 		return api.ResGetStorageMyfile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
+	if res.Files == nil {
+		res.Files = []api.ResGetStorageMyfileObjectFile{}
+	}
 	return res, nil
 }
 

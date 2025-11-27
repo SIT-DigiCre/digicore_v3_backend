@@ -23,6 +23,9 @@ func GetBudgetBudgetId(ctx echo.Context, dbClient db.Client, budgetId string) (a
 	if rerr != nil {
 		return api.ResGetBudgetBudgetId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "稟議の取得に失敗しました", Log: rerr.Error()}
 	}
+	if res.Files == nil {
+		res.Files = []api.ResGetBudgetBudgetIdObjectFile{}
+	}
 	return res, nil
 }
 
@@ -81,6 +84,9 @@ func getBudgetFromBudgetId(dbClient db.Client, budgetId string) (budgetDetail, *
 	files, err := getBudgetFileInfo(dbClient, budgetId)
 	if err != nil {
 		return budgetDetail{}, err
+	}
+	if files == nil {
+		files = []utils.FileInfo{}
 	}
 	budgetDetails[0].Files = files
 	return budgetDetails[0], nil

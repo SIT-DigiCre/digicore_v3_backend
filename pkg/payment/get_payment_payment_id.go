@@ -23,7 +23,7 @@ func GetPaymentPaymentId(ctx echo.Context, dbClient db.Client, paymentId string)
 	return res, nil
 }
 
-type paymtent struct {
+type payment struct {
 	Checked       bool   `db:"checked"`
 	PaymentId     string `db:"id"`
 	StudentNumber string `db:"student_number"`
@@ -32,19 +32,19 @@ type paymtent struct {
 	Note          string `db:"note"`
 }
 
-func getPaymentFromPaymentId(dbClient db.Client, paymentId string) (paymtent, *response.Error) {
+func getPaymentFromPaymentId(dbClient db.Client, paymentId string) (payment, *response.Error) {
 	params := struct {
 		PaymentId string `twowaysql:"paymentId"`
 	}{
 		PaymentId: paymentId,
 	}
-	paymtents := []paymtent{}
-	err := dbClient.Select(&paymtents, "sql/payment/select_payment_from_payment_id.sql", &params)
+	payments := []payment{}
+	err := dbClient.Select(&payments, "sql/payment/select_payment_from_payment_id.sql", &params)
 	if err != nil {
-		return paymtent{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+		return payment{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
-	if len(paymtents) == 0 {
-		return paymtent{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "支払い情報が有りません", Log: "no rows in result"}
+	if len(payments) == 0 {
+		return payment{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "支払い情報が有りません", Log: "no rows in result"}
 	}
-	return paymtents[0], nil
+	return payments[0], nil
 }

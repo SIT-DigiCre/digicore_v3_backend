@@ -21,6 +21,9 @@ func GetGroupGroupId(ctx echo.Context, dbClient db.Client, groupId string) (api.
 	if rerr != nil {
 		return api.ResGetGroupGroupId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "グループの取得に失敗しました", Log: rerr.Error()}
 	}
+	if res.Users == nil {
+		res.Users = []api.ResGetGroupGroupIdObjectUser{}
+	}
 	return res, nil
 }
 
@@ -60,6 +63,9 @@ func getGroupFromGroupId(dbClient db.Client, groupId string, userId string) (gro
 	err = dbClient.Select(&groupUsers, "sql/group/select_group_user_from_group_id.sql", &params)
 	if err != nil {
 		return groupDetail{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "グループの取得に失敗しました", Log: err.Error()}
+	}
+	if groupUsers == nil {
+		groupUsers = []groupDetailObjectUser{}
 	}
 	eventDetails[0].Users = groupUsers
 	return eventDetails[0], nil

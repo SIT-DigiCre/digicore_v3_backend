@@ -20,6 +20,15 @@ func GetWorkWorkWorkId(ctx echo.Context, dbClient db.Client, workId string) (api
 	if rerr != nil {
 		return api.ResGetWorkWorkWorkId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
+	if res.Authors == nil {
+		res.Authors = []api.ResGetWorkWorkWorkIdObjectAuthor{}
+	}
+	if res.Files == nil {
+		res.Files = []api.ResGetWorkWorkWorkIdObjectFile{}
+	}
+	if res.Tags == nil {
+		res.Tags = []api.ResGetWorkWorkWorkIdObjectTag{}
+	}
 	return res, nil
 }
 
@@ -66,15 +75,24 @@ func getWorkFromTagId(dbClient db.Client, workId string) (work, *response.Error)
 	if err != nil {
 		return work{}, err
 	}
+	if workAuthors == nil {
+		workAuthors = []workObjectAuthor{}
+	}
 	works[0].Authors = workAuthors
 	workTags, err := getWorkWorkTagList(dbClient, workId)
 	if err != nil {
 		return work{}, err
 	}
+	if workTags == nil {
+		workTags = []workObjectTag{}
+	}
 	works[0].Tags = workTags
 	workFiles, err := getWorkWorkFileList(dbClient, workId)
 	if err != nil {
 		return work{}, err
+	}
+	if workFiles == nil {
+		workFiles = []workObjectFile{}
 	}
 	works[0].Files = workFiles
 	return works[0], nil

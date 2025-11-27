@@ -21,6 +21,9 @@ func GetUserMePayment(ctx echo.Context, dbClient db.Client) (api.ResGetUserMePay
 	if rerr != nil {
 		return api.ResGetUserMePayment{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
+	if res.Histories == nil {
+		res.Histories = []api.ResGetUserMePaymentObjectHistory{}
+	}
 	return res, nil
 }
 

@@ -22,6 +22,9 @@ func GetEventEventIdReservationId(ctx echo.Context, dbClient db.Client, eventId 
 	if rerr != nil {
 		return api.ResGetEventEventIdReservationId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントの予約枠の取得に失敗しました", Log: rerr.Error()}
 	}
+	if res.Users == nil {
+		res.Users = []api.ResGetEventEventIdReservationIdObjectUser{}
+	}
 	return res, nil
 }
 
@@ -83,6 +86,9 @@ func getReservationFromReservationId(dbClient db.Client, eventId string, reserva
 	err = dbClient.Select(&eventReservationObjectUsers, "sql/event/select_event_reservation_user_from_event_id_reservation_id.sql", &params)
 	if err != nil {
 		return eventReservation{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントの取得に失敗しました", Log: err.Error()}
+	}
+	if eventReservationObjectUsers == nil {
+		eventReservationObjectUsers = []eventReservationObjectUser{}
 	}
 	eventReservations[0].Users = eventReservationObjectUsers
 	return eventReservations[0], nil
