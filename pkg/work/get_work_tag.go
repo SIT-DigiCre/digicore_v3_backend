@@ -20,6 +20,9 @@ func GetWorkTag(ctx echo.Context, dbClient db.Client, params api.GetWorkTagParam
 	if rerr != nil {
 		return api.ResGetWorkTag{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
+	if res.Tags == nil {
+		res.Tags = []api.ResGetWorkTagObjectTag{}
+	}
 	return res, nil
 }
 

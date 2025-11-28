@@ -22,6 +22,9 @@ func GetEventEventId(ctx echo.Context, dbClient db.Client, eventId string) (api.
 	if rerr != nil {
 		return api.ResGetEventEventId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベント一覧の取得に失敗しました", Log: rerr.Error()}
 	}
+	if res.Reservations == nil {
+		res.Reservations = []api.ResGetEventEventIdObjectReservation{}
+	}
 	return res, nil
 }
 

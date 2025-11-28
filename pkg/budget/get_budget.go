@@ -20,6 +20,9 @@ func GetBudget(ctx echo.Context, dbClient db.Client, params api.GetBudgetParams)
 	if rerr != nil {
 		return api.ResGetBudget{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "稟議一覧の取得に失敗しました", Log: rerr.Error()}
 	}
+	if res.Budgets == nil {
+		res.Budgets = []api.ResGetBudgetObjectBudget{}
+	}
 	return res, nil
 }
 

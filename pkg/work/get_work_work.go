@@ -20,6 +20,9 @@ func GetWorkWork(ctx echo.Context, dbClient db.Client, params api.GetWorkWorkPar
 	if rerr != nil {
 		return api.ResGetWorkWork{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
+	if res.Works == nil {
+		res.Works = []api.ResGetWorkWorkObjectWork{}
+	}
 	return res, nil
 }
 

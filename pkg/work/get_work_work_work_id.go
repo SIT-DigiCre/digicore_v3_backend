@@ -20,6 +20,15 @@ func GetWorkWorkWorkId(ctx echo.Context, dbClient db.Client, workId string) (api
 	if rerr != nil {
 		return api.ResGetWorkWorkWorkId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
+	if res.Authors == nil {
+		res.Authors = []api.ResGetWorkWorkWorkIdObjectAuthor{}
+	}
+	if res.Files == nil {
+		res.Files = []api.ResGetWorkWorkWorkIdObjectFile{}
+	}
+	if res.Tags == nil {
+		res.Tags = []api.ResGetWorkWorkWorkIdObjectTag{}
+	}
 	return res, nil
 }
 

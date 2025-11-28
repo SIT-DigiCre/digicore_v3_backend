@@ -20,6 +20,9 @@ func GetUser(ctx echo.Context, dbClient db.Client, params api.GetUserParams) (ap
 	if rerr != nil {
 		return api.ResGetUser{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
+	if res.Users == nil {
+		res.Users = []api.ResGetUserObjectUser{}
+	}
 	return res, nil
 }
 
