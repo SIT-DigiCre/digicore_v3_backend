@@ -10,5 +10,3 @@ FROM `groups`
 JOIN groups_users ON groups_users.group_id = groups.id AND groups_users.user_id = UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee')
 LEFT JOIN group_claims ON group_claims.group_id = groups.id AND group_claims.claim = 'admin'
 GROUP BY groups.id;
-
-

@@ -7,7 +7,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// GetUserUserIdWork は、指定されたユーザーが作者として含まれる作品一覧を返す
 func (s *server) GetUserUserIdWork(ctx echo.Context, userId string) error {
 	dbClient := db.Open()
 
@@ -18,5 +17,3 @@ func (s *server) GetUserUserIdWork(ctx echo.Context, userId string) error {
 
 	return response.SuccessResponse(ctx, res)
 }
-
-

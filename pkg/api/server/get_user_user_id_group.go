@@ -7,7 +7,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// GetUserUserIdGroup は、指定されたユーザーが参加しているグループ一覧を返す
 func (s *server) GetUserUserIdGroup(ctx echo.Context, userId string) error {
 	dbClient := db.Open()
 
@@ -18,5 +17,3 @@ func (s *server) GetUserUserIdGroup(ctx echo.Context, userId string) error {
 
 	return response.SuccessResponse(ctx, res)
 }
-
-
