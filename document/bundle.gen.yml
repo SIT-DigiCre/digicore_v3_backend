@@ -2444,6 +2444,7 @@ components:
         - userCount
         - joinable
         - joined
+        - isAdminGroup
       properties:
         groupId:
           type: string
@@ -2455,6 +2456,8 @@ components:
           type: boolean
         joined:
           type: boolean
+        isAdminGroup:
+          type: boolean
     ResGetGroupGroupId:
       required:
         - groupId
@@ -2463,6 +2466,7 @@ components:
         - userCount
         - joinable
         - joined
+        - isAdminGroup
         - users
       properties:
         groupId:
@@ -2476,6 +2480,8 @@ components:
         joinable:
           type: boolean
         joined:
+          type: boolean
+        isAdminGroup:
           type: boolean
         users:
           type: array

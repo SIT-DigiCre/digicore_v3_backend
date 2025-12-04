@@ -321,13 +321,14 @@ type ResGetGroup struct {
 
 // ResGetGroupGroupId defines model for ResGetGroupGroupId.
 type ResGetGroupGroupId struct {
-	Description string                         `json:"description"`
-	GroupId     string                         `json:"groupId"`
-	Joinable    bool                           `json:"joinable"`
-	Joined      bool                           `json:"joined"`
-	Name        string                         `json:"name"`
-	UserCount   int                            `json:"userCount"`
-	Users       []ResGetGroupGroupIdObjectUser `json:"users"`
+	Description  string                         `json:"description"`
+	GroupId      string                         `json:"groupId"`
+	IsAdminGroup bool                           `json:"isAdminGroup"`
+	Joinable     bool                           `json:"joinable"`
+	Joined       bool                           `json:"joined"`
+	Name         string                         `json:"name"`
+	UserCount    int                            `json:"userCount"`
+	Users        []ResGetGroupGroupIdObjectUser `json:"users"`
 }
 
 // ResGetGroupGroupIdObjectUser defines model for ResGetGroupGroupIdObjectUser.
@@ -339,11 +340,12 @@ type ResGetGroupGroupIdObjectUser struct {
 
 // ResGetGroupObjectGroup defines model for ResGetGroupObjectGroup.
 type ResGetGroupObjectGroup struct {
-	GroupId   string `json:"groupId"`
-	Joinable  bool   `json:"joinable"`
-	Joined    bool   `json:"joined"`
-	Name      string `json:"name"`
-	UserCount int    `json:"userCount"`
+	GroupId      string `json:"groupId"`
+	IsAdminGroup bool   `json:"isAdminGroup"`
+	Joinable     bool   `json:"joinable"`
+	Joined       bool   `json:"joined"`
+	Name         string `json:"name"`
+	UserCount    int    `json:"userCount"`
 }
 
 // ResGetLogin defines model for ResGetLogin.
