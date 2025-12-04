@@ -28,13 +28,14 @@ func GetGroupGroupId(ctx echo.Context, dbClient db.Client, groupId string) (api.
 }
 
 type groupDetail struct {
-	GroupId     string `db:"group_id"`
-	Name        string `db:"name"`
-	Description string `db:"description"`
-	UserCount   int    `db:"user_count"`
-	Joinable    bool   `db:"joinable"`
-	Joined      bool   `db:"joined"`
-	Users       []groupDetailObjectUser
+	GroupId      string `db:"group_id"`
+	Name         string `db:"name"`
+	Description  string `db:"description"`
+	UserCount    int    `db:"user_count"`
+	Joinable     bool   `db:"joinable"`
+	Joined       bool   `db:"joined"`
+	IsAdminGroup bool   `db:"is_admin_group"`
+	Users        []groupDetailObjectUser
 }
 
 type groupDetailObjectUser struct {

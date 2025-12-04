@@ -28,12 +28,13 @@ func GetGroup(ctx echo.Context, dbClient db.Client, params api.GetGroupParams) (
 }
 
 type group struct {
-	GroupId     string `db:"group_id"`
-	Name        string `db:"name"`
-	Description string `db:"description"`
-	UserCount   int    `db:"user_count"`
-	Joinable    bool   `db:"joinable"`
-	Joined      bool   `db:"joined"`
+	GroupId      string `db:"group_id"`
+	Name         string `db:"name"`
+	Description  string `db:"description"`
+	UserCount    int    `db:"user_count"`
+	Joinable     bool   `db:"joinable"`
+	Joined       bool   `db:"joined"`
+	IsAdminGroup bool   `db:"is_admin_group"`
 }
 
 func getGroupList(dbClient db.Client, userId string, offset *int) ([]group, *response.Error) {

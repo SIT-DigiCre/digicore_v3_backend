@@ -4,6 +4,7 @@ required:
   - userCount
   - joinable
   - joined
+  - isAdminGroup
 properties:
   groupId:
     type: string
@@ -14,4 +15,6 @@ properties:
   joinable:
     type: boolean
   joined:
+    type: boolean
+  isAdminGroup:
     type: boolean
