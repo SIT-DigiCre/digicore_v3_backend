@@ -12,6 +12,9 @@ import (
 
 func GetUserSearch(ctx echo.Context, dbClient db.Client, params api.GetUserSearchParams) (api.ResGetUser, *response.Error) {
 	res := api.ResGetUser{}
+	if params.Query == "" {
+		return api.ResGetUser{}, &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "検索クエリが空です", Log: "Empty query parameter provided"}
+	}
 	user, err := searchUserList(dbClient, params.Query)
 	if err != nil {
 		return api.ResGetUser{}, err
