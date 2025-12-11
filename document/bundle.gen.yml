@@ -187,6 +187,7 @@ paths:
           schema:
             type: string
             minLength: 1
+            maxLength: 10
       responses:
         '200':
           description: Success search users

@@ -2,6 +2,7 @@ package user
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
@@ -30,10 +31,12 @@ func GetUserSearch(ctx echo.Context, dbClient db.Client, params api.GetUserSearc
 }
 
 func searchUserList(dbClient db.Client, query string) ([]userOverview, *response.Error) {
+	// LIKE クエリのワイルドカード文字をエスケープ
+	escapedQuery := escapeLikeWildcards(query)
 	params := struct {
 		Query string `twowaysql:"query"`
 	}{
-		Query: query,
+		Query: escapedQuery,
 	}
 	userOverviews := []userOverview{}
 	err := dbClient.Select(&userOverviews, "sql/user/select_user_search.sql", &params)
@@ -41,4 +44,11 @@ func searchUserList(dbClient db.Client, query string) ([]userOverview, *response
 		return []userOverview{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
 	return userOverviews, nil
+}
+
+func escapeLikeWildcards(s string) string {
+	s = strings.ReplaceAll(s, "\\", "\\\\")
+	s = strings.ReplaceAll(s, "%", "\\%")
+	s = strings.ReplaceAll(s, "_", "\\_")
+	return s
 }
