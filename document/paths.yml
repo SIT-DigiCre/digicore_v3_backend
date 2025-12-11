@@ -16,6 +16,10 @@
   $ref: "./paths/user_user_id.yml"
 /user/{userId}/introduction:
   $ref: "./paths/user_user_id_introduction.yml"
+/user/{userId}/group:
+  $ref: "./paths/user_user_id_group.yml"
+/user/{userId}/work:
+  $ref: "./paths/user_user_id_work.yml"
 /user/me:
   $ref: "./paths/user_me.yml"
 /user/me/renewal:

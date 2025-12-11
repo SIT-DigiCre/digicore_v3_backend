@@ -1,0 +1,25 @@
+get:
+  tags:
+    - user
+  description: "Get groups which the specified user joined"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      description: "Success get groups which the specified user joined"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_group.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
