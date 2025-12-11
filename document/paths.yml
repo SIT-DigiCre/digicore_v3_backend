@@ -12,6 +12,8 @@
   $ref: "./paths/login_callback.yml"
 /user:
   $ref: "./paths/user.yml"
+/user/search:
+  $ref: "./paths/user_search.yml"
 /user/{userId}:
   $ref: "./paths/user_user_id.yml"
 /user/{userId}/introduction:

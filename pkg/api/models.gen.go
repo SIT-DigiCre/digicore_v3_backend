@@ -674,6 +674,11 @@ type GetUserParams struct {
 	Seed   *int `form:"seed,omitempty" json:"seed,omitempty"`
 }
 
+// GetUserSearchParams defines parameters for GetUserSearch.
+type GetUserSearchParams struct {
+	Query string `form:"query" json:"query"`
+}
+
 // GetWorkTagParams defines parameters for GetWorkTag.
 type GetWorkTagParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`

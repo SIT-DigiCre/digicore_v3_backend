@@ -155,6 +155,9 @@ type ServerInterface interface {
 	// (PUT /user/me/renewal)
 	PutUserMeRenewal(ctx echo.Context) error
 
+	// (GET /user/search)
+	GetUserSearch(ctx echo.Context, params GetUserSearchParams) error
+
 	// (GET /user/{userId})
 	GetUserUserId(ctx echo.Context, userId string) error
 
@@ -925,6 +928,26 @@ func (w *ServerInterfaceWrapper) PutUserMeRenewal(ctx echo.Context) error {
 	return err
 }
 
+// GetUserSearch converts echo context to params.
+func (w *ServerInterfaceWrapper) GetUserSearch(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetUserSearchParams
+	// ------------- Required query parameter "query" -------------
+
+	err = runtime.BindQueryParameter("form", true, true, "query", ctx.QueryParams(), &params.Query)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter query: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetUserSearch(ctx, params)
+	return err
+}
+
 // GetUserUserId converts echo context to params.
 func (w *ServerInterfaceWrapper) GetUserUserId(ctx echo.Context) error {
 	var err error
@@ -1265,6 +1288,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/user/me/private", wrapper.GetUserMePrivate)
 	router.PUT(baseURL+"/user/me/private", wrapper.PutUserMePrivate)
 	router.PUT(baseURL+"/user/me/renewal", wrapper.PutUserMeRenewal)
+	router.GET(baseURL+"/user/search", wrapper.GetUserSearch)
 	router.GET(baseURL+"/user/:userId", wrapper.GetUserUserId)
 	router.GET(baseURL+"/user/:userId/group", wrapper.GetUserUserIdGroup)
 	router.GET(baseURL+"/user/:userId/introduction", wrapper.GetUserUserIdIntroduction)
