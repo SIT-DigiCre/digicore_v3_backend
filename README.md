@@ -46,7 +46,7 @@ make insert_test
 > `./document/_.gen.yml` と `./pkg/api/_.gen.go` は自動生成であるため直接編集しない
 
 ```sh
-make 
+make generate_api
 ```
 
 ## 開発時の JWT 検証の無効化
