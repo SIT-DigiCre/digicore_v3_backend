@@ -15,6 +15,7 @@
 
 ```sh
 make build
+# ubuntuの場合はsudo権限が必要
 ```
 
 ## 実行
