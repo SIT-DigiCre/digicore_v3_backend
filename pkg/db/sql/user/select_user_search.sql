@@ -5,6 +5,6 @@ SELECT
     short_introduction
 FROM user_profiles
 /* IF query */
-WHERE username LIKE CONCAT('%', /*query*/'', '%') ESCAPE '\'
+WHERE username LIKE CONCAT('%', /*query*/'', '%')
 /* END */
 LIMIT 100;
