@@ -68,9 +68,7 @@ func (s *server) PostEvent(ctx echo.Context) error {
 		return response.ErrorResponse(ctx, rerr)
 	}
 	defer func() {
-		if err := dbTranisactionClient.Rollback(); err != nil {
-			// best-effort rollback log already handled elsewhere
-		}
+		_ = dbTranisactionClient.Rollback() // best-effort rollback, ignore error
 	}()
 
 	// Require authenticated admin user to create events
