@@ -15,6 +15,7 @@
 
 ```sh
 make build
+# ubuntuの場合はsudo権限が必要
 ```
 
 ## 実行
@@ -45,7 +46,7 @@ make insert_test
 > `./document/_.gen.yml` と `./pkg/api/_.gen.go` は自動生成であるため直接編集しない
 
 ```sh
-make generate_api
+make 
 ```
 
 ## 開発時の JWT 検証の無効化

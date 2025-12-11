@@ -591,6 +591,122 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+    post:
+      tags:
+        - work
+      description: Post event
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Create work
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - description
+                - start_date
+                - finish_date
+                - reservation_start
+                - reservation_finish
+                - capacity
+              properties:
+                name:
+                  type: string
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: イベント名
+                description:
+                  type: string
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 説明
+                start_date:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,datetime'
+                    ja: 開始日時
+                finish_date:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,datetime'
+                    ja: 終了日時
+                reservation_start:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,datetime'
+                    ja: 予約開始日時
+                reservation_finish:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,datetime'
+                    ja: 予約終了日時
+                capacity:
+                  type: integer
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1'
+                    ja: 定員
+      responses:
+        '200':
+          description: Create event
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - event_id
+                  - name
+                  - description
+                  - start_date
+                  - finish_date
+                  - reservation_start
+                  - reservation_finish
+                  - capacity
+                properties:
+                  event_id:
+                    type: string
+                    format: uuid
+                    x-oapi-codegen-extra-tags:
+                      ja: イベントID
+                  name:
+                    type: string
+                    x-oapi-codegen-extra-tags:
+                      ja: イベント名
+                  description:
+                    type: string
+                    x-oapi-codegen-extra-tags:
+                      ja: 説明
+                  start_date:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 開始日時
+                  finish_date:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 終了日時
+                  reservation_start:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 予約開始日時
+                  reservation_finish:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 予約終了日時
+                  capacity:
+                    type: integer
+                    x-oapi-codegen-extra-tags:
+                      ja: 定員
+        '500':
+          $ref: '#/components/responses/InternalServer'
   '/event/{eventId}':
     get:
       tags:

@@ -13,7 +13,12 @@ import (
 
 func GetEventEventId(ctx echo.Context, dbClient db.Client, eventId string) (api.ResGetEventEventId, *response.Error) {
 	res := api.ResGetEventEventId{}
-	userId := ctx.Get("user_id").(string)
+	var userId string
+	if v := ctx.Get("user_id"); v != nil {
+		if s, ok := v.(string); ok {
+			userId = s
+		}
+	}
 	eventDetail, err := getEventFromEventId(dbClient, eventId, userId)
 	if err != nil {
 		return api.ResGetEventEventId{}, err

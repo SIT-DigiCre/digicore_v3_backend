@@ -655,6 +655,17 @@ type GetEventParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
 }
 
+// PostEventJSONBody defines parameters for PostEvent.
+type PostEventJSONBody struct {
+	Capacity          int       `ja:"定員" json:"capacity" validate:"required,min=1"`
+	Description       string    `ja:"説明" json:"description" validate:"required"`
+	FinishDate        time.Time `ja:"終了日時" json:"finish_date" validate:"required,datetime"`
+	Name              string    `ja:"イベント名" json:"name" validate:"required"`
+	ReservationFinish time.Time `ja:"予約終了日時" json:"reservation_finish" validate:"required,datetime"`
+	ReservationStart  time.Time `ja:"予約開始日時" json:"reservation_start" validate:"required,datetime"`
+	StartDate         time.Time `ja:"開始日時" json:"start_date" validate:"required,datetime"`
+}
+
 // GetGroupParams defines parameters for GetGroup.
 type GetGroupParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
@@ -700,6 +711,9 @@ type PutBudgetBudgetIdStatusPaidJSONRequestBody = ReqPutBudgetBudgetIdStatusPaid
 
 // PutBudgetBudgetIdStatusPendingJSONRequestBody defines body for PutBudgetBudgetIdStatusPending for application/json ContentType.
 type PutBudgetBudgetIdStatusPendingJSONRequestBody = ReqPutBudgetBudgetIdStatusPending
+
+// PostEventJSONRequestBody defines body for PostEvent for application/json ContentType.
+type PostEventJSONRequestBody PostEventJSONBody
 
 // PutEventEventIdReservationIdMeJSONRequestBody defines body for PutEventEventIdReservationIdMe for application/json ContentType.
 type PutEventEventIdReservationIdMeJSONRequestBody = ReqPutEventEventIdReservationIdMe

@@ -22,3 +22,25 @@ get:
       $ref: "../responses/not_found.yml"
     500:
       $ref: "../responses/internal_server.yml"
+post:
+  tags:
+    - work
+  description: "Post event"
+  security:
+    - BearerAuth: []
+  requestBody:
+    description: "Create work"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_post_event_event.yml"
+  responses:
+    200:
+      description: "Create event"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_post_event_event.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

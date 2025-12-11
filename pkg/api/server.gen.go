@@ -47,6 +47,9 @@ type ServerInterface interface {
 	// (GET /event)
 	GetEvent(ctx echo.Context, params GetEventParams) error
 
+	// (POST /event)
+	PostEvent(ctx echo.Context) error
+
 	// (GET /event/{eventId})
 	GetEventEventId(ctx echo.Context, eventId string) error
 
@@ -399,6 +402,17 @@ func (w *ServerInterfaceWrapper) GetEvent(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetEvent(ctx, params)
+	return err
+}
+
+// PostEvent converts echo context to params.
+func (w *ServerInterfaceWrapper) PostEvent(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostEvent(ctx)
 	return err
 }
 
@@ -1187,6 +1201,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.DELETE(baseURL+"/budget/:budgetId/status_pending", wrapper.DeleteBudgetBudgetIdStatusPending)
 	router.PUT(baseURL+"/budget/:budgetId/status_pending", wrapper.PutBudgetBudgetIdStatusPending)
 	router.GET(baseURL+"/event", wrapper.GetEvent)
+	router.POST(baseURL+"/event", wrapper.PostEvent)
 	router.GET(baseURL+"/event/:eventId", wrapper.GetEventEventId)
 	router.GET(baseURL+"/event/:eventId/:reservationId", wrapper.GetEventEventIdReservationId)
 	router.DELETE(baseURL+"/event/:eventId/:reservationId/me", wrapper.DeleteEventEventIdReservationIdMe)

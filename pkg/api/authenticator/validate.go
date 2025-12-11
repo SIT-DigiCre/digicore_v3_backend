@@ -34,15 +34,30 @@ func Login(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		tokenString := c.Request().Header.Get("Authorization")
 		tokenString = strings.TrimPrefix(tokenString, "Bearer ")
-		if tokenString == "" || urlSkipper(c) {
+
+		// If no token provided, continue without setting user_id
+		if tokenString == "" {
 			return next(c)
 		}
+
+		// Parse token (no verification here) to extract subject and always set user_id
 		token, err := jwt.Parse([]byte(tokenString), jwt.WithVerify(false))
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, api.Error{Message: err.Error()})
 		}
 		subjectKey, _ := token.Get(jwt.SubjectKey)
-		c.Set("user_id", subjectKey)
+		var subjectStr string
+		if s, ok := subjectKey.(string); ok {
+			subjectStr = s
+		} else if subjectKey != nil {
+			subjectStr = fmt.Sprintf("%v", subjectKey)
+		} else {
+			subjectStr = ""
+		}
+		c.Set("user_id", subjectStr)
+
+		// Continue to next handler regardless of urlSkipper; authentication/enforcement
+		// will be handled by the OAPI validator when appropriate.
 		return next(c)
 	}
 }

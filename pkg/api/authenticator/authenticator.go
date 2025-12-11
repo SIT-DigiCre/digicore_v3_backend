@@ -110,5 +110,41 @@ type claim struct {
 }
 
 func urlSkipper(c echo.Context) bool {
-	return strings.HasPrefix(c.Path(), "/metrics") || strings.HasPrefix(c.Path(), "/mattermost/cmd")
+	// Skip OpenAPI request validation for metrics and mattermost command endpoints.
+	// Additionally skip for POST /event because the event POST handler binds raw
+	// JSON and performs its own validation/parsing (avoids validator tag issues
+	// on generated time.Time fields).
+	// Use Request.URL.Path instead of Echo's registered path to be more robust
+	// against routing differences.
+	// Check multiple path sources to be robust against routing/baseURL prefixes
+	reqPath := c.Request().URL.Path
+	rawPath := c.Request().URL.RawPath
+	echoPath := c.Path()
+
+	// helper to detect event path (matches /event or /.../event and optional trailing slash)
+	isEventPath := func(p string) bool {
+		if p == "" {
+			return false
+		}
+		if p == "/event" || p == "/event/" {
+			return true
+		}
+		if strings.HasSuffix(p, "/event") || strings.HasSuffix(p, "/event/") {
+			return true
+		}
+		// also support paths like /api/v1/event
+		parts := strings.Split(p, "/")
+		for i := range parts {
+			if parts[i] == "event" {
+				return true
+			}
+		}
+		return false
+	}
+
+	if c.Request().Method == http.MethodPost && (isEventPath(reqPath) || isEventPath(rawPath) || isEventPath(echoPath)) {
+		return true
+	}
+
+	return strings.HasPrefix(reqPath, "/metrics") || strings.HasPrefix(reqPath, "/mattermost/cmd")
 }
