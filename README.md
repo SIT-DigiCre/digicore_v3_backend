@@ -51,3 +51,32 @@ make generate_api
 ## 開発時の JWT 検証の無効化
 
 `.env` の AUTH を disable に書き換えてください。
+
+## リクエストのテスト
+
+### 認証ヘッダー設定
+
+認証が無効化されていても、JWT トークンの subject から user_id を取得するため、有効な JWT 形式のトークンが必要です。以下のようなダミートークンを生成：
+
+```sh
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMTExMTExMS0xMTExLTExMTEtMTExMS0xMTExMTExMTExMTEiLCJleHAiOjk5OTk5OTk5OTl9.dummy
+```
+
+トークンの生成は https://www.jwt.io/ja から行ってください。
+
+#### ヘッダーの例
+
+```json
+{
+  "alg": "RS256",
+  "typ": "JWT"
+}
+```
+
+#### ペイロードの例
+
+```json
+{
+  "sub": "55555555-5555-5555-5555-555555555555"
+}
+```

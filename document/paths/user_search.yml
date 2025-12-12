@@ -1,0 +1,27 @@
+get:
+  tags:
+    - user
+  description: "Search users by username"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: query
+      in: query
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 10
+  responses:
+    200:
+      description: "Success search users"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_user.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
