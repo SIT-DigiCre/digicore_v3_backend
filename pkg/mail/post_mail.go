@@ -13,7 +13,24 @@ import (
 )
 
 func PostMail(ctx echo.Context, dbClient db.Client, requestBody api.ReqPostMail) (api.ResPostMail, *response.Error) {
-	userId := ctx.Get("user_id").(string)
+	userIdRaw := ctx.Get("user_id")
+	if userIdRaw == nil {
+		return api.ResPostMail{}, &response.Error{
+			Code:    http.StatusUnauthorized,
+			Level:   "Info",
+			Message: "認証が必要です",
+			Log:     "user_id is not set in context",
+		}
+	}
+	userId, ok := userIdRaw.(string)
+	if !ok || userId == "" {
+		return api.ResPostMail{}, &response.Error{
+			Code:    http.StatusUnauthorized,
+			Level:   "Info",
+			Message: "認証が必要です",
+			Log:     "user_id is invalid",
+		}
+	}
 
 	isAdmin, err := group.CheckUserIsAdmin(dbClient, userId)
 	if err != nil {
