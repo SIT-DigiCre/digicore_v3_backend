@@ -5,8 +5,10 @@ required:
 properties:
   addresses:
     type: array
+    minItems: 1
     items:
       type: string
+      format: email
     x-oapi-codegen-extra-tags:
       validate: required
       ja: 送信先アドレス

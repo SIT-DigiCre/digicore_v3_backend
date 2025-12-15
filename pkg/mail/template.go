@@ -5,7 +5,7 @@ import (
 	"text/template"
 )
 
-// {{{.address}}} を 送信先アドレスに展開する
+// {{.address}} を送信先アドレスに展開する
 func renderTemplate(templateStr string, data map[string]string) (string, error) {
 	tmpl, err := template.New("email").Parse(templateStr)
 	if err != nil {
