@@ -11,7 +11,7 @@ import (
 
 const (
 	emailAddress = "contact@digicre.net"
-	fromName     = "デジクリ"
+	fromName     = "芝浦工業大学 デジクリ"
 )
 
 func sendEmail(to string, subject string, body string) error {
