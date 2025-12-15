@@ -247,7 +247,7 @@ WHERE groups_users.user_id = UUID_TO_BIN(?)
 - `pkg/db/sql/group/insert_group.sql` - 新規作成
 - `pkg/db/sql/group/insert_groups_users.sql` - 新規作成
 - `pkg/db/sql/group/insert_group_claims.sql` - 新規作成
-- `pkg/db/sql/group/select_user_is_admin.sql` - 新規作成
+- `pkg/db/sql/admin/select_user_is_admin.sql` - 新規作成（管理者チェック用）
 - `pkg/db/sql/group/select_is_group_member.sql` - 新規作成
 - `pkg/db/sql/group/select_group_is_admin_group.sql` - 新規作成（グループが admin グループか確認）
 - `pkg/db/sql/group/select_group_joinable.sql` - 新規作成（グループの joinable 状態を取得）

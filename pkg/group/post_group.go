@@ -3,6 +3,7 @@ package group
 import (
 	"net/http"
 
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
@@ -14,7 +15,7 @@ func PostGroup(ctx echo.Context, dbClient db.TransactionClient, req api.ReqPostG
 
 	// isAdminGroup=trueの場合、リクエストユーザーが管理者かどうかを確認
 	if req.IsAdminGroup {
-		isAdmin, err := checkUserIsAdmin(dbClient, userId)
+		isAdmin, err := admin.CheckUserIsAdmin(dbClient, userId)
 		if err != nil {
 			return api.ResPostGroup{}, err
 		}

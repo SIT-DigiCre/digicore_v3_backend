@@ -3,36 +3,19 @@ package mail
 import (
 	"net/http"
 
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/group"
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
 )
 
 func PostMail(ctx echo.Context, dbClient db.Client, requestBody api.ReqPostMail) (api.ResPostMail, *response.Error) {
-	userIdRaw := ctx.Get("user_id")
-	if userIdRaw == nil {
-		return api.ResPostMail{}, &response.Error{
-			Code:    http.StatusUnauthorized,
-			Level:   "Info",
-			Message: "認証が必要です",
-			Log:     "user_id is not set in context",
-		}
-	}
-	userId, ok := userIdRaw.(string)
-	if !ok || userId == "" {
-		return api.ResPostMail{}, &response.Error{
-			Code:    http.StatusUnauthorized,
-			Level:   "Info",
-			Message: "認証が必要です",
-			Log:     "user_id is invalid",
-		}
-	}
+	userId := ctx.Get("user_id").(string)
 
-	isAdmin, err := group.CheckUserIsAdmin(dbClient, userId)
+	isAdmin, err := admin.CheckUserIsAdmin(dbClient, userId)
 	if err != nil {
 		return api.ResPostMail{}, err
 	}

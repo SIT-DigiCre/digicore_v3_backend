@@ -16,7 +16,6 @@ const (
 
 func sendEmail(to string, subject string, body string) error {
 	if env.SendGridApiKey == "" {
-		logrus.Error("SENDGRID_API_KEY環境変数が設定されていません。.envファイルにSENDGRID_API_KEYが設定されているか、Dockerコンテナが再起動されているか確認してください。")
 		return fmt.Errorf("SENDGRID_API_KEYが設定されていません")
 	}
 
@@ -34,9 +33,6 @@ func sendEmail(to string, subject string, body string) error {
 	toEmail := mail.NewEmail("", to)
 	content := mail.NewContent("text/plain", renderedBody)
 	message := mail.NewV3MailInit(from, subject, toEmail, content)
-
-	// Reply-Toヘッダーを設定
-	message.SetReplyTo(mail.NewEmail("", emailAddress))
 
 	// SendGridクライアントを作成して送信
 	client := sendgrid.NewSendClient(env.SendGridApiKey)
