@@ -80,6 +80,9 @@ type ServerInterface interface {
 	// (POST /login/callback)
 	PostLoginCallback(ctx echo.Context) error
 
+	// (POST /mail)
+	PostMail(ctx echo.Context) error
+
 	// (POST /mattermost/create_user)
 	PostMattermostCreateUser(ctx echo.Context) error
 
@@ -614,6 +617,17 @@ func (w *ServerInterfaceWrapper) PostLoginCallback(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PostLoginCallback(ctx)
+	return err
+}
+
+// PostMail converts echo context to params.
+func (w *ServerInterfaceWrapper) PostMail(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"admin"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostMail(ctx)
 	return err
 }
 
@@ -1263,6 +1277,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.POST(baseURL+"/group/:groupId/user", wrapper.PostGroupGroupIdUser)
 	router.GET(baseURL+"/login", wrapper.GetLogin)
 	router.POST(baseURL+"/login/callback", wrapper.PostLoginCallback)
+	router.POST(baseURL+"/mail", wrapper.PostMail)
 	router.POST(baseURL+"/mattermost/create_user", wrapper.PostMattermostCreateUser)
 	router.GET(baseURL+"/payment", wrapper.GetPayment)
 	router.GET(baseURL+"/payment/:paymentId", wrapper.GetPaymentPaymentId)

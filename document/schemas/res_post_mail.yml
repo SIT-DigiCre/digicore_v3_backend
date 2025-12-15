@@ -1,0 +1,10 @@
+required:
+  - successCount
+  - failures
+properties:
+  successCount:
+    type: integer
+  failures:
+    type: array
+    items:
+      $ref: "./res_post_mail.failure.yml"

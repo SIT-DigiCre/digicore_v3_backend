@@ -1,0 +1,8 @@
+required:
+  - address
+  - error
+properties:
+  address:
+    type: string
+  error:
+    type: string

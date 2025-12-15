@@ -7,8 +7,13 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 )
 
+// CheckUserIsAdmin は、ユーザーが管理者かどうかを確認する（エクスポート関数）
+func CheckUserIsAdmin(dbClient db.Client, userId string) (bool, *response.Error) {
+	return checkUserIsAdmin(dbClient, userId)
+}
+
 // checkUserIsAdmin は、ユーザーが管理者かどうかを確認する
-func checkUserIsAdmin(dbClient db.TransactionClient, userId string) (bool, *response.Error) {
+func checkUserIsAdmin(dbClient db.Client, userId string) (bool, *response.Error) {
 	params := struct {
 		UserId string `twowaysql:"userId"`
 	}{

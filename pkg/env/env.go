@@ -34,3 +34,6 @@ var MattermostAdminPassword = os.Getenv("MATTERMOST_ADMIN_PASSWORD")
 var MattermostWebHookURL = os.Getenv("MATTERMOST_WEB_HOOK_URL")
 
 var ClubRoomStatusToken = os.Getenv("CLUB_ROOM_STATUS_TOKEN")
+
+var SendGridApiKey = os.Getenv("SENDGRID_API_KEY")
+var AdminEmail = os.Getenv("ADMIN_EMAIL")

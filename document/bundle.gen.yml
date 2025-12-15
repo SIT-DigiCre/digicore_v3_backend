@@ -25,6 +25,8 @@ tags:
     description: Status system
   - name: mattermost
     description: Mattermost system
+  - name: mail
+    description: Mail system
 paths:
   /status:
     get:
@@ -1579,6 +1581,34 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /mail:
+    post:
+      tags:
+        - mail
+      description: Send bulk email
+      security:
+        - BearerAuth:
+            - admin
+      requestBody:
+        description: Email request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostMail'
+      responses:
+        '200':
+          description: Success send email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostMail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -2951,6 +2981,52 @@ components:
           type: string
           x-oapi-codegen-extra-tags:
             ja: 備考
+    ReqPostMail:
+      required:
+        - addresses
+        - subject
+        - body
+      properties:
+        addresses:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 送信先アドレス
+        subject:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: タイトル
+        body:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 本文
+        sendToAdmin:
+          type: boolean
+          default: false
+          x-oapi-codegen-extra-tags:
+            ja: 管理者用アドレスにも送信
+    ResPostMail:
+      required:
+        - successCount
+        - failures
+      properties:
+        successCount:
+          type: integer
+        failures:
+          type: array
+          items:
+            required:
+              - address
+              - error
+            properties:
+              address:
+                type: string
+              error:
+                type: string
     Error:
       required:
         - level

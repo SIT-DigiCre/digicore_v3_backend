@@ -1,0 +1,27 @@
+required:
+  - addresses
+  - subject
+  - body
+properties:
+  addresses:
+    type: array
+    items:
+      type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 送信先アドレス
+  subject:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: タイトル
+  body:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 本文
+  sendToAdmin:
+    type: boolean
+    default: false
+    x-oapi-codegen-extra-tags:
+      ja: 管理者用アドレスにも送信
