@@ -41,6 +41,14 @@ type ReqPostLoginCallback struct {
 	Code string `ja:"認証コード" json:"code" validate:"required"`
 }
 
+// ReqPostMail defines model for ReqPostMail.
+type ReqPostMail struct {
+	Addresses   []string `ja:"送信先アドレス" json:"addresses" validate:"required"`
+	Body        string   `ja:"本文" json:"body" validate:"required"`
+	SendToAdmin *bool    `ja:"管理者用アドレスにも送信" json:"sendToAdmin,omitempty"`
+	Subject     string   `ja:"タイトル" json:"subject" validate:"required"`
+}
+
 // ReqPostMattermostCreateuser defines model for ReqPostMattermostCreateuser.
 type ReqPostMattermostCreateuser struct {
 	Nickname string `ja:"ニックネーム" json:"nickname" validate:"required,min=3,max=22"`
@@ -616,6 +624,15 @@ type ResPostLoginCallback struct {
 	Jwt string `json:"jwt"`
 }
 
+// ResPostMail defines model for ResPostMail.
+type ResPostMail struct {
+	Failures []struct {
+		Address string `json:"address"`
+		Error   string `json:"error"`
+	} `json:"failures"`
+	SuccessCount int `json:"successCount"`
+}
+
 // ResPostMattermostCreateuser defines model for ResPostMattermostCreateuser.
 type ResPostMattermostCreateuser struct {
 	Username string `json:"username"`
@@ -719,6 +736,9 @@ type PostGroupGroupIdUserJSONRequestBody = ReqPostGroupGroupIdUser
 
 // PostLoginCallbackJSONRequestBody defines body for PostLoginCallback for application/json ContentType.
 type PostLoginCallbackJSONRequestBody = ReqPostLoginCallback
+
+// PostMailJSONRequestBody defines body for PostMail for application/json ContentType.
+type PostMailJSONRequestBody = ReqPostMail
 
 // PostMattermostCreateUserJSONRequestBody defines body for PostMattermostCreateUser for application/json ContentType.
 type PostMattermostCreateUserJSONRequestBody = ReqPostMattermostCreateuser

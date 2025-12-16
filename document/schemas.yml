@@ -162,6 +162,10 @@ ResGetPaymentPaymentId:
   $ref: "./schemas/res_get_payment_payment_id.yml"
 ReqPutPaymentPaymentId:
   $ref: "./schemas/req_put_payment_payment_id.yml"
+ReqPostMail:
+  $ref: "./schemas/req_post_mail.yml"
+ResPostMail:
+  $ref: "./schemas/res_post_mail.yml"
 
 Error:
   $ref: "./schemas/error.yml"

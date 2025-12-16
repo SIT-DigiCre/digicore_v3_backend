@@ -20,3 +20,5 @@
   description: Status system
 - name: mattermost
   description: Mattermost system
+- name: mail
+  description: Mail system
