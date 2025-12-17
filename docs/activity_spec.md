@@ -27,8 +27,8 @@ CREATE TABLE activity_records
 - `user_id`: ユーザーID
 - `place`: 場所名（部室など）
 - `activity_type`: レコードタイプ（`checkin`、`checkout`など、VARCHARで拡張可能）
-- `created_at`: チェックイン/チェックアウト日時（デフォルトは現在時刻だが、後から更新可能）
-- `updated_at`: レコード更新日時（自動）
+- `created_at`: チェックイン/チェックアウト日時
+- `updated_at`: 編集後の日時
 
 **設計の利点:**
 - `activity_type`をVARCHARにすることで、将来的に他のタイプ（例：`break`、`return`など）を追加しやすい
@@ -92,9 +92,9 @@ CREATE TABLE activity_records
   - `checkInAt`: 入室時刻
 
 **処理フロー:**
-1. 指定場所のレコードをユーザーごとに`datetime`の降順でソート
+1. 指定場所のレコードをユーザーごとに`updated_at`の降順でソート
 2. 各ユーザーについて最新レコードの`activity_type`が`checkin`のものを抽出
-3. 該当ユーザーの最新の`activity_type='checkin'`レコードの`datetime`を取得
+3. 該当ユーザーの最新の`activity_type='checkin'`レコードの`updated_at`を取得
 4. ユーザー情報（`user_profiles`）と結合
 5. 入室時刻の昇順でソート
 
@@ -117,7 +117,7 @@ CREATE TABLE activity_records
    - `day`: 指定日の00:00:00 ～ 23:59:59
    - `week`: 指定日を含む週の月曜00:00:00 ～ 日曜23:59:59
    - `month`: 指定日を含む月の1日00:00:00 ～ 月末23:59:59
-2. 指定場所で`activity_type='checkin'`かつ`datetime`が範囲内のレコードをユーザーごとに集計
+2. 指定場所で`activity_type='checkin'`かつ`updated_at`が範囲内のレコードをユーザーごとに集計
 3. 入室回数をカウント
 4. ユーザー情報（`user_profiles`）と結合
 5. 入室回数の降順でソート
@@ -133,16 +133,16 @@ CREATE TABLE activity_records
 - `records`: レコード配列
   - `recordId`: レコードID
   - `place`: 場所名
-  - `activity_type`: レコードタイプ（`checkin`または`checkout`）
+  - `type`: レコードタイプ（`checkin`または`checkout`）
   - `datetime`: 日時
-  - `checkOutAt`: 退室時刻（`activity_type='checkin'`の場合のみ、次の`checkout`レコードの`datetime`）
+  - `checkOutAt`: 退室時刻（`activity_type='checkin'`の場合のみ、次の`checkout`レコードの`updated_at`）
 - `total`: 総レコード数
 - `offset`: 現在のオフセット
 - `limit`: 現在のリミット
 
 **処理フロー:**
 1. 指定ユーザーのレコードを取得（`place`が指定されている場合はフィルタ）
-2. `datetime`の降順でソート
+2. `updated_at`の降順でソート
 3. ページネーション適用（`offset`と`limit`）
 4. チェックインレコードの場合、その後の最初のチェックアウトレコードを探して`checkOutAt`を設定
 5. 総レコード数を取得
@@ -157,14 +157,13 @@ CREATE TABLE activity_records
 2. レコードが存在しない場合は404
 3. リクエスト送信者がレコードの所有者か確認（管理者は除く）
 4. 指定された日時を更新
-5. **注意**: `datetime`を変更すると在室判定に影響する可能性があるため、変更後の整合性チェックが必要な場合がある
 
 ## 注意事項
 
 - すべてのエンドポイントは`BearerAuth`セキュリティスキームを要求
 - 管理者権限チェックは`pkg/group/group.go`の`checkUserIsAdmin`関数を使用
 - 日時は`DATETIME`型で保存し、タイムゾーンは`Asia/Tokyo`を使用
-- 在室判定は、ユーザーと場所でレコードを`datetime`の降順でソートし、最新レコードの`activity_type`が`checkin`かどうかで行う
+- 在室判定は、ユーザーと場所でレコードを`updated_at`の降順でソートし、最新レコードの`activity_type`が`checkin`かどうかで行う
 - トランザクション処理が必要な場合は`db.OpenTransaction()`を使用（チェックイン時に既存チェックアウトと新規チェックインの両方を追加する場合など）
 - `activity_type`はVARCHARなので、将来的に`checkin`、`checkout`以外のタイプも追加可能
 - ユーザーごとの入室記録取得では、ページネーションを実装し、チェックインレコードには対応するチェックアウト時刻も含める
