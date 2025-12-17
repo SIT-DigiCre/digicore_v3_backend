@@ -76,7 +76,7 @@ CREATE TABLE activity_records
 - `checkOutAt`: チェックアウト日時（オプション、未指定時は現在時刻）
 
 **処理フロー:**
-1. リクエスト送信者が管理者か確認（`pkg/group/group.go`の`checkUserIsAdmin`を使用）
+1. リクエスト送信者が管理者か確認（`pkg/admin/admin.go`の`CheckUserIsAdmin`を使用）
 2. 対象ユーザーが指定場所でチェックイン中か確認（最新レコードの`activity_type`が`checkin`かどうか）
 3. チェックイン中の場合：
    - チェックアウトレコードを作成（`activity_type='checkout'`）
@@ -157,13 +157,3 @@ CREATE TABLE activity_records
 2. レコードが存在しない場合は404
 3. リクエスト送信者がレコードの所有者か確認（管理者は除く）
 4. 指定された日時を更新
-
-## 注意事項
-
-- すべてのエンドポイントは`BearerAuth`セキュリティスキームを要求
-- 管理者権限チェックは`pkg/group/group.go`の`checkUserIsAdmin`関数を使用
-- 日時は`DATETIME`型で保存し、タイムゾーンは`Asia/Tokyo`を使用
-- 在室判定は、ユーザーと場所でレコードを`updated_at`の降順でソートし、最新レコードの`activity_type`が`checkin`かどうかで行う
-- トランザクション処理が必要な場合は`db.OpenTransaction()`を使用（チェックイン時に既存チェックアウトと新規チェックインの両方を追加する場合など）
-- `activity_type`はVARCHARなので、将来的に`checkin`、`checkout`以外のタイプも追加可能
-- ユーザーごとの入室記録取得では、ページネーションを実装し、チェックインレコードには対応するチェックアウト時刻も含める
