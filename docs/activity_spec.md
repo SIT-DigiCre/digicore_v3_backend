@@ -6,19 +6,22 @@
 
 ## データベース設計
 
-### テーブル: `activity_records`
+### テーブル: `checkins`
 
 ```sql
-CREATE TABLE activity_records
+CREATE TABLE checkins
 (
-    id              BINARY(16)   NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
-    user_id         BINARY(16)   NOT NULL,
-    place           VARCHAR(255) NOT NULL,
-    activity_type   VARCHAR(255) NOT NULL,
-    created_at      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    id                    BINARY(16)   NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
+    user_id               BINARY(16)   NOT NULL,
+    place                 VARCHAR(255) NOT NULL,
+    initial_check_in_at   DATETIME     NOT NULL,
+    initial_check_out_at  DATETIME     NULL,
+    check_in_at           DATETIME     NOT NULL,
+    check_out_at          DATETIME     NULL,
+    created_at            DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at            DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
-    INDEX idx_user_id_place_created_at (user_id, place, created_at DESC)
+    INDEX idx_user_id_place_check_in_at (user_id, place, check_in_at DESC)
 );
 ```
 
@@ -26,19 +29,22 @@ CREATE TABLE activity_records
 - `id`: レコードID（UUID）
 - `user_id`: ユーザーID
 - `place`: 場所名（部室など）
-- `activity_type`: レコードタイプ（`checkin`、`checkout`など、VARCHARで拡張可能）
-- `created_at`: チェックイン/チェックアウト日時
-- `updated_at`: 編集後の日時
+- `initial_check_in_at`: 初回チェックイン日時（編集される前の値、常に不変）
+- `initial_check_out_at`: 初回チェックアウト日時（編集される前の値、常に不変、退室前はNULL）
+- `check_in_at`: 現在有効なチェックイン日時（編集により更新されうる）
+- `check_out_at`: 現在有効なチェックアウト日時（編集により更新されうる、退室前はNULL）
+- `created_at`: レコード作成日時
+- `updated_at`: レコード更新日時
 
 **設計の利点:**
-- `activity_type`をVARCHARにすることで、将来的に他のタイプ（例：`break`、`return`など）を追加しやすい
-- `related_id`がないため、シンプルな構造
-- 在室判定は最新レコードの`activity_type`を確認するだけなのでシンプル
+- 1レコードで入室〜退室までを一括管理できるため、チェックインとチェックアウトの対応関係が明確
+- `initial_*`と`*At`を分離することで、編集履歴のトレースがしやすい
+- 在室判定は最新のチェックインレコードの`check_out_at`がNULLかどうかで判定できるためシンプル
 
 **在室判定ロジック:**
-- ユーザーと場所でレコードを`created_at`の降順でソート
-- 最新レコードの`activity_type`が`checkin`の場合、在室中
-- 最新レコードの`activity_type`が`checkout`の場合、不在
+- ユーザーと場所でレコードを`check_in_at`の降順でソート
+- 最新レコードの`check_out_at`がNULLの場合、在室中
+- 最新レコードの`check_out_at`がNULLでない場合、不在
 
 ## APIエンドポイント
 
@@ -49,12 +55,16 @@ CREATE TABLE activity_records
 - `checkInAt`: チェックイン日時（オプション、未指定時は現在時刻）
 
 **処理フロー:**
-1. ユーザーが既に同じ場所でチェックイン中か確認（最新レコードの`activity_type`が`checkin`かどうか）
-2. チェックイン中の場合：
-   - チェックアウトレコードを作成（`activity_type='checkout'`、`created_at`は現在時刻または指定時刻）
-   - 新しいチェックインレコードを作成（`activity_type='checkin'`）
-3. チェックイン中でない場合：
-   - 新しいチェックインレコードを作成（`activity_type='checkin'`）
+1. ユーザーが既に同じ場所で在室中か確認（最新レコードの`check_out_at`がNULLかどうか）
+2. 在室中の場合：
+   - 既存レコードの`initial_check_out_at`および`check_out_at`を、現在時刻または指定時刻で設定
+   - 新しいチェックインレコードを作成
+     - `initial_check_in_at` = チェックイン日時
+     - `check_in_at` = チェックイン日時
+     - `initial_check_out_at` = NULL
+     - `check_out_at` = NULL
+3. 在室中でない場合：
+   - 新しいチェックインレコードを作成（上記と同様）
 
 ### 2. チェックアウト: `POST /activity/checkout`
 
@@ -63,10 +73,10 @@ CREATE TABLE activity_records
 - `checkOutAt`: チェックアウト日時（オプション、未指定時は現在時刻）
 
 **処理フロー:**
-1. ユーザーが指定場所でチェックイン中か確認（最新レコードの`activity_type`が`checkin`かどうか）
-2. チェックイン中の場合：
-   - チェックアウトレコードを作成（`activity_type='checkout'`）
-3. チェックイン中でない場合：
+1. ユーザーが指定場所で在室中か確認（最新レコードの`check_out_at`がNULLかどうか）
+2. 在室中の場合：
+   - 対象レコードの`initial_check_out_at`および`check_out_at`を、現在時刻または指定時刻で設定
+3. 在室中でない場合：
    - エラーを返す
 
 ### 3. 管理者による強制チェックアウト: `POST /activity/checkout/{userId}`
@@ -77,9 +87,9 @@ CREATE TABLE activity_records
 
 **処理フロー:**
 1. リクエスト送信者が管理者か確認（`pkg/admin/admin.go`の`CheckUserIsAdmin`を使用）
-2. 対象ユーザーが指定場所でチェックイン中か確認（最新レコードの`activity_type`が`checkin`かどうか）
-3. チェックイン中の場合：
-   - チェックアウトレコードを作成（`activity_type='checkout'`）
+2. 対象ユーザーが指定場所で在室中か確認（最新レコードの`check_out_at`がNULLかどうか）
+3. 在室中の場合：
+   - 対象レコードの`initial_check_out_at`および`check_out_at`を、現在時刻または指定時刻で設定
 
 ### 4. 現在在室中のユーザー一覧: `GET /activity/place/{place}/current`
 
@@ -92,9 +102,9 @@ CREATE TABLE activity_records
   - `checkInAt`: 入室時刻
 
 **処理フロー:**
-1. 指定場所のレコードをユーザーごとに`updated_at`の降順でソート
-2. 各ユーザーについて最新レコードの`activity_type`が`checkin`のものを抽出
-3. 該当ユーザーの最新の`activity_type='checkin'`レコードの`updated_at`を取得
+1. 指定場所のレコードをユーザーごとに`check_in_at`の降順でソート
+2. 各ユーザーについて最新レコードの`check_out_at`がNULLのものを抽出
+3. 該当ユーザーのレコードの`check_in_at`を入室時刻として取得
 4. ユーザー情報（`user_profiles`）と結合
 5. 入室時刻の昇順でソート
 
@@ -117,7 +127,7 @@ CREATE TABLE activity_records
    - `day`: 指定日の00:00:00 ～ 23:59:59
    - `week`: 指定日を含む週の1週間前の月曜00:00:00 ～ 日曜23:59:59
    - `month`: 指定日を含む月の1か月前の1日00:00:00 ～ 月末23:59:59
-2. 指定場所で`activity_type='checkin'`かつ`updated_at`が範囲内のレコードをユーザーごとに集計
+2. 指定場所で`check_in_at`が範囲内のレコードをユーザーごとに集計
 3. 入室回数をカウント
 4. ユーザー情報（`user_profiles`）と結合
 5. 入室回数の降順でソート
@@ -133,27 +143,29 @@ CREATE TABLE activity_records
 - `records`: レコード配列
   - `recordId`: レコードID
   - `place`: 場所名
-  - `type`: レコードタイプ（`checkin`または`checkout`）
-  - `datetime`: 日時
-  - `checkOutAt`: 退室時刻（`activity_type='checkin'`の場合のみ、次の`checkout`レコードの`updated_at`）
+  - `checkInAt`: 現在有効なチェックイン日時
+  - `checkOutAt`: 現在有効なチェックアウト日時（退室前はNULL）
+  - `initialCheckInAt`: 初回チェックイン日時
+  - `initialCheckOutAt`: 初回チェックアウト日時
 - `total`: 総レコード数
 - `offset`: 現在のオフセット
 - `limit`: 現在のリミット
 
 **処理フロー:**
 1. 指定ユーザーのレコードを取得（`place`が指定されている場合はフィルタ）
-2. `updated_at`の降順でソート
+2. `check_in_at`の降順でソート
 3. ページネーション適用（`offset`と`limit`）
-4. チェックインレコードの場合、その後の最初のチェックアウトレコードを探して`checkOutAt`を設定
-5. 総レコード数を取得
+4. 総レコード数を取得
 
 ### 7. レコード日時の更新: `PUT /activity/record/{recordId}`
 
 **リクエスト:**
-- `datetime`: チェックイン/チェックアウト日時（必須）
+- `checkInAt`: 編集後のチェックイン日時（オプション）
+- `checkOutAt`: 編集後のチェックアウト日時（オプション）
 
 **処理フロー:**
-1. レコードIDで`activity_records`レコードを取得
+1. レコードIDで`checkins`レコードを取得
 2. レコードが存在しない場合は404
 3. リクエスト送信者がレコードの所有者か確認（管理者は除く）
-4. 指定された日時を更新
+4. `checkInAt`が指定されている場合は`check_in_at`のみを更新（`initial_check_in_at`は変更しない）
+5. `checkOutAt`が指定されている場合は`check_out_at`のみを更新（`initial_check_out_at`は変更しない）
