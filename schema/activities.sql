@@ -3,6 +3,7 @@ CREATE TABLE activities
     id                   BINARY(16)   NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
     user_id              BINARY(16)   NOT NULL,
     place                VARCHAR(255) NOT NULL,
+    note                 TEXT         NULL,
     initial_check_in_at  DATETIME     NOT NULL,
     initial_check_out_at DATETIME     NULL,
     check_in_at          DATETIME     NOT NULL,

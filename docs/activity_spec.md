@@ -14,6 +14,7 @@ CREATE TABLE activities
     id                    BINARY(16)   NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
     user_id               BINARY(16)   NOT NULL,
     place                 VARCHAR(255) NOT NULL,
+    note                  TEXT         NULL,
     initial_check_in_at   DATETIME     NOT NULL,
     initial_check_out_at  DATETIME     NULL,
     check_in_at           DATETIME     NOT NULL,
@@ -29,6 +30,7 @@ CREATE TABLE activities
 - `id`: レコードID（UUID）
 - `user_id`: ユーザーID
 - `place`: 場所名（部室など）
+- `note`: メモ（任意の補足情報、自由記述）
 - `initial_check_in_at`: 初回チェックイン日時（編集される前の値、常に不変）
 - `initial_check_out_at`: 初回チェックアウト日時（編集される前の値、常に不変、退室前はNULL）
 - `check_in_at`: 現在有効なチェックイン日時（編集により更新されうる）
