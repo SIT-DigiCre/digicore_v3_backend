@@ -2,14 +2,14 @@
 
 ## 概要
 
-部室への入退室管理機能を実装します。場所は`place`カラムで管理し、部室に限定しません。チェックインとチェックアウトを同じテーブルで`activity_type`カラム（VARCHAR）で判別し、最新レコードの`activity_type`で在室状況を判定します。
+部室への入退室管理機能を実装します。場所は`place`カラムで管理し、部室に限定しません。チェックインとチェックアウトは同じテーブル`activities`の1レコード内で`check_in_at`および`check_out_at`として管理し、最新レコードの`check_out_at`がNULLかどうかで在室状況を判定します。
 
 ## データベース設計
 
-### テーブル: `checkins`
+### テーブル: `activities`
 
 ```sql
-CREATE TABLE checkins
+CREATE TABLE activities
 (
     id                    BINARY(16)   NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
     user_id               BINARY(16)   NOT NULL,
@@ -164,7 +164,7 @@ CREATE TABLE checkins
 - `checkOutAt`: 編集後のチェックアウト日時（オプション）
 
 **処理フロー:**
-1. レコードIDで`checkins`レコードを取得
+1. レコードIDで`activities`レコードを取得
 2. レコードが存在しない場合は404
 3. リクエスト送信者がレコードの所有者か確認（管理者は除く）
 4. `checkInAt`が指定されている場合は`check_in_at`のみを更新（`initial_check_in_at`は変更しない）

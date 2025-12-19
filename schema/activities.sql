@@ -1,4 +1,4 @@
-CREATE TABLE checkins
+CREATE TABLE activities
 (
     id                   BINARY(16)   NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
     user_id              BINARY(16)   NOT NULL,
