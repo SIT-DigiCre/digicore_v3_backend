@@ -7,7 +7,6 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/work"
 	"github.com/labstack/echo/v4"
-	"github.com/sirupsen/logrus"
 )
 
 func (s *server) PutWorkTagTagId(ctx echo.Context, tagId string) error {
@@ -24,11 +23,7 @@ func (s *server) PutWorkTagTagId(ctx echo.Context, tagId string) error {
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}
-	defer func() {
-		if err := dbTranisactionClient.Rollback(); err != nil {
-			logrus.Errorf("トランザクションのロールバックに失敗しました: %v", err)
-		}
-	}()
+	defer dbTranisactionClient.Rollback()
 
 	res, err := work.PutWorkTagTagId(ctx, &dbTranisactionClient, tagId, requestBody)
 	if err != nil {

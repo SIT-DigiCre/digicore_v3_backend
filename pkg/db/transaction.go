@@ -5,16 +5,19 @@ import (
 	"database/sql"
 	"embed"
 	"net/http"
+	"strings"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/future-architect/go-twowaysql"
 	"github.com/go-sql-driver/mysql"
+	"github.com/sirupsen/logrus"
 )
 
 type transactionClient struct {
-	tx      *twowaysql.TwowaysqlTx
-	query   *embed.FS
-	context context.Context
+	tx        *twowaysql.TwowaysqlTx
+	query     *embed.FS
+	context   context.Context
+	committed bool
 }
 
 func (t *transactionClient) Select(dest interface{}, queryPath string, params interface{}) error {
@@ -44,11 +47,23 @@ func (t *transactionClient) Commit() *response.Error {
 	if err != nil {
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
+	t.committed = true
 	return nil
 }
 
-func (t *transactionClient) Rollback() error {
-	return t.tx.Rollback()
+func (t *transactionClient) Rollback() {
+	if t.committed {
+		// 既にコミット済みの場合は何もしない
+		return
+	}
+	err := t.tx.Rollback()
+	if err != nil {
+		// 既にコミット済み/ロールバック済みのエラーは無視
+		if strings.Contains(err.Error(), "already been committed or rolled back") {
+			return
+		}
+		logrus.Errorf("トランザクションのロールバックに失敗しました: %v", err)
+	}
 }
 
 func (t *transactionClient) GetId() (string, error) {
