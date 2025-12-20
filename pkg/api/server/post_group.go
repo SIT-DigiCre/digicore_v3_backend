@@ -7,7 +7,6 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/group"
 	"github.com/labstack/echo/v4"
-	"github.com/sirupsen/logrus"
 )
 
 func (s *server) PostGroup(ctx echo.Context) error {
@@ -24,11 +23,7 @@ func (s *server) PostGroup(ctx echo.Context) error {
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}
-	defer func() {
-		if err := dbTransactionClient.Rollback(); err != nil {
-			logrus.Errorf("トランザクションのロールバックに失敗しました: %v", err)
-		}
-	}()
+	defer dbTransactionClient.Rollback()
 
 	res, err := group.PostGroup(ctx, &dbTransactionClient, requestBody)
 	if err != nil {
