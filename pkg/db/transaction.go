@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"embed"
 	"net/http"
-	"strings"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/future-architect/go-twowaysql"
@@ -58,10 +57,6 @@ func (t *transactionClient) Rollback() {
 	}
 	err := t.tx.Rollback()
 	if err != nil {
-		// 既にコミット済み/ロールバック済みのエラーは無視
-		if strings.Contains(err.Error(), "already been committed or rolled back") {
-			return
-		}
 		logrus.Errorf("トランザクションのロールバックに失敗しました: %v", err)
 	}
 }
