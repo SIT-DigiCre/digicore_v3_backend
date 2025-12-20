@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"embed"
 	"net/http"
+	"sync/atomic"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/future-architect/go-twowaysql"
@@ -16,7 +17,7 @@ type transactionClient struct {
 	tx        *twowaysql.TwowaysqlTx
 	query     *embed.FS
 	context   context.Context
-	committed bool
+	committed atomic.Bool
 }
 
 func (t *transactionClient) Select(dest interface{}, queryPath string, params interface{}) error {
@@ -46,12 +47,12 @@ func (t *transactionClient) Commit() *response.Error {
 	if err != nil {
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
-	t.committed = true
+	t.committed.Store(true)
 	return nil
 }
 
 func (t *transactionClient) Rollback() {
-	if t.committed {
+	if t.committed.Load() {
 		// 既にコミット済みの場合は何もしない
 		return
 	}
