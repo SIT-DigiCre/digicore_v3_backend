@@ -28,7 +28,11 @@ func PostMail(ctx echo.Context, dbClient db.Client, requestBody api.ReqPostMail)
 		}
 	}
 
-	addresses := requestBody.Addresses
+	// OpenAPIのEmail型をstringに変換
+	addresses := make([]string, 0, len(requestBody.Addresses)+1)
+	for _, address := range requestBody.Addresses {
+		addresses = append(addresses, string(address))
+	}
 
 	if requestBody.SendToAdmin != nil && *requestBody.SendToAdmin {
 		if env.AdminEmail != "" {

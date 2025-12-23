@@ -166,6 +166,12 @@ ReqPostMail:
   $ref: "./schemas/req_post_mail.yml"
 ResPostMail:
   $ref: "./schemas/res_post_mail.yml"
+ReqPostActivityCheckin:
+  $ref: "./schemas/req_post_activity_checkin.yml"
+ReqPostActivityCheckout:
+  $ref: "./schemas/req_post_activity_checkout.yml"
+ReqPutActivityRecordRecordId:
+  $ref: "./schemas/req_put_activity_record_record_id.yml"
 
 Error:
   $ref: "./schemas/error.yml"

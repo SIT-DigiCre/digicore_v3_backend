@@ -27,6 +27,8 @@ tags:
     description: Mattermost system
   - name: mail
     description: Mail system
+  - name: activity
+    description: Activity system
 paths:
   /status:
     get:
@@ -1609,6 +1611,116 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /activity/checkin:
+    post:
+      tags:
+        - activity
+      description: Activity checkin
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Activity checkin request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostActivityCheckin'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /activity/checkout:
+    post:
+      tags:
+        - activity
+      description: Activity checkout
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Activity checkout request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostActivityCheckout'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/activity/checkout/{userId}':
+    post:
+      tags:
+        - activity
+      description: Admin force activity checkout
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Activity checkout request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostActivityCheckout'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/activity/record/{recordId}':
+    put:
+      tags:
+        - activity
+      description: Update activity record times
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: recordId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Activity record update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutActivityRecordRecordId'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -2989,8 +3101,10 @@ components:
       properties:
         addresses:
           type: array
+          minItems: 1
           items:
             type: string
+            format: email
           x-oapi-codegen-extra-tags:
             validate: required
             ja: 送信先アドレス
@@ -3027,6 +3141,51 @@ components:
                 type: string
               error:
                 type: string
+    ReqPostActivityCheckin:
+      required:
+        - place
+      properties:
+        place:
+          type: string
+          minLength: 3
+          maxLength: 30
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=3,max=30'
+            ja: 場所名
+    ReqPostActivityCheckout:
+      required:
+        - place
+      properties:
+        place:
+          type: string
+          minLength: 3
+          maxLength: 30
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=3,max=30'
+            ja: 場所名
+        checkout_at:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            validate: omitempty
+            ja: チェックアウト時刻
+    ReqPutActivityRecordRecordId:
+      required:
+        - activity_type
+        - time
+      properties:
+        activity_type:
+          type: string
+          enum:
+            - checkin
+            - checkout
+          x-oapi-codegen-extra-tags:
+            ja: アクティビティタイプ
+        time:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            ja: 更新時刻
     Error:
       required:
         - level

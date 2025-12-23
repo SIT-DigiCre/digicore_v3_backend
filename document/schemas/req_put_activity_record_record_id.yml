@@ -1,0 +1,16 @@
+required:
+  - activity_type
+  - time
+properties:
+  activity_type:
+    type: string
+    enum:
+      - checkin
+      - checkout
+    x-oapi-codegen-extra-tags:
+      ja: アクティビティタイプ
+  time:
+    type: string
+    format: date-time
+    x-oapi-codegen-extra-tags:
+      ja: 更新時刻

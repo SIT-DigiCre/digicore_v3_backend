@@ -14,6 +14,18 @@ import (
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
+	// (POST /activity/checkin)
+	PostActivityCheckin(ctx echo.Context) error
+
+	// (POST /activity/checkout)
+	PostActivityCheckout(ctx echo.Context) error
+
+	// (POST /activity/checkout/{userId})
+	PostActivityCheckoutUserId(ctx echo.Context, userId string) error
+
+	// (PUT /activity/record/{recordId})
+	PutActivityRecordRecordId(ctx echo.Context, recordId string) error
+
 	// (GET /budget)
 	GetBudget(ctx echo.Context, params GetBudgetParams) error
 
@@ -210,6 +222,64 @@ type ServerInterface interface {
 // ServerInterfaceWrapper converts echo contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler ServerInterface
+}
+
+// PostActivityCheckin converts echo context to params.
+func (w *ServerInterfaceWrapper) PostActivityCheckin(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostActivityCheckin(ctx)
+	return err
+}
+
+// PostActivityCheckout converts echo context to params.
+func (w *ServerInterfaceWrapper) PostActivityCheckout(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostActivityCheckout(ctx)
+	return err
+}
+
+// PostActivityCheckoutUserId converts echo context to params.
+func (w *ServerInterfaceWrapper) PostActivityCheckoutUserId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "userId" -------------
+	var userId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "userId", runtime.ParamLocationPath, ctx.Param("userId"), &userId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter userId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostActivityCheckoutUserId(ctx, userId)
+	return err
+}
+
+// PutActivityRecordRecordId converts echo context to params.
+func (w *ServerInterfaceWrapper) PutActivityRecordRecordId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "recordId" -------------
+	var recordId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "recordId", runtime.ParamLocationPath, ctx.Param("recordId"), &recordId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter recordId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutActivityRecordRecordId(ctx, recordId)
+	return err
 }
 
 // GetBudget converts echo context to params.
@@ -1255,6 +1325,10 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
+	router.POST(baseURL+"/activity/checkin", wrapper.PostActivityCheckin)
+	router.POST(baseURL+"/activity/checkout", wrapper.PostActivityCheckout)
+	router.POST(baseURL+"/activity/checkout/:userId", wrapper.PostActivityCheckoutUserId)
+	router.PUT(baseURL+"/activity/record/:recordId", wrapper.PutActivityRecordRecordId)
 	router.GET(baseURL+"/budget", wrapper.GetBudget)
 	router.POST(baseURL+"/budget", wrapper.PostBudget)
 	router.GET(baseURL+"/budget/:budgetId", wrapper.GetBudgetBudgetId)
