@@ -3164,17 +3164,22 @@ components:
             validate: 'required,min=3,max=10'
             ja: 場所名
     ReqPutActivityRecordRecordId:
+      required:
+        - activity_type
+        - time
       properties:
-        checkedInAt:
+        activity_type:
+          type: string
+          enum:
+            - checkin
+            - checkout
+          x-oapi-codegen-extra-tags:
+            ja: アクティビティタイプ
+        time:
           type: string
           format: date-time
           x-oapi-codegen-extra-tags:
-            ja: 編集後のチェックイン日時
-        checkedOutAt:
-          type: string
-          format: date-time
-          x-oapi-codegen-extra-tags:
-            ja: 編集後のチェックアウト日時
+            ja: 更新時刻
     Error:
       required:
         - level

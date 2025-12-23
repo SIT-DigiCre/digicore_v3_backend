@@ -12,7 +12,7 @@ import (
 )
 
 // 在室レコードの入退室時刻更新
-func PutActivityRecordRecordId(ctx echo.Context, dbClient db.TransactionClient, recordId string, requestBody api.ReqPutActivityRecordRecordId) (api.BlankSuccess, *response.Error) {
+func PutActivityRecordRecordId(ctx echo.Context, dbClient db.TransactionClient, recordId string, requestBody ActivityRecordUpdateRequest) (api.BlankSuccess, *response.Error) {
 	record, err := selectActivityFromId(dbClient, recordId)
 	if err != nil {
 		return api.BlankSuccess{}, err
@@ -45,20 +45,49 @@ func PutActivityRecordRecordId(ctx echo.Context, dbClient db.TransactionClient, 
 	checkedInAt := record.CheckedInAt
 	checkedOutAt := record.CheckedOutAt
 
-	if requestBody.CheckedInAt != nil {
-		checkedInAt = *requestBody.CheckedInAt
-	}
-	if requestBody.CheckedOutAt != nil {
-		checkedOutAt = requestBody.CheckedOutAt
-	}
-
-	// チェックアウト時刻がチェックイン時刻より前でないことを確認
-	if checkedOutAt != nil && checkedOutAt.Before(checkedInAt) {
+	switch requestBody.ActivityType {
+	case "checkin":
+		if requestBody.Time == nil {
+			return api.BlankSuccess{}, &response.Error{
+				Code:    http.StatusBadRequest,
+				Level:   "Info",
+				Message: "更新時刻が指定されていません",
+				Log:     "checkin更新でtimeがnilです",
+			}
+		}
+		checkedInAt = *requestBody.Time
+		if checkedOutAt != nil && checkedOutAt.Before(checkedInAt) {
+			return api.BlankSuccess{}, &response.Error{
+				Code:    http.StatusBadRequest,
+				Level:   "Info",
+				Message: "チェックアウト時刻はチェックイン時刻より後である必要があります",
+				Log:     "チェックアウト時刻がチェックイン時刻より前です",
+			}
+		}
+	case "checkout":
+		if requestBody.Time == nil {
+			return api.BlankSuccess{}, &response.Error{
+				Code:    http.StatusBadRequest,
+				Level:   "Info",
+				Message: "更新時刻が指定されていません",
+				Log:     "checkout更新でtimeがnilです",
+			}
+		}
+		if requestBody.Time.Before(record.InitialCheckedInAt) || requestBody.Time.Before(record.CheckedInAt) {
+			return api.BlankSuccess{}, &response.Error{
+				Code:    http.StatusBadRequest,
+				Level:   "Info",
+				Message: "チェックアウト時刻はチェックイン時刻より後である必要があります",
+				Log:     "チェックアウト時刻が初回または最新のチェックイン時刻より前です",
+			}
+		}
+		checkedOutAt = requestBody.Time
+	default:
 		return api.BlankSuccess{}, &response.Error{
 			Code:    http.StatusBadRequest,
 			Level:   "Info",
-			Message: "チェックアウト時刻はチェックイン時刻より後である必要があります",
-			Log:     "チェックアウト時刻がチェックイン時刻より前です",
+			Message: "activity_typeが不正です",
+			Log:     "許可されていないactivity_typeです",
 		}
 	}
 

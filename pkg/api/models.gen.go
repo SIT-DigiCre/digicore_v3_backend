@@ -13,6 +13,12 @@ const (
 	BearerAuthScopes = "BearerAuth.Scopes"
 )
 
+// Defines values for ReqPutActivityRecordRecordIdActivityType.
+const (
+	Checkin  ReqPutActivityRecordRecordIdActivityType = "checkin"
+	Checkout ReqPutActivityRecordRecordIdActivityType = "checkout"
+)
+
 // Error defines model for Error.
 type Error struct {
 	Level   string `json:"level"`
@@ -97,9 +103,12 @@ type ReqPostWorkWork struct {
 
 // ReqPutActivityRecordRecordId defines model for ReqPutActivityRecordRecordId.
 type ReqPutActivityRecordRecordId struct {
-	CheckedInAt  *time.Time `ja:"編集後のチェックイン日時" json:"checkedInAt,omitempty"`
-	CheckedOutAt *time.Time `ja:"編集後のチェックアウト日時" json:"checkedOutAt,omitempty"`
+	ActivityType ReqPutActivityRecordRecordIdActivityType `ja:"アクティビティタイプ" json:"activity_type"`
+	Time         time.Time                                `ja:"更新時刻" json:"time"`
 }
+
+// ReqPutActivityRecordRecordIdActivityType defines model for ReqPutActivityRecordRecordId.ActivityType.
+type ReqPutActivityRecordRecordIdActivityType string
 
 // ReqPutBudgetBudgetIdAdmin defines model for ReqPutBudgetBudgetIdAdmin.
 type ReqPutBudgetBudgetIdAdmin struct {

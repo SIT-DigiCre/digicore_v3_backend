@@ -21,6 +21,12 @@ type ActivityRecord struct {
 	UpdatedAt           time.Time  `db:"updated_at"`
 }
 
+// アクティビティ入退室時刻更新リクエスト
+type ActivityRecordUpdateRequest struct {
+	ActivityType string     `json:"activity_type" validate:"required,oneof=checkin checkout" ja:"アクティビティタイプ"`
+	Time         *time.Time `json:"time" validate:"required" ja:"更新時刻"`
+}
+
 func selectLatestActivity(dbClient db.TransactionClient, userId string, place string) (*ActivityRecord, *response.Error) {
 	params := struct {
 		UserId string `twowaysql:"userId"`

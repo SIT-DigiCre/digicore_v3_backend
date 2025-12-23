@@ -15,7 +15,7 @@ func PostActivityCheckin(ctx echo.Context, dbClient db.TransactionClient, reques
 
 	checkInAt := time.Now()
 
-	// 既存の在室レコードがあればチェックアウトしてから新規レコードを作成
+	// 同じ場所に在室中の場合はチェックアウトしてから新規レコードを作成。在室中ではない場合は第1引数がfalseになるが、チェックアウト処理を実行するうえで関係がないので無視
 	_, err := executeCheckout(dbClient, userId, requestBody.Place, checkInAt)
 	if err != nil {
 		return api.BlankSuccess{}, err
