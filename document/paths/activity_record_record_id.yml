@@ -1,0 +1,32 @@
+put:
+  tags:
+    - activity
+  description: "Update activity record times"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: recordId
+      in: path
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: "Activity record update request"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_put_activity_record_record_id.yml"
+  responses:
+    200:
+      $ref: "../responses/blank_success.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+
+

@@ -1,0 +1,13 @@
+properties:
+  checkedInAt:
+    type: string
+    format: date-time
+    x-oapi-codegen-extra-tags:
+      ja: 編集後のチェックイン日時
+  checkedOutAt:
+    type: string
+    format: date-time
+    x-oapi-codegen-extra-tags:
+      ja: 編集後のチェックアウト日時
+
+

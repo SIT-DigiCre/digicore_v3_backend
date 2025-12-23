@@ -90,3 +90,11 @@
   $ref: "./paths/budget_budget_id_admin.yml"
 /mail:
   $ref: "./paths/mail.yml"
+/activity/checkin:
+  $ref: "./paths/activity_checkin.yml"
+/activity/checkout:
+  $ref: "./paths/activity_checkout.yml"
+/activity/checkout/{userId}:
+  $ref: "./paths/activity_checkout_user_id.yml"
+/activity/record/{recordId}:
+  $ref: "./paths/activity_record_record_id.yml"

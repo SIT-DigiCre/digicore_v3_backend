@@ -22,3 +22,5 @@
   description: Mattermost system
 - name: mail
   description: Mail system
+- name: activity
+  description: Activity system

@@ -5,6 +5,8 @@ package api
 
 import (
 	"time"
+
+	openapi_types "github.com/deepmap/oapi-codegen/pkg/types"
 )
 
 const (
@@ -15,6 +17,16 @@ const (
 type Error struct {
 	Level   string `json:"level"`
 	Message string `json:"message"`
+}
+
+// ReqPostActivityCheckin defines model for ReqPostActivityCheckin.
+type ReqPostActivityCheckin struct {
+	Place string `ja:"場所名" json:"place" validate:"required"`
+}
+
+// ReqPostActivityCheckout defines model for ReqPostActivityCheckout.
+type ReqPostActivityCheckout struct {
+	Place string `ja:"場所名" json:"place" validate:"required"`
 }
 
 // ReqPostBudget defines model for ReqPostBudget.
@@ -43,10 +55,10 @@ type ReqPostLoginCallback struct {
 
 // ReqPostMail defines model for ReqPostMail.
 type ReqPostMail struct {
-	Addresses   []string `ja:"送信先アドレス" json:"addresses" validate:"required"`
-	Body        string   `ja:"本文" json:"body" validate:"required"`
-	SendToAdmin *bool    `ja:"管理者用アドレスにも送信" json:"sendToAdmin,omitempty"`
-	Subject     string   `ja:"タイトル" json:"subject" validate:"required"`
+	Addresses   []openapi_types.Email `ja:"送信先アドレス" json:"addresses" validate:"required"`
+	Body        string                `ja:"本文" json:"body" validate:"required"`
+	SendToAdmin *bool                 `ja:"管理者用アドレスにも送信" json:"sendToAdmin,omitempty"`
+	Subject     string                `ja:"タイトル" json:"subject" validate:"required"`
 }
 
 // ReqPostMattermostCreateuser defines model for ReqPostMattermostCreateuser.
@@ -81,6 +93,12 @@ type ReqPostWorkWork struct {
 	Files       []string `ja:"ファイル" json:"files" validate:"dive,uuid"`
 	Name        string   `ja:"作品名" json:"name" validate:"required"`
 	Tags        []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
+}
+
+// ReqPutActivityRecordRecordId defines model for ReqPutActivityRecordRecordId.
+type ReqPutActivityRecordRecordId struct {
+	CheckedInAt  *time.Time `ja:"編集後のチェックイン日時" json:"checkedInAt,omitempty"`
+	CheckedOutAt *time.Time `ja:"編集後のチェックアウト日時" json:"checkedOutAt,omitempty"`
 }
 
 // ReqPutBudgetBudgetIdAdmin defines model for ReqPutBudgetBudgetIdAdmin.
@@ -706,6 +724,18 @@ type GetWorkWorkParams struct {
 	Offset   *int    `form:"offset,omitempty" json:"offset,omitempty"`
 	AuthorId *string `form:"authorId,omitempty" json:"authorId,omitempty"`
 }
+
+// PostActivityCheckinJSONRequestBody defines body for PostActivityCheckin for application/json ContentType.
+type PostActivityCheckinJSONRequestBody = ReqPostActivityCheckin
+
+// PostActivityCheckoutJSONRequestBody defines body for PostActivityCheckout for application/json ContentType.
+type PostActivityCheckoutJSONRequestBody = ReqPostActivityCheckout
+
+// PostActivityCheckoutUserIdJSONRequestBody defines body for PostActivityCheckoutUserId for application/json ContentType.
+type PostActivityCheckoutUserIdJSONRequestBody = ReqPostActivityCheckout
+
+// PutActivityRecordRecordIdJSONRequestBody defines body for PutActivityRecordRecordId for application/json ContentType.
+type PutActivityRecordRecordIdJSONRequestBody = ReqPutActivityRecordRecordId
 
 // PostBudgetJSONRequestBody defines body for PostBudget for application/json ContentType.
 type PostBudgetJSONRequestBody = ReqPostBudget

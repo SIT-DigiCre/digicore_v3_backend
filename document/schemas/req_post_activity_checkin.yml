@@ -1,0 +1,8 @@
+required:
+  - place
+properties:
+  place:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 場所名

@@ -1,0 +1,26 @@
+post:
+  tags:
+    - activity
+  description: "Activity checkout"
+  security:
+    - BearerAuth: []
+  requestBody:
+    description: "Activity checkout request"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_post_activity_checkout.yml"
+  responses:
+    200:
+      $ref: "../responses/blank_success.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+
+
