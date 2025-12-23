@@ -101,7 +101,7 @@ CREATE TABLE activities
   - `username`: ユーザー名
   - `shortIntroduction`: 自己紹介（短い）
   - `iconUrl`: アイコンURL
-  - `checkInAt`: 入室時刻
+  - `checkedInAt`: 入室時刻
 
 **処理フロー:**
 1. 指定場所のレコードをユーザーごとに`checked_in_at`の降順でソート
