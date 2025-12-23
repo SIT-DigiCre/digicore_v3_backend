@@ -17,5 +17,3 @@ WHERE
 ORDER BY
     checked_in_at DESC
 LIMIT 1;
-
-

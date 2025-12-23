@@ -22,5 +22,3 @@ post:
       $ref: "../responses/not_found.yml"
     500:
       $ref: "../responses/internal_server.yml"
-
-

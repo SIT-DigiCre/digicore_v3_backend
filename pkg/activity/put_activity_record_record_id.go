@@ -22,7 +22,7 @@ func PutActivityRecordRecordId(ctx echo.Context, dbClient db.TransactionClient, 
 			Code:    http.StatusNotFound,
 			Level:   "Info",
 			Message: "アクティビティレコードが存在しません",
-			Log:     "activity record not found",
+			Log:     "アクティビティレコードが見つかりません",
 		}
 	}
 
@@ -37,7 +37,7 @@ func PutActivityRecordRecordId(ctx echo.Context, dbClient db.TransactionClient, 
 				Code:    http.StatusForbidden,
 				Level:   "Info",
 				Message: "編集権限がありません",
-				Log:     "user is not owner or admin",
+				Log:     "ユーザーはレコードの所有者でも管理者でもありません",
 			}
 		}
 	}
@@ -50,6 +50,16 @@ func PutActivityRecordRecordId(ctx echo.Context, dbClient db.TransactionClient, 
 	}
 	if requestBody.CheckedOutAt != nil {
 		checkedOutAt = requestBody.CheckedOutAt
+	}
+
+	// チェックアウト時刻がチェックイン時刻より前でないことを確認
+	if checkedOutAt != nil && checkedOutAt.Before(checkedInAt) {
+		return api.BlankSuccess{}, &response.Error{
+			Code:    http.StatusBadRequest,
+			Level:   "Info",
+			Message: "チェックアウト時刻はチェックイン時刻より後である必要があります",
+			Log:     "チェックアウト時刻がチェックイン時刻より前です",
+		}
 	}
 
 	if err := updateActivityTimes(dbClient, recordId, checkedInAt, checkedOutAt); err != nil {
@@ -104,5 +114,3 @@ func updateActivityTimes(dbClient db.TransactionClient, id string, checkedInAt t
 	}
 	return nil
 }
-
-

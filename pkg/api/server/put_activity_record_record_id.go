@@ -37,5 +37,3 @@ func (s *server) PutActivityRecordRecordId(ctx echo.Context, recordId string) er
 
 	return response.SuccessResponse(ctx, res)
 }
-
-

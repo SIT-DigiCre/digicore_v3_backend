@@ -21,12 +21,12 @@ type Error struct {
 
 // ReqPostActivityCheckin defines model for ReqPostActivityCheckin.
 type ReqPostActivityCheckin struct {
-	Place string `ja:"場所名" json:"place" validate:"required"`
+	Place string `ja:"場所名" json:"place" validate:"required,min=3,max=10"`
 }
 
 // ReqPostActivityCheckout defines model for ReqPostActivityCheckout.
 type ReqPostActivityCheckout struct {
-	Place string `ja:"場所名" json:"place" validate:"required"`
+	Place string `ja:"場所名" json:"place" validate:"required,min=3,max=10"`
 }
 
 // ReqPostBudget defines model for ReqPostBudget.

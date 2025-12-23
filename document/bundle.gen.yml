@@ -3147,8 +3147,10 @@ components:
       properties:
         place:
           type: string
+          minLength: 3
+          maxLength: 10
           x-oapi-codegen-extra-tags:
-            validate: required
+            validate: 'required,min=3,max=10'
             ja: 場所名
     ReqPostActivityCheckout:
       required:
@@ -3156,8 +3158,10 @@ components:
       properties:
         place:
           type: string
+          minLength: 3
+          maxLength: 10
           x-oapi-codegen-extra-tags:
-            validate: required
+            validate: 'required,min=3,max=10'
             ja: 場所名
     ReqPutActivityRecordRecordId:
       properties:

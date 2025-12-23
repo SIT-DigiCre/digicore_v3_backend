@@ -23,7 +23,7 @@ func PostActivityCheckoutUserId(ctx echo.Context, dbClient db.TransactionClient,
 			Code:    http.StatusForbidden,
 			Level:   "Info",
 			Message: "管理者権限がありません",
-			Log:     "user is not admin",
+			Log:     "ユーザーは管理者ではありません",
 		}
 	}
 
@@ -38,7 +38,7 @@ func PostActivityCheckoutUserId(ctx echo.Context, dbClient db.TransactionClient,
 			Code:    http.StatusNotFound,
 			Level:   "Info",
 			Message: "在室中ではありません",
-			Log:     "activity not found or already checked out",
+			Log:     "アクティビティレコードが見つからないか、既にチェックアウト済みです",
 		}
 	}
 

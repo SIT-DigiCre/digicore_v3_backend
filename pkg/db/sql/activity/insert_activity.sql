@@ -17,5 +17,3 @@ INSERT INTO activities (
     /*checkedInAt*/NOW(),
     NULL
 );
-
-

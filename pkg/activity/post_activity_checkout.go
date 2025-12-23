@@ -23,7 +23,7 @@ func PostActivityCheckout(ctx echo.Context, dbClient db.TransactionClient, reque
 			Code:    http.StatusNotFound,
 			Level:   "Info",
 			Message: "在室中ではありません",
-			Log:     "activity not found or already checked out",
+			Log:     "アクティビティレコードが見つからないか、既にチェックアウト済みです",
 		}
 	}
 

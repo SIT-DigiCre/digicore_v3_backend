@@ -9,5 +9,3 @@ properties:
     format: date-time
     x-oapi-codegen-extra-tags:
       ja: 編集後のチェックアウト日時
-
-

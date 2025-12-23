@@ -37,5 +37,3 @@ func (s *server) PostActivityCheckoutUserId(ctx echo.Context, userId string) err
 
 	return response.SuccessResponse(ctx, res)
 }
-
-

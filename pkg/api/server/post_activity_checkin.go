@@ -37,5 +37,3 @@ func (s *server) PostActivityCheckin(ctx echo.Context) error {
 
 	return response.SuccessResponse(ctx, res)
 }
-
-
