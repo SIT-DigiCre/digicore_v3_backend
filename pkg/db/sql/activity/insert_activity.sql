@@ -12,8 +12,8 @@ INSERT INTO activities (
     UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'),
     /*place*/'place',
     NULL,
-    /*initialCheckedInAt*/NOW(),
+    /*initialCheckedInAt*/'1970-01-01 00:00:00',
     NULL,
-    /*checkedInAt*/NOW(),
+    /*checkedInAt*/'1970-01-01 00:00:00',
     NULL
 );

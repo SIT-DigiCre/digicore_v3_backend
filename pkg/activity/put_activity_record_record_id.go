@@ -47,7 +47,7 @@ func PutActivityRecordRecordId(ctx echo.Context, dbClient db.TransactionClient, 
 
 	switch requestBody.ActivityType {
 	case "checkin":
-		if requestBody.Time == nil {
+		if requestBody.Time.IsZero() {
 			return api.BlankSuccess{}, &response.Error{
 				Code:    http.StatusBadRequest,
 				Level:   "Info",
@@ -55,7 +55,7 @@ func PutActivityRecordRecordId(ctx echo.Context, dbClient db.TransactionClient, 
 				Log:     "checkin更新でtimeがnilです",
 			}
 		}
-		checkedInAt = *requestBody.Time
+		checkedInAt = requestBody.Time
 		if checkedOutAt != nil && checkedOutAt.Before(checkedInAt) {
 			return api.BlankSuccess{}, &response.Error{
 				Code:    http.StatusBadRequest,
@@ -65,7 +65,7 @@ func PutActivityRecordRecordId(ctx echo.Context, dbClient db.TransactionClient, 
 			}
 		}
 	case "checkout":
-		if requestBody.Time == nil {
+		if requestBody.Time.IsZero() {
 			return api.BlankSuccess{}, &response.Error{
 				Code:    http.StatusBadRequest,
 				Level:   "Info",
@@ -81,7 +81,7 @@ func PutActivityRecordRecordId(ctx echo.Context, dbClient db.TransactionClient, 
 				Log:     "チェックアウト時刻が初回または最新のチェックイン時刻より前です",
 			}
 		}
-		checkedOutAt = requestBody.Time
+		checkedOutAt = &requestBody.Time
 	default:
 		return api.BlankSuccess{}, &response.Error{
 			Code:    http.StatusBadRequest,

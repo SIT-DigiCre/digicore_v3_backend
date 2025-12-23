@@ -2,7 +2,6 @@ package activity
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
@@ -27,9 +26,8 @@ func PostActivityCheckoutUserId(ctx echo.Context, dbClient db.TransactionClient,
 		}
 	}
 
-	checkOutAt := time.Now()
-
-	executed, err := executeCheckout(dbClient, userId, requestBody.Place, checkOutAt)
+	note := "管理者による退室"
+	executed, err := executeCheckout(dbClient, userId, requestBody.Place, requestBody.CheckoutAt, &note)
 	if err != nil {
 		return api.BlankSuccess{}, err
 	}

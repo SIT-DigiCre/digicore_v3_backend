@@ -27,12 +27,13 @@ type Error struct {
 
 // ReqPostActivityCheckin defines model for ReqPostActivityCheckin.
 type ReqPostActivityCheckin struct {
-	Place string `ja:"場所名" json:"place" validate:"required,min=3,max=10"`
+	Place string `ja:"場所名" json:"place" validate:"required,min=3,max=30"`
 }
 
 // ReqPostActivityCheckout defines model for ReqPostActivityCheckout.
 type ReqPostActivityCheckout struct {
-	Place string `ja:"場所名" json:"place" validate:"required,min=3,max=10"`
+	CheckoutAt *time.Time `ja:"チェックアウト時刻" json:"checkout_at,omitempty" validate:"omitempty"`
+	Place      string     `ja:"場所名" json:"place" validate:"required,min=3,max=30"`
 }
 
 // ReqPostBudget defines model for ReqPostBudget.
