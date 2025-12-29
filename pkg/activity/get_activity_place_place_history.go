@@ -124,4 +124,3 @@ func selectPlaceHistory(dbClient db.Client, place string, startDate time.Time, e
 	}
 	return users, nil
 }
-

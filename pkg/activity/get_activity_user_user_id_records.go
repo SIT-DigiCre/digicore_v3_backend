@@ -115,4 +115,3 @@ func selectUserRecordsCount(dbClient db.Client, userId string, place *string) (i
 	}
 	return counts[0].Total, nil
 }
-
