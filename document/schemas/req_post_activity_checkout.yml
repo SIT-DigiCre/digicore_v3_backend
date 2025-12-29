@@ -1,0 +1,16 @@
+required:
+  - place
+properties:
+  place:
+    type: string
+    minLength: 3
+    maxLength: 30
+    x-oapi-codegen-extra-tags:
+      validate: required,min=3,max=30
+      ja: 場所名
+  checkout_at:
+    type: string
+    format: date-time
+    x-oapi-codegen-extra-tags:
+      validate: omitempty
+      ja: チェックアウト時刻
