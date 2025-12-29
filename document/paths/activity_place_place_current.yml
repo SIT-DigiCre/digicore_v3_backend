@@ -21,4 +21,3 @@ get:
       $ref: "../responses/unauthorized.yml"
     500:
       $ref: "../responses/internal_server.yml"
-

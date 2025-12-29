@@ -15,4 +15,3 @@ properties:
     type: string
   checkInCount:
     type: integer
-

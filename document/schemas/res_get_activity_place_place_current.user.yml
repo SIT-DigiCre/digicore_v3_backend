@@ -16,4 +16,3 @@ properties:
   checkedInAt:
     type: string
     format: date-time
-

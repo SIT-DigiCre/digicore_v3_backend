@@ -14,4 +14,3 @@ properties:
     type: integer
   limit:
     type: integer
-
