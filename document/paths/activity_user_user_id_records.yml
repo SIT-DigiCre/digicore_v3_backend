@@ -1,0 +1,39 @@
+get:
+  tags:
+    - activity
+  description: "Get user activity records"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: place
+      in: query
+      required: false
+      schema:
+        type: string
+    - name: offset
+      in: query
+      required: false
+      schema:
+        type: integer
+    - name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+  responses:
+    200:
+      description: "Success get user records"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_activity_user_user_id_records.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+

@@ -1,0 +1,24 @@
+get:
+  tags:
+    - activity
+  description: "Get current users in place"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: place
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      description: "Success get current users"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_activity_place_place_current.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+

@@ -1,0 +1,17 @@
+required:
+  - records
+  - total
+  - offset
+  - limit
+properties:
+  records:
+    type: array
+    items:
+      $ref: './res_get_activity_user_user_id_records.record.yml'
+  total:
+    type: integer
+  offset:
+    type: integer
+  limit:
+    type: integer
+

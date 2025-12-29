@@ -1,0 +1,8 @@
+required:
+  - users
+properties:
+  users:
+    type: array
+    items:
+      $ref: './res_get_activity_place_place_current.user.yml'
+
