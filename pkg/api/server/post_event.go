@@ -26,7 +26,7 @@ func (s *server) PostEvent(ctx echo.Context) error {
 		return response.ErrorResponse(ctx, rerr)
 	}
 	defer func() {
-		_ = dbTranisactionClient.Rollback()
+		dbTranisactionClient.Rollback()
 	}()
 
 	// 管理者であるか確認
