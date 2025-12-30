@@ -1,0 +1,20 @@
+required:
+  - name
+  - description
+  - calendar_view
+properties:
+  name:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: イベント名
+  description:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 説明
+  calendar_view:
+    type: boolean
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: カレンダー表示

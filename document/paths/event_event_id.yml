@@ -23,3 +23,35 @@ get:
       $ref: "../responses/not_found.yml"
     500:
       $ref: "../responses/internal_server.yml"
+put:
+  tags:
+    - event
+  description: "Update event"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: eventId
+      in: path
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: "Update event"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_post_event_event.yml"
+  responses:
+    200:
+      description: "Success update event"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_post_event_event.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
