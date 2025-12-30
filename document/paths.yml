@@ -12,6 +12,8 @@
   $ref: "./paths/login_callback.yml"
 /user:
   $ref: "./paths/user.yml"
+/user/search:
+  $ref: "./paths/user_search.yml"
 /user/{userId}:
   $ref: "./paths/user_user_id.yml"
 /user/{userId}/introduction:
@@ -86,3 +88,13 @@
   $ref: "./paths/budget_budget_id_status_paid.yml"
 /budget/{budgetId}/admin:
   $ref: "./paths/budget_budget_id_admin.yml"
+/mail:
+  $ref: "./paths/mail.yml"
+/activity/checkin:
+  $ref: "./paths/activity_checkin.yml"
+/activity/checkout:
+  $ref: "./paths/activity_checkout.yml"
+/activity/checkout/{userId}:
+  $ref: "./paths/activity_checkout_user_id.yml"
+/activity/record/{recordId}:
+  $ref: "./paths/activity_record_record_id.yml"

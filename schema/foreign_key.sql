@@ -14,6 +14,8 @@ ALTER TABLE user_private_profiles ADD CONSTRAINT fk_user_private_profiles_user_i
 
 ALTER TABLE user_profiles ADD CONSTRAINT fk_user_profiles_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id);
 
+ALTER TABLE activities ADD CONSTRAINT fk_activities_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id);
+
 ALTER TABLE work_work_tags ADD CONSTRAINT fk_work_work_tags_tag_id_work_tags_id FOREIGN KEY (tag_id) REFERENCES work_tags(id);
 ALTER TABLE work_work_tags ADD CONSTRAINT fk_work_work_tags_work_id_works_id FOREIGN KEY (work_id) REFERENCES works(id);
 

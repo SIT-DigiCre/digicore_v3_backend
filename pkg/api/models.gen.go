@@ -13,10 +13,27 @@ const (
 	BearerAuthScopes = "BearerAuth.Scopes"
 )
 
+// Defines values for ReqPutActivityRecordRecordIdActivityType.
+const (
+	Checkin  ReqPutActivityRecordRecordIdActivityType = "checkin"
+	Checkout ReqPutActivityRecordRecordIdActivityType = "checkout"
+)
+
 // Error defines model for Error.
 type Error struct {
 	Level   string `json:"level"`
 	Message string `json:"message"`
+}
+
+// ReqPostActivityCheckin defines model for ReqPostActivityCheckin.
+type ReqPostActivityCheckin struct {
+	Place string `ja:"場所名" json:"place" validate:"required,min=3,max=30"`
+}
+
+// ReqPostActivityCheckout defines model for ReqPostActivityCheckout.
+type ReqPostActivityCheckout struct {
+	CheckoutAt *time.Time `ja:"チェックアウト時刻" json:"checkout_at,omitempty" validate:"omitempty"`
+	Place      string     `ja:"場所名" json:"place" validate:"required,min=3,max=30"`
 }
 
 // ReqPostBudget defines model for ReqPostBudget.
@@ -48,6 +65,14 @@ type ReqPostGroupGroupIdUser struct {
 // ReqPostLoginCallback defines model for ReqPostLoginCallback.
 type ReqPostLoginCallback struct {
 	Code string `ja:"認証コード" json:"code" validate:"required"`
+}
+
+// ReqPostMail defines model for ReqPostMail.
+type ReqPostMail struct {
+	Addresses   []openapi_types.Email `ja:"送信先アドレス" json:"addresses" validate:"required"`
+	Body        string                `ja:"本文" json:"body" validate:"required"`
+	SendToAdmin *bool                 `ja:"管理者用アドレスにも送信" json:"sendToAdmin,omitempty"`
+	Subject     string                `ja:"タイトル" json:"subject" validate:"required"`
 }
 
 // ReqPostMattermostCreateuser defines model for ReqPostMattermostCreateuser.
@@ -83,6 +108,15 @@ type ReqPostWorkWork struct {
 	Name        string   `ja:"作品名" json:"name" validate:"required"`
 	Tags        []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
 }
+
+// ReqPutActivityRecordRecordId defines model for ReqPutActivityRecordRecordId.
+type ReqPutActivityRecordRecordId struct {
+	ActivityType ReqPutActivityRecordRecordIdActivityType `ja:"アクティビティタイプ" json:"activity_type"`
+	Time         time.Time                                `ja:"更新時刻" json:"time"`
+}
+
+// ReqPutActivityRecordRecordIdActivityType defines model for ReqPutActivityRecordRecordId.ActivityType.
+type ReqPutActivityRecordRecordIdActivityType string
 
 // ReqPutBudgetBudgetIdAdmin defines model for ReqPutBudgetBudgetIdAdmin.
 type ReqPutBudgetBudgetIdAdmin struct {
@@ -633,6 +667,15 @@ type ResPostLoginCallback struct {
 	Jwt string `json:"jwt"`
 }
 
+// ResPostMail defines model for ResPostMail.
+type ResPostMail struct {
+	Failures []struct {
+		Address string `json:"address"`
+		Error   string `json:"error"`
+	} `json:"failures"`
+	SuccessCount int `json:"successCount"`
+}
+
 // ResPostMattermostCreateuser defines model for ResPostMattermostCreateuser.
 type ResPostMattermostCreateuser struct {
 	Username string `json:"username"`
@@ -691,6 +734,11 @@ type GetUserParams struct {
 	Seed   *int `form:"seed,omitempty" json:"seed,omitempty"`
 }
 
+// GetUserSearchParams defines parameters for GetUserSearch.
+type GetUserSearchParams struct {
+	Query string `form:"query" json:"query"`
+}
+
 // GetWorkTagParams defines parameters for GetWorkTag.
 type GetWorkTagParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
@@ -701,6 +749,18 @@ type GetWorkWorkParams struct {
 	Offset   *int    `form:"offset,omitempty" json:"offset,omitempty"`
 	AuthorId *string `form:"authorId,omitempty" json:"authorId,omitempty"`
 }
+
+// PostActivityCheckinJSONRequestBody defines body for PostActivityCheckin for application/json ContentType.
+type PostActivityCheckinJSONRequestBody = ReqPostActivityCheckin
+
+// PostActivityCheckoutJSONRequestBody defines body for PostActivityCheckout for application/json ContentType.
+type PostActivityCheckoutJSONRequestBody = ReqPostActivityCheckout
+
+// PostActivityCheckoutUserIdJSONRequestBody defines body for PostActivityCheckoutUserId for application/json ContentType.
+type PostActivityCheckoutUserIdJSONRequestBody = ReqPostActivityCheckout
+
+// PutActivityRecordRecordIdJSONRequestBody defines body for PutActivityRecordRecordId for application/json ContentType.
+type PutActivityRecordRecordIdJSONRequestBody = ReqPutActivityRecordRecordId
 
 // PostBudgetJSONRequestBody defines body for PostBudget for application/json ContentType.
 type PostBudgetJSONRequestBody = ReqPostBudget
@@ -737,6 +797,9 @@ type PostGroupGroupIdUserJSONRequestBody = ReqPostGroupGroupIdUser
 
 // PostLoginCallbackJSONRequestBody defines body for PostLoginCallback for application/json ContentType.
 type PostLoginCallbackJSONRequestBody = ReqPostLoginCallback
+
+// PostMailJSONRequestBody defines body for PostMail for application/json ContentType.
+type PostMailJSONRequestBody = ReqPostMail
 
 // PostMattermostCreateUserJSONRequestBody defines body for PostMattermostCreateUser for application/json ContentType.
 type PostMattermostCreateUserJSONRequestBody = ReqPostMattermostCreateuser

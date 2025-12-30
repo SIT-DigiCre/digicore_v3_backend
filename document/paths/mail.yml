@@ -1,0 +1,27 @@
+post:
+  tags:
+    - mail
+  description: "Send bulk email"
+  security:
+    - BearerAuth:
+        - "admin"
+  requestBody:
+    description: "Email request"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_post_mail.yml"
+  responses:
+    200:
+      description: "Success send email"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_post_mail.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

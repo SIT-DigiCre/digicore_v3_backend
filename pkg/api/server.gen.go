@@ -14,6 +14,18 @@ import (
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
+	// (POST /activity/checkin)
+	PostActivityCheckin(ctx echo.Context) error
+
+	// (POST /activity/checkout)
+	PostActivityCheckout(ctx echo.Context) error
+
+	// (POST /activity/checkout/{userId})
+	PostActivityCheckoutUserId(ctx echo.Context, userId string) error
+
+	// (PUT /activity/record/{recordId})
+	PutActivityRecordRecordId(ctx echo.Context, recordId string) error
+
 	// (GET /budget)
 	GetBudget(ctx echo.Context, params GetBudgetParams) error
 
@@ -85,6 +97,9 @@ type ServerInterface interface {
 
 	// (POST /login/callback)
 	PostLoginCallback(ctx echo.Context) error
+
+	// (POST /mail)
+	PostMail(ctx echo.Context) error
 
 	// (POST /mattermost/create_user)
 	PostMattermostCreateUser(ctx echo.Context) error
@@ -161,6 +176,9 @@ type ServerInterface interface {
 	// (PUT /user/me/renewal)
 	PutUserMeRenewal(ctx echo.Context) error
 
+	// (GET /user/search)
+	GetUserSearch(ctx echo.Context, params GetUserSearchParams) error
+
 	// (GET /user/{userId})
 	GetUserUserId(ctx echo.Context, userId string) error
 
@@ -210,6 +228,64 @@ type ServerInterface interface {
 // ServerInterfaceWrapper converts echo contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler ServerInterface
+}
+
+// PostActivityCheckin converts echo context to params.
+func (w *ServerInterfaceWrapper) PostActivityCheckin(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostActivityCheckin(ctx)
+	return err
+}
+
+// PostActivityCheckout converts echo context to params.
+func (w *ServerInterfaceWrapper) PostActivityCheckout(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostActivityCheckout(ctx)
+	return err
+}
+
+// PostActivityCheckoutUserId converts echo context to params.
+func (w *ServerInterfaceWrapper) PostActivityCheckoutUserId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "userId" -------------
+	var userId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "userId", runtime.ParamLocationPath, ctx.Param("userId"), &userId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter userId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostActivityCheckoutUserId(ctx, userId)
+	return err
+}
+
+// PutActivityRecordRecordId converts echo context to params.
+func (w *ServerInterfaceWrapper) PutActivityRecordRecordId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "recordId" -------------
+	var recordId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "recordId", runtime.ParamLocationPath, ctx.Param("recordId"), &recordId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter recordId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutActivityRecordRecordId(ctx, recordId)
+	return err
 }
 
 // GetBudget converts echo context to params.
@@ -649,6 +725,17 @@ func (w *ServerInterfaceWrapper) PostLoginCallback(ctx echo.Context) error {
 	return err
 }
 
+// PostMail converts echo context to params.
+func (w *ServerInterfaceWrapper) PostMail(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"admin"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostMail(ctx)
+	return err
+}
+
 // PostMattermostCreateUser converts echo context to params.
 func (w *ServerInterfaceWrapper) PostMattermostCreateUser(ctx echo.Context) error {
 	var err error
@@ -960,6 +1047,26 @@ func (w *ServerInterfaceWrapper) PutUserMeRenewal(ctx echo.Context) error {
 	return err
 }
 
+// GetUserSearch converts echo context to params.
+func (w *ServerInterfaceWrapper) GetUserSearch(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetUserSearchParams
+	// ------------- Required query parameter "query" -------------
+
+	err = runtime.BindQueryParameter("form", true, true, "query", ctx.QueryParams(), &params.Query)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter query: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetUserSearch(ctx, params)
+	return err
+}
+
 // GetUserUserId converts echo context to params.
 func (w *ServerInterfaceWrapper) GetUserUserId(ctx echo.Context) error {
 	var err error
@@ -1253,6 +1360,10 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
+	router.POST(baseURL+"/activity/checkin", wrapper.PostActivityCheckin)
+	router.POST(baseURL+"/activity/checkout", wrapper.PostActivityCheckout)
+	router.POST(baseURL+"/activity/checkout/:userId", wrapper.PostActivityCheckoutUserId)
+	router.PUT(baseURL+"/activity/record/:recordId", wrapper.PutActivityRecordRecordId)
 	router.GET(baseURL+"/budget", wrapper.GetBudget)
 	router.POST(baseURL+"/budget", wrapper.PostBudget)
 	router.GET(baseURL+"/budget/:budgetId", wrapper.GetBudgetBudgetId)
@@ -1277,6 +1388,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.POST(baseURL+"/group/:groupId/user", wrapper.PostGroupGroupIdUser)
 	router.GET(baseURL+"/login", wrapper.GetLogin)
 	router.POST(baseURL+"/login/callback", wrapper.PostLoginCallback)
+	router.POST(baseURL+"/mail", wrapper.PostMail)
 	router.POST(baseURL+"/mattermost/create_user", wrapper.PostMattermostCreateUser)
 	router.GET(baseURL+"/payment", wrapper.GetPayment)
 	router.GET(baseURL+"/payment/:paymentId", wrapper.GetPaymentPaymentId)
@@ -1302,6 +1414,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/user/me/private", wrapper.GetUserMePrivate)
 	router.PUT(baseURL+"/user/me/private", wrapper.PutUserMePrivate)
 	router.PUT(baseURL+"/user/me/renewal", wrapper.PutUserMeRenewal)
+	router.GET(baseURL+"/user/search", wrapper.GetUserSearch)
 	router.GET(baseURL+"/user/:userId", wrapper.GetUserUserId)
 	router.GET(baseURL+"/user/:userId/group", wrapper.GetUserUserIdGroup)
 	router.GET(baseURL+"/user/:userId/introduction", wrapper.GetUserUserIdIntroduction)

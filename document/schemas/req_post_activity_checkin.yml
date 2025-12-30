@@ -1,0 +1,10 @@
+required:
+  - place
+properties:
+  place:
+    type: string
+    minLength: 3
+    maxLength: 30
+    x-oapi-codegen-extra-tags:
+      validate: required,min=3,max=30
+      ja: 場所名

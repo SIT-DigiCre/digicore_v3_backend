@@ -18,6 +18,7 @@ require (
 	github.com/lestrrat-go/jwx/v2 v2.0.10
 	github.com/mattermost/mattermost-server/v5 v5.39.3
 	github.com/rubenv/sql-migrate v1.4.0
+	github.com/sendgrid/sendgrid-go v3.16.1+incompatible
 	github.com/sirupsen/logrus v1.9.3
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e
 	golang.org/x/oauth2 v0.8.0
@@ -112,6 +113,7 @@ require (
 	github.com/rs/xid v1.4.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
+	github.com/sendgrid/rest v2.6.9+incompatible // indirect
 	github.com/shibukawa/formatdata-go v0.1.3 // indirect
 	github.com/shibukawa/mdd-go v0.1.7 // indirect
 	github.com/shibukawa/stringwidth v0.2.0 // indirect
