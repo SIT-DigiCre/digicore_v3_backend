@@ -9,9 +9,9 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *server) PostEvent(ctx echo.Context) error {
+func (s *server) PutEventEventId(ctx echo.Context, eventId string) error {
 	// リクエストボディの解析
-	var requestBody api.PostEventJSONRequestBody
+	var requestBody api.PutEventEventIdJSONRequestBody
 	if err := ctx.Bind(&requestBody); err != nil {
 		return response.ErrorResponse(ctx, &response.Error{Code: 400, Level: "Info", Message: "リクエストボディの解析に失敗しました", Log: err.Error()})
 	}
@@ -48,7 +48,7 @@ func (s *server) PostEvent(ctx echo.Context) error {
 		return response.ErrorResponse(ctx, &response.Error{Code: 403, Level: "Info", Message: "管理者権限が必要です", Log: "user is not admin"})
 	}
 
-	res, rerr := event.PostEvent(ctx, &dbTranisactionClient, requestBody)
+	res, rerr := event.PutEvent(ctx, &dbTranisactionClient, eventId, requestBody)
 	if rerr != nil {
 		return response.ErrorResponse(ctx, rerr)
 	}

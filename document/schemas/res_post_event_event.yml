@@ -3,11 +3,7 @@ required:
   - event_id
   - name
   - description
-  - start_date
-  - finish_date
-  - reservation_start
-  - reservation_finish
-  - capacity
+  - calendar_view
 properties:
   event_id:
     type: string
@@ -22,27 +18,7 @@ properties:
     type: string
     x-oapi-codegen-extra-tags:
       ja: 説明
-  start_date:
-    type: string
-    format: date-time
+  calendar_view:
+    type: boolean
     x-oapi-codegen-extra-tags:
-      ja: 開始日時
-  finish_date:
-    type: string
-    format: date-time
-    x-oapi-codegen-extra-tags:
-      ja: 終了日時
-  reservation_start:
-    type: string
-    format: date-time
-    x-oapi-codegen-extra-tags:
-      ja: 予約開始日時
-  reservation_finish:
-    type: string
-    format: date-time
-    x-oapi-codegen-extra-tags:
-      ja: 予約終了日時
-  capacity:
-    type: integer
-    x-oapi-codegen-extra-tags:
-      ja: 定員
+      ja: カレンダー表示

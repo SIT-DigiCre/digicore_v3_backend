@@ -1,11 +1,7 @@
 required:
   - name
   - description
-  - start_date
-  - finish_date
-  - reservation_start
-  - reservation_finish
-  - capacity
+  - calendar_view
 properties:
   name:
     type: string
@@ -17,32 +13,8 @@ properties:
     x-oapi-codegen-extra-tags:
       validate: required
       ja: 説明
-  start_date:
-    type: string
-    format: date-time
+  calendar_view:
+    type: boolean
     x-oapi-codegen-extra-tags:
-      validate: required,datetime
-      ja: 開始日時
-  finish_date:
-    type: string
-    format: date-time
-    x-oapi-codegen-extra-tags:
-      validate: required,datetime
-      ja: 終了日時
-  reservation_start:
-    type: string
-    format: date-time
-    x-oapi-codegen-extra-tags:
-      validate: required,datetime
-      ja: 予約開始日時
-  reservation_finish:
-    type: string
-    format: date-time
-    x-oapi-codegen-extra-tags:
-      validate: required,datetime
-      ja: 予約終了日時
-  capacity:
-    type: integer
-    x-oapi-codegen-extra-tags:
-      validate: required,min=1
-      ja: 定員
+      validate: required
+      ja: カレンダー表示

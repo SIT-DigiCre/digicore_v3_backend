@@ -5,6 +5,8 @@ package api
 
 import (
 	"time"
+
+	openapi_types "github.com/deepmap/oapi-codegen/pkg/types"
 )
 
 const (
@@ -21,6 +23,13 @@ type Error struct {
 type ReqPostBudget struct {
 	Class string `ja:"分類" json:"class" validate:"oneof=festival fixed project outside room"`
 	Name  string `ja:"名前" json:"name" validate:"required"`
+}
+
+// ReqPostEventEvent defines model for ReqPostEventEvent.
+type ReqPostEventEvent struct {
+	CalendarView bool   `ja:"カレンダー表示" json:"calendar_view" validate:"required"`
+	Description  string `ja:"説明" json:"description" validate:"required"`
+	Name         string `ja:"イベント名" json:"name" validate:"required"`
 }
 
 // ReqPostGroup defines model for ReqPostGroup.
@@ -592,6 +601,14 @@ type ResGetWorkWorkWorkIdPublic struct {
 	WorkId      string                             `json:"workId"`
 }
 
+// ResPostEventEvent defines model for ResPostEventEvent.
+type ResPostEventEvent struct {
+	CalendarView bool               `ja:"カレンダー表示" json:"calendar_view"`
+	Description  string             `ja:"説明" json:"description"`
+	EventId      openapi_types.UUID `ja:"イベントID" json:"event_id"`
+	Name         string             `ja:"イベント名" json:"name"`
+}
+
 // ResPostGroup defines model for ResPostGroup.
 type ResPostGroup struct {
 	Description string `json:"description"`
@@ -657,17 +674,6 @@ type GetEventParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
 }
 
-// PostEventJSONBody defines parameters for PostEvent.
-type PostEventJSONBody struct {
-	Capacity          int       `ja:"定員" json:"capacity" validate:"required,min=1"`
-	Description       string    `ja:"説明" json:"description" validate:"required"`
-	FinishDate        time.Time `ja:"終了日時" json:"finish_date" validate:"required,datetime"`
-	Name              string    `ja:"イベント名" json:"name" validate:"required"`
-	ReservationFinish time.Time `ja:"予約終了日時" json:"reservation_finish" validate:"required,datetime"`
-	ReservationStart  time.Time `ja:"予約開始日時" json:"reservation_start" validate:"required,datetime"`
-	StartDate         time.Time `ja:"開始日時" json:"start_date" validate:"required,datetime"`
-}
-
 // GetGroupParams defines parameters for GetGroup.
 type GetGroupParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
@@ -715,7 +721,10 @@ type PutBudgetBudgetIdStatusPaidJSONRequestBody = ReqPutBudgetBudgetIdStatusPaid
 type PutBudgetBudgetIdStatusPendingJSONRequestBody = ReqPutBudgetBudgetIdStatusPending
 
 // PostEventJSONRequestBody defines body for PostEvent for application/json ContentType.
-type PostEventJSONRequestBody PostEventJSONBody
+type PostEventJSONRequestBody = ReqPostEventEvent
+
+// PutEventEventIdJSONRequestBody defines body for PutEventEventId for application/json ContentType.
+type PutEventEventIdJSONRequestBody = ReqPostEventEvent
 
 // PutEventEventIdReservationIdMeJSONRequestBody defines body for PutEventEventIdReservationIdMe for application/json ContentType.
 type PutEventEventIdReservationIdMeJSONRequestBody = ReqPutEventEventIdReservationIdMe

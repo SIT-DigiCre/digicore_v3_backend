@@ -6,23 +6,37 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
 )
 
-// PostEvent creates an event and a single reservation attached to it.
-// It returns the full event detail via GetEventEventId on success.
-func PostEvent(ctx echo.Context, dbClient db.TransactionClient, requestBody api.PostEventJSONBody) (api.ResGetEventEventId, *response.Error) {
-	// create event and reservation and get event id
+// name, description, calendar_viewを受け取ってイベントを作成する関数。
+// 作成に成功した場合、イベントの詳細を返す。
+func PostEvent(ctx echo.Context, dbClient db.TransactionClient, requestBody api.PostEventJSONRequestBody) (api.ResPostEventEvent, *response.Error) {
+	// イベントを作成し、イベントIDを取得
 	eventId, err := createEvent(dbClient, requestBody)
 	if err != nil {
-		return api.ResGetEventEventId{}, err
+		return api.ResPostEventEvent{}, err
 	}
-	return GetEventEventId(ctx, dbClient, eventId)
+
+	// UUIDのパース
+	eventUUID, parseErr := uuid.Parse(eventId)
+	if parseErr != nil {
+		return api.ResPostEventEvent{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントIDの解析に失敗しました", Log: parseErr.Error()}
+	}
+
+	// 作成したイベント情報を返す
+	return api.ResPostEventEvent{
+		EventId:      eventUUID,
+		Name:         requestBody.Name,
+		Description:  requestBody.Description,
+		CalendarView: requestBody.CalendarView,
+	}, nil
 }
 
-func createEvent(dbClient db.TransactionClient, requestBody api.PostEventJSONBody) (string, *response.Error) {
-	// generate event id
+func createEvent(dbClient db.TransactionClient, requestBody api.PostEventJSONRequestBody) (string, *response.Error) {
+	// イベントIDを生成
 	_, rerr := dbClient.Exec("sql/transaction/generate_id.sql", nil, false)
 	if rerr != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントの作成に失敗しました", Log: rerr.Error()}
@@ -32,66 +46,34 @@ func createEvent(dbClient db.TransactionClient, requestBody api.PostEventJSONBod
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントの作成に失敗しました", Log: gerr.Error()}
 	}
 	if eventId == "" {
-		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントIDの生成に失敗しました", Log: "empty id returned"}
+		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントIDの生成に失敗しました", Log: "空のIDが返されました"}
 	}
 
-	// generate reservation id
-	_, rerr = dbClient.Exec("sql/transaction/generate_id.sql", nil, false)
-	if rerr != nil {
-		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントの作成に失敗しました", Log: rerr.Error()}
-	}
-	reservationId, gerr := dbClient.GetId()
-	if gerr != nil {
-		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントの作成に失敗しました", Log: gerr.Error()}
-	}
-	if reservationId == "" {
-		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "予約IDの生成に失敗しました", Log: "empty id returned"}
-	}
-
-	// insert into events table (use struct with twowaysql tags)
+	// eventsテーブルに挿入
 	eventParams := struct {
-		EventId     string `twowaysql:"eventId"`
-		Name        string `twowaysql:"name"`
-		Description string `twowaysql:"description"`
+		EventId      string `twowaysql:"eventId"`
+		Name         string `twowaysql:"name"`
+		Description  string `twowaysql:"description"`
+		CalendarView int    `twowaysql:"calendarView"`
 	}{
-		EventId:     eventId,
-		Name:        requestBody.Name,
-		Description: requestBody.Description,
+		EventId:      eventId,
+		Name:         requestBody.Name,
+		Description:  requestBody.Description,
+		CalendarView: boolToInt(requestBody.CalendarView),
 	}
 	logrus.Debugf("Inserting event: sql=insert_events.sql params=%#v", eventParams)
 	_, rerr = dbClient.Exec("sql/event/insert_events.sql", &eventParams, false)
 	if rerr != nil {
-		logrus.Errorf("insert_events failed: %v", rerr)
+		logrus.Errorf("イベントの挿入に失敗しました: %v", rerr)
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "DBエラーが発生しました (events)", Log: rerr.Error()}
 	}
 
-	// insert into event_reservations table
-	reservationParams := struct {
-		ReservationId     string `twowaysql:"reservationId"`
-		EventId           string `twowaysql:"eventId"`
-		Name              string `twowaysql:"name"`
-		Description       string `twowaysql:"description"`
-		StartDate         string `twowaysql:"startDate"`
-		FinishDate        string `twowaysql:"finishDate"`
-		ReservationStart  string `twowaysql:"reservationStart"`
-		ReservationFinish string `twowaysql:"reservationFinish"`
-		Capacity          int    `twowaysql:"capacity"`
-	}{
-		ReservationId:     reservationId,
-		EventId:           eventId,
-		Name:              requestBody.Name,
-		Description:       requestBody.Description,
-		StartDate:         requestBody.StartDate.Format("2006-01-02 15:04:05"),
-		FinishDate:        requestBody.FinishDate.Format("2006-01-02 15:04:05"),
-		ReservationStart:  requestBody.ReservationStart.Format("2006-01-02 15:04:05"),
-		ReservationFinish: requestBody.ReservationFinish.Format("2006-01-02 15:04:05"),
-		Capacity:          requestBody.Capacity,
-	}
-	logrus.Debugf("Inserting reservation: sql=insert_event_reservations.sql params=%#v", reservationParams)
-	_, rerr = dbClient.Exec("sql/event/insert_event_reservations.sql", &reservationParams, false)
-	if rerr != nil {
-		logrus.Errorf("insert_event_reservations failed: %v", rerr)
-		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "DBエラーが発生しました (reservations)", Log: rerr.Error()}
-	}
 	return eventId, nil
+}
+
+func boolToInt(b bool) int {
+	if b {
+		return 1
+	}
+	return 0
 }

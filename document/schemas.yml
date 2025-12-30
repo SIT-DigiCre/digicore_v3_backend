@@ -62,6 +62,10 @@ ResGetEventEventIdReservationIdObjectUser:
   $ref: "./schemas/res_get_event_event_id_reservation_id.user.yml"
 ReqPutEventEventIdReservationIdMe:
   $ref: "./schemas/req_put_event_event_id_reservation_id_me.yml"
+ReqPostEventEvent:
+  $ref: "./schemas/req_post_event_event.yml"
+ResPostEventEvent:
+  $ref: "./schemas/res_post_event_event.yml"
 ResGetStorageMyfile:
   $ref: "./schemas/res_get_storage_myfile.yml"
 ResGetStorageMyfileObjectFile:

@@ -24,12 +24,12 @@ get:
       $ref: "../responses/internal_server.yml"
 post:
   tags:
-    - work
+    - event
   description: "Post event"
   security:
     - BearerAuth: []
   requestBody:
-    description: "Create work"
+    description: "Create event"
     required: true
     content:
       application/json:
