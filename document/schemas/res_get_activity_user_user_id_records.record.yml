@@ -1,0 +1,24 @@
+required:
+  - recordId
+  - place
+  - checkedInAt
+  - initialCheckedInAt
+properties:
+  recordId:
+    type: string
+  place:
+    type: string
+  checkedInAt:
+    type: string
+    format: date-time
+  checkedOutAt:
+    type: string
+    format: date-time
+    nullable: true
+  initialCheckedInAt:
+    type: string
+    format: date-time
+  initialCheckedOutAt:
+    type: string
+    format: date-time
+    nullable: true

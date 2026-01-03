@@ -172,6 +172,18 @@ ReqPostActivityCheckout:
   $ref: "./schemas/req_post_activity_checkout.yml"
 ReqPutActivityRecordRecordId:
   $ref: "./schemas/req_put_activity_record_record_id.yml"
+ResGetActivityPlacePlaceCurrent:
+  $ref: "./schemas/res_get_activity_place_place_current.yml"
+ResGetActivityPlacePlaceCurrentObjectUser:
+  $ref: "./schemas/res_get_activity_place_place_current.user.yml"
+ResGetActivityPlacePlaceHistory:
+  $ref: "./schemas/res_get_activity_place_place_history.yml"
+ResGetActivityPlacePlaceHistoryObjectUser:
+  $ref: "./schemas/res_get_activity_place_place_history.user.yml"
+ResGetActivityUserUserIdRecords:
+  $ref: "./schemas/res_get_activity_user_user_id_records.yml"
+ResGetActivityUserUserIdRecordsObjectRecord:
+  $ref: "./schemas/res_get_activity_user_user_id_records.record.yml"
 
 Error:
   $ref: "./schemas/error.yml"
