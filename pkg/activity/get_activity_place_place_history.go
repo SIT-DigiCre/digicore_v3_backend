@@ -41,7 +41,7 @@ func GetActivityPlacePlaceHistory(ctx echo.Context, dbClient db.Client, place st
 		return api.ResGetActivityPlacePlaceHistory{}, &response.Error{
 			Code:    http.StatusInternalServerError,
 			Level:   "Error",
-			Message: "訪問履歴の取得に失敗しました",
+			Message: "訪問履歴のデータベース取得に失敗しました",
 			Log:     rerr.Error(),
 		}
 	}

@@ -39,7 +39,7 @@ func GetActivityUserUserIdRecords(ctx echo.Context, dbClient db.Client, userId s
 		return api.ResGetActivityUserUserIdRecords{}, &response.Error{
 			Code:    http.StatusInternalServerError,
 			Level:   "Error",
-			Message: "入室記録の取得に失敗しました",
+			Message: "入室記録のデータ変換に失敗しました",
 			Log:     rerr.Error(),
 		}
 	}
