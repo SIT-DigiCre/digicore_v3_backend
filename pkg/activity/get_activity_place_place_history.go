@@ -70,18 +70,17 @@ func calculateDateRange(period string, date time.Time) (time.Time, time.Time, *r
 		daysToMonday := weekday - 1 + 7 // 1週間前の月曜までの日数
 		oneWeekAgoMonday := date.AddDate(0, 0, -daysToMonday)
 		startDate = time.Date(oneWeekAgoMonday.Year(), oneWeekAgoMonday.Month(), oneWeekAgoMonday.Day(), 0, 0, 0, 0, date.Location())
-		// 指定日を含む週の日曜を計算
-		daysToSunday := 7 - weekday
-		sunday := date.AddDate(0, 0, daysToSunday)
-		endDate = time.Date(sunday.Year(), sunday.Month(), sunday.Day(), 23, 59, 59, 999999999, date.Location())
+		// 1週間前の日曜を計算（開始日の月曜から6日後）
+		oneWeekAgoSunday := oneWeekAgoMonday.AddDate(0, 0, 6)
+		endDate = time.Date(oneWeekAgoSunday.Year(), oneWeekAgoSunday.Month(), oneWeekAgoSunday.Day(), 23, 59, 59, 999999999, date.Location())
 	case "month":
 		// 指定日を含む月の1か月前の1日00:00:00 ～ 月末23:59:59
 		oneMonthAgo := date.AddDate(0, -1, 0)
 		startDate = time.Date(oneMonthAgo.Year(), oneMonthAgo.Month(), 1, 0, 0, 0, 0, date.Location())
-		// 指定日を含む月の月末を計算
-		nextMonth := date.AddDate(0, 1, 0)
-		lastDayOfMonth := time.Date(nextMonth.Year(), nextMonth.Month(), 1, 0, 0, 0, 0, date.Location()).AddDate(0, 0, -1)
-		endDate = time.Date(lastDayOfMonth.Year(), lastDayOfMonth.Month(), lastDayOfMonth.Day(), 23, 59, 59, 999999999, date.Location())
+		// 1か月前の月末を計算
+		oneMonthAgoNextMonth := oneMonthAgo.AddDate(0, 1, 0)
+		lastDayOfOneMonthAgo := time.Date(oneMonthAgoNextMonth.Year(), oneMonthAgoNextMonth.Month(), 1, 0, 0, 0, 0, date.Location()).AddDate(0, 0, -1)
+		endDate = time.Date(lastDayOfOneMonthAgo.Year(), lastDayOfOneMonthAgo.Month(), lastDayOfOneMonthAgo.Day(), 23, 59, 59, 999999999, date.Location())
 	default:
 		return time.Time{}, time.Time{}, &response.Error{
 			Code:    http.StatusBadRequest,
