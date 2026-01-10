@@ -1721,6 +1721,115 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+  '/activity/place/{place}/current':
+    get:
+      tags:
+        - activity
+      description: Get current users in place
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: place
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get current users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetActivityPlacePlaceCurrent'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/activity/place/{place}/history':
+    get:
+      tags:
+        - activity
+      description: Get place visit history
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: place
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: period
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - day
+              - week
+              - month
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Success get place history
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetActivityPlacePlaceHistory'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/activity/user/{userId}/records':
+    get:
+      tags:
+        - activity
+      description: Get user activity records
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: place
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+      responses:
+        '200':
+          description: Success get user records
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetActivityUserUserIdRecords'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -3186,6 +3295,101 @@ components:
           format: date-time
           x-oapi-codegen-extra-tags:
             ja: 更新時刻
+    ResGetActivityPlacePlaceCurrent:
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetActivityPlacePlaceCurrentObjectUser'
+    ResGetActivityPlacePlaceCurrentObjectUser:
+      required:
+        - userId
+        - username
+        - shortIntroduction
+        - iconUrl
+        - checkedInAt
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        shortIntroduction:
+          type: string
+        iconUrl:
+          type: string
+        checkedInAt:
+          type: string
+          format: date-time
+    ResGetActivityPlacePlaceHistory:
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetActivityPlacePlaceHistoryObjectUser'
+    ResGetActivityPlacePlaceHistoryObjectUser:
+      required:
+        - userId
+        - username
+        - shortIntroduction
+        - iconUrl
+        - checkInCount
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        shortIntroduction:
+          type: string
+        iconUrl:
+          type: string
+        checkInCount:
+          type: integer
+    ResGetActivityUserUserIdRecords:
+      required:
+        - records
+        - total
+        - offset
+        - limit
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetActivityUserUserIdRecordsObjectRecord'
+        total:
+          type: integer
+        offset:
+          type: integer
+        limit:
+          type: integer
+    ResGetActivityUserUserIdRecordsObjectRecord:
+      required:
+        - recordId
+        - place
+        - checkedInAt
+        - initialCheckedInAt
+      properties:
+        recordId:
+          type: string
+        place:
+          type: string
+        checkedInAt:
+          type: string
+          format: date-time
+        checkedOutAt:
+          type: string
+          format: date-time
+          nullable: true
+        initialCheckedInAt:
+          type: string
+          format: date-time
+        initialCheckedOutAt:
+          type: string
+          format: date-time
+          nullable: true
     Error:
       required:
         - level
