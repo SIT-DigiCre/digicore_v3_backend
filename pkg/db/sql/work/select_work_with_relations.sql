@@ -1,7 +1,6 @@
-SELECT 
+SELECT
     BIN_TO_UUID(works.id) AS work_id,
     works.name AS work_name,
-    works.updated_at AS work_updated_at,
     BIN_TO_UUID(work_users.user_id) AS author_user_id,
     user_profiles.username AS author_username,
     user_profiles.icon_url AS author_icon_url,

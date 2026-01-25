@@ -52,5 +52,5 @@ func getWorkListFromAuthorId(dbClient db.Client, userId string) ([]workOverview,
 		}
 	}
 
-	return aggregateWorkListRows(rows), nil
+	return mapRowsToWorkList(rows), nil
 }

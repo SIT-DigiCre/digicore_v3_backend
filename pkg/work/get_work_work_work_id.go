@@ -84,10 +84,10 @@ func getWorkFromTagId(dbClient db.Client, workId string) (work, *response.Error)
 	if len(rows) == 0 {
 		return work{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "作品が存在しません", Log: "no rows in result"}
 	}
-	return aggregateWorkDetailRows(rows), nil
+	return mapRowsToWorkDetail(rows), nil
 }
 
-func aggregateWorkDetailRows(rows []workDetailWithRelationsRow) work {
+func mapRowsToWorkDetail(rows []workDetailWithRelationsRow) work {
 	firstRow := rows[0]
 	result := work{
 		WorkId:      firstRow.WorkId,

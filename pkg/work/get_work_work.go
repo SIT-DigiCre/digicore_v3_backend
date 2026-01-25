@@ -13,7 +13,6 @@ import (
 type workWithRelationsRow struct {
 	WorkId         string  `db:"work_id"`
 	WorkName       string  `db:"work_name"`
-	WorkUpdatedAt  string  `db:"work_updated_at"`
 	AuthorUserId   *string `db:"author_user_id"`
 	AuthorUsername *string `db:"author_username"`
 	AuthorIconUrl  *string `db:"author_icon_url"`
@@ -57,10 +56,10 @@ func getWorkList(dbClient db.Client, offset *int, authorId *string) ([]workOverv
 	if err != nil {
 		return []workOverview{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
-	return aggregateWorkListRows(rows), nil
+	return mapRowsToWorkList(rows), nil
 }
 
-func aggregateWorkListRows(rows []workWithRelationsRow) []workOverview {
+func mapRowsToWorkList(rows []workWithRelationsRow) []workOverview {
 	workMap := make(map[string]*workOverview)
 	workOrder := make([]string, 0)
 	authorMap := make(map[string]map[string]bool)
