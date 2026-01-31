@@ -34,7 +34,6 @@ func GetUserUserIdWork(ctx echo.Context, dbClient db.Client, userId string) (api
 	return res, nil
 }
 
-// 指定されたユーザーが作者として含まれる作品一覧を取得する
 func getWorkListFromAuthorId(dbClient db.Client, userId string) ([]workOverview, *response.Error) {
 	params := struct {
 		AuthorId *string `twowaysql:"authorId"`
@@ -42,8 +41,8 @@ func getWorkListFromAuthorId(dbClient db.Client, userId string) ([]workOverview,
 		AuthorId: &userId,
 	}
 
-	workOverviews := []workOverview{}
-	err := dbClient.Select(&workOverviews, "sql/work/select_work.sql", &params)
+	rows := []workWithRelationsRow{}
+	err := dbClient.Select(&rows, "sql/work/select_work_with_relations.sql", &params)
 	if err != nil {
 		return []workOverview{}, &response.Error{
 			Code:    http.StatusInternalServerError,
@@ -53,19 +52,5 @@ func getWorkListFromAuthorId(dbClient db.Client, userId string) ([]workOverview,
 		}
 	}
 
-	for i := range workOverviews {
-		workId := workOverviews[i].WorkId
-		workAuthors, err := getWorkWorkAuthorList(dbClient, workId)
-		if err != nil {
-			return []workOverview{}, err
-		}
-		workOverviews[i].Authors = workAuthors
-		workTags, err := getWorkWorkTagList(dbClient, workId)
-		if err != nil {
-			return []workOverview{}, err
-		}
-		workOverviews[i].Tags = workTags
-	}
-
-	return workOverviews, nil
+	return mapRowsToWorkList(rows), nil
 }

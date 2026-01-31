@@ -10,6 +10,16 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+type workWithRelationsRow struct {
+	WorkId         string  `db:"work_id"`
+	WorkName       string  `db:"work_name"`
+	AuthorUserId   *string `db:"author_user_id"`
+	AuthorUsername *string `db:"author_username"`
+	AuthorIconUrl  *string `db:"author_icon_url"`
+	TagId          *string `db:"tag_id"`
+	TagName        *string `db:"tag_name"`
+}
+
 func GetWorkWork(ctx echo.Context, dbClient db.Client, params api.GetWorkWorkParams) (api.ResGetWorkWork, *response.Error) {
 	res := api.ResGetWorkWork{}
 	work, err := getWorkList(dbClient, params.Offset, params.AuthorId)
@@ -41,23 +51,65 @@ func getWorkList(dbClient db.Client, offset *int, authorId *string) ([]workOverv
 		Offset:   offset,
 		AuthorId: authorId,
 	}
-	workOverviews := []workOverview{}
-	err := dbClient.Select(&workOverviews, "sql/work/select_work.sql", &params)
+	rows := []workWithRelationsRow{}
+	err := dbClient.Select(&rows, "sql/work/select_work_with_relations.sql", &params)
 	if err != nil {
 		return []workOverview{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
-	for i := range workOverviews {
-		workId := workOverviews[i].WorkId
-		workAuthors, err := getWorkWorkAuthorList(dbClient, workId)
-		if err != nil {
-			return []workOverview{}, err
+	return mapRowsToWorkList(rows), nil
+}
+
+func mapRowsToWorkList(rows []workWithRelationsRow) []workOverview {
+	workMap := make(map[string]*workOverview)
+	workOrder := make([]string, 0)
+	authorMap := make(map[string]map[string]bool)
+	tagMap := make(map[string]map[string]bool)
+
+	for _, row := range rows {
+		if _, exists := workMap[row.WorkId]; !exists {
+			workMap[row.WorkId] = &workOverview{
+				WorkId:  row.WorkId,
+				Name:    row.WorkName,
+				Authors: []workObjectAuthor{},
+				Tags:    []workObjectTag{},
+			}
+			workOrder = append(workOrder, row.WorkId)
+			authorMap[row.WorkId] = make(map[string]bool)
+			tagMap[row.WorkId] = make(map[string]bool)
 		}
-		workOverviews[i].Authors = workAuthors
-		workTags, err := getWorkWorkTagList(dbClient, workId)
-		if err != nil {
-			return []workOverview{}, err
+
+		// 作者情報を追加
+		if row.AuthorUserId != nil && !authorMap[row.WorkId][*row.AuthorUserId] {
+			author := workObjectAuthor{
+				UserId: *row.AuthorUserId,
+			}
+			if row.AuthorUsername != nil {
+				author.Username = *row.AuthorUsername
+			}
+			if row.AuthorIconUrl != nil {
+				author.IconUrl = *row.AuthorIconUrl
+			}
+			workMap[row.WorkId].Authors = append(workMap[row.WorkId].Authors, author)
+			authorMap[row.WorkId][*row.AuthorUserId] = true
 		}
-		workOverviews[i].Tags = workTags
+
+		// タグ情報を追加
+		if row.TagId != nil && !tagMap[row.WorkId][*row.TagId] {
+			tag := workObjectTag{
+				TagId: *row.TagId,
+			}
+			if row.TagName != nil {
+				tag.Name = *row.TagName
+			}
+			workMap[row.WorkId].Tags = append(workMap[row.WorkId].Tags, tag)
+			tagMap[row.WorkId][*row.TagId] = true
+		}
 	}
-	return workOverviews, nil
+
+	result := make([]workOverview, 0, len(workMap))
+	for _, workId := range workOrder {
+		result = append(result, *workMap[workId])
+	}
+
+	return result
 }
