@@ -2,6 +2,7 @@ package user
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
@@ -22,16 +23,21 @@ func PutUserMePrivate(ctx echo.Context, dbClient db.TransactionClient, requestBo
 	return GetUserMePrivate(ctx, dbClient)
 }
 
-// validateParentNameFields は送信された緊急連絡先氏名まわりに空文字が含まれていれば 400 を返す。未送信（nil）は対象外。
+// validateParentNameFields は送信された緊急連絡先氏名まわりに空文字・空白のみが含まれていれば 400 を返す。
+// また、姓と名は必ずセットで送信する必要がある。未送信（nil）は対象外。
 func validateParentNameFields(req api.ReqPutUserMePrivate) *response.Error {
-	if req.ParentName != nil && *req.ParentName == "" {
+	if req.ParentName != nil && strings.TrimSpace(*req.ParentName) == "" {
 		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "緊急連絡先氏名に空文字は指定できません", Log: "parentName is empty"}
 	}
-	if req.ParentLastName != nil && *req.ParentLastName == "" {
+	if req.ParentLastName != nil && strings.TrimSpace(*req.ParentLastName) == "" {
 		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "緊急連絡先の名字に空文字は指定できません", Log: "parentLastName is empty"}
 	}
-	if req.ParentFirstName != nil && *req.ParentFirstName == "" {
+	if req.ParentFirstName != nil && strings.TrimSpace(*req.ParentFirstName) == "" {
 		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "緊急連絡先の名前に空文字は指定できません", Log: "parentFirstName is empty"}
+	}
+	// 姓と名は必ずセットで送信する必要がある
+	if (req.ParentLastName != nil) != (req.ParentFirstName != nil) {
+		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "緊急連絡先の名字と名前は両方指定してください", Log: "parentLastName and parentFirstName must be provided together"}
 	}
 	return nil
 }
