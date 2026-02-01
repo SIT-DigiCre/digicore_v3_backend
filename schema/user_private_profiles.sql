@@ -10,6 +10,8 @@ CREATE TABLE user_private_profiles
     phone_number            VARCHAR(32)  NOT NULL,
     address                 VARCHAR(255) NOT NULL,
     parent_name             VARCHAR(255) NOT NULL,
+    parent_last_name        VARCHAR(255) NOT NULL DEFAULT '',
+    parent_first_name       VARCHAR(255) NOT NULL DEFAULT '',
     parent_cellphone_number VARCHAR(32)  NOT NULL,
     parent_homephone_number VARCHAR(32)  NOT NULL,
     parent_address          VARCHAR(255) NOT NULL,
