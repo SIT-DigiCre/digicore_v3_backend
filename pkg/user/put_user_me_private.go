@@ -37,7 +37,10 @@ func validateParentNameFields(req api.ReqPutUserMePrivate) *response.Error {
 }
 
 func updateUserPrivate(dbClient db.TransactionClient, userId string, requestBody api.ReqPutUserMePrivate) *response.Error {
-	parentName, parentLastName, parentFirstName := resolveParentNameFields(dbClient, userId, requestBody)
+	parentName, parentLastName, parentFirstName, resolveErr := resolveParentNameFields(dbClient, userId, requestBody)
+	if resolveErr != nil {
+		return resolveErr
+	}
 
 	params := struct {
 		UserId                string  `twowaysql:"userId"`
@@ -78,9 +81,18 @@ func updateUserPrivate(dbClient db.TransactionClient, userId string, requestBody
 }
 
 // resolveParentNameFields はリクエストで送信された値があればそれを使い、未送信なら既存値を返す。既存レコードが無い場合は未送信を空文字とする。
-func resolveParentNameFields(dbClient db.Client, userId string, req api.ReqPutUserMePrivate) (parentName, parentLastName, parentFirstName string) {
+func resolveParentNameFields(dbClient db.Client, userId string, req api.ReqPutUserMePrivate) (parentName, parentLastName, parentFirstName string, resErr *response.Error) {
+	// 3フィールドすべてが送信済みの場合は既存取得を省略する
+	if req.ParentName != nil && req.ParentLastName != nil && req.ParentFirstName != nil {
+		return *req.ParentName, *req.ParentLastName, *req.ParentFirstName, nil
+	}
+
 	existing, err := getUserPrivateFromUserId(dbClient, userId)
 	if err != nil {
+		if err.Code != http.StatusNotFound {
+			// 既存レコード取得に失敗した場合はエラーを返す
+			return "", "", "", err
+		}
 		// 既存が無い（新規登録）場合は未送信を空文字で返す
 		if req.ParentName != nil {
 			parentName = *req.ParentName
@@ -91,7 +103,7 @@ func resolveParentNameFields(dbClient db.Client, userId string, req api.ReqPutUs
 		if req.ParentFirstName != nil {
 			parentFirstName = *req.ParentFirstName
 		}
-		return parentName, parentLastName, parentFirstName
+		return parentName, parentLastName, parentFirstName, nil
 	}
 	parentName = existing.ParentName
 	parentLastName = existing.ParentLastName
@@ -105,5 +117,5 @@ func resolveParentNameFields(dbClient db.Client, userId string, req api.ReqPutUs
 	if req.ParentFirstName != nil {
 		parentFirstName = *req.ParentFirstName
 	}
-	return parentName, parentLastName, parentFirstName
+	return parentName, parentLastName, parentFirstName, nil
 }
