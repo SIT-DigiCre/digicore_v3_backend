@@ -52,3 +52,10 @@ build:
 .PHONY: ls
 ls:
 	docker compose -f ${DOCKER_COMPOSE} ls
+
+.PHONY: jwt
+jwt:
+	@TOKEN=$$(bash scripts/gen_jwt.sh); \
+	echo "$$TOKEN"; \
+	echo ""; \
+	echo "Authorization: Bearer $$TOKEN"
