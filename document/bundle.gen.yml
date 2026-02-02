@@ -205,6 +205,48 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /admin/user:
+    get:
+      tags:
+        - user
+      description: Get admin user list
+      security:
+        - BearerAuth:
+            - admin
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: query
+          in: query
+          schema:
+            type: string
+        - name: schoolGrade
+          in: query
+          schema:
+            type: integer
+        - name: isAdmin
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success get admin user list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetAdminUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   '/user/{userId}':
     get:
       tags:
@@ -277,32 +319,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetGroup'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServer'
-  '/user/{userId}/work':
-    get:
-      tags:
-        - user
-      description: Get works which the specified user is included as author
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success get works which the specified user is included as author
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResGetWorkWork'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1992,6 +2008,59 @@ components:
           type: string
         isAdmin:
           type: boolean
+    ResGetAdminUser:
+      required:
+        - users
+        - total
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetAdminUserObjectUser'
+        total:
+          type: integer
+    ResGetAdminUserObjectUser:
+      required:
+        - userId
+        - studentNumber
+        - isAdmin
+        - profile
+        - privateProfile
+      properties:
+        userId:
+          type: string
+        studentNumber:
+          type: string
+        isAdmin:
+          type: boolean
+        profile:
+          $ref: '#/components/schemas/ResGetAdminUserProfile'
+        privateProfile:
+          $ref: '#/components/schemas/ResGetUserMePrivate'
+    ResGetAdminUserProfile:
+      required:
+        - username
+        - iconUrl
+        - schoolGrade
+        - discordUserId
+        - shortIntroduction
+        - introduction
+        - activeLimit
+      properties:
+        username:
+          type: string
+        iconUrl:
+          type: string
+        schoolGrade:
+          type: integer
+        discordUserId:
+          type: string
+        shortIntroduction:
+          type: string
+        introduction:
+          type: string
+        activeLimit:
+          type: string
     ReqPutUserMe:
       required:
         - username

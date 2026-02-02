@@ -272,6 +272,32 @@ type ResGetActivityUserUserIdRecordsObjectRecord struct {
 	RecordId            string     `json:"recordId"`
 }
 
+// ResGetAdminUser defines model for ResGetAdminUser.
+type ResGetAdminUser struct {
+	Total int                         `json:"total"`
+	Users []ResGetAdminUserObjectUser `json:"users"`
+}
+
+// ResGetAdminUserObjectUser defines model for ResGetAdminUserObjectUser.
+type ResGetAdminUserObjectUser struct {
+	IsAdmin        bool                   `json:"isAdmin"`
+	PrivateProfile ResGetUserMePrivate    `json:"privateProfile"`
+	Profile        ResGetAdminUserProfile `json:"profile"`
+	StudentNumber  string                 `json:"studentNumber"`
+	UserId         string                 `json:"userId"`
+}
+
+// ResGetAdminUserProfile defines model for ResGetAdminUserProfile.
+type ResGetAdminUserProfile struct {
+	ActiveLimit       string `json:"activeLimit"`
+	DiscordUserId     string `json:"discordUserId"`
+	IconUrl           string `json:"iconUrl"`
+	Introduction      string `json:"introduction"`
+	SchoolGrade       int    `json:"schoolGrade"`
+	ShortIntroduction string `json:"shortIntroduction"`
+	Username          string `json:"username"`
+}
+
 // ResGetBudget defines model for ResGetBudget.
 type ResGetBudget struct {
 	Budgets []ResGetBudgetObjectBudget `json:"budgets"`
@@ -762,6 +788,15 @@ type GetActivityUserUserIdRecordsParams struct {
 	Place  *string `form:"place,omitempty" json:"place,omitempty"`
 	Offset *int    `form:"offset,omitempty" json:"offset,omitempty"`
 	Limit  *int    `form:"limit,omitempty" json:"limit,omitempty"`
+}
+
+// GetAdminUserParams defines parameters for GetAdminUser.
+type GetAdminUserParams struct {
+	Offset      *int    `form:"offset,omitempty" json:"offset,omitempty"`
+	Limit       *int    `form:"limit,omitempty" json:"limit,omitempty"`
+	Query       *string `form:"query,omitempty" json:"query,omitempty"`
+	SchoolGrade *int    `form:"schoolGrade,omitempty" json:"schoolGrade,omitempty"`
+	IsAdmin     *bool   `form:"isAdmin,omitempty" json:"isAdmin,omitempty"`
 }
 
 // GetBudgetParams defines parameters for GetBudget.

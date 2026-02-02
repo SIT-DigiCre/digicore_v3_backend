@@ -8,8 +8,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// GetAdminUser は /admin/user のハンドラ。
-// 管理者向けのユーザー一覧・検索機能を提供する。
 func (s *server) GetAdminUser(ctx echo.Context, params api.GetAdminUserParams) error {
 	dbClient := db.Open()
 

@@ -35,6 +35,9 @@ type ServerInterface interface {
 	// (GET /activity/user/{userId}/records)
 	GetActivityUserUserIdRecords(ctx echo.Context, userId string, params GetActivityUserUserIdRecordsParams) error
 
+	// (GET /admin/user)
+	GetAdminUser(ctx echo.Context, params GetAdminUserParams) error
+
 	// (GET /budget)
 	GetBudget(ctx echo.Context, params GetBudgetParams) error
 
@@ -190,9 +193,6 @@ type ServerInterface interface {
 
 	// (GET /user/{userId}/introduction)
 	GetUserUserIdIntroduction(ctx echo.Context, userId string) error
-
-	// (GET /user/{userId}/work)
-	GetUserUserIdWork(ctx echo.Context, userId string) error
 
 	// (GET /work/tag)
 	GetWorkTag(ctx echo.Context, params GetWorkTagParams) error
@@ -381,6 +381,54 @@ func (w *ServerInterfaceWrapper) GetActivityUserUserIdRecords(ctx echo.Context) 
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetActivityUserUserIdRecords(ctx, userId, params)
+	return err
+}
+
+// GetAdminUser converts echo context to params.
+func (w *ServerInterfaceWrapper) GetAdminUser(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"admin"})
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetAdminUserParams
+	// ------------- Optional query parameter "offset" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "offset", ctx.QueryParams(), &params.Offset)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter offset: %s", err))
+	}
+
+	// ------------- Optional query parameter "limit" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "limit", ctx.QueryParams(), &params.Limit)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter limit: %s", err))
+	}
+
+	// ------------- Optional query parameter "query" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "query", ctx.QueryParams(), &params.Query)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter query: %s", err))
+	}
+
+	// ------------- Optional query parameter "schoolGrade" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "schoolGrade", ctx.QueryParams(), &params.SchoolGrade)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter schoolGrade: %s", err))
+	}
+
+	// ------------- Optional query parameter "isAdmin" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "isAdmin", ctx.QueryParams(), &params.IsAdmin)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter isAdmin: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetAdminUser(ctx, params)
 	return err
 }
 
@@ -1188,24 +1236,6 @@ func (w *ServerInterfaceWrapper) GetUserUserIdIntroduction(ctx echo.Context) err
 	return err
 }
 
-// GetUserUserIdWork converts echo context to params.
-func (w *ServerInterfaceWrapper) GetUserUserIdWork(ctx echo.Context) error {
-	var err error
-	// ------------- Path parameter "userId" -------------
-	var userId string
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "userId", runtime.ParamLocationPath, ctx.Param("userId"), &userId)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter userId: %s", err))
-	}
-
-	ctx.Set(BearerAuthScopes, []string{""})
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetUserUserIdWork(ctx, userId)
-	return err
-}
-
 // GetWorkTag converts echo context to params.
 func (w *ServerInterfaceWrapper) GetWorkTag(ctx echo.Context) error {
 	var err error
@@ -1434,6 +1464,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/activity/place/:place/history", wrapper.GetActivityPlacePlaceHistory)
 	router.PUT(baseURL+"/activity/record/:recordId", wrapper.PutActivityRecordRecordId)
 	router.GET(baseURL+"/activity/user/:userId/records", wrapper.GetActivityUserUserIdRecords)
+	router.GET(baseURL+"/admin/user", wrapper.GetAdminUser)
 	router.GET(baseURL+"/budget", wrapper.GetBudget)
 	router.POST(baseURL+"/budget", wrapper.PostBudget)
 	router.GET(baseURL+"/budget/:budgetId", wrapper.GetBudgetBudgetId)
@@ -1486,7 +1517,6 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/user/:userId", wrapper.GetUserUserId)
 	router.GET(baseURL+"/user/:userId/group", wrapper.GetUserUserIdGroup)
 	router.GET(baseURL+"/user/:userId/introduction", wrapper.GetUserUserIdIntroduction)
-	router.GET(baseURL+"/user/:userId/work", wrapper.GetUserUserIdWork)
 	router.GET(baseURL+"/work/tag", wrapper.GetWorkTag)
 	router.POST(baseURL+"/work/tag", wrapper.PostWorkTag)
 	router.DELETE(baseURL+"/work/tag/:tagId", wrapper.DeleteWorkTagTagId)

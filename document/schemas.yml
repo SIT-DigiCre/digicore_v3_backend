@@ -28,6 +28,12 @@ ResGetUserUserIdIntroduction:
   $ref: "./schemas/res_get_user_user_id_introduction.yml"
 ResGetUserMe:
   $ref: "./schemas/res_get_user_me.yml"
+ResGetAdminUser:
+  $ref: "./schemas/res_get_admin_user.yml"
+ResGetAdminUserObjectUser:
+  $ref: "./schemas/res_get_admin_user.user.yml"
+ResGetAdminUserProfile:
+  $ref: "./schemas/res_get_admin_user.profile.yml"
 ReqPutUserMe:
   $ref: "./schemas/req_put_user_me.yml"
 ResGetUserMeIntroduction:

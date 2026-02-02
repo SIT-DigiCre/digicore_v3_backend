@@ -11,12 +11,9 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// GetAdminUser は管理者用のユーザー一覧・検索 API のドメインロジック。
-// /admin/user の OpenAPI 定義（ResGetAdminUser）に対応する。
 func GetAdminUser(ctx echo.Context, dbClient db.Client, params api.GetAdminUserParams) (api.ResGetAdminUser, *response.Error) {
 	res := api.ResGetAdminUser{}
 
-	// limit のデフォルト / 上限設定（デフォルト 100, 最大 500）
 	limit := params.Limit
 	if limit == nil {
 		defaultLimit := 100
@@ -31,7 +28,6 @@ func GetAdminUser(ctx echo.Context, dbClient db.Client, params api.GetAdminUserP
 		limit = &minLimit
 	}
 
-	// offset のデフォルト（指定なしなら 0）
 	offset := params.Offset
 	if offset == nil {
 		defaultOffset := 0
@@ -64,8 +60,6 @@ func GetAdminUser(ctx echo.Context, dbClient db.Client, params api.GetAdminUserP
 	return res, nil
 }
 
-// adminUser は ResGetAdminUserObjectUser に対応するドメイン側の構造体。
-// フィールド名を OpenAPI 由来の構造体と揃えることで copier でマッピングする。
 type adminUser struct {
 	UserId         string                  `db:"user_id"`
 	StudentNumber  string                  `db:"student_number"`
@@ -74,7 +68,6 @@ type adminUser struct {
 	PrivateProfile adminUserPrivateProfile `db:"-"`
 }
 
-// adminUserProfile は profile ネストオブジェクト用。
 type adminUserProfile struct {
 	Username          string `db:"username"`
 	IconUrl           string `db:"icon_url"`
@@ -85,8 +78,6 @@ type adminUserProfile struct {
 	ActiveLimit       string `db:"active_limit"`
 }
 
-// adminUserPrivateProfile は privateProfile ネストオブジェクト用。
-// ResGetUserMePrivate と同じ構造になるようにしている。
 type adminUserPrivateProfile struct {
 	FirstName             string `db:"first_name"`
 	LastName              string `db:"last_name"`
@@ -103,7 +94,6 @@ type adminUserPrivateProfile struct {
 	ParentAddress         string `db:"parent_address"`
 }
 
-// adminUserRow は SQL の結果セットを受けるためのフラットな構造体。
 type adminUserRow struct {
 	UserId            string `db:"user_id"`
 	StudentNumber     string `db:"student_number"`
