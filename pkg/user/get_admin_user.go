@@ -118,6 +118,7 @@ type adminUserRow struct {
 	ParentCellphone   string `db:"parent_cellphone_number"`
 	ParentHomephone   string `db:"parent_homephone_number"`
 	ParentAddress     string `db:"parent_address"`
+	Total             int    `db:"total"`
 }
 
 func (r adminUserRow) toAdminUser() adminUser {
@@ -177,25 +178,11 @@ func getAdminUserList(dbClient db.Client, offset, limit *int, query *string, sch
 		}
 	}
 
-	countRows := []struct {
-		Total int `db:"total"`
-	}{}
-	if err := dbClient.Select(&countRows, "sql/user/select_admin_user_count.sql", &params); err != nil {
-		return []adminUser{}, 0, &response.Error{
-			Code:    http.StatusInternalServerError,
-			Level:   "Error",
-			Message: "不明なエラーが発生しました",
-			Log:     err.Error(),
-		}
-	}
 	total := 0
-	if len(countRows) > 0 {
-		total = countRows[0].Total
-	}
-
 	adminUsers := make([]adminUser, 0, len(rows))
 	for _, row := range rows {
 		adminUsers = append(adminUsers, row.toAdminUser())
+		total = row.Total
 	}
 
 	return adminUsers, total, nil

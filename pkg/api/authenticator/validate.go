@@ -85,7 +85,6 @@ func getClaims(t jwt.Token) ([]string, error) {
 
 func checkClaims(expectedClaims []string, t jwt.Token) error {
 	claims, err := getClaims(t)
-	fmt.Printf("%v %v\n", claims, expectedClaims)
 	if err != nil {
 		return fmt.Errorf("getting claims from token: %w", err)
 	}

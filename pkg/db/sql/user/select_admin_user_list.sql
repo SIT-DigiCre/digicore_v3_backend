@@ -8,17 +8,7 @@ SELECT
     active_limit,
     short_introduction,
     introduction,
-    IF(
-        EXISTS(
-            SELECT 1
-            FROM groups_users
-            INNER JOIN group_claims ON groups_users.group_id = group_claims.group_id
-            WHERE groups_users.user_id = user_profiles.user_id
-            AND group_claims.claim = 'admin'
-        ),
-        true,
-        false
-    ) as is_admin,
+    CASE WHEN gc.claim IS NOT NULL THEN true ELSE false END as is_admin,
     first_name,
     last_name,
     first_name_kana,
@@ -31,33 +21,27 @@ SELECT
     parent_first_name,
     parent_cellphone_number,
     parent_homephone_number,
-    parent_address
+    parent_address,
+    COUNT(*) OVER() as total
 FROM user_profiles
 LEFT JOIN users ON users.id = user_profiles.user_id
 LEFT JOIN user_private_profiles ON user_private_profiles.user_id = user_profiles.user_id
+LEFT JOIN groups_users gu ON gu.user_id = user_profiles.user_id
+LEFT JOIN group_claims gc ON gc.group_id = gu.group_id AND gc.claim = 'admin'
 WHERE 1 = 1
 /* IF query */
   AND (
-    username LIKE CONCAT('%', /*query*/'', '%')
-    OR users.student_number LIKE CONCAT('%', /*query*/'', '%')
+    username LIKE CONCAT('%', REPLACE(REPLACE(/*query*/'', '%', '\%'), '_', '\_'), '%')
+    OR users.student_number LIKE CONCAT('%', REPLACE(REPLACE(/*query*/'', '%', '\%'), '_', '\_'), '%')
   )
 /* END */
 /* IF schoolGrade */
   AND school_grade = /*schoolGrade*/0
 /* END */
 /* IF isAdmin */
-  AND IF(
-        EXISTS(
-            SELECT 1
-            FROM groups_users
-            INNER JOIN group_claims ON groups_users.group_id = group_claims.group_id
-            WHERE groups_users.user_id = user_profiles.user_id
-            AND group_claims.claim = 'admin'
-        ),
-        true,
-        false
-    ) = /*isAdmin*/false
+  AND (CASE WHEN gc.claim IS NOT NULL THEN true ELSE false END) = /*isAdmin*/false
 /* END */
+GROUP BY user_profiles.user_id
 ORDER BY user_profiles.created_at DESC
 LIMIT /*limit*/100
 OFFSET /*offset*/0;
