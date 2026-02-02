@@ -8,7 +8,7 @@ SELECT
     active_limit,
     short_introduction,
     introduction,
-    CASE WHEN gc.claim IS NOT NULL THEN true ELSE false END as is_admin,
+    MAX(CASE WHEN gc.claim IS NOT NULL THEN true ELSE false END) as is_admin,
     first_name,
     last_name,
     first_name_kana,
@@ -21,8 +21,7 @@ SELECT
     parent_first_name,
     parent_cellphone_number,
     parent_homephone_number,
-    parent_address,
-    COUNT(*) OVER() as total
+    parent_address
 FROM user_profiles
 LEFT JOIN users ON users.id = user_profiles.user_id
 LEFT JOIN user_private_profiles ON user_private_profiles.user_id = user_profiles.user_id
@@ -38,10 +37,10 @@ WHERE 1 = 1
 /* IF schoolGrade */
   AND school_grade = /*schoolGrade*/0
 /* END */
-/* IF isAdmin */
-  AND (CASE WHEN gc.claim IS NOT NULL THEN true ELSE false END) = /*isAdmin*/false
-/* END */
 GROUP BY user_profiles.user_id
+/* IF isAdmin */
+  HAVING MAX(CASE WHEN gc.claim IS NOT NULL THEN true ELSE false END) = /*isAdmin*/false
+/* END */
 ORDER BY user_profiles.created_at DESC
 LIMIT /*limit*/100
 OFFSET /*offset*/0;

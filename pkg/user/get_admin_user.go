@@ -5,6 +5,7 @@ import (
 
 	"github.com/jinzhu/copier"
 
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
@@ -12,6 +13,21 @@ import (
 )
 
 func GetAdminUser(ctx echo.Context, dbClient db.Client, params api.GetAdminUserParams) (api.ResGetAdminUser, *response.Error) {
+	userId := ctx.Get("user_id").(string)
+
+	isAdmin, authErr := admin.CheckUserIsAdmin(dbClient, userId)
+	if authErr != nil {
+		return api.ResGetAdminUser{}, authErr
+	}
+	if !isAdmin {
+		return api.ResGetAdminUser{}, &response.Error{
+			Code:    http.StatusForbidden,
+			Level:   "Info",
+			Message: "管理者ユーザー一覧を取得する権限がありません",
+			Log:     "user is not admin",
+		}
+	}
+
 	res := api.ResGetAdminUser{}
 
 	limit := params.Limit
@@ -118,7 +134,6 @@ type adminUserRow struct {
 	ParentCellphone   string `db:"parent_cellphone_number"`
 	ParentHomephone   string `db:"parent_homephone_number"`
 	ParentAddress     string `db:"parent_address"`
-	Total             int    `db:"total"`
 }
 
 func (r adminUserRow) toAdminUser() adminUser {
@@ -154,7 +169,22 @@ func (r adminUserRow) toAdminUser() adminUser {
 }
 
 func getAdminUserList(dbClient db.Client, offset, limit *int, query *string, schoolGrade *int, isAdmin *bool) ([]adminUser, int, *response.Error) {
-	params := struct {
+	filterParams := struct {
+		Query       *string `twowaysql:"query"`
+		SchoolGrade *int    `twowaysql:"schoolGrade"`
+		IsAdmin     *bool   `twowaysql:"isAdmin"`
+	}{
+		Query:       query,
+		SchoolGrade: schoolGrade,
+		IsAdmin:     isAdmin,
+	}
+
+	total, countErr := countAdminUserList(dbClient, &filterParams)
+	if countErr != nil {
+		return []adminUser{}, 0, countErr
+	}
+
+	listParams := struct {
 		Offset      *int    `twowaysql:"offset"`
 		Limit       *int    `twowaysql:"limit"`
 		Query       *string `twowaysql:"query"`
@@ -169,7 +199,7 @@ func getAdminUserList(dbClient db.Client, offset, limit *int, query *string, sch
 	}
 
 	rows := []adminUserRow{}
-	if err := dbClient.Select(&rows, "sql/user/select_admin_user_list.sql", &params); err != nil {
+	if err := dbClient.Select(&rows, "sql/user/select_admin_user_list.sql", &listParams); err != nil {
 		return []adminUser{}, 0, &response.Error{
 			Code:    http.StatusInternalServerError,
 			Level:   "Error",
@@ -178,12 +208,28 @@ func getAdminUserList(dbClient db.Client, offset, limit *int, query *string, sch
 		}
 	}
 
-	total := 0
 	adminUsers := make([]adminUser, 0, len(rows))
 	for _, row := range rows {
 		adminUsers = append(adminUsers, row.toAdminUser())
-		total = row.Total
 	}
 
 	return adminUsers, total, nil
+}
+
+func countAdminUserList(dbClient db.Client, params interface{}) (int, *response.Error) {
+	result := []struct {
+		Total int `db:"total"`
+	}{}
+	if err := dbClient.Select(&result, "sql/user/count_admin_user_list.sql", params); err != nil {
+		return 0, &response.Error{
+			Code:    http.StatusInternalServerError,
+			Level:   "Error",
+			Message: "不明なエラーが発生しました",
+			Log:     err.Error(),
+		}
+	}
+	if len(result) == 0 {
+		return 0, nil
+	}
+	return result[0].Total, nil
 }
