@@ -1,0 +1,41 @@
+get:
+  tags:
+    - user
+  description: "Get admin user list"
+  security:
+    - BearerAuth:
+        - "admin"
+  parameters:
+    - name: offset
+      in: query
+      schema:
+        type: integer
+    - name: limit
+      in: query
+      schema:
+        type: integer
+    - name: query
+      in: query
+      schema:
+        type: string
+    - name: schoolGrade
+      in: query
+      schema:
+        type: integer
+    - name: isAdmin
+      in: query
+      schema:
+        type: boolean
+  responses:
+    200:
+      description: "Success get admin user list"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_admin_user.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

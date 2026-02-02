@@ -1,0 +1,17 @@
+required:
+  - userId
+  - studentNumber
+  - isAdmin
+  - profile
+  - privateProfile
+properties:
+  userId:
+    type: string
+  studentNumber:
+    type: string
+  isAdmin:
+    type: boolean
+  profile:
+    $ref: './res_get_admin_user.profile.yml'
+  privateProfile:
+    $ref: './res_get_user_me_private.yml'

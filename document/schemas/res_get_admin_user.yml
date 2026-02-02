@@ -1,0 +1,10 @@
+required:
+  - users
+  - total
+properties:
+  users:
+    type: array
+    items:
+      $ref: './res_get_admin_user.user.yml'
+  total:
+    type: integer
