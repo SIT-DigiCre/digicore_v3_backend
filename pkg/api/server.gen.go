@@ -388,7 +388,7 @@ func (w *ServerInterfaceWrapper) GetActivityUserUserIdRecords(ctx echo.Context) 
 func (w *ServerInterfaceWrapper) GetAdminUser(ctx echo.Context) error {
 	var err error
 
-	ctx.Set(BearerAuthScopes, []string{"admin"})
+	ctx.Set(BearerAuthScopes, []string{""})
 
 	// Parameter object where we will unmarshal all parameters from the context
 	var params GetAdminUserParams

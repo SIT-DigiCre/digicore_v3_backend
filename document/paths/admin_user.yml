@@ -3,8 +3,7 @@ get:
     - user
   description: "Get admin user list"
   security:
-    - BearerAuth:
-        - "admin"
+    - BearerAuth: []
   parameters:
     - name: offset
       in: query

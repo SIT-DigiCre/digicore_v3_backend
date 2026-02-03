@@ -9,6 +9,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/utils"
 	"github.com/labstack/echo/v4"
 )
 
@@ -30,29 +31,8 @@ func GetAdminUser(ctx echo.Context, dbClient db.Client, params api.GetAdminUserP
 
 	res := api.ResGetAdminUser{}
 
-	limit := params.Limit
-	if limit == nil {
-		defaultLimit := 100
-		limit = &defaultLimit
-	}
-	if *limit > 500 {
-		maxLimit := 500
-		limit = &maxLimit
-	}
-	if *limit <= 0 {
-		minLimit := 1
-		limit = &minLimit
-	}
-
-	offset := params.Offset
-	if offset == nil {
-		defaultOffset := 0
-		offset = &defaultOffset
-	}
-	if *offset < 0 {
-		minOffset := 0
-		offset = &minOffset
-	}
+	limit := utils.ClampInt(params.Limit, 1, 500, 100)
+	offset := utils.ClampInt(params.Offset, 0, int(^uint(0)>>1), 0)
 
 	adminUsers, total, err := getAdminUserList(dbClient, offset, limit, params.Query, params.SchoolGrade, params.IsAdmin)
 	if err != nil {
@@ -168,38 +148,28 @@ func (r adminUserRow) toAdminUser() adminUser {
 	}
 }
 
-func getAdminUserList(dbClient db.Client, offset, limit *int, query *string, schoolGrade *int, isAdmin *bool) ([]adminUser, int, *response.Error) {
-	filterParams := struct {
-		Query       *string `twowaysql:"query"`
-		SchoolGrade *int    `twowaysql:"schoolGrade"`
-		IsAdmin     *bool   `twowaysql:"isAdmin"`
-	}{
-		Query:       query,
-		SchoolGrade: schoolGrade,
-		IsAdmin:     isAdmin,
-	}
-
-	total, countErr := countAdminUserList(dbClient, &filterParams)
-	if countErr != nil {
-		return []adminUser{}, 0, countErr
-	}
-
-	listParams := struct {
+func getAdminUserList(dbClient db.Client, offset, limit int, query *string, schoolGrade *int, isAdmin *bool) ([]adminUser, int, *response.Error) {
+	params := struct {
 		Offset      *int    `twowaysql:"offset"`
 		Limit       *int    `twowaysql:"limit"`
 		Query       *string `twowaysql:"query"`
 		SchoolGrade *int    `twowaysql:"schoolGrade"`
 		IsAdmin     *bool   `twowaysql:"isAdmin"`
 	}{
-		Offset:      offset,
-		Limit:       limit,
+		Offset:      &offset,
+		Limit:       &limit,
 		Query:       query,
 		SchoolGrade: schoolGrade,
 		IsAdmin:     isAdmin,
 	}
 
+	total, countErr := countAdminUserList(dbClient, &params)
+	if countErr != nil {
+		return []adminUser{}, 0, countErr
+	}
+
 	rows := []adminUserRow{}
-	if err := dbClient.Select(&rows, "sql/user/select_admin_user_list.sql", &listParams); err != nil {
+	if err := dbClient.Select(&rows, "sql/user/select_admin_user_list.sql", &params); err != nil {
 		return []adminUser{}, 0, &response.Error{
 			Code:    http.StatusInternalServerError,
 			Level:   "Error",

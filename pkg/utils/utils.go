@@ -157,3 +157,17 @@ func CheckUserId(userIds []string, targetUserId string) bool {
 	}
 	return false
 }
+
+func ClampInt(ptr *int, min, max, defaultVal int) int {
+	v := defaultVal
+	if ptr != nil {
+		v = *ptr
+	}
+	if v < min {
+		return min
+	}
+	if v > max {
+		return max
+	}
+	return v
+}
