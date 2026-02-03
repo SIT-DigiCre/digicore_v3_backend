@@ -56,13 +56,23 @@ make generate_api
 
 ### 認証ヘッダー設定
 
-認証が無効化されていても、JWT トークンの subject から user_id を取得するため、有効な JWT 形式のトークンが必要です。以下のようなダミートークンを生成：
+認証が無効化されていても、JWT トークンの subject から user_id を取得するため、有効な JWT 形式のトークンが必要です。
+
+テスト用トークンの生成には `scripts/gen_jwt.sh` を使用してください：
 
 ```sh
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMTExMTExMS0xMTExLTExMTEtMTExMS0xMTExMTExMTExMTEiLCJleHAiOjk5OTk5OTk5OTl9.dummy
+# デフォルト user_id (11111111-1111-1111-1111-111111111111) でトークン生成
+./scripts/gen_jwt.sh
+
+# 指定した user_id でトークン生成
+./scripts/gen_jwt.sh <user_id>
+
+# 使用例
+TOKEN=$(./scripts/gen_jwt.sh)
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8000/user/me
 ```
 
-トークンの生成は https://www.jwt.io/ja から行ってください。
+手動でトークンを生成する場合は https://www.jwt.io/ja から行ってください。
 
 #### ヘッダーの例
 

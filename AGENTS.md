@@ -61,6 +61,20 @@ make insert_test
 - 本番: JWT 認証有効
 - 開発: テスト用に`.env`で`AUTH=disable`に設定
 
+### テスト用 JWT トークン生成
+
+`AUTH=disable` でも API リクエストには JWT トークンが必要です（user_id の取得に使用）。
+
+```bash
+# テスト用トークン生成スクリプト
+./scripts/gen_jwt.sh              # デフォルト user_id
+./scripts/gen_jwt.sh <user_id>    # 指定 user_id
+
+# API テスト例
+TOKEN=$(./scripts/gen_jwt.sh)
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8000/user/me
+```
+
 ## アーキテクチャ
 
 ### コード構成
