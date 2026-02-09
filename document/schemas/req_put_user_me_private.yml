@@ -67,7 +67,7 @@ properties:
   parentHomephoneNumber:
     type: string
     x-oapi-codegen-extra-tags:
-      validate: phonenumber
+      validate: omitempty,phonenumber
       ja: 緊急連絡先固定電話番号
   parentAddress:
     type: string

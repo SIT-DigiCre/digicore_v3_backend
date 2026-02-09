@@ -205,7 +205,7 @@ type ReqPutUserMePrivate struct {
 	ParentAddress         string  `ja:"緊急連絡先住所" json:"parentAddress" validate:"required,min=1,max=255"`
 	ParentCellphoneNumber string  `ja:"緊急連絡先携帯電話番号" json:"parentCellphoneNumber" validate:"required,phonenumber"`
 	ParentFirstName       *string `ja:"緊急連絡先の名前" json:"parentFirstName,omitempty" validate:"omitempty,min=1,max=255"`
-	ParentHomephoneNumber *string `ja:"緊急連絡先固定電話番号" json:"parentHomephoneNumber,omitempty" validate:"phonenumber"`
+	ParentHomephoneNumber *string `ja:"緊急連絡先固定電話番号" json:"parentHomephoneNumber,omitempty" validate:"omitempty,phonenumber"`
 	ParentLastName        *string `ja:"緊急連絡先の名字" json:"parentLastName,omitempty" validate:"omitempty,min=1,max=255"`
 	ParentName            *string `ja:"緊急連絡先氏名" json:"parentName,omitempty" validate:"omitempty,min=1,max=255"`
 	PhoneNumber           string  `ja:"電話番号" json:"phoneNumber" validate:"required,phonenumber"`
