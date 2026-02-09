@@ -1,0 +1,1 @@
+INSERT INTO user_private_profiles (user_id, first_name, last_name, first_name_kana, last_name_kana, phone_number, address, parent_name, parent_cellphone_number, parent_homephone_number, parent_address) VALUE (UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'), '', '', '', '', '', '', '', '', '', '');
