@@ -82,7 +82,7 @@ func (t *transactionClient) DuplicateUpdate(insertQueryPath string, updateQueryP
 			if err != nil {
 				return nil, true, err
 			}
-			return res, false, nil
+			return res, true, nil
 		}
 		return nil, false, err
 	}

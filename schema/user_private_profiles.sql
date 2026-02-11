@@ -13,7 +13,7 @@ CREATE TABLE user_private_profiles
     parent_last_name        VARCHAR(255) NOT NULL DEFAULT '',
     parent_first_name       VARCHAR(255) NOT NULL DEFAULT '',
     parent_cellphone_number VARCHAR(32)  NOT NULL,
-    parent_homephone_number VARCHAR(32)  NOT NULL,
+    parent_homephone_number VARCHAR(32)  NOT NULL DEFAULT '',
     parent_address          VARCHAR(255) NOT NULL,
     created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

@@ -75,5 +75,11 @@ func createDefaultUser(dbClient db.TransactionClient, userId string, studentNumb
 	if rerr != nil {
 		return rerr
 	}
+	_, err = dbClient.Exec("sql/user/insert_user_private_default.sql", &struct {
+		UserId string `twowaysql:"userId"`
+	}{UserId: userId}, true)
+	if err != nil {
+		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
+	}
 	return nil
 }
