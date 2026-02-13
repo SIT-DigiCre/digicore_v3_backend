@@ -10,6 +10,19 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+type workDetailWithRelationsRow struct {
+	WorkId          string  `db:"work_id"`
+	WorkName        string  `db:"work_name"`
+	WorkDescription string  `db:"work_description"`
+	AuthorUserId    *string `db:"author_user_id"`
+	AuthorUsername  *string `db:"author_username"`
+	AuthorIconUrl   *string `db:"author_icon_url"`
+	TagId           *string `db:"tag_id"`
+	TagName         *string `db:"tag_name"`
+	FileId          *string `db:"file_id"`
+	FileName        *string `db:"file_name"`
+}
+
 func GetWorkWorkWorkId(ctx echo.Context, dbClient db.Client, workId string) (api.ResGetWorkWorkWorkId, *response.Error) {
 	res := api.ResGetWorkWorkWorkId{}
 	work, err := getWorkFromTagId(dbClient, workId)
@@ -63,30 +76,74 @@ func getWorkFromTagId(dbClient db.Client, workId string) (work, *response.Error)
 	}{
 		WorkId: workId,
 	}
-	works := []work{}
-	rerr := dbClient.Select(&works, "sql/work/select_work_from_work_id.sql", &params)
+	rows := []workDetailWithRelationsRow{}
+	rerr := dbClient.Select(&rows, "sql/work/select_work_from_work_id_with_relations.sql", &params)
 	if rerr != nil {
 		return work{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
-	if len(works) == 0 {
+	if len(rows) == 0 {
 		return work{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "作品が存在しません", Log: "no rows in result"}
 	}
-	workAuthors, err := getWorkWorkAuthorList(dbClient, workId)
-	if err != nil {
-		return work{}, err
+	return mapRowsToWorkDetail(rows), nil
+}
+
+func mapRowsToWorkDetail(rows []workDetailWithRelationsRow) work {
+	firstRow := rows[0]
+	result := work{
+		WorkId:      firstRow.WorkId,
+		Name:        firstRow.WorkName,
+		Description: firstRow.WorkDescription,
+		Authors:     []workObjectAuthor{},
+		Tags:        []workObjectTag{},
+		Files:       []workObjectFile{},
 	}
-	works[0].Authors = workAuthors
-	workTags, err := getWorkWorkTagList(dbClient, workId)
-	if err != nil {
-		return work{}, err
+
+	authorMap := make(map[string]bool)
+	tagMap := make(map[string]bool)
+	fileMap := make(map[string]bool)
+
+	for _, row := range rows {
+		// 作者情報を追加
+		if row.AuthorUserId != nil && !authorMap[*row.AuthorUserId] {
+			author := workObjectAuthor{
+				UserId: *row.AuthorUserId,
+			}
+			if row.AuthorUsername != nil {
+				author.Username = *row.AuthorUsername
+			}
+			if row.AuthorIconUrl != nil {
+				author.IconUrl = *row.AuthorIconUrl
+			}
+			result.Authors = append(result.Authors, author)
+			authorMap[*row.AuthorUserId] = true
+		}
+
+		// タグ情報を追加
+		if row.TagId != nil && !tagMap[*row.TagId] {
+			tag := workObjectTag{
+				TagId: *row.TagId,
+			}
+			if row.TagName != nil {
+				tag.Name = *row.TagName
+			}
+			result.Tags = append(result.Tags, tag)
+			tagMap[*row.TagId] = true
+		}
+
+		// ファイル情報を追加
+		if row.FileId != nil && !fileMap[*row.FileId] {
+			file := workObjectFile{
+				FileId: *row.FileId,
+			}
+			if row.FileName != nil {
+				file.Name = *row.FileName
+			}
+			result.Files = append(result.Files, file)
+			fileMap[*row.FileId] = true
+		}
 	}
-	works[0].Tags = workTags
-	workFiles, err := getWorkWorkFileList(dbClient, workId)
-	if err != nil {
-		return work{}, err
-	}
-	works[0].Files = workFiles
-	return works[0], nil
+
+	return result
 }
 
 func getWorkWorkAuthorList(dbClient db.Client, workId string) ([]workObjectAuthor, *response.Error) {
@@ -101,32 +158,4 @@ func getWorkWorkAuthorList(dbClient db.Client, workId string) ([]workObjectAutho
 		return []workObjectAuthor{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}
 	return workAuthors, nil
-}
-
-func getWorkWorkTagList(dbClient db.Client, workId string) ([]workObjectTag, *response.Error) {
-	params := struct {
-		WorkId string `twowaysql:"workId"`
-	}{
-		WorkId: workId,
-	}
-	workTags := []workObjectTag{}
-	err := dbClient.Select(&workTags, "sql/work/select_work_work_tag.sql", &params)
-	if err != nil {
-		return []workObjectTag{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
-	}
-	return workTags, nil
-}
-
-func getWorkWorkFileList(dbClient db.Client, workId string) ([]workObjectFile, *response.Error) {
-	params := struct {
-		WorkId string `twowaysql:"workId"`
-	}{
-		WorkId: workId,
-	}
-	workFiles := []workObjectFile{}
-	err := dbClient.Select(&workFiles, "sql/work/select_work_work_file.sql", &params)
-	if err != nil {
-		return []workObjectFile{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
-	}
-	return workFiles, nil
 }

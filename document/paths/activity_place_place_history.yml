@@ -1,0 +1,40 @@
+get:
+  tags:
+    - activity
+  description: "Get place visit history"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: place
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: period
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+          - day
+          - week
+          - month
+    - name: date
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date
+  responses:
+    200:
+      description: "Success get place history"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_activity_place_place_history.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

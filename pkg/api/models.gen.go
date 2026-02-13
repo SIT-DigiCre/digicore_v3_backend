@@ -19,6 +19,13 @@ const (
 	Checkout ReqPutActivityRecordRecordIdActivityType = "checkout"
 )
 
+// Defines values for GetActivityPlacePlaceHistoryParamsPeriod.
+const (
+	Day   GetActivityPlacePlaceHistoryParamsPeriod = "day"
+	Month GetActivityPlacePlaceHistoryParamsPeriod = "month"
+	Week  GetActivityPlacePlaceHistoryParamsPeriod = "week"
+)
+
 // Error defines model for Error.
 type Error struct {
 	Level   string `json:"level"`
@@ -204,8 +211,10 @@ type ReqPutUserMePrivate struct {
 	LastNameKana          string  `ja:"名字(カナ)" json:"lastNameKana" validate:"required,min=1,max=255"`
 	ParentAddress         string  `ja:"緊急連絡先住所" json:"parentAddress" validate:"required,min=1,max=255"`
 	ParentCellphoneNumber string  `ja:"緊急連絡先携帯電話番号" json:"parentCellphoneNumber" validate:"required,phonenumber"`
-	ParentHomephoneNumber *string `ja:"緊急連絡先固定電話番号" json:"parentHomephoneNumber,omitempty" validate:"phonenumber"`
-	ParentName            string  `ja:"緊急連絡先氏名" json:"parentName" validate:"required,min=1,max=255"`
+	ParentFirstName       *string `ja:"緊急連絡先の名前" json:"parentFirstName,omitempty" validate:"omitempty,min=1,max=255"`
+	ParentHomephoneNumber *string `ja:"緊急連絡先固定電話番号" json:"parentHomephoneNumber,omitempty" validate:"omitempty,phonenumber"`
+	ParentLastName        *string `ja:"緊急連絡先の名字" json:"parentLastName,omitempty" validate:"omitempty,min=1,max=255"`
+	ParentName            *string `ja:"緊急連絡先氏名" json:"parentName,omitempty" validate:"omitempty,min=1,max=255"`
 	PhoneNumber           string  `ja:"電話番号" json:"phoneNumber" validate:"required,phonenumber"`
 }
 
@@ -222,6 +231,52 @@ type ReqPutWorkWorkWorkId struct {
 	Files       []string `ja:"ファイル" json:"files" validate:"dive,uuid"`
 	Name        string   `ja:"作品名" json:"name" validate:"required"`
 	Tags        []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
+}
+
+// ResGetActivityPlacePlaceCurrent defines model for ResGetActivityPlacePlaceCurrent.
+type ResGetActivityPlacePlaceCurrent struct {
+	Users []ResGetActivityPlacePlaceCurrentObjectUser `json:"users"`
+}
+
+// ResGetActivityPlacePlaceCurrentObjectUser defines model for ResGetActivityPlacePlaceCurrentObjectUser.
+type ResGetActivityPlacePlaceCurrentObjectUser struct {
+	CheckedInAt       time.Time `json:"checkedInAt"`
+	IconUrl           string    `json:"iconUrl"`
+	ShortIntroduction string    `json:"shortIntroduction"`
+	UserId            string    `json:"userId"`
+	Username          string    `json:"username"`
+}
+
+// ResGetActivityPlacePlaceHistory defines model for ResGetActivityPlacePlaceHistory.
+type ResGetActivityPlacePlaceHistory struct {
+	Users []ResGetActivityPlacePlaceHistoryObjectUser `json:"users"`
+}
+
+// ResGetActivityPlacePlaceHistoryObjectUser defines model for ResGetActivityPlacePlaceHistoryObjectUser.
+type ResGetActivityPlacePlaceHistoryObjectUser struct {
+	CheckInCount      int    `json:"checkInCount"`
+	IconUrl           string `json:"iconUrl"`
+	ShortIntroduction string `json:"shortIntroduction"`
+	UserId            string `json:"userId"`
+	Username          string `json:"username"`
+}
+
+// ResGetActivityUserUserIdRecords defines model for ResGetActivityUserUserIdRecords.
+type ResGetActivityUserUserIdRecords struct {
+	Limit   int                                           `json:"limit"`
+	Offset  int                                           `json:"offset"`
+	Records []ResGetActivityUserUserIdRecordsObjectRecord `json:"records"`
+	Total   int                                           `json:"total"`
+}
+
+// ResGetActivityUserUserIdRecordsObjectRecord defines model for ResGetActivityUserUserIdRecordsObjectRecord.
+type ResGetActivityUserUserIdRecordsObjectRecord struct {
+	CheckedInAt         time.Time  `json:"checkedInAt"`
+	CheckedOutAt        *time.Time `json:"checkedOutAt"`
+	InitialCheckedInAt  time.Time  `json:"initialCheckedInAt"`
+	InitialCheckedOutAt *time.Time `json:"initialCheckedOutAt"`
+	Place               string     `json:"place"`
+	RecordId            string     `json:"recordId"`
 }
 
 // ResGetBudget defines model for ResGetBudget.
@@ -521,7 +576,9 @@ type ResGetUserMePrivate struct {
 	LastNameKana          string `json:"lastNameKana"`
 	ParentAddress         string `json:"parentAddress"`
 	ParentCellphoneNumber string `json:"parentCellphoneNumber"`
+	ParentFirstName       string `json:"parentFirstName"`
 	ParentHomephoneNumber string `json:"parentHomephoneNumber"`
+	ParentLastName        string `json:"parentLastName"`
 	ParentName            string `json:"parentName"`
 	PhoneNumber           string `json:"phoneNumber"`
 }
@@ -705,6 +762,22 @@ type NotFound = Error
 
 // Unauthorized defines model for Unauthorized.
 type Unauthorized = Error
+
+// GetActivityPlacePlaceHistoryParams defines parameters for GetActivityPlacePlaceHistory.
+type GetActivityPlacePlaceHistoryParams struct {
+	Period GetActivityPlacePlaceHistoryParamsPeriod `form:"period" json:"period"`
+	Date   openapi_types.Date                       `form:"date" json:"date"`
+}
+
+// GetActivityPlacePlaceHistoryParamsPeriod defines parameters for GetActivityPlacePlaceHistory.
+type GetActivityPlacePlaceHistoryParamsPeriod string
+
+// GetActivityUserUserIdRecordsParams defines parameters for GetActivityUserUserIdRecords.
+type GetActivityUserUserIdRecordsParams struct {
+	Place  *string `form:"place,omitempty" json:"place,omitempty"`
+	Offset *int    `form:"offset,omitempty" json:"offset,omitempty"`
+	Limit  *int    `form:"limit,omitempty" json:"limit,omitempty"`
+}
 
 // GetBudgetParams defines parameters for GetBudget.
 type GetBudgetParams struct {

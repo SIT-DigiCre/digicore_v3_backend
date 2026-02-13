@@ -1,0 +1,17 @@
+required:
+  - userId
+  - username
+  - shortIntroduction
+  - iconUrl
+  - checkInCount
+properties:
+  userId:
+    type: string
+  username:
+    type: string
+  shortIntroduction:
+    type: string
+  iconUrl:
+    type: string
+  checkInCount:
+    type: integer
