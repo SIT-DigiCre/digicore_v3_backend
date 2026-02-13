@@ -61,8 +61,8 @@ func createEvent(dbClient db.TransactionClient, requestBody api.PostEventJSONReq
 		Description:  requestBody.Description,
 		CalendarView: boolToInt(requestBody.CalendarView),
 	}
-	logrus.Debugf("Inserting event: sql=insert_events.sql params=%#v", eventParams)
-	_, rerr = dbClient.Exec("sql/event/insert_events.sql", &eventParams, false)
+	logrus.Debugf("Inserting event: sql=insert_event.sql params=%#v", eventParams)
+	_, rerr = dbClient.Exec("sql/event/insert_event.sql", &eventParams, false)
 	if rerr != nil {
 		logrus.Errorf("イベントの挿入に失敗しました: %v", rerr)
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "DBエラーが発生しました (events)", Log: rerr.Error()}
