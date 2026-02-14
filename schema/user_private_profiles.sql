@@ -9,7 +9,7 @@ CREATE TABLE user_private_profiles
     is_male                 BOOLEAN      NOT NULL DEFAULT true,
     phone_number            VARCHAR(32)  NOT NULL,
     address                 VARCHAR(255) NOT NULL,
-    parent_name             VARCHAR(255) NOT NULL,
+    parent_name             VARCHAR(255) NOT NULL DEFAULT '',
     parent_last_name        VARCHAR(255) NOT NULL DEFAULT '',
     parent_first_name       VARCHAR(255) NOT NULL DEFAULT '',
     parent_cellphone_number VARCHAR(32)  NOT NULL,

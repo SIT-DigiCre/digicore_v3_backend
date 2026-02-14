@@ -6,7 +6,6 @@ required:
   - isMale
   - phoneNumber
   - address
-  - parentName
   - parentLastName
   - parentFirstName
   - parentCellphoneNumber
@@ -26,8 +25,6 @@ properties:
   phoneNumber:
     type: string
   address:
-    type: string
-  parentName:
     type: string
   parentLastName:
     type: string

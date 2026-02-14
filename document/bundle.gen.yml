@@ -2043,7 +2043,6 @@ components:
         - isMale
         - phoneNumber
         - address
-        - parentName
         - parentLastName
         - parentFirstName
         - parentCellphoneNumber
@@ -2063,8 +2062,6 @@ components:
         phoneNumber:
           type: string
         address:
-          type: string
-        parentName:
           type: string
         parentLastName:
           type: string
@@ -2123,11 +2120,6 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: 住所
-        parentName:
-          type: string
-          x-oapi-codegen-extra-tags:
-            validate: 'omitempty,min=1,max=255'
-            ja: 緊急連絡先氏名
         parentLastName:
           type: string
           x-oapi-codegen-extra-tags:
