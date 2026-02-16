@@ -23,19 +23,14 @@ func PutUserMePrivate(ctx echo.Context, dbClient db.TransactionClient, requestBo
 	return GetUserMePrivate(ctx, dbClient)
 }
 
-// validateParentNameFields は送信された緊急連絡先氏名まわりに空文字・空白のみが含まれていれば 400 を返す。
-// また、姓と名は必ずセットで送信する必要がある。未送信（nil）は対象外。
+// 姓と名は必ずセットで送信する必要がある。未送信（nil）は対象外
 func validateParentNameFields(req api.ReqPutUserMePrivate) *response.Error {
-	if req.ParentName != nil && strings.TrimSpace(*req.ParentName) == "" {
-		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "緊急連絡先氏名に空文字は指定できません", Log: "parentName is empty"}
-	}
 	if req.ParentLastName != nil && strings.TrimSpace(*req.ParentLastName) == "" {
 		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "緊急連絡先の名字に空文字は指定できません", Log: "parentLastName is empty"}
 	}
 	if req.ParentFirstName != nil && strings.TrimSpace(*req.ParentFirstName) == "" {
 		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "緊急連絡先の名前に空文字は指定できません", Log: "parentFirstName is empty"}
 	}
-	// 姓と名は必ずセットで送信する必要がある
 	if (req.ParentLastName != nil) != (req.ParentFirstName != nil) {
 		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "緊急連絡先の名字と名前は両方指定してください", Log: "parentLastName and parentFirstName must be provided together"}
 	}
@@ -43,7 +38,7 @@ func validateParentNameFields(req api.ReqPutUserMePrivate) *response.Error {
 }
 
 func updateUserPrivate(dbClient db.TransactionClient, userId string, requestBody api.ReqPutUserMePrivate) *response.Error {
-	parentName, parentLastName, parentFirstName, resolveErr := resolveParentNameFields(dbClient, userId, requestBody)
+	parentLastName, parentFirstName, resolveErr := resolveParentNameFields(dbClient, userId, requestBody)
 	if resolveErr != nil {
 		return resolveErr
 	}
@@ -57,7 +52,6 @@ func updateUserPrivate(dbClient db.TransactionClient, userId string, requestBody
 		IsMale                bool    `twowaysql:"isMale"`
 		PhoneNumber           string  `twowaysql:"phoneNumber"`
 		Address               string  `twowaysql:"address"`
-		ParentName            string  `twowaysql:"parentName"`
 		ParentLastName        string  `twowaysql:"parentLastName"`
 		ParentFirstName       string  `twowaysql:"parentFirstName"`
 		ParentCellphoneNumber string  `twowaysql:"parentCellphoneNumber"`
@@ -72,7 +66,6 @@ func updateUserPrivate(dbClient db.TransactionClient, userId string, requestBody
 		IsMale:                requestBody.IsMale,
 		PhoneNumber:           requestBody.PhoneNumber,
 		Address:               requestBody.Address,
-		ParentName:            parentName,
 		ParentLastName:        parentLastName,
 		ParentFirstName:       parentFirstName,
 		ParentCellphoneNumber: requestBody.ParentCellphoneNumber,
@@ -86,42 +79,34 @@ func updateUserPrivate(dbClient db.TransactionClient, userId string, requestBody
 	return nil
 }
 
-// resolveParentNameFields はリクエストで送信された値があればそれを使い、未送信なら既存値を返す。既存レコードが無い場合は未送信を空文字とする。
-func resolveParentNameFields(dbClient db.Client, userId string, req api.ReqPutUserMePrivate) (parentName, parentLastName, parentFirstName string, resErr *response.Error) {
-	// 3フィールドすべてが送信済みの場合は既存取得を省略する
-	if req.ParentName != nil && req.ParentLastName != nil && req.ParentFirstName != nil {
-		return *req.ParentName, *req.ParentLastName, *req.ParentFirstName, nil
+// resolveParentNameFields はリクエストで送信された値があればそれを使い、未送信なら既存値を返す。既存レコードが無い場合は未送信を空文字とする
+func resolveParentNameFields(dbClient db.Client, userId string, req api.ReqPutUserMePrivate) (parentLastName, parentFirstName string, resErr *response.Error) {
+	// 2フィールドすべてが送信済みの場合は既存取得を省略する
+	if req.ParentLastName != nil && req.ParentFirstName != nil {
+		return *req.ParentLastName, *req.ParentFirstName, nil
 	}
 
 	existing, err := getUserPrivateFromUserId(dbClient, userId)
 	if err != nil {
 		if err.Code != http.StatusNotFound {
-			// 既存レコード取得に失敗した場合はエラーを返す
-			return "", "", "", err
+			return "", "", err
 		}
-		// 既存が無い（新規登録）場合は未送信を空文字で返す
-		if req.ParentName != nil {
-			parentName = *req.ParentName
-		}
+		// 新規登録の場合は未送信を空文字で返す
 		if req.ParentLastName != nil {
 			parentLastName = *req.ParentLastName
 		}
 		if req.ParentFirstName != nil {
 			parentFirstName = *req.ParentFirstName
 		}
-		return parentName, parentLastName, parentFirstName, nil
+		return parentLastName, parentFirstName, nil
 	}
-	parentName = existing.ParentName
 	parentLastName = existing.ParentLastName
 	parentFirstName = existing.ParentFirstName
-	if req.ParentName != nil {
-		parentName = *req.ParentName
-	}
 	if req.ParentLastName != nil {
 		parentLastName = *req.ParentLastName
 	}
 	if req.ParentFirstName != nil {
 		parentFirstName = *req.ParentFirstName
 	}
-	return parentName, parentLastName, parentFirstName, nil
+	return parentLastName, parentFirstName, nil
 }

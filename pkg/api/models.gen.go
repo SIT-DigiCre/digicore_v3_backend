@@ -207,7 +207,6 @@ type ReqPutUserMePrivate struct {
 	ParentFirstName       *string `ja:"緊急連絡先の名前" json:"parentFirstName,omitempty" validate:"omitempty,min=1,max=255"`
 	ParentHomephoneNumber *string `ja:"緊急連絡先固定電話番号" json:"parentHomephoneNumber,omitempty" validate:"omitempty,phonenumber"`
 	ParentLastName        *string `ja:"緊急連絡先の名字" json:"parentLastName,omitempty" validate:"omitempty,min=1,max=255"`
-	ParentName            *string `ja:"緊急連絡先氏名" json:"parentName,omitempty" validate:"omitempty,min=1,max=255"`
 	PhoneNumber           string  `ja:"電話番号" json:"phoneNumber" validate:"required,phonenumber"`
 }
 
@@ -572,7 +571,6 @@ type ResGetUserMePrivate struct {
 	ParentFirstName       string `json:"parentFirstName"`
 	ParentHomephoneNumber string `json:"parentHomephoneNumber"`
 	ParentLastName        string `json:"parentLastName"`
-	ParentName            string `json:"parentName"`
 	PhoneNumber           string `json:"phoneNumber"`
 }
 

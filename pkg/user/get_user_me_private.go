@@ -32,7 +32,6 @@ type private struct {
 	IsMale                bool   `db:"is_male"`
 	PhoneNumber           string `db:"phone_number"`
 	Address               string `db:"address"`
-	ParentName            string `db:"parent_name"`
 	ParentLastName        string `db:"parent_last_name"`
 	ParentFirstName       string `db:"parent_first_name"`
 	ParentCellphoneNumber string `db:"parent_cellphone_number"`
