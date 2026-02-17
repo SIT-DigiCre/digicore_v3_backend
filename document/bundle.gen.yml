@@ -3228,7 +3228,7 @@ components:
             type: string
             format: uuid
           x-oapi-codegen-extra-tags:
-            validate: 'omitempty,dive,uuid'
+            validate: 'omitempty,dive'
             ja: 送信先ユーザーID
         subject:
           type: string
@@ -3242,6 +3242,7 @@ components:
             ja: 本文
         sendToAdmin:
           type: boolean
+          default: false
           x-oapi-codegen-extra-tags:
             ja: 管理者用アドレスにも送信
     ResPostMail:

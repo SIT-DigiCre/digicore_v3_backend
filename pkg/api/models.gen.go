@@ -73,7 +73,7 @@ type ReqPostMail struct {
 	Body        string                 `ja:"本文" json:"body" validate:"required"`
 	SendToAdmin *bool                  `ja:"管理者用アドレスにも送信" json:"sendToAdmin,omitempty"`
 	Subject     string                 `ja:"タイトル" json:"subject" validate:"required"`
-	UserIds     *[]openapi_types.UUID  `ja:"送信先ユーザーID" json:"userIds,omitempty" validate:"omitempty,dive,uuid"`
+	UserIds     *[]openapi_types.UUID  `ja:"送信先ユーザーID" json:"userIds,omitempty" validate:"omitempty,dive"`
 }
 
 // ReqPostMattermostCreateuser defines model for ReqPostMattermostCreateuser.
