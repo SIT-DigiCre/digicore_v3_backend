@@ -1,0 +1,1 @@
+SELECT BIN_TO_UUID(users.id) AS user_id, user_profiles.student_number FROM users LEFT JOIN user_profiles ON users.id = user_profiles.user_id WHERE BIN_TO_UUID(users.id) IN /*userIds*/('00000000-0000-0000-0000-000000000000');

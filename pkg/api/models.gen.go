@@ -69,10 +69,11 @@ type ReqPostLoginCallback struct {
 
 // ReqPostMail defines model for ReqPostMail.
 type ReqPostMail struct {
-	Addresses   []openapi_types.Email `ja:"送信先アドレス" json:"addresses" validate:"required"`
-	Body        string                `ja:"本文" json:"body" validate:"required"`
-	SendToAdmin *bool                 `ja:"管理者用アドレスにも送信" json:"sendToAdmin,omitempty"`
-	Subject     string                `ja:"タイトル" json:"subject" validate:"required"`
+	Addresses   *[]openapi_types.Email `ja:"送信先アドレス" json:"addresses,omitempty" validate:"omitempty,dive,email"`
+	Body        string                 `ja:"本文" json:"body" validate:"required"`
+	SendToAdmin *bool                  `ja:"管理者用アドレスにも送信" json:"sendToAdmin,omitempty"`
+	Subject     string                 `ja:"タイトル" json:"subject" validate:"required"`
+	UserIds     *[]openapi_types.UUID  `ja:"送信先ユーザーID" json:"userIds,omitempty" validate:"omitempty,dive,uuid"`
 }
 
 // ReqPostMattermostCreateuser defines model for ReqPostMattermostCreateuser.
