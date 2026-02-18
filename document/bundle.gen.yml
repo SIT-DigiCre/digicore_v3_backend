@@ -3211,19 +3211,25 @@ components:
             ja: 備考
     ReqPostMail:
       required:
-        - addresses
         - subject
         - body
       properties:
         addresses:
           type: array
-          minItems: 1
           items:
             type: string
             format: email
           x-oapi-codegen-extra-tags:
-            validate: required
+            validate: 'omitempty,dive,email'
             ja: 送信先アドレス
+        userIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          x-oapi-codegen-extra-tags:
+            validate: 'omitempty,dive'
+            ja: 送信先ユーザーID
         subject:
           type: string
           x-oapi-codegen-extra-tags:
