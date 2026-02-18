@@ -9,10 +9,12 @@
 | `account` | 会計 |
 | `infra` | インフラ |
 
-これらは `pkg/admin/admin.go` の `AdminClaims` 変数で管理されています。
+これらは `pkg/admin/admin.go` の `adminClaims` 変数で管理されており、`GetAdminClaims()` でコピーを取得できます。
 
 ```go
-var AdminClaims = []string{"account", "infra"}
+var adminClaims = []string{"account", "infra"}
+
+func GetAdminClaims() []string { ... }
 ```
 
 ### 「管理者」の定義
@@ -64,18 +66,19 @@ OpenAPI スコープで表現できない条件付き認可が必要な場合の
 
 | メソッド | パス | 説明 |
 |---------|------|------|
-| `POST` | `/group/admin` | `AdminClaims` に含まれる claim を持つグループを作成 |
+| `POST` | `/group/admin` | 任意の claim を持つグループを作成 |
 | `POST` | `/activity/checkout/{userId}` | 管理者による強制チェックアウト |
 | `PUT` | `/activity/record/{recordId}` | 他ユーザーの在室レコードを編集（所有者本人は不要） |
+| `POST` | `/mail` | メール一括送信（アドレス直接指定またはユーザーID指定） |
 
 ### `account` claim が必要なエンドポイント
 
 | メソッド | パス | 説明 |
 |---------|------|------|
-| `GET` | `/payment` | 会費支払い一覧取得 |
-| `GET` | `/payment/{paymentId}` | 会費支払い詳細取得 |
-| `PUT` | `/payment/{paymentId}` | 会費支払い状況の更新 |
-| `PUT` | `/budget/{budgetId}/admin` | 予算の承認・ステータス変更 |
+| `GET` | `/payment` | 部費支払い一覧取得 |
+| `GET` | `/payment/{paymentId}` | 部費支払い詳細取得 |
+| `PUT` | `/payment/{paymentId}` | 部費支払い状況の更新 |
+| `PUT` | `/budget/{budgetId}/admin` | 稟議の承認・ステータス変更 |
 
 ---
 
@@ -87,21 +90,21 @@ OpenAPI スコープで表現できない条件付き認可が必要な場合の
 |---------|------|-------------|------|
 | `GET` | `/group` | なし（要認証） | グループ一覧取得 |
 | `POST` | `/group` | なし（要認証） | claim なし通常グループ作成 |
-| `POST` | `/group/admin` | `infra` | `AdminClaims` の claim を持つグループ作成 |
-| `POST` | `/group/{groupId}/user` | なし（要グループ所属） | グループにユーザーを追加 |
+| `POST` | `/group/admin` | `infra` | 任意の claim を持つグループ作成 |
+| `POST` | `/group/{groupId}/user` | なし（要グループ所属 or `infra`） | グループにユーザーを追加 |
 | `POST` | `/group/{groupId}/join` | なし（要認証） | グループに自発参加 |
 
 ### グループ作成の権限ルール
 
 - **claim なしのグループ** (`POST /group`): 認証済みユーザー全員が作成可能
-- **`AdminClaims` の claim を持つグループ** (`POST /group/admin`): `infra` claim を持つユーザーのみ作成可能
+- **任意の claim を持つグループ** (`POST /group/admin`): `infra` claim を持つユーザーのみ作成可能
 
 ### 自発参加の制限
 
 `POST /group/{groupId}/join` で参加できないケース:
 
+- `AdminClaims` のいずれかの claim を持つグループ（`account` / `infra`）→ 403（`joinable` フラグに関わらず無条件で拒否）
 - `joinable=false` のグループ → 403
-- `AdminClaims` のいずれかの claim を持つグループ（`account` / `infra`）→ 403
 
 ---
 
@@ -241,7 +244,7 @@ curl -s -X POST http://localhost:8080/group \
 
 ---
 
-#### AdminClaims を持つグループの作成
+#### 任意の claim を持つグループの作成（`POST /group/admin`）
 
 ```bash
 # infra ユーザーで実行（AUTH=disable では一般ユーザーでも通過する）
@@ -258,10 +261,17 @@ curl -s -X POST http://localhost:8080/group/admin \
 ```bash
 GROUP_ID="<グループID>"
 
+# グループ所属ユーザーとして追加
 curl -s -X POST "http://localhost:8080/group/${GROUP_ID}/user" \
   -H "Authorization: Bearer <グループ作成者のトークン>" \
   -H "Content-Type: application/json" \
   -d '{"userId":"33333333-3333-3333-3333-333333333333"}'
+
+# infra ユーザーとして追加（グループ非所属でも可）
+curl -s -X POST "http://localhost:8080/group/${GROUP_ID}/user" \
+  -H "Authorization: Bearer <山田次郎のトークン>" \
+  -H "Content-Type: application/json" \
+  -d '{"userId":"44444444-4444-4444-4444-444444444444"}'
 ```
 
 ---
@@ -273,7 +283,7 @@ curl -s -X POST "http://localhost:8080/group/${GROUP_ID}/user" \
 curl -s -X POST "http://localhost:8080/group/f1111111-1111-1111-1111-111111111111/join" \
   -H "Authorization: Bearer <高橋健太のトークン>"
 
-# AdminClaims を持つグループへの参加（403 が返る）
+# 役職 claim（account/infra）を持つグループへの参加（403 が返る）
 curl -s -X POST "http://localhost:8080/group/f0000007-1111-1111-1111-111111111111/join" \
   -H "Authorization: Bearer <佐藤花子のトークン>"
 ```
@@ -324,7 +334,7 @@ curl -s -X PUT "http://localhost:8080/activity/record/${RECORD_ID}" \
 
 ---
 
-#### 会費支払い一覧取得
+#### 部費支払い一覧取得
 
 ```bash
 # account ユーザーで実行
@@ -334,7 +344,7 @@ curl -s -X GET "http://localhost:8080/payment?year=2026" \
 
 ---
 
-#### 予算の承認
+#### 稟議の承認
 
 ```bash
 BUDGET_ID="a0000012-2222-2222-2222-222222222222"

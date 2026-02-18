@@ -46,7 +46,7 @@ func getGroupList(dbClient db.Client, userId string, offset *int) ([]group, *res
 	}{
 		UserId:      userId,
 		Offset:      offset,
-		AdminClaims: admin.AdminClaims,
+		AdminClaims: admin.GetAdminClaims(),
 	}
 	groups := []group{}
 	err := dbClient.Select(&groups, "sql/group/select_group.sql", &params)

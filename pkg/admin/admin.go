@@ -7,7 +7,14 @@ import (
 )
 
 // 定義済みの役職claimリスト
-var AdminClaims = []string{"account", "infra"}
+var adminClaims = []string{"account", "infra"}
+
+// GetAdminClaims は役職claimリストのコピーを返す（外部からのミューテートを防ぐ）
+func GetAdminClaims() []string {
+	result := make([]string, len(adminClaims))
+	copy(result, adminClaims)
+	return result
+}
 
 type SelectClient interface {
 	Select(dest interface{}, queryPath string, params interface{}) error
@@ -20,7 +27,7 @@ func CheckUserIsAdmin(dbClient SelectClient, userId string) (bool, *response.Err
 		AdminClaims []string `twowaysql:"adminClaims"`
 	}{
 		UserId:      userId,
-		AdminClaims: AdminClaims,
+		AdminClaims: adminClaims,
 	}
 
 	result := []struct {

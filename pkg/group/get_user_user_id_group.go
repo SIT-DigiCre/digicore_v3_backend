@@ -42,7 +42,7 @@ func getGroupListFromUserId(dbClient db.Client, userId string) ([]group, *respon
 		AdminClaims []string `twowaysql:"adminClaims"`
 	}{
 		UserId:      userId,
-		AdminClaims: admin.AdminClaims,
+		AdminClaims: admin.GetAdminClaims(),
 	}
 
 	groups := []group{}

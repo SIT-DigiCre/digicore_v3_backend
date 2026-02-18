@@ -1,7 +1,7 @@
 put:
   tags:
     - budget
-  description: "Update budget by admin"
+  description: "Update budget by account role"
   security:
     - BearerAuth:
         - "account"

@@ -53,7 +53,7 @@ func getGroupFromGroupId(dbClient db.Client, groupId string, userId string) (gro
 	}{
 		GroupId:     groupId,
 		UserId:      userId,
-		AdminClaims: admin.AdminClaims,
+		AdminClaims: admin.GetAdminClaims(),
 	}
 	eventDetails := []groupDetail{}
 	err := dbClient.Select(&eventDetails, "sql/group/select_group_from_group_id.sql", &params)

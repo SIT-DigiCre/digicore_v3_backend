@@ -51,7 +51,7 @@ func GetUserProfileFromUserId(dbClient db.Client, userId string) (profile, *resp
 		AdminClaims []string `twowaysql:"adminClaims"`
 	}{
 		UserId:      userId,
-		AdminClaims: admin.AdminClaims,
+		AdminClaims: admin.GetAdminClaims(),
 	}
 	profiles := []profile{}
 	err := dbClient.Select(&profiles, "sql/user/select_user_profile_from_user_id.sql", &params)

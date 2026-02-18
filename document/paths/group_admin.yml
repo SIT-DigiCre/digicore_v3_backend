@@ -1,7 +1,7 @@
 post:
   tags:
     - group
-  description: "Create new group with admin claim. infra権限を持つユーザーはあらゆるclaimのグループを作成可能"
+  description: "Create new group with any claim. infra権限を持つユーザーが任意のclaimのグループを作成可能"
   security:
     - BearerAuth:
         - "infra"

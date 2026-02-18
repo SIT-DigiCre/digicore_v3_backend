@@ -110,7 +110,7 @@ func checkGroupIsAdminGroup(dbClient db.TransactionClient, groupId string) (bool
 		AdminClaims []string `twowaysql:"adminClaims"`
 	}{
 		GroupId:     groupId,
-		AdminClaims: admin.AdminClaims,
+		AdminClaims: admin.GetAdminClaims(),
 	}
 
 	result := []struct {

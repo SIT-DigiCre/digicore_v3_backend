@@ -21,5 +21,5 @@ properties:
   claim:
     type: string
     x-oapi-codegen-extra-tags:
-      validate: required
+      validate: required,max=255
       ja: グループに付与するclaim名
