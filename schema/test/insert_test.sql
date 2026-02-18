@@ -83,17 +83,29 @@ INSERT INTO groups_users (id, group_id, user_id) VALUES
   (UUID_TO_BIN('a0000007-7777-7777-7777-777777777777'), UUID_TO_BIN('f3333333-3333-3333-3333-333333333333'), UUID_TO_BIN('11111111-1111-1111-1111-111111111111')),
   (UUID_TO_BIN('a0000008-8888-8888-8888-888888888888'), UUID_TO_BIN('f4444444-4444-4444-4444-444444444444'), UUID_TO_BIN('22222222-2222-2222-2222-222222222222'));
 
--- 管理者グループ作成
+-- インフラグループ作成（infraクレーム）
 INSERT INTO `groups` (id, name, description, joinable, user_count) VALUES
-  (UUID_TO_BIN('f0000007-1111-1111-1111-111111111111'), '管理者グループ', '管理者専用', false, 1);
+  (UUID_TO_BIN('f0000007-1111-1111-1111-111111111111'), 'インフラグループ', 'インフラ担当専用', false, 1);
 
--- 管理者権限付与
+-- infraクレーム付与
 INSERT INTO group_claims (id, group_id, claim) VALUES
-  (UUID_TO_BIN('f0000008-1111-1111-1111-111111111111'), UUID_TO_BIN('f0000007-1111-1111-1111-111111111111'), 'admin');
+  (UUID_TO_BIN('f0000008-1111-1111-1111-111111111111'), UUID_TO_BIN('f0000007-1111-1111-1111-111111111111'), 'infra');
 
--- ユーザーを管理者グループに追加
+-- ユーザーをインフラグループに追加（山田次郎: インフラ担当）
 INSERT INTO groups_users (id, group_id, user_id) VALUES
-  (UUID_TO_BIN('f0000009-1111-1111-1111-111111111111'), UUID_TO_BIN('f0000007-1111-1111-1111-111111111111'), UUID_TO_BIN('11111111-1111-1111-1111-111111111111'));
+  (UUID_TO_BIN('f0000009-1111-1111-1111-111111111111'), UUID_TO_BIN('f0000007-1111-1111-1111-111111111111'), UUID_TO_BIN('33333333-3333-3333-3333-333333333333'));
+
+-- 会計グループ作成（accountクレーム）
+INSERT INTO `groups` (id, name, description, joinable, user_count) VALUES
+  (UUID_TO_BIN('f000000a-1111-1111-1111-111111111111'), '会計グループ', '会計担当専用', false, 1);
+
+-- accountクレーム付与
+INSERT INTO group_claims (id, group_id, claim) VALUES
+  (UUID_TO_BIN('f000000b-1111-1111-1111-111111111111'), UUID_TO_BIN('f000000a-1111-1111-1111-111111111111'), 'account');
+
+-- ユーザーを会計グループに追加（田中太郎: 会計担当）
+INSERT INTO groups_users (id, group_id, user_id) VALUES
+  (UUID_TO_BIN('f000000c-1111-1111-1111-111111111111'), UUID_TO_BIN('f000000a-1111-1111-1111-111111111111'), UUID_TO_BIN('11111111-1111-1111-1111-111111111111'));
 
 -- 予算データの投入
 INSERT INTO budgets (id, name, proposer_user_id, approver_user_id, status, class, budget, settlement, purpose, mattermost_url, remark) VALUES

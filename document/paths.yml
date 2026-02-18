@@ -68,6 +68,8 @@
   $ref: "./paths/work_tag_tag_id.yml"
 /group:
   $ref: "./paths/group.yml"
+/group/admin:
+  $ref: "./paths/group_admin.yml"
 /group/{groupId}:
   $ref: "./paths/group_group_id.yml"
 /group/{groupId}/user:
