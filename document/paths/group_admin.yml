@@ -1,24 +1,23 @@
 post:
   tags:
-    - mail
-  description: "Send bulk email"
+    - group
+  description: "Create new group with admin claim. infra権限を持つユーザーはあらゆるclaimのグループを作成可能"
   security:
     - BearerAuth:
         - "infra"
   requestBody:
-    description: "Email request"
     required: true
     content:
       application/json:
         schema:
-          $ref: "../schemas/req_post_mail.yml"
+          $ref: "../schemas/req_post_group_admin.yml"
   responses:
     200:
-      description: "Success send email"
+      description: "Success create admin group"
       content:
         application/json:
           schema:
-            $ref: "../schemas/res_post_mail.yml"
+            $ref: "../schemas/res_post_group.yml"
     400:
       $ref: "../responses/bad_request.yml"
     403:

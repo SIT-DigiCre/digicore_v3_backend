@@ -3,6 +3,7 @@ package group
 import (
 	"net/http"
 
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
@@ -39,11 +40,13 @@ type group struct {
 
 func getGroupList(dbClient db.Client, userId string, offset *int) ([]group, *response.Error) {
 	params := struct {
-		UserId string `twowaysql:"userId"`
-		Offset *int   `twowaysql:"offset"`
+		UserId      string   `twowaysql:"userId"`
+		Offset      *int     `twowaysql:"offset"`
+		AdminClaims []string `twowaysql:"adminClaims"`
 	}{
-		UserId: userId,
-		Offset: offset,
+		UserId:      userId,
+		Offset:      offset,
+		AdminClaims: admin.AdminClaims,
 	}
 	groups := []group{}
 	err := dbClient.Select(&groups, "sql/group/select_group.sql", &params)

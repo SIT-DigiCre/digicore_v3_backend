@@ -8,6 +8,6 @@ SELECT
   IF(COUNT(group_claims.group_id) > 0, true, false) as is_admin_group
 FROM `groups`
 LEFT JOIN groups_users ON groups_users.group_id = groups.id AND user_id = UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee')
-LEFT JOIN group_claims ON group_claims.group_id = groups.id AND group_claims.claim = 'admin'
+LEFT JOIN group_claims ON group_claims.group_id = groups.id AND group_claims.claim IN /*adminClaims*/('account', 'infra')
 GROUP BY groups.id
 LIMIT 50 /* IF offset*/ OFFSET /*offset*/0 /* END */;

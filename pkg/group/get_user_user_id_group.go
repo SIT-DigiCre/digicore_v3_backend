@@ -3,6 +3,7 @@ package group
 import (
 	"net/http"
 
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
@@ -37,9 +38,11 @@ func GetUserUserIdGroup(ctx echo.Context, dbClient db.Client, userId string) (ap
 // 指定されたユーザーが参加しているグループ一覧を取得する
 func getGroupListFromUserId(dbClient db.Client, userId string) ([]group, *response.Error) {
 	params := struct {
-		UserId string `twowaysql:"userId"`
+		UserId      string   `twowaysql:"userId"`
+		AdminClaims []string `twowaysql:"adminClaims"`
 	}{
-		UserId: userId,
+		UserId:      userId,
+		AdminClaims: admin.AdminClaims,
 	}
 
 	groups := []group{}

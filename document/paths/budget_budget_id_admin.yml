@@ -4,7 +4,7 @@ put:
   description: "Update budget by admin"
   security:
     - BearerAuth:
-        - "admin"
+        - "account"
   parameters:
     - name: budgetId
       in: path

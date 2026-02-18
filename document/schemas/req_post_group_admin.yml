@@ -2,6 +2,7 @@ required:
   - name
   - description
   - joinable
+  - claim
 properties:
   name:
     type: string
@@ -17,3 +18,8 @@ properties:
     type: boolean
     x-oapi-codegen-extra-tags:
       ja: 参加可能フラグ
+  claim:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: グループに付与するclaim名

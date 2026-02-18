@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 )
@@ -46,9 +47,11 @@ type profile struct {
 
 func GetUserProfileFromUserId(dbClient db.Client, userId string) (profile, *response.Error) {
 	params := struct {
-		UserId string `twowaysql:"userId"`
+		UserId      string   `twowaysql:"userId"`
+		AdminClaims []string `twowaysql:"adminClaims"`
 	}{
-		UserId: userId,
+		UserId:      userId,
+		AdminClaims: admin.AdminClaims,
 	}
 	profiles := []profile{}
 	err := dbClient.Select(&profiles, "sql/user/select_user_profile_from_user_id.sql", &params)
