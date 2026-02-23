@@ -26,19 +26,14 @@ LEFT JOIN work_users ON work_users.work_id = works.id
 LEFT JOIN user_profiles ON user_profiles.user_id = work_users.user_id
 LEFT JOIN work_work_tags ON work_work_tags.work_id = works.id
 LEFT JOIN work_tags ON work_tags.id = work_work_tags.tag_id
-LEFT JOIN (
-    SELECT ranked.work_id, ranked.file_id
-    FROM (
-        SELECT
-            work_files.work_id,
-            work_files.file_id,
-            ROW_NUMBER() OVER (
-                PARTITION BY work_files.work_id
-                ORDER BY work_files.created_at ASC, work_files.id ASC
-            ) AS row_num
-        FROM work_files
-    ) AS ranked
-    WHERE ranked.row_num = 1
-) AS first_work_file ON first_work_file.work_id = works.id
+LEFT JOIN work_files AS first_work_file
+    ON first_work_file.work_id = works.id
+    AND first_work_file.id = (
+        SELECT wf.id
+        FROM work_files AS wf
+        WHERE wf.work_id = works.id
+        ORDER BY wf.created_at ASC, wf.id ASC
+        LIMIT 1
+    )
 LEFT JOIN user_files ON user_files.id = first_work_file.file_id
 ORDER BY works.updated_at DESC;
