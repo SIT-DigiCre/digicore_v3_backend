@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
+	"regexp"
+	"strconv"
 	"time"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
@@ -11,6 +13,8 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 	"github.com/sirupsen/logrus"
 )
+
+var studentNumberPattern = regexp.MustCompile(`^([iz]\d{6}|[abcdm][abcdefghlnpqrvyz]\d{5})$`)
 
 func GetSchoolYear() int {
 	now := time.Now()
@@ -24,6 +28,55 @@ func GetSchoolYear() int {
 func GetYear() int {
 	now := time.Now()
 	return now.Year()
+}
+
+// 学籍番号から学年を算出する。不正フォーマット時は第1学年を返す
+func CalculateSchoolGrade(studentNumber string, schoolYear int) int {
+	enrollmentYear, ok := getEnrollmentYear(studentNumber)
+	if !ok {
+		return 1
+	}
+
+	schoolGrade := schoolYear - 2000 - enrollmentYear + 1
+
+	switch studentNumber[0] {
+	case 'm':
+		schoolGrade += 4
+	case 'n':
+		schoolGrade += 6
+	}
+
+	if schoolGrade < 1 {
+		return 1
+	}
+
+	return schoolGrade
+}
+
+// 学籍番号から入学年度を算出する
+func getEnrollmentYear(studentNumber string) (int, bool) {
+	if !studentNumberPattern.MatchString(studentNumber) {
+		return 0, false
+	}
+
+	firstDigitIndex := -1
+	for i := 0; i < len(studentNumber); i++ {
+		if studentNumber[i] >= '0' && studentNumber[i] <= '9' {
+			firstDigitIndex = i
+			break
+		}
+	}
+
+	if firstDigitIndex == -1 || firstDigitIndex+2 > len(studentNumber) {
+		return 0, false
+	}
+
+	enrollmentYear, err := strconv.Atoi(studentNumber[firstDigitIndex : firstDigitIndex+2])
+	if err != nil {
+		return 0, false
+	}
+
+	return enrollmentYear, true
 }
 
 func GetAfterDate(year int, month int, day int) string {
