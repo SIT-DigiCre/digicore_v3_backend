@@ -1918,6 +1918,7 @@ components:
       required:
         - userId
         - username
+        - schoolGrade
         - iconUrl
         - shortIntroduction
       properties:
@@ -1925,6 +1926,8 @@ components:
           type: string
         username:
           type: string
+        schoolGrade:
+          type: integer
         iconUrl:
           type: string
         shortIntroduction:
@@ -2490,6 +2493,8 @@ components:
       required:
         - workId
         - name
+        - description
+        - firstFile
         - authors
         - tags
       properties:
@@ -2497,6 +2502,19 @@ components:
           type: string
         name:
           type: string
+        description:
+          type: string
+        firstFile:
+          type: object
+          nullable: true
+          required:
+            - fileId
+            - name
+          properties:
+            fileId:
+              type: string
+            name:
+              type: string
         authors:
           type: array
           items:

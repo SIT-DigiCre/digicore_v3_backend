@@ -578,6 +578,7 @@ type ResGetUserMePrivate struct {
 // ResGetUserObjectUser defines model for ResGetUserObjectUser.
 type ResGetUserObjectUser struct {
 	IconUrl           string `json:"iconUrl"`
+	SchoolGrade       int    `json:"schoolGrade"`
 	ShortIntroduction string `json:"shortIntroduction"`
 	UserId            string `json:"userId"`
 	Username          string `json:"username"`
@@ -625,10 +626,15 @@ type ResGetWorkWork struct {
 
 // ResGetWorkWorkObjectWork defines model for ResGetWorkWorkObjectWork.
 type ResGetWorkWorkObjectWork struct {
-	Authors []ResGetWorkWorkObjectWorkObjectAuthor `json:"authors"`
-	Name    string                                 `json:"name"`
-	Tags    []ResGetWorkWorkObjectWorkObjectTag    `json:"tags"`
-	WorkId  string                                 `json:"workId"`
+	Authors     []ResGetWorkWorkObjectWorkObjectAuthor `json:"authors"`
+	Description string                                 `json:"description"`
+	FirstFile   *struct {
+		FileId string `json:"fileId"`
+		Name   string `json:"name"`
+	} `json:"firstFile"`
+	Name   string                              `json:"name"`
+	Tags   []ResGetWorkWorkObjectWorkObjectTag `json:"tags"`
+	WorkId string                              `json:"workId"`
 }
 
 // ResGetWorkWorkObjectWorkObjectAuthor defines model for ResGetWorkWorkObjectWorkObjectAuthor.
