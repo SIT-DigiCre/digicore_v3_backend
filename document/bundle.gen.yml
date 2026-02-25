@@ -753,6 +753,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResPostEventEvent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -2417,13 +2419,13 @@ components:
           type: string
           minLength: 1
           x-oapi-codegen-extra-tags:
-            validate: max=255
+            validate: 'min=1,max=255'
             ja: コメント
         url:
           type: string
           minLength: 1
           x-oapi-codegen-extra-tags:
-            validate: max=255
+            validate: 'min=1,max=255'
             ja: URL
     ReqPostEventEvent:
       required:
@@ -2435,13 +2437,13 @@ components:
           type: string
           minLength: 1
           x-oapi-codegen-extra-tags:
-            validate: required
+            validate: 'required,min=1'
             ja: イベント名
         description:
           type: string
           minLength: 1
           x-oapi-codegen-extra-tags:
-            validate: required
+            validate: 'required,min=1'
             ja: 説明
         calendar_view:
           type: boolean

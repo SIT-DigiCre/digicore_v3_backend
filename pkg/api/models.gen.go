@@ -52,8 +52,8 @@ type ReqPostBudget struct {
 // ReqPostEventEvent defines model for ReqPostEventEvent.
 type ReqPostEventEvent struct {
 	CalendarView bool   `ja:"カレンダー表示" json:"calendar_view" validate:"required"`
-	Description  string `ja:"説明" json:"description" validate:"required"`
-	Name         string `ja:"イベント名" json:"name" validate:"required"`
+	Description  string `ja:"説明" json:"description" validate:"required,min=1"`
+	Name         string `ja:"イベント名" json:"name" validate:"required,min=1"`
 }
 
 // ReqPostGroup defines model for ReqPostGroup.
@@ -163,8 +163,8 @@ type ReqPutBudgetBudgetIdStatusPending struct {
 
 // ReqPutEventEventIdReservationIdMe defines model for ReqPutEventEventIdReservationIdMe.
 type ReqPutEventEventIdReservationIdMe struct {
-	Comment string `ja:"コメント" json:"comment" validate:"max=255"`
-	Url     string `ja:"URL" json:"url" validate:"max=255"`
+	Comment string `ja:"コメント" json:"comment" validate:"min=1,max=255"`
+	Url     string `ja:"URL" json:"url" validate:"min=1,max=255"`
 }
 
 // ReqPutPaymentPaymentId defines model for ReqPutPaymentPaymentId.
