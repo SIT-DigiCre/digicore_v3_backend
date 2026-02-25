@@ -6,7 +6,7 @@
 1. [Docker Desktop](https://www.docker.com)をダウンロード・インストールする
 1. VSCodeの拡張機能のところからWSLと検索してVSCodeにWSLの拡張機能をインストールする
 1. Ubuntuに開発用の[ディレクトリを作成](#ディレクトリを作成)する 
-1. https://github.com/SIT-DigiCre/digicore_v3_frontend.git と　https://github.com/SIT-DigiCre/digicore_v3_backend.git　を[クローン](#クローン)する
+1. `https://github.com/SIT-DigiCre/digicore_v3_frontend.git` と `https://github.com/SIT-DigiCre/digicore_v3_backend.git` を[クローン](#クローン)する
 1. クローンしたディレクトリを[VSCodeで編集](#VSCodeで編集)していく
 1. `.env.sample` をコピーして `.env` を作成する
 1.  `.env`に環境変数を入力する
