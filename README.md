@@ -2,7 +2,7 @@
 
 ## 環境構築
 
-1. Ubuntuで開発を行うため、Windowsにて開発をする方は[WSLおよびUbuntuの環境構築](#WSLおよびUbuntuの環境構築)をする　
+1. Windowsにて開発をする方は、Ubuntuで開発を行うために[WSLおよびUbuntuの環境構築](#WSLおよびUbuntuの環境構築)をする　
 1. [Docker Desktop](https://www.docker.com)をダウンロード・インストールする
 1. VSCodeの拡張機能のところからWSLと検索してVSCodeにWSLの拡張機能をインストールする
 1. Ubuntuに開発用の[ディレクトリを作成](#ディレクトリを作成)する 
