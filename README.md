@@ -2,11 +2,13 @@
 
 ## 環境構築
 
-1. Ubuntuで開発を行うため、windowsにて開発をする方は[WSLおよびUbuntuの環境構築](#WSLおよびUbuntuの環境構築)をする
+1. Ubuntuで開発を行うため、Windowsにて開発をする方は[WSLおよびUbuntuの環境構築](#WSLおよびUbuntuの環境構築)をする　※OSがUbuntuの方は４まで飛んでください
 1. [Docker Desktop](https://www.docker.com)をダウンロード・インストールする
-1. VScodeとWSLを連携する
-1. Ubuntuに開発用のディレクトリを作成する(ここにgit clone をしていく)
+1. VSCodeの拡張機能のところからWSLと検索してVSCodeにWSLの拡張機能をインストールする
+1. Ubuntuに開発用の[ディレクトリを作成する](#ディレクトリを作成する) 
+1. https://github.com/SIT-DigiCre/digicore_v3_frontend.git と　https://github.com/SIT-DigiCre/digicore_v3_backend.git　を[クローン](#クローン)する
 1. `.env.sample` をコピーして `.env` を作成する
+1.  `.env`に環境変数を入力する
 1. [Discord developers](https://discord.com/developers/applications)で App を作成し、Oauth2 の Redirects に`${FRONTEND_ROOT_URL}/user/discord/callback`を指定する
 1. 上記で作成した App の Client information から Client ID と Client Secret を取得し、.env に追記する。
 1. [Google Cloud Platform](https://console.cloud.google.com/home/dashboard)で App を作成し、OAuth クライアント ID をアプリケーションの種類をウェブアプリケーションにして作成し、承認済みのリダイレクト URI に`${FRONTEND_ROOT_URL}/signup/callback`と`${FRONTEND_ROOT_URL}/login/callback`を指定する。
@@ -19,6 +21,17 @@
 ```sh
 wsl --install
 wsl --install -d Ubuntu-24.04.4 
+```
+## ディレクトリを作成する
+```sh
+cd    ##ホームディレクトリに戻る
+mkdir digicre
+```
+
+## クローン
+```sh
+git clone 指定したURL
+#今開いているリポジトリに指定したURLのリポジトリを複製する
 ```
 ## コンテナのビルド
 
