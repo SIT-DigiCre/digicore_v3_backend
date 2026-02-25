@@ -38,12 +38,12 @@ func updateEvent(dbClient db.TransactionClient, eventId string, requestBody api.
 		EventId      string `twowaysql:"eventId"`
 		Name         string `twowaysql:"name"`
 		Description  string `twowaysql:"description"`
-		CalendarView int    `twowaysql:"calendarView"`
+		CalendarView bool   `twowaysql:"calendarView"`
 	}{
 		EventId:      eventId,
 		Name:         requestBody.Name,
 		Description:  requestBody.Description,
-		CalendarView: boolToInt(requestBody.CalendarView),
+		CalendarView: requestBody.CalendarView,
 	}
 	_, rerr := dbClient.Exec("sql/event/update_event.sql", &params, false)
 	if rerr != nil {

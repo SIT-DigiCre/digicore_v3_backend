@@ -54,12 +54,12 @@ func createEvent(dbClient db.TransactionClient, requestBody api.PostEventJSONReq
 		EventId      string `twowaysql:"eventId"`
 		Name         string `twowaysql:"name"`
 		Description  string `twowaysql:"description"`
-		CalendarView int    `twowaysql:"calendarView"`
+		CalendarView bool   `twowaysql:"calendarView"`
 	}{
 		EventId:      eventId,
 		Name:         requestBody.Name,
 		Description:  requestBody.Description,
-		CalendarView: boolToInt(requestBody.CalendarView),
+		CalendarView: requestBody.CalendarView,
 	}
 	logrus.Debugf("Inserting event: sql=insert_event.sql params=%#v", eventParams)
 	_, rerr = dbClient.Exec("sql/event/insert_event.sql", &eventParams, false)
@@ -69,11 +69,4 @@ func createEvent(dbClient db.TransactionClient, requestBody api.PostEventJSONReq
 	}
 
 	return eventId, nil
-}
-
-func boolToInt(b bool) int {
-	if b {
-		return 1
-	}
-	return 0
 }
