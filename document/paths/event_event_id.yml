@@ -49,6 +49,8 @@ put:
         application/json:
           schema:
             $ref: "../schemas/res_post_event_event.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
     403:
       $ref: "../responses/unauthorized.yml"
     404:
