@@ -2,6 +2,10 @@
 
 ## 環境構築
 
+1. Ubuntuで開発を行うため、windowsにて開発をする方は[WSLおよびUbuntuの環境構築](#WSLおよびUbuntuの環境構築)をする
+1. [Docker Desktop](https://www.docker.com)をダウンロード・インストールする
+1. VScodeとWSLを連携する
+1. Ubuntuに開発用のディレクトリを作成する(ここにgit clone をしていく)
 1. `.env.sample` をコピーして `.env` を作成する
 1. [Discord developers](https://discord.com/developers/applications)で App を作成し、Oauth2 の Redirects に`${FRONTEND_ROOT_URL}/user/discord/callback`を指定する
 1. 上記で作成した App の Client information から Client ID と Client Secret を取得し、.env に追記する。
@@ -11,6 +15,11 @@
 1. [実行](#実行)を行う
 1. [DB マイグレーション](#DBマイグレーション)を行う
 
+##  WSLおよびUbuntuの環境構築
+```sh
+wsl --install
+wsl --install -d Ubuntu-24.04.4 
+```
 ## コンテナのビルド
 
 ```sh
