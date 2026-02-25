@@ -2,11 +2,12 @@
 
 ## 環境構築
 
-1. Ubuntuで開発を行うため、Windowsにて開発をする方は[WSLおよびUbuntuの環境構築](#WSLおよびUbuntuの環境構築)をする　※OSがUbuntuの方は４まで飛んでください
+1. Ubuntuで開発を行うため、Windowsにて開発をする方は[WSLおよびUbuntuの環境構築](#WSLおよびUbuntuの環境構築)をする　
 1. [Docker Desktop](https://www.docker.com)をダウンロード・インストールする
 1. VSCodeの拡張機能のところからWSLと検索してVSCodeにWSLの拡張機能をインストールする
-1. Ubuntuに開発用の[ディレクトリを作成する](#ディレクトリを作成する) 
+1. Ubuntuに開発用の[ディレクトリを作成](#ディレクトリを作成)する 
 1. https://github.com/SIT-DigiCre/digicore_v3_frontend.git と　https://github.com/SIT-DigiCre/digicore_v3_backend.git　を[クローン](#クローン)する
+1. クローンしたディレクトリを[VSCodeで編集](#VSCodeで編集)していく
 1. `.env.sample` をコピーして `.env` を作成する
 1.  `.env`に環境変数を入力する
 1. [Discord developers](https://discord.com/developers/applications)で App を作成し、Oauth2 の Redirects に`${FRONTEND_ROOT_URL}/user/discord/callback`を指定する
@@ -22,10 +23,11 @@
 wsl --install
 wsl --install -d Ubuntu-24.04.4 
 ```
-## ディレクトリを作成する
+## ディレクトリを作成
 ```sh
 cd    ##ホームディレクトリに戻る
 mkdir digicre
+cd digicre #digicreフォルダに入る
 ```
 
 ## クローン
@@ -33,6 +35,12 @@ mkdir digicre
 git clone 指定したURL
 #今開いているリポジトリに指定したURLのリポジトリを複製する
 ```
+## VSCodeで編集
+```sh
+cd digicore_v3_backend
+code . #VSCodeを開く
+```
+
 ## コンテナのビルド
 
 ```sh
