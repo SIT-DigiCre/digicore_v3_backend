@@ -4,11 +4,13 @@ required:
 properties:
   comment:
     type: string
+    minLength: 1
     x-oapi-codegen-extra-tags:
-      validate: max=255
+      validate: min=1,max=255
       ja: コメント
   url:
     type: string
+    minLength: 1
     x-oapi-codegen-extra-tags:
-      validate: max=255
+      validate: min=1,max=255
       ja: URL

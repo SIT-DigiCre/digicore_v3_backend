@@ -49,6 +49,13 @@ type ReqPostBudget struct {
 	Name  string `ja:"名前" json:"name" validate:"required"`
 }
 
+// ReqPostEventEvent defines model for ReqPostEventEvent.
+type ReqPostEventEvent struct {
+	CalendarView bool   `ja:"カレンダー表示" json:"calendar_view" validate:"required"`
+	Description  string `ja:"説明" json:"description" validate:"required,min=1"`
+	Name         string `ja:"イベント名" json:"name" validate:"required,min=1"`
+}
+
 // ReqPostGroup defines model for ReqPostGroup.
 type ReqPostGroup struct {
 	Description  string `ja:"グループの説明" json:"description" validate:"required,min=1,max=1000"`
@@ -156,8 +163,8 @@ type ReqPutBudgetBudgetIdStatusPending struct {
 
 // ReqPutEventEventIdReservationIdMe defines model for ReqPutEventEventIdReservationIdMe.
 type ReqPutEventEventIdReservationIdMe struct {
-	Comment string `ja:"コメント" json:"comment" validate:"max=255"`
-	Url     string `ja:"URL" json:"url" validate:"max=255"`
+	Comment string `ja:"コメント" json:"comment" validate:"min=1,max=255"`
+	Url     string `ja:"URL" json:"url" validate:"min=1,max=255"`
 }
 
 // ReqPutPaymentPaymentId defines model for ReqPutPaymentPaymentId.
@@ -684,6 +691,14 @@ type ResGetWorkWorkWorkIdPublic struct {
 	WorkId      string                             `json:"workId"`
 }
 
+// ResPostEventEvent defines model for ResPostEventEvent.
+type ResPostEventEvent struct {
+	CalendarView bool               `ja:"カレンダー表示" json:"calendar_view"`
+	Description  string             `ja:"説明" json:"description"`
+	EventId      openapi_types.UUID `ja:"イベントID" json:"event_id"`
+	Name         string             `ja:"イベント名" json:"name"`
+}
+
 // ResPostGroup defines model for ResPostGroup.
 type ResPostGroup struct {
 	Description string `json:"description"`
@@ -836,6 +851,12 @@ type PutBudgetBudgetIdStatusPaidJSONRequestBody = ReqPutBudgetBudgetIdStatusPaid
 
 // PutBudgetBudgetIdStatusPendingJSONRequestBody defines body for PutBudgetBudgetIdStatusPending for application/json ContentType.
 type PutBudgetBudgetIdStatusPendingJSONRequestBody = ReqPutBudgetBudgetIdStatusPending
+
+// PostEventJSONRequestBody defines body for PostEvent for application/json ContentType.
+type PostEventJSONRequestBody = ReqPostEventEvent
+
+// PutEventEventIdJSONRequestBody defines body for PutEventEventId for application/json ContentType.
+type PutEventEventIdJSONRequestBody = ReqPostEventEvent
 
 // PutEventEventIdReservationIdMeJSONRequestBody defines body for PutEventEventIdReservationIdMe for application/json ContentType.
 type PutEventEventIdReservationIdMeJSONRequestBody = ReqPutEventEventIdReservationIdMe

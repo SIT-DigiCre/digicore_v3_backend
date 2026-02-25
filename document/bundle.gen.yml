@@ -675,6 +675,32 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+    post:
+      tags:
+        - event
+      description: Post event
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Create event
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostEventEvent'
+      responses:
+        '200':
+          description: Create event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostEventEvent'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   '/event/{eventId}':
     get:
       tags:
@@ -695,6 +721,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetEventEventId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - event
+      description: Update event
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update event
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostEventEvent'
+      responses:
+        '200':
+          description: Success update event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostEventEvent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -2357,14 +2417,64 @@ components:
       properties:
         comment:
           type: string
+          minLength: 1
           x-oapi-codegen-extra-tags:
-            validate: max=255
+            validate: 'min=1,max=255'
             ja: コメント
         url:
           type: string
+          minLength: 1
           x-oapi-codegen-extra-tags:
-            validate: max=255
+            validate: 'min=1,max=255'
             ja: URL
+    ReqPostEventEvent:
+      required:
+        - name
+        - description
+        - calendar_view
+      properties:
+        name:
+          type: string
+          minLength: 1
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1'
+            ja: イベント名
+        description:
+          type: string
+          minLength: 1
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1'
+            ja: 説明
+        calendar_view:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: カレンダー表示
+    ResPostEventEvent:
+      type: object
+      required:
+        - event_id
+        - name
+        - description
+        - calendar_view
+      properties:
+        event_id:
+          type: string
+          format: uuid
+          x-oapi-codegen-extra-tags:
+            ja: イベントID
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: イベント名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: 説明
+        calendar_view:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: カレンダー表示
     ResGetStorageMyfile:
       required:
         - files

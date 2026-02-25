@@ -1,0 +1,24 @@
+type: object
+required:
+  - event_id
+  - name
+  - description
+  - calendar_view
+properties:
+  event_id:
+    type: string
+    format: uuid
+    x-oapi-codegen-extra-tags:
+      ja: イベントID
+  name:
+    type: string
+    x-oapi-codegen-extra-tags:
+      ja: イベント名
+  description:
+    type: string
+    x-oapi-codegen-extra-tags:
+      ja: 説明
+  calendar_view:
+    type: boolean
+    x-oapi-codegen-extra-tags:
+      ja: カレンダー表示
