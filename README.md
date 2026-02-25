@@ -2,7 +2,14 @@
 
 ## 環境構築
 
+1. Windowsにて開発をする方は、Ubuntuで開発を行うために[WSLおよびUbuntuの環境構築](#WSLおよびUbuntuの環境構築)をする　
+1. [Docker Desktop](https://www.docker.com)をダウンロード・インストールする
+1. VSCodeの拡張機能のところから`ms-vscode-remote.remote-wsl`と検索してVSCodeにWSLの拡張機能をインストールする
+1. Ubuntuに開発用の[ディレクトリを作成](#ディレクトリを作成)する 
+1. `https://github.com/SIT-DigiCre/digicore_v3_frontend.git` と `https://github.com/SIT-DigiCre/digicore_v3_backend.git` を[クローン](#クローン)する
+1. クローンしたディレクトリを[VSCodeで編集](#VSCodeで編集)していく
 1. `.env.sample` をコピーして `.env` を作成する
+1.  `.env`に環境変数を入力する ※環境変数はsysdevの既存メンバーから教えてもらってください
 1. [Discord developers](https://discord.com/developers/applications)で App を作成し、Oauth2 の Redirects に`${FRONTEND_ROOT_URL}/user/discord/callback`を指定する
 1. 上記で作成した App の Client information から Client ID と Client Secret を取得し、.env に追記する。
 1. [Google Cloud Platform](https://console.cloud.google.com/home/dashboard)で App を作成し、OAuth クライアント ID をアプリケーションの種類をウェブアプリケーションにして作成し、承認済みのリダイレクト URI に`${FRONTEND_ROOT_URL}/signup/callback`と`${FRONTEND_ROOT_URL}/login/callback`を指定する。
@@ -10,6 +17,29 @@
 1. [コンテナのビルド](#コンテナのビルド)を行う
 1. [実行](#実行)を行う
 1. [DB マイグレーション](#DBマイグレーション)を行う
+
+##  WSLおよびUbuntuの環境構築
+```sh
+wsl --install
+wsl --install -d Ubuntu-24.04.4 
+```
+## ディレクトリを作成
+```sh
+cd    ##ホームディレクトリに戻る
+mkdir digicre
+cd digicre #digicreフォルダに入る
+```
+
+## クローン
+```sh
+git clone https://github.com/SIT-DigiCre/digicore_v3_frontend.git
+git clone https://github.com/SIT-DigiCre/digicore_v3_backend.git
+```
+## VSCodeで編集
+```sh
+cd digicore_v3_backend
+code . #VSCodeを開く
+```
 
 ## コンテナのビルド
 
