@@ -16,11 +16,6 @@ func (s *server) PutEventEventId(ctx echo.Context, eventId string) error {
 		return response.ErrorResponse(ctx, &response.Error{Code: 400, Level: "Info", Message: "リクエストボディの解析に失敗しました", Log: err.Error()})
 	}
 
-	// 空データのチェック
-	if requestBody.Name == "" || requestBody.Description == "" {
-		return response.ErrorResponse(ctx, &response.Error{Code: 400, Level: "Info", Message: "必須フィールドが不足しています", Log: "missing required field"})
-	}
-
 	dbTranisactionClient, rerr := db.OpenTransaction()
 	if rerr != nil {
 		return response.ErrorResponse(ctx, rerr)

@@ -2411,11 +2411,13 @@ components:
       properties:
         comment:
           type: string
+          minLength: 1
           x-oapi-codegen-extra-tags:
             validate: max=255
             ja: コメント
         url:
           type: string
+          minLength: 1
           x-oapi-codegen-extra-tags:
             validate: max=255
             ja: URL
@@ -2427,11 +2429,13 @@ components:
       properties:
         name:
           type: string
+          minLength: 1
           x-oapi-codegen-extra-tags:
             validate: required
             ja: イベント名
         description:
           type: string
+          minLength: 1
           x-oapi-codegen-extra-tags:
             validate: required
             ja: 説明
