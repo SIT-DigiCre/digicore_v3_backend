@@ -66,7 +66,7 @@ func CreateToken(user_id string) (string, *response.Error) {
 	if err := t.Set(jwt.SubjectKey, user_id); err != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "JWTトークンにユーザーIDを設定できませんでした", Log: err.Error()}
 	}
-	if err := t.Set(jwt.ExpirationKey, time.Now().Add(time.Hour*72).Unix()); err != nil {
+	if err := t.Set(jwt.ExpirationKey, time.Now().Add(time.Hour*24*30).Unix()); err != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "JWTトークンに有効期限を設定できませんでした", Log: err.Error()}
 	}
 	claims, err := GetClaims(user_id)
