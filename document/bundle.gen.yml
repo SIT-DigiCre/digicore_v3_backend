@@ -2097,7 +2097,6 @@ components:
         - isMale
         - phoneNumber
         - address
-        - parentName
         - parentLastName
         - parentFirstName
         - parentCellphoneNumber
@@ -2117,8 +2116,6 @@ components:
         phoneNumber:
           type: string
         address:
-          type: string
-        parentName:
           type: string
         parentLastName:
           type: string
@@ -2177,11 +2174,6 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: 住所
-        parentName:
-          type: string
-          x-oapi-codegen-extra-tags:
-            validate: 'omitempty,min=1,max=255'
-            ja: 緊急連絡先氏名
         parentLastName:
           type: string
           x-oapi-codegen-extra-tags:
@@ -3319,19 +3311,25 @@ components:
             ja: 備考
     ReqPostMail:
       required:
-        - addresses
         - subject
         - body
       properties:
         addresses:
           type: array
-          minItems: 1
           items:
             type: string
             format: email
           x-oapi-codegen-extra-tags:
-            validate: required
+            validate: 'omitempty,dive,email'
             ja: 送信先アドレス
+        userIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          x-oapi-codegen-extra-tags:
+            validate: 'omitempty,dive'
+            ja: 送信先ユーザーID
         subject:
           type: string
           x-oapi-codegen-extra-tags:

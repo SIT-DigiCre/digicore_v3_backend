@@ -76,10 +76,11 @@ type ReqPostLoginCallback struct {
 
 // ReqPostMail defines model for ReqPostMail.
 type ReqPostMail struct {
-	Addresses   []openapi_types.Email `ja:"送信先アドレス" json:"addresses" validate:"required"`
-	Body        string                `ja:"本文" json:"body" validate:"required"`
-	SendToAdmin *bool                 `ja:"管理者用アドレスにも送信" json:"sendToAdmin,omitempty"`
-	Subject     string                `ja:"タイトル" json:"subject" validate:"required"`
+	Addresses   *[]openapi_types.Email `ja:"送信先アドレス" json:"addresses,omitempty" validate:"omitempty,dive,email"`
+	Body        string                 `ja:"本文" json:"body" validate:"required"`
+	SendToAdmin *bool                  `ja:"管理者用アドレスにも送信" json:"sendToAdmin,omitempty"`
+	Subject     string                 `ja:"タイトル" json:"subject" validate:"required"`
+	UserIds     *[]openapi_types.UUID  `ja:"送信先ユーザーID" json:"userIds,omitempty" validate:"omitempty,dive"`
 }
 
 // ReqPostMattermostCreateuser defines model for ReqPostMattermostCreateuser.
@@ -214,7 +215,6 @@ type ReqPutUserMePrivate struct {
 	ParentFirstName       *string `ja:"緊急連絡先の名前" json:"parentFirstName,omitempty" validate:"omitempty,min=1,max=255"`
 	ParentHomephoneNumber *string `ja:"緊急連絡先固定電話番号" json:"parentHomephoneNumber,omitempty" validate:"omitempty,phonenumber"`
 	ParentLastName        *string `ja:"緊急連絡先の名字" json:"parentLastName,omitempty" validate:"omitempty,min=1,max=255"`
-	ParentName            *string `ja:"緊急連絡先氏名" json:"parentName,omitempty" validate:"omitempty,min=1,max=255"`
 	PhoneNumber           string  `ja:"電話番号" json:"phoneNumber" validate:"required,phonenumber"`
 }
 
@@ -579,7 +579,6 @@ type ResGetUserMePrivate struct {
 	ParentFirstName       string `json:"parentFirstName"`
 	ParentHomephoneNumber string `json:"parentHomephoneNumber"`
 	ParentLastName        string `json:"parentLastName"`
-	ParentName            string `json:"parentName"`
 	PhoneNumber           string `json:"phoneNumber"`
 }
 
