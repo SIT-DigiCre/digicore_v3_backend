@@ -45,9 +45,19 @@ func updateEvent(dbClient db.TransactionClient, eventId string, requestBody api.
 		Description:  requestBody.Description,
 		CalendarView: requestBody.CalendarView,
 	}
-	_, rerr := dbClient.Exec("sql/event/update_event.sql", &params, false)
+	result, rerr := dbClient.Exec("sql/event/update_event.sql", &params, false)
 	if rerr != nil {
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "DBエラーが発生しました", Log: rerr.Error()}
 	}
+
+	// 影響を受けた行数を確認
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "更新結果の確認に失敗しました", Log: err.Error()}
+	}
+	if rowsAffected == 0 {
+		return &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "指定されたイベントが見つかりません", Log: "event not found"}
+	}
+
 	return nil
 }

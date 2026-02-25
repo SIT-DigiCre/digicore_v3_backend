@@ -42,5 +42,9 @@ post:
         application/json:
           schema:
             $ref: "../schemas/res_post_event_event.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
     500:
       $ref: "../responses/internal_server.yml"
