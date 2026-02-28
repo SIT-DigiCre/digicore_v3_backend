@@ -1214,6 +1214,33 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /group/admin:
+    post:
+      tags:
+        - group
+      description: Create new group with admin claim
+      security:
+        - BearerAuth:
+            - infra
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostGroupAdmin'
+      responses:
+        '200':
+          description: Success create admin group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostGroup'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   '/group/{groupId}':
     get:
       tags:
@@ -1556,7 +1583,7 @@ paths:
       description: Update budget by admin
       security:
         - BearerAuth:
-            - admin
+            - account
       parameters:
         - name: budgetId
           in: path
@@ -1590,7 +1617,7 @@ paths:
       description: Send bulk email
       security:
         - BearerAuth:
-            - admin
+            - infra
       requestBody:
         description: Email request
         required: true
@@ -2860,7 +2887,6 @@ components:
         - name
         - description
         - joinable
-        - isAdminGroup
       properties:
         name:
           type: string
@@ -2876,10 +2902,32 @@ components:
           type: boolean
           x-oapi-codegen-extra-tags:
             ja: 参加可能フラグ
-        isAdminGroup:
+    ReqPostGroupAdmin:
+      required:
+        - name
+        - description
+        - joinable
+        - claim
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: グループ名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=1000'
+            ja: グループの説明
+        joinable:
           type: boolean
           x-oapi-codegen-extra-tags:
-            ja: 管理者グループフラグ
+            ja: 参加可能フラグ
+        claim:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: グループに付与するclaim名
     ResPostGroup:
       required:
         - groupId

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
@@ -15,21 +14,6 @@ import (
 )
 
 func PostMail(ctx echo.Context, dbClient db.Client, requestBody api.ReqPostMail) (api.ResPostMail, *response.Error) {
-	userId := ctx.Get("user_id").(string)
-
-	isAdmin, err := admin.CheckUserIsAdmin(dbClient, userId)
-	if err != nil {
-		return api.ResPostMail{}, err
-	}
-	if !isAdmin {
-		return api.ResPostMail{}, &response.Error{
-			Code:    http.StatusForbidden,
-			Level:   "Info",
-			Message: "メール送信の権限がありません",
-			Log:     "user is not admin",
-		}
-	}
-
 	// addressesとuserIdsの両方が空の場合はエラー
 	addressCount := 0
 	if requestBody.Addresses != nil {

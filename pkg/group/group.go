@@ -3,6 +3,7 @@ package group
 import (
 	"net/http"
 
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 )
@@ -105,9 +106,11 @@ func checkGroupExists(dbClient db.TransactionClient, groupId string) (bool, *res
 
 func checkGroupIsAdminGroup(dbClient db.TransactionClient, groupId string) (bool, *response.Error) {
 	params := struct {
-		GroupId string `twowaysql:"groupId"`
+		GroupId     string   `twowaysql:"groupId"`
+		AdminClaims []string `twowaysql:"adminClaims"`
 	}{
-		GroupId: groupId,
+		GroupId:     groupId,
+		AdminClaims: admin.GetAdminClaims(),
 	}
 
 	result := []struct {

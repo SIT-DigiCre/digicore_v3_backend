@@ -3,6 +3,7 @@ package group
 import (
 	"net/http"
 
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
@@ -26,17 +27,23 @@ func PostGroupGroupIdUser(ctx echo.Context, dbClient db.TransactionClient, group
 		}
 	}
 
-	// リクエストユーザーがグループに所属しているか確認
+	// リクエストユーザーがグループに所属しているか、またはinfra claimを持つか確認
 	isMember, err := checkUserIsGroupMember(dbClient, requestUserId, groupId)
 	if err != nil {
 		return api.ResPostGroupGroupIdUser{}, err
 	}
 	if !isMember {
-		return api.ResPostGroupGroupIdUser{}, &response.Error{
-			Code:    http.StatusForbidden,
-			Level:   "Info",
-			Message: "グループに所属していないため、ユーザーを追加できません",
-			Log:     "user is not member of the group",
+		hasInfra, err := admin.CheckUserHasClaim(dbClient, requestUserId, "infra")
+		if err != nil {
+			return api.ResPostGroupGroupIdUser{}, err
+		}
+		if !hasInfra {
+			return api.ResPostGroupGroupIdUser{}, &response.Error{
+				Code:    http.StatusForbidden,
+				Level:   "Info",
+				Message: "グループに所属していないため、ユーザーを追加できません",
+				Log:     "user is not member of the group",
+			}
 		}
 	}
 

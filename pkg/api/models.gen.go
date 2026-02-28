@@ -51,10 +51,17 @@ type ReqPostBudget struct {
 
 // ReqPostGroup defines model for ReqPostGroup.
 type ReqPostGroup struct {
-	Description  string `ja:"グループの説明" json:"description" validate:"required,min=1,max=1000"`
-	IsAdminGroup bool   `ja:"管理者グループフラグ" json:"isAdminGroup"`
-	Joinable     bool   `ja:"参加可能フラグ" json:"joinable"`
-	Name         string `ja:"グループ名" json:"name" validate:"required,min=1,max=255"`
+	Description string `ja:"グループの説明" json:"description" validate:"required,min=1,max=1000"`
+	Joinable    bool   `ja:"参加可能フラグ" json:"joinable"`
+	Name        string `ja:"グループ名" json:"name" validate:"required,min=1,max=255"`
+}
+
+// ReqPostGroupAdmin defines model for ReqPostGroupAdmin.
+type ReqPostGroupAdmin struct {
+	Claim       string `ja:"グループに付与するclaim名" json:"claim" validate:"required"`
+	Description string `ja:"グループの説明" json:"description" validate:"required,min=1,max=1000"`
+	Joinable    bool   `ja:"参加可能フラグ" json:"joinable"`
+	Name        string `ja:"グループ名" json:"name" validate:"required,min=1,max=255"`
 }
 
 // ReqPostGroupGroupIdUser defines model for ReqPostGroupGroupIdUser.
@@ -848,6 +855,9 @@ type PutEventEventIdReservationIdMeJSONRequestBody = ReqPutEventEventIdReservati
 
 // PostGroupJSONRequestBody defines body for PostGroup for application/json ContentType.
 type PostGroupJSONRequestBody = ReqPostGroup
+
+// PostGroupAdminJSONRequestBody defines body for PostGroupAdmin for application/json ContentType.
+type PostGroupAdminJSONRequestBody = ReqPostGroupAdmin
 
 // PostGroupGroupIdUserJSONRequestBody defines body for PostGroupGroupIdUser for application/json ContentType.
 type PostGroupGroupIdUserJSONRequestBody = ReqPostGroupGroupIdUser

@@ -86,6 +86,9 @@ type ServerInterface interface {
 	// (POST /group)
 	PostGroup(ctx echo.Context) error
 
+	// (POST /group/admin)
+	PostGroupAdmin(ctx echo.Context) error
+
 	// (GET /group/{groupId})
 	GetGroupGroupId(ctx echo.Context, groupId string) error
 
@@ -451,7 +454,7 @@ func (w *ServerInterfaceWrapper) PutBudgetBudgetIdAdmin(ctx echo.Context) error 
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter budgetId: %s", err))
 	}
 
-	ctx.Set(BearerAuthScopes, []string{"admin"})
+	ctx.Set(BearerAuthScopes, []string{"account"})
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PutBudgetBudgetIdAdmin(ctx, budgetId)
@@ -720,6 +723,17 @@ func (w *ServerInterfaceWrapper) PostGroup(ctx echo.Context) error {
 	return err
 }
 
+// PostGroupAdmin converts echo context to params.
+func (w *ServerInterfaceWrapper) PostGroupAdmin(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostGroupAdmin(ctx)
+	return err
+}
+
 // GetGroupGroupId converts echo context to params.
 func (w *ServerInterfaceWrapper) GetGroupGroupId(ctx echo.Context) error {
 	var err error
@@ -796,7 +810,7 @@ func (w *ServerInterfaceWrapper) PostLoginCallback(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) PostMail(ctx echo.Context) error {
 	var err error
 
-	ctx.Set(BearerAuthScopes, []string{"admin"})
+	ctx.Set(BearerAuthScopes, []string{"infra"})
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PostMail(ctx)
@@ -1451,6 +1465,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.PUT(baseURL+"/event/:eventId/:reservationId/me", wrapper.PutEventEventIdReservationIdMe)
 	router.GET(baseURL+"/group", wrapper.GetGroup)
 	router.POST(baseURL+"/group", wrapper.PostGroup)
+	router.POST(baseURL+"/group/admin", wrapper.PostGroupAdmin)
 	router.GET(baseURL+"/group/:groupId", wrapper.GetGroupGroupId)
 	router.POST(baseURL+"/group/:groupId/join", wrapper.PostGroupGroupIdJoin)
 	router.POST(baseURL+"/group/:groupId/user", wrapper.PostGroupGroupIdUser)

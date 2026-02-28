@@ -12,7 +12,7 @@ SELECT
         FROM groups_users
         INNER JOIN group_claims ON groups_users.group_id = group_claims.group_id
         WHERE groups_users.user_id = user_profiles.user_id
-        AND group_claims.claim = 'admin'
+        AND group_claims.claim IN /*adminClaims*/('account', 'infra')
     ), true, false) as is_admin
 FROM user_profiles
 LEFT JOIN users ON users.id = user_profiles.user_id
