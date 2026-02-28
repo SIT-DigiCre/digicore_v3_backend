@@ -11,13 +11,16 @@ import (
 )
 
 type workWithRelationsRow struct {
-	WorkId         string  `db:"work_id"`
-	WorkName       string  `db:"work_name"`
-	AuthorUserId   *string `db:"author_user_id"`
-	AuthorUsername *string `db:"author_username"`
-	AuthorIconUrl  *string `db:"author_icon_url"`
-	TagId          *string `db:"tag_id"`
-	TagName        *string `db:"tag_name"`
+	WorkId          string  `db:"work_id"`
+	WorkName        string  `db:"work_name"`
+	WorkDescription string  `db:"work_description"`
+	AuthorUserId    *string `db:"author_user_id"`
+	AuthorUsername  *string `db:"author_username"`
+	AuthorIconUrl   *string `db:"author_icon_url"`
+	TagId           *string `db:"tag_id"`
+	TagName         *string `db:"tag_name"`
+	FileId          *string `db:"file_id"`
+	FileName        *string `db:"file_name"`
 }
 
 func GetWorkWork(ctx echo.Context, dbClient db.Client, params api.GetWorkWorkParams) (api.ResGetWorkWork, *response.Error) {
@@ -37,10 +40,12 @@ func GetWorkWork(ctx echo.Context, dbClient db.Client, params api.GetWorkWorkPar
 }
 
 type workOverview struct {
-	Authors []workObjectAuthor
-	Name    string `db:"name"`
-	Tags    []workObjectTag
-	WorkId  string `db:"work_id"`
+	Authors     []workObjectAuthor
+	Description string          `db:"description"`
+	FirstFile   *workObjectFile `db:"first_file"`
+	Name        string          `db:"name"`
+	Tags        []workObjectTag
+	WorkId      string `db:"work_id"`
 }
 
 func getWorkList(dbClient db.Client, offset *int, authorId *string) ([]workOverview, *response.Error) {
@@ -68,10 +73,11 @@ func mapRowsToWorkList(rows []workWithRelationsRow) []workOverview {
 	for _, row := range rows {
 		if _, exists := workMap[row.WorkId]; !exists {
 			workMap[row.WorkId] = &workOverview{
-				WorkId:  row.WorkId,
-				Name:    row.WorkName,
-				Authors: []workObjectAuthor{},
-				Tags:    []workObjectTag{},
+				WorkId:      row.WorkId,
+				Name:        row.WorkName,
+				Description: row.WorkDescription,
+				Authors:     []workObjectAuthor{},
+				Tags:        []workObjectTag{},
 			}
 			workOrder = append(workOrder, row.WorkId)
 			authorMap[row.WorkId] = make(map[string]bool)
@@ -103,6 +109,17 @@ func mapRowsToWorkList(rows []workWithRelationsRow) []workOverview {
 			}
 			workMap[row.WorkId].Tags = append(workMap[row.WorkId].Tags, tag)
 			tagMap[row.WorkId][*row.TagId] = true
+		}
+
+		// 先頭ファイル情報を追加
+		if row.FileId != nil && workMap[row.WorkId].FirstFile == nil {
+			file := workObjectFile{
+				FileId: *row.FileId,
+			}
+			if row.FileName != nil {
+				file.Name = *row.FileName
+			}
+			workMap[row.WorkId].FirstFile = &file
 		}
 	}
 

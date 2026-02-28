@@ -1218,7 +1218,7 @@ paths:
     post:
       tags:
         - group
-      description: Create new group with admin claim
+      description: Create new group with any claim. infra権限を持つユーザーが任意のclaimのグループを作成可能
       security:
         - BearerAuth:
             - infra
@@ -1580,7 +1580,7 @@ paths:
     put:
       tags:
         - budget
-      description: Update budget by admin
+      description: Update budget by account role
       security:
         - BearerAuth:
             - account
@@ -1692,7 +1692,8 @@ paths:
         - activity
       description: Admin force activity checkout
       security:
-        - BearerAuth: []
+        - BearerAuth:
+            - infra
       parameters:
         - name: userId
           in: path
@@ -1945,6 +1946,7 @@ components:
       required:
         - userId
         - username
+        - schoolGrade
         - iconUrl
         - shortIntroduction
       properties:
@@ -1952,6 +1954,8 @@ components:
           type: string
         username:
           type: string
+        schoolGrade:
+          type: integer
         iconUrl:
           type: string
         shortIntroduction:
@@ -2517,6 +2521,8 @@ components:
       required:
         - workId
         - name
+        - description
+        - firstFile
         - authors
         - tags
       properties:
@@ -2524,6 +2530,19 @@ components:
           type: string
         name:
           type: string
+        description:
+          type: string
+        firstFile:
+          type: object
+          nullable: true
+          required:
+            - fileId
+            - name
+          properties:
+            fileId:
+              type: string
+            name:
+              type: string
         authors:
           type: array
           items:
@@ -2908,7 +2927,7 @@ components:
         claim:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: required
+            validate: 'required,max=255'
             ja: グループに付与するclaim名
     ResPostGroup:
       required:
