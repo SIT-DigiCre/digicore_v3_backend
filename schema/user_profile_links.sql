@@ -1,0 +1,10 @@
+CREATE TABLE user_profile_links
+(
+    id          BINARY(16)   NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
+    user_id     BINARY(16)   NOT NULL ,
+    `url`       VARCHAR(2048) NOT NULL,
+    created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+    INDEX idx_user_id (user_id)
+)

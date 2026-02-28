@@ -29,3 +29,5 @@ ALTER TABLE budgets ADD CONSTRAINT fk_budgets_proposer_user_id_users_id FOREIGN 
 ALTER TABLE budgets ADD CONSTRAINT fk_budgets_approver_user_id_users_id FOREIGN KEY (approver_user_id) REFERENCES users(id);
 
 ALTER TABLE group_claims ADD CONSTRAINT fk_group_claims_group_id_groups_id FOREIGN KEY (group_id) REFERENCES `groups`(id);
+
+ALTER TABLE user_profile_links ADD CONSTRAINT fk_user_profile_links_user_id_user_id  FOREIGN KEY(user_id)  REFERENCES users(id) ON DELETE CASCADE;
