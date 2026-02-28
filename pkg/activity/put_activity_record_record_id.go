@@ -28,16 +28,16 @@ func PutActivityRecordRecordId(ctx echo.Context, dbClient db.TransactionClient, 
 
 	requestUserId := ctx.Get("user_id").(string)
 	if requestUserId != record.UserID {
-		isAdmin, aerr := admin.CheckUserIsAdmin(dbClient, requestUserId)
+		hasInfra, aerr := admin.CheckUserHasClaim(dbClient, requestUserId, "infra")
 		if aerr != nil {
 			return api.BlankSuccess{}, aerr
 		}
-		if !isAdmin {
+		if !hasInfra {
 			return api.BlankSuccess{}, &response.Error{
 				Code:    http.StatusForbidden,
 				Level:   "Info",
 				Message: "編集権限がありません",
-				Log:     "ユーザーはレコードの所有者でも管理者でもありません",
+				Log:     "ユーザーはレコードの所有者でもinfra claimを持つユーザーでもありません",
 			}
 		}
 	}

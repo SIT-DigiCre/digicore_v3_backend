@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func PostGroup(ctx echo.Context, dbClient db.TransactionClient, req api.ReqPostGroup) (api.ResPostGroup, *response.Error) {
+func PostGroupAdmin(ctx echo.Context, dbClient db.TransactionClient, req api.ReqPostGroupAdmin) (api.ResPostGroup, *response.Error) {
 	userId := ctx.Get("user_id").(string)
 
 	// グループを作成
@@ -31,6 +31,12 @@ func PostGroup(ctx echo.Context, dbClient db.TransactionClient, req api.ReqPostG
 
 	// 作成者をグループメンバーとして追加
 	err = insertGroupUser(dbClient, userId, groupId)
+	if err != nil {
+		return api.ResPostGroup{}, err
+	}
+
+	// group_claimsテーブルにclaimを追加。infra権限を持つユーザーはあらゆるclaimのグループを作成可能
+	err = insertGroupClaim(dbClient, groupId, req.Claim)
 	if err != nil {
 		return api.ResPostGroup{}, err
 	}

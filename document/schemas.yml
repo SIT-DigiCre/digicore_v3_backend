@@ -120,6 +120,8 @@ ResGetGroupGroupIdObjectUser:
   $ref: "./schemas/res_get_group_group_id.user.yml"
 ReqPostGroup:
   $ref: "./schemas/req_post_group.yml"
+ReqPostGroupAdmin:
+  $ref: "./schemas/req_post_group_admin.yml"
 ResPostGroup:
   $ref: "./schemas/res_post_group.yml"
 ReqPostGroupGroupIdUser:
