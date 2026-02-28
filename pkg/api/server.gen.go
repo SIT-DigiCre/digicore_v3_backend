@@ -269,7 +269,7 @@ func (w *ServerInterfaceWrapper) PostActivityCheckoutUserId(ctx echo.Context) er
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter userId: %s", err))
 	}
 
-	ctx.Set(BearerAuthScopes, []string{""})
+	ctx.Set(BearerAuthScopes, []string{"infra"})
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PostActivityCheckoutUserId(ctx, userId)
