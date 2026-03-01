@@ -1,6 +1,7 @@
 required:
   - userId
   - username
+  - schoolGrade
   - iconUrl
   - shortIntroduction
 properties:
@@ -8,6 +9,8 @@ properties:
     type: string
   username:
     type: string
+  schoolGrade:
+    type: integer
   iconUrl:
     type: string
   shortIntroduction:

@@ -1274,6 +1274,33 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /group/admin:
+    post:
+      tags:
+        - group
+      description: Create new group with any claim. infra権限を持つユーザーが任意のclaimのグループを作成可能
+      security:
+        - BearerAuth:
+            - infra
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostGroupAdmin'
+      responses:
+        '200':
+          description: Success create admin group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostGroup'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   '/group/{groupId}':
     get:
       tags:
@@ -1613,10 +1640,10 @@ paths:
     put:
       tags:
         - budget
-      description: Update budget by admin
+      description: Update budget by account role
       security:
         - BearerAuth:
-            - admin
+            - account
       parameters:
         - name: budgetId
           in: path
@@ -1650,7 +1677,7 @@ paths:
       description: Send bulk email
       security:
         - BearerAuth:
-            - admin
+            - infra
       requestBody:
         description: Email request
         required: true
@@ -1725,7 +1752,8 @@ paths:
         - activity
       description: Admin force activity checkout
       security:
-        - BearerAuth: []
+        - BearerAuth:
+            - infra
       parameters:
         - name: userId
           in: path
@@ -1978,6 +2006,7 @@ components:
       required:
         - userId
         - username
+        - schoolGrade
         - iconUrl
         - shortIntroduction
       properties:
@@ -1985,6 +2014,8 @@ components:
           type: string
         username:
           type: string
+        schoolGrade:
+          type: integer
         iconUrl:
           type: string
         shortIntroduction:
@@ -2600,6 +2631,8 @@ components:
       required:
         - workId
         - name
+        - description
+        - firstFile
         - authors
         - tags
       properties:
@@ -2607,6 +2640,19 @@ components:
           type: string
         name:
           type: string
+        description:
+          type: string
+        firstFile:
+          type: object
+          nullable: true
+          required:
+            - fileId
+            - name
+          properties:
+            fileId:
+              type: string
+            name:
+              type: string
         authors:
           type: array
           items:
@@ -2952,7 +2998,6 @@ components:
         - name
         - description
         - joinable
-        - isAdminGroup
       properties:
         name:
           type: string
@@ -2968,10 +3013,32 @@ components:
           type: boolean
           x-oapi-codegen-extra-tags:
             ja: 参加可能フラグ
-        isAdminGroup:
+    ReqPostGroupAdmin:
+      required:
+        - name
+        - description
+        - joinable
+        - claim
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: グループ名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=1000'
+            ja: グループの説明
+        joinable:
           type: boolean
           x-oapi-codegen-extra-tags:
-            ja: 管理者グループフラグ
+            ja: 参加可能フラグ
+        claim:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,max=255'
+            ja: グループに付与するclaim名
     ResPostGroup:
       required:
         - groupId
