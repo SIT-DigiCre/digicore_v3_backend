@@ -8,18 +8,18 @@ import (
 )
 
 func (s *server) PutUserMeGraduated(ctx echo.Context) error {
-	dbTranisactionClient, err := db.OpenTransaction()
+	dbTransactionClient, err := db.OpenTransaction()
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}
-	defer dbTranisactionClient.Rollback()
+	defer dbTransactionClient.Rollback()
 
-	res, err := user.PutUserMeGraduated(ctx, &dbTranisactionClient)
+	res, err := user.PutUserMeGraduated(ctx, &dbTransactionClient)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}
 
-	err = dbTranisactionClient.Commit()
+	err = dbTransactionClient.Commit()
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

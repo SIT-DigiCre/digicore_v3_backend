@@ -32,7 +32,6 @@ func CreateEchoServer() *echo.Echo {
 		logrus.Fatal("Failed to create validation middleware: %w", err)
 	}
 	e.Use(authenticator_middleware...)
-	authenticator.RegisterNonMemberAllowedPath("/user/me/reentry")
 
 	p := prometheus.NewPrometheus("echo", nil)
 	p.Use(e)

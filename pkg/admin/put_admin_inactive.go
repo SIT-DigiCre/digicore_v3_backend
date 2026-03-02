@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func PutAdminInactive(ctx echo.Context, dbClient db.TransactionClient) (api.BlankSuccess, *response.Error) {
+func PutAdminInactive(_ echo.Context, dbClient db.TransactionClient) (api.BlankSuccess, *response.Error) {
 	_, err := dbClient.Exec("sql/admin/update_user_profiles_inactive.sql", nil, false)
 	if err != nil {
 		return api.BlankSuccess{}, &response.Error{

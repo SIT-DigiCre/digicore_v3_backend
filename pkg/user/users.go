@@ -23,7 +23,7 @@ func IdFromStudentNumber(dbClient db.Client, studentNumber string) (string, *res
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}
 	}
 	if len(user) == 0 {
-		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "ユーザーが存在しません", Log: "ユーザーが存在しません"}
+		return "", &response.Error{Code: http.StatusForbidden, Level: "Info", Message: "ユーザーが存在しません", Log: "ユーザーが存在しません"}
 	}
 	return user[0].Id, nil
 }
