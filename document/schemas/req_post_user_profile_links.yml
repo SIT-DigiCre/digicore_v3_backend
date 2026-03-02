@@ -1,0 +1,8 @@
+required:
+  - link_url
+properties:
+  link_url:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: max=2048
+      ja: URL

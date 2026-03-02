@@ -4,6 +4,7 @@ required:
   - schoolGrade
   - iconUrl
   - shortIntroduction
+  - link_url
 properties:
   userId:
     type: string
@@ -15,3 +16,7 @@ properties:
     type: string
   shortIntroduction:
     type: string
+  link_urls:
+    type: array
+    items:
+      $ref: './res_get_user_profile_links.yml'

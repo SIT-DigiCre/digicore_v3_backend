@@ -1,0 +1,15 @@
+required:
+  - link_url
+  - created_at
+  - updated_at
+properties:
+  link_url:
+    type: string
+    format: uri
+  created_at:
+    type: string
+    format: date-time
+  updated_at:
+    type: string
+    format: date-time
+    

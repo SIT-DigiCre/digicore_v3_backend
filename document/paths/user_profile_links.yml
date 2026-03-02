@@ -1,0 +1,42 @@
+post:
+  tags:
+    - user_profile_links
+  summary: "新しいリンクを登録する"
+  security:
+    - BearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_post_user_profile_links.yml"
+  responses:
+    201:
+      description: "Success create user_profile_links"
+    400:
+      $ref: "../responses/bad_request.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+
+delete:
+  tags:
+    - user_profile_links
+  summary: "ユーザープロフィールリンクを削除する"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uuid
+  responses:
+    204:
+      description: "Success delete user_profile_links"
+    403:
+      $ref: "../responses/forbidden.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
