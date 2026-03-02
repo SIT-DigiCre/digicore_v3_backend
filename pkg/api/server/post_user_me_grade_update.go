@@ -5,7 +5,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/validator"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
-	grade_update "github.com/SIT-DigiCre/digicore_v3_backend/pkg/grade_update"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
 	"github.com/labstack/echo/v4"
 )
 
@@ -25,7 +25,7 @@ func (s *server) PostUserMeGradeUpdate(ctx echo.Context) error {
 	}
 	defer dbTranisactionClient.Rollback()
 
-	res, err := grade_update.PostUserMeGradeUpdate(ctx, &dbTranisactionClient, requestBody)
+	res, err := user.PostUserMeGradeUpdate(ctx, &dbTranisactionClient, requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

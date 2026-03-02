@@ -1,11 +1,11 @@
 package server
 
 import (
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/validator"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
-	grade_update "github.com/SIT-DigiCre/digicore_v3_backend/pkg/grade_update"
 	"github.com/labstack/echo/v4"
 )
 
@@ -25,7 +25,7 @@ func (s *server) PutAdminGradeUpdateGradeUpdateId(ctx echo.Context, gradeUpdateI
 	}
 	defer dbTranisactionClient.Rollback()
 
-	res, err := grade_update.PutAdminGradeUpdateGradeUpdateId(ctx, &dbTranisactionClient, gradeUpdateId, requestBody)
+	res, err := admin.PutAdminGradeUpdateGradeUpdateId(ctx, &dbTranisactionClient, gradeUpdateId, requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}

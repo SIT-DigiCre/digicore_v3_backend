@@ -1,4 +1,4 @@
-package grade_update
+package admin
 
 import (
 	"net/http"
