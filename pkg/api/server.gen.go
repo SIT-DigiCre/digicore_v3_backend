@@ -125,6 +125,9 @@ type ServerInterface interface {
 	// (PUT /payment/{paymentId})
 	PutPaymentPaymentId(ctx echo.Context, paymentId string) error
 
+	// (GET /public/user-count)
+	GetPublicUserCount(ctx echo.Context) error
+
 	// (GET /signup)
 	GetSignup(ctx echo.Context) error
 
@@ -154,9 +157,6 @@ type ServerInterface interface {
 
 	// (GET /user)
 	GetUser(ctx echo.Context, params GetUserParams) error
-
-	// (GET /user/count)
-	GetUserCount(ctx echo.Context) error
 
 	// (GET /user/me)
 	GetUserMe(ctx echo.Context) error
@@ -922,6 +922,15 @@ func (w *ServerInterfaceWrapper) PutPaymentPaymentId(ctx echo.Context) error {
 	return err
 }
 
+// GetPublicUserCount converts echo context to params.
+func (w *ServerInterfaceWrapper) GetPublicUserCount(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetPublicUserCount(ctx)
+	return err
+}
+
 // GetSignup converts echo context to params.
 func (w *ServerInterfaceWrapper) GetSignup(ctx echo.Context) error {
 	var err error
@@ -1042,15 +1051,6 @@ func (w *ServerInterfaceWrapper) GetUser(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetUser(ctx, params)
-	return err
-}
-
-// GetUserCount converts echo context to params.
-func (w *ServerInterfaceWrapper) GetUserCount(ctx echo.Context) error {
-	var err error
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetUserCount(ctx)
 	return err
 }
 
@@ -1525,6 +1525,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/payment", wrapper.GetPayment)
 	router.GET(baseURL+"/payment/:paymentId", wrapper.GetPaymentPaymentId)
 	router.PUT(baseURL+"/payment/:paymentId", wrapper.PutPaymentPaymentId)
+	router.GET(baseURL+"/public/user-count", wrapper.GetPublicUserCount)
 	router.GET(baseURL+"/signup", wrapper.GetSignup)
 	router.POST(baseURL+"/signup/callback", wrapper.PostSignupCallback)
 	router.GET(baseURL+"/status", wrapper.GetStatus)
@@ -1535,7 +1536,6 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/storage/:fileId", wrapper.GetStorageFileId)
 	router.GET(baseURL+"/tool", wrapper.GetTool)
 	router.GET(baseURL+"/user", wrapper.GetUser)
-	router.GET(baseURL+"/user/count", wrapper.GetUserCount)
 	router.GET(baseURL+"/user/me", wrapper.GetUserMe)
 	router.PUT(baseURL+"/user/me", wrapper.PutUserMe)
 	router.GET(baseURL+"/user/me/discord", wrapper.GetUserMeDiscord)

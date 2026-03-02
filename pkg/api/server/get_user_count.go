@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *server) GetUserCount(ctx echo.Context) error {
+func (s *server) GetPublicUserCount(ctx echo.Context) error {
 	dbClient := db.Open()
 	res, err := user.GetUserCount(ctx, dbClient)
 	if err != nil {

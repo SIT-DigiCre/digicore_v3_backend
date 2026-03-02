@@ -1,3 +1,5 @@
+/public/user-count:
+  $ref: "./paths/public_user_count.yml"
 /status:
   $ref: "./paths/status.yml"
 /status/club_room:
@@ -12,8 +14,6 @@
   $ref: "./paths/login_callback.yml"
 /user:
   $ref: "./paths/user.yml"
-/user/count:
-  $ref: "./paths/user_count.yml"
 /user/search:
   $ref: "./paths/user_search.yml"
 /user/{userId}:
