@@ -2,7 +2,6 @@ package user
 
 import (
 	"database/sql"
-	"fmt"
 	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
@@ -10,25 +9,14 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 )
 
-type LoginUserOption struct {
-	// 将来的に特定用途のみ非部員ユーザーのログインを許可するためのフラグ
-	AllowNonMember bool
-}
-
-func IdFromStudentNumber(dbClient db.Client, studentNumber string, options ...LoginUserOption) (string, *response.Error) {
-	option := LoginUserOption{}
-	if len(options) > 0 {
-		option = options[0]
-	}
-
+func IdFromStudentNumber(dbClient db.Client, studentNumber string) (string, *response.Error) {
 	params := struct {
 		StudentNumber string `twowaysql:"studentNumber"`
 	}{
 		StudentNumber: studentNumber,
 	}
 	user := []struct {
-		Id       string `db:"id"`
-		IsMember bool   `db:"is_member"`
+		Id string `db:"id"`
 	}{}
 	err := dbClient.Select(&user, "sql/user/select_id_from_student_number.sql", &params)
 	if err != nil {
@@ -36,9 +24,6 @@ func IdFromStudentNumber(dbClient db.Client, studentNumber string, options ...Lo
 	}
 	if len(user) == 0 {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "ユーザーが存在しません", Log: "ユーザーが存在しません"}
-	}
-	if !option.AllowNonMember && !user[0].IsMember {
-		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "無効なアカウントです", Log: fmt.Sprintf("non member user login(%s)", user[0].Id)}
 	}
 	return user[0].Id, nil
 }
