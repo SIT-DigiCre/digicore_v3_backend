@@ -7,5 +7,7 @@ CREATE TABLE grade_updates (
     approved_by  BINARY(16) NULL,
     created_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    INDEX idx_grade_updates_user_status (user_id, status, created_at),
+    INDEX idx_grade_updates_status (status, created_at)
 );

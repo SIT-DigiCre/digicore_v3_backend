@@ -61,8 +61,11 @@ func PostUserMeGradeUpdate(ctx echo.Context, dbClient db.TransactionClient, requ
 		GradeUpdateId string `twowaysql:"gradeUpdateId"`
 	}{GradeUpdateId: gradeUpdateId}
 	err = dbClient.Select(&details, "sql/grade_update/select_grade_update_by_id.sql", &detailParams)
-	if err != nil || len(details) == 0 {
-		return api.ResGetUserMeGradeUpdateObjectGradeUpdate{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "申請の取得に失敗しました", Log: "failed to get created grade update"}
+	if err != nil {
+		return api.ResGetUserMeGradeUpdateObjectGradeUpdate{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "申請の取得に失敗しました", Log: err.Error()}
+	}
+	if len(details) == 0 {
+		return api.ResGetUserMeGradeUpdateObjectGradeUpdate{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "申請の取得に失敗しました", Log: "created grade update not found: id=" + gradeUpdateId}
 	}
 
 	detail := details[0]
