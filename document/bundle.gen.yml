@@ -29,6 +29,8 @@ tags:
     description: Mail system
   - name: activity
     description: Activity system
+  - name: grade-update
+    description: Grade update request system
 paths:
   /status:
     get:
@@ -1858,6 +1860,101 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /user/me/grade-update:
+    post:
+      tags:
+        - grade-update
+      description: 学年補正申請の作成
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: 学年補正申請
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostUserMeGradeUpdate'
+      responses:
+        '200':
+          description: Success create grade update request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMeGradeUpdateObjectGradeUpdate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    get:
+      tags:
+        - grade-update
+      description: 自分の学年補正申請一覧の取得
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success get my grade update requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMeGradeUpdate'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /admin/grade-update:
+    get:
+      tags:
+        - grade-update
+      description: 承認待ち学年補正申請一覧の取得（管理者用）
+      security:
+        - BearerAuth:
+            - infra
+      responses:
+        '200':
+          description: Success get pending grade update requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetAdminGradeUpdate'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/admin/grade-update/{gradeUpdateId}':
+    put:
+      tags:
+        - grade-update
+      description: 学年補正申請の承認/却下（管理者用）
+      security:
+        - BearerAuth:
+            - infra
+      parameters:
+        - name: gradeUpdateId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: 承認/却下リクエスト
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutAdminGradeUpdateGradeUpdateId'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -3470,6 +3567,88 @@ components:
           type: string
           format: date-time
           nullable: true
+    ReqPostUserMeGradeUpdate:
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 申請理由
+    ResGetUserMeGradeUpdate:
+      required:
+        - gradeUpdates
+      properties:
+        gradeUpdates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetUserMeGradeUpdateObjectGradeUpdate'
+    ResGetUserMeGradeUpdateObjectGradeUpdate:
+      required:
+        - gradeUpdateId
+        - gradeDiff
+        - reason
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        gradeUpdateId:
+          type: string
+        gradeDiff:
+          type: integer
+        reason:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    ReqPutAdminGradeUpdateGradeUpdateId:
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,oneof=approved rejected'
+            ja: ステータス
+    ResGetAdminGradeUpdate:
+      required:
+        - gradeUpdates
+      properties:
+        gradeUpdates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetAdminGradeUpdateObjectGradeUpdate'
+    ResGetAdminGradeUpdateObjectGradeUpdate:
+      required:
+        - gradeUpdateId
+        - userId
+        - username
+        - gradeDiff
+        - reason
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        gradeUpdateId:
+          type: string
+        userId:
+          type: string
+        username:
+          type: string
+        gradeDiff:
+          type: integer
+        reason:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
     Error:
       required:
         - level

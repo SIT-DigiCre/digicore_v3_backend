@@ -1,0 +1,1 @@
+UPDATE grade_updates SET status = /*status*/'approved', approved_by = UUID_TO_BIN(/*approvedBy*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee') WHERE id = UUID_TO_BIN(/*gradeUpdateId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');

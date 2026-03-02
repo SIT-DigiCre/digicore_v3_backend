@@ -24,3 +24,5 @@
   description: Mail system
 - name: activity
   description: Activity system
+- name: grade-update
+  description: Grade update request system

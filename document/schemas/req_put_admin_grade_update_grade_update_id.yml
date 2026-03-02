@@ -1,0 +1,8 @@
+required:
+  - status
+properties:
+  status:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,oneof=approved rejected
+      ja: ステータス
