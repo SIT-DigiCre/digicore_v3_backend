@@ -6,6 +6,8 @@ SELECT
     icon_url,
     discord_userid,
     active_limit,
+    is_graduated,
+    is_member,
     short_introduction,
     IF(EXISTS(
         SELECT 1

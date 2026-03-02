@@ -7,6 +7,8 @@ CREATE TABLE user_profiles
     icon_url                VARCHAR(255) NOT NULL,
     discord_userid          VARCHAR(255) NOT NULL DEFAULT '',
     active_limit            DATE         NOT NULL,
+    is_graduated            BOOLEAN      NOT NULL DEFAULT false,
+    is_member               BOOLEAN      NOT NULL DEFAULT true,
     short_introduction VARCHAR(255) NOT NULL DEFAULT 'デジクリ入りました',
     introduction       TEXT         NOT NULL,
     created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,

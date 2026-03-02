@@ -7,6 +7,8 @@ import (
 	"strings"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/labstack/echo/v4"
 	"github.com/lestrrat-go/jwx/v2/jwa"
@@ -43,8 +45,60 @@ func Login(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 		subjectKey, _ := token.Get(jwt.SubjectKey)
 		c.Set("user_id", subjectKey)
+
+		userId, ok := subjectKey.(string)
+		if !ok {
+			return response.ErrorResponse(c, &response.Error{
+				Code:    http.StatusUnauthorized,
+				Level:   "Info",
+				Message: "ログインされていません",
+				Log:     "subject claim is not string",
+			})
+		}
+		isMember, rerr := checkUserIsMember(userId)
+		if rerr != nil {
+			return response.ErrorResponse(c, rerr)
+		}
+		if !isMember && !isNonMemberAllowedPath(c.Path()) {
+			return response.ErrorResponse(c, &response.Error{
+				Code:    http.StatusForbidden,
+				Level:   "Info",
+				Message: "無効なアカウントです",
+				Log:     fmt.Sprintf("non member user access denied(%s, %s)", userId, c.Path()),
+			})
+		}
 		return next(c)
 	}
+}
+
+func checkUserIsMember(userId string) (bool, *response.Error) {
+	dbClient := db.Open()
+	params := struct {
+		UserId string `twowaysql:"userId"`
+	}{
+		UserId: userId,
+	}
+	rows := []struct {
+		IsMember bool `db:"is_member"`
+	}{}
+	err := dbClient.Select(&rows, "sql/user/select_user_is_member_from_user_id.sql", &params)
+	if err != nil {
+		return false, &response.Error{
+			Code:    http.StatusInternalServerError,
+			Level:   "Error",
+			Message: "不明なエラーが発生しました",
+			Log:     err.Error(),
+		}
+	}
+	if len(rows) == 0 {
+		return false, &response.Error{
+			Code:    http.StatusUnauthorized,
+			Level:   "Info",
+			Message: "ログインされていません",
+			Log:     fmt.Sprintf("user profile not found(%s)", userId),
+		}
+	}
+	return rows[0].IsMember, nil
 }
 
 func validateJWT(token string) (jwt.Token, error) {

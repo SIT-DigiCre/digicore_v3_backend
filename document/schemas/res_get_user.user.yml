@@ -3,6 +3,8 @@ required:
   - username
   - schoolGrade
   - iconUrl
+  - isGraduated
+  - isMember
   - shortIntroduction
 properties:
   userId:
@@ -13,5 +15,9 @@ properties:
     type: integer
   iconUrl:
     type: string
+  isGraduated:
+    type: boolean
+  isMember:
+    type: boolean
   shortIntroduction:
     type: string

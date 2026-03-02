@@ -26,6 +26,8 @@
   $ref: "./paths/user_me.yml"
 /user/me/renewal:
   $ref: "./paths/user_me_renewal.yml"
+/user/me/graduated:
+  $ref: "./paths/user_me_graduated.yml"
 /user/me/discord:
   $ref: "./paths/user_me_discord.yml"
 /user/me/discord/callback:
@@ -92,6 +94,8 @@
   $ref: "./paths/budget_budget_id_admin.yml"
 /mail:
   $ref: "./paths/mail.yml"
+/admin/inactive:
+  $ref: "./paths/admin_inactive.yml"
 /activity/checkin:
   $ref: "./paths/activity_checkin.yml"
 /activity/checkout:

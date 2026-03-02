@@ -10,15 +10,25 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 )
 
-func IdFromStudentNumber(dbClient db.Client, studentNumber string) (string, *response.Error) {
+type LoginUserOption struct {
+	// 将来的に特定用途のみ非部員ユーザーのログインを許可するためのフラグ
+	AllowNonMember bool
+}
+
+func IdFromStudentNumber(dbClient db.Client, studentNumber string, options ...LoginUserOption) (string, *response.Error) {
+	option := LoginUserOption{}
+	if len(options) > 0 {
+		option = options[0]
+	}
+
 	params := struct {
 		StudentNumber string `twowaysql:"studentNumber"`
 	}{
 		StudentNumber: studentNumber,
 	}
 	user := []struct {
-		Id     string `db:"id"`
-		Active bool   `db:"active"`
+		Id       string `db:"id"`
+		IsMember bool   `db:"is_member"`
 	}{}
 	err := dbClient.Select(&user, "sql/user/select_id_from_student_number.sql", &params)
 	if err != nil {
@@ -27,8 +37,8 @@ func IdFromStudentNumber(dbClient db.Client, studentNumber string) (string, *res
 	if len(user) == 0 {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "ユーザーが存在しません", Log: "ユーザーが存在しません"}
 	}
-	if !user[0].Active {
-		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "無効なアカウントです", Log: fmt.Sprintf("non active user login(%s)", user[0].Id)}
+	if !option.AllowNonMember && !user[0].IsMember {
+		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "無効なアカウントです", Log: fmt.Sprintf("non member user login(%s)", user[0].Id)}
 	}
 	return user[0].Id, nil
 }
@@ -41,6 +51,8 @@ type profile struct {
 	IconUrl           string `db:"icon_url"`
 	DiscordUserId     string `db:"discord_userid"`
 	ActiveLimit       string `db:"active_limit"`
+	IsGraduated       bool   `db:"is_graduated"`
+	IsMember          bool   `db:"is_member"`
 	ShortIntroduction string `db:"short_introduction"`
 	IsAdmin           bool   `db:"is_admin"`
 }

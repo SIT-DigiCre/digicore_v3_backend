@@ -3,6 +3,8 @@ SELECT
     username,
     school_grade,
     icon_url,
+    is_graduated,
+    is_member,
     short_introduction
 FROM user_profiles
 /* IF query */
