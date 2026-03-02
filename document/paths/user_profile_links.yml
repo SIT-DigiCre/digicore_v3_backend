@@ -18,23 +18,24 @@ post:
     500:
       $ref: "../responses/internal_server.yml"
 
-get:
+delete:
   tags:
     - user_profile_links
-  summary: "ユーザープロフィールのリンクを取得する"
+  summary: "ユーザープロフィールリンクを削除する"
   security:
     - BearerAuth: []
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uuid
   responses:
-    200:
-      description: "Success get user_profile_links"
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: "../schemas/res_get_user_profile_links.yml"
+    204:
+      description: "Success delete user_profile_links"
     403:
-      $ref: "../responses/unauthorized.yml"
+      $ref: "../responses/forbidden.yml"
     404:
       $ref: "../responses/not_found.yml"
     500:

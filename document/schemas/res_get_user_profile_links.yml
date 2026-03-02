@@ -1,21 +1,15 @@
 required:
-  - id
-  - user_id
   - link_url
   - created_at
   - updated_at
 properties:
-  id:
-    type: integer
-    format: uuid
-  user_id:
-    type: integer
   link_url:
     type: string
+    format: uri
   created_at:
     type: string
     format: date-time
   updated_at:
     type: string
     format: date-time
-
+    
