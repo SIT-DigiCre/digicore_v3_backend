@@ -155,6 +155,9 @@ type ServerInterface interface {
 	// (GET /user)
 	GetUser(ctx echo.Context, params GetUserParams) error
 
+	// (GET /user/count)
+	GetUserCount(ctx echo.Context) error
+
 	// (GET /user/me)
 	GetUserMe(ctx echo.Context) error
 
@@ -1042,6 +1045,15 @@ func (w *ServerInterfaceWrapper) GetUser(ctx echo.Context) error {
 	return err
 }
 
+// GetUserCount converts echo context to params.
+func (w *ServerInterfaceWrapper) GetUserCount(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetUserCount(ctx)
+	return err
+}
+
 // GetUserMe converts echo context to params.
 func (w *ServerInterfaceWrapper) GetUserMe(ctx echo.Context) error {
 	var err error
@@ -1523,6 +1535,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/storage/:fileId", wrapper.GetStorageFileId)
 	router.GET(baseURL+"/tool", wrapper.GetTool)
 	router.GET(baseURL+"/user", wrapper.GetUser)
+	router.GET(baseURL+"/user/count", wrapper.GetUserCount)
 	router.GET(baseURL+"/user/me", wrapper.GetUserMe)
 	router.PUT(baseURL+"/user/me", wrapper.PutUserMe)
 	router.GET(baseURL+"/user/me/discord", wrapper.GetUserMeDiscord)

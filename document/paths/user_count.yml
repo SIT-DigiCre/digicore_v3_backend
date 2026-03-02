@@ -1,0 +1,13 @@
+get:
+  tags:
+    - user
+  description: "Get current member count"
+  responses:
+    200:
+      description: "Success get member count"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_user_count.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

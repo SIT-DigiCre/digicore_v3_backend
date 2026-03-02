@@ -18,6 +18,8 @@ ResPostLoginCallback:
   $ref: "./schemas/res_post_login_callback.yml"
 ResGetTool:
   $ref: "./schemas/res_get_tool.yml"
+ResGetUserCount:
+  $ref: "./schemas/res_get_user_count.yml"
 ResGetUser:
   $ref: "./schemas/res_get_user.yml"
 ResGetUserObjectUser:

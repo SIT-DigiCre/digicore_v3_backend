@@ -537,6 +537,11 @@ type ResGetUser struct {
 	Users []ResGetUserObjectUser `json:"users"`
 }
 
+// ResGetUserCount defines model for ResGetUserCount.
+type ResGetUserCount struct {
+	Count int `json:"count"`
+}
+
 // ResGetUserMe defines model for ResGetUserMe.
 type ResGetUserMe struct {
 	ActiveLimit       string `json:"activeLimit"`
