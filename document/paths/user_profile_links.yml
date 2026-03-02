@@ -1,0 +1,41 @@
+post:
+  tags:
+    - user_profile_links
+  summary: "新しいリンクを登録する"
+  security:
+    - BearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_post_user_profile_links.yml"
+  responses:
+    201:
+      description: "Success create user_profile_links"
+    400:
+      $ref: "../responses/bad_request.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+
+get:
+  tags:
+    - user_profile_links
+  summary: "ユーザープロフィールのリンクを取得する"
+  security:
+    - BearerAuth: []
+  responses:
+    200:
+      description: "Success get user_profile_links"
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../schemas/res_get_user_profile_links.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
