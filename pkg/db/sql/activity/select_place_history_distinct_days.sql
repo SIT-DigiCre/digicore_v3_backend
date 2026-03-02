@@ -3,7 +3,7 @@ SELECT
     user_profiles.username,
     user_profiles.short_introduction,
     user_profiles.icon_url,
-    COUNT(DISTINCT DATE(activities.id)) AS check_in_count
+    COUNT(DISTINCT DATE(activities.checked_in_at)) AS check_in_count
 FROM user_profiles
 INNER JOIN activities ON user_profiles.user_id = activities.user_id
 WHERE activities.place = /*place*/'place'
