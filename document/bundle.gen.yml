@@ -1920,6 +1920,7 @@ components:
         - username
         - iconUrl
         - shortIntroduction
+        - link_url
       properties:
         userId:
           type: string
@@ -1929,6 +1930,23 @@ components:
           type: string
         shortIntroduction:
           type: string
+        link_urls:
+          type: array
+          items:
+            required:
+              - link_url
+              - created_at
+              - updated_at
+            properties:
+              link_url:
+                type: string
+                format: uri
+              created_at:
+                type: string
+                format: date-time
+              updated_at:
+                type: string
+                format: date-time
     ResGetUserUserId:
       required:
         - userId

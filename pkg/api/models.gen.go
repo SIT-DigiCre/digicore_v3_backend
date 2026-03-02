@@ -577,7 +577,12 @@ type ResGetUserMePrivate struct {
 
 // ResGetUserObjectUser defines model for ResGetUserObjectUser.
 type ResGetUserObjectUser struct {
-	IconUrl           string `json:"iconUrl"`
+	IconUrl  string `json:"iconUrl"`
+	LinkUrls *[]struct {
+		CreatedAt time.Time `json:"created_at"`
+		LinkUrl   string    `json:"link_url"`
+		UpdatedAt time.Time `json:"updated_at"`
+	} `json:"link_urls,omitempty"`
 	ShortIntroduction string `json:"shortIntroduction"`
 	UserId            string `json:"userId"`
 	Username          string `json:"username"`
