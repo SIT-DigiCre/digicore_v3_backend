@@ -1,7 +1,6 @@
 package user
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
@@ -63,32 +62,6 @@ func GetUserProfileFromUserId(dbClient db.Client, userId string) (profile, *resp
 
 type introduction struct {
 	Introduction string `db:"introduction"`
-}
-
-func GetStudentNumbersFromUserIds(dbClient db.Client, userIds []string) (map[string]string, *response.Error) {
-	if len(userIds) == 0 {
-		return map[string]string{}, nil
-	}
-	params := struct {
-		UserIds []string `twowaysql:"userIds"`
-	}{
-		UserIds: userIds,
-	}
-	rows := []struct {
-		UserId        string         `db:"user_id"`
-		StudentNumber sql.NullString `db:"student_number"`
-	}{}
-	err := dbClient.Select(&rows, "sql/user/select_student_numbers_from_user_ids.sql", &params)
-	if err != nil {
-		return nil, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "ユーザー情報の取得に失敗しました", Log: err.Error()}
-	}
-	result := make(map[string]string, len(rows))
-	for _, row := range rows {
-		if row.StudentNumber.Valid {
-			result[row.UserId] = row.StudentNumber.String
-		}
-	}
-	return result, nil
 }
 
 func GetUserIntroductionFromUserId(dbClient db.Client, userId string) (introduction, *response.Error) {

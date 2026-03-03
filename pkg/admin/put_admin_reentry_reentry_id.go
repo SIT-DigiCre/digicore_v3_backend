@@ -84,8 +84,13 @@ func PutAdminReentryReentryId(ctx echo.Context, dbClient db.TransactionClient, r
 
 	studentNumber, serr := getStudentNumberByUserId(dbClient, reentry.UserId)
 	if serr != nil {
-		logrus.Warnf("再入部通知メール送信用の学籍番号取得に失敗しました(%s): %v", reentry.UserId, serr)
-		return api.BlankSuccess{Success: true}, "", nil
+		logrus.Errorf("再入部通知メール送信用の学籍番号取得に失敗しました(%s): %v", reentry.UserId, serr)
+		return api.BlankSuccess{}, "", &response.Error{
+			Code:    http.StatusInternalServerError,
+			Level:   "Error",
+			Message: "再入部通知メール送信用の学籍番号取得に失敗しました",
+			Log:     serr.Log,
+		}
 	}
 
 	return api.BlankSuccess{Success: true}, studentNumber, nil

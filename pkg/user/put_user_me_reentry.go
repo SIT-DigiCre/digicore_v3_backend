@@ -24,13 +24,24 @@ func PutUserMeReentry(ctx echo.Context, dbClient db.TransactionClient, requestBo
 		UserId string `twowaysql:"userId"`
 	}{UserId: userId}
 
+	lockRows := []struct {
+		UserId string `db:"user_id"`
+	}{}
+	err := dbClient.Select(&lockRows, "sql/reentry/select_user_profile_for_update_by_user_id.sql", &params)
+	if err != nil {
+		return api.ResGetUserMeReentryObjectReentry{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "再入部申請の確認に失敗しました", Log: err.Error()}
+	}
+	if len(lockRows) == 0 {
+		return api.ResGetUserMeReentryObjectReentry{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "プロフィールが有りません", Log: "user profile not found while locking reentry"}
+	}
+
 	pendings := []reentryPendingCount{}
-	err := dbClient.Select(&pendings, "sql/reentry/select_pending_reentry_count_by_user_id.sql", &params)
+	err = dbClient.Select(&pendings, "sql/reentry/select_pending_reentry_count_by_user_id.sql", &params)
 	if err != nil {
 		return api.ResGetUserMeReentryObjectReentry{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "未処理申請の確認に失敗しました", Log: err.Error()}
 	}
 	if len(pendings) > 0 && pendings[0].PendingCount > 0 {
-		return api.ResGetUserMeReentryObjectReentry{}, &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "未処理の再入部申請があります", Log: "pending reentry exists"}
+		return api.ResGetUserMeReentryObjectReentry{}, &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "再入部申請の確認中です。振込案内ページをご確認ください", Log: "pending reentry exists"}
 	}
 
 	counts := []reentryTotalCount{}

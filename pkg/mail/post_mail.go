@@ -81,7 +81,7 @@ func PostMail(ctx echo.Context, dbClient db.Client, requestBody api.ReqPostMail)
 	successCount := 0
 
 	for _, address := range addresses {
-		err := sendEmail(address, requestBody.Subject, requestBody.Body)
+		err := SendEmail(address, requestBody.Subject, requestBody.Body)
 		if err != nil {
 			failures = append(failures, struct {
 				Address string `json:"address"`
