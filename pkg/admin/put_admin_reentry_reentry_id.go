@@ -8,6 +8,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/mail"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/utils"
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
 )
@@ -30,6 +31,20 @@ func PutAdminReentryReentryId(ctx echo.Context, dbClient db.TransactionClient, r
 	note := ""
 	if requestBody.Note != nil {
 		note = *requestBody.Note
+	}
+	if requestBody.Status == "approved" {
+		checked, cerr := isCurrentSchoolYearPaymentChecked(dbClient, details[0].UserId)
+		if cerr != nil {
+			return api.BlankSuccess{}, cerr
+		}
+		if !checked {
+			return api.BlankSuccess{}, &response.Error{
+				Code:    http.StatusBadRequest,
+				Level:   "Info",
+				Message: "今年度の部費振込報告が会計承認されていないため、再入部を承認できません",
+				Log:     "payment is not approved",
+			}
+		}
 	}
 
 	updateParams := struct {
@@ -111,4 +126,25 @@ func getStudentNumberByUserId(dbClient db.Client, userId string) (string, *respo
 		return "", &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "通知先の取得に失敗しました", Log: "student number not found"}
 	}
 	return rows[0].StudentNumber, nil
+}
+
+func isCurrentSchoolYearPaymentChecked(dbClient db.Client, userId string) (bool, *response.Error) {
+	params := struct {
+		UserId string `twowaysql:"userId"`
+		Year   int    `twowaysql:"year"`
+	}{
+		UserId: userId,
+		Year:   utils.GetSchoolYear(),
+	}
+	rows := []struct {
+		Checked bool `db:"checked"`
+	}{}
+	err := dbClient.Select(&rows, "sql/reentry/select_payment_checked_by_user_id_year.sql", &params)
+	if err != nil {
+		return false, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "振込報告の確認に失敗しました", Log: err.Error()}
+	}
+	if len(rows) == 0 {
+		return false, nil
+	}
+	return rows[0].Checked, nil
 }

@@ -3949,6 +3949,7 @@ components:
         - studentNumber
         - reentryCount
         - status
+        - paymentStatus
         - createdAt
         - updatedAt
       properties:
@@ -3963,6 +3964,8 @@ components:
         reentryCount:
           type: integer
         status:
+          type: string
+        paymentStatus:
           type: string
         note:
           type: string

@@ -5,6 +5,7 @@ required:
   - studentNumber
   - reentryCount
   - status
+  - paymentStatus
   - createdAt
   - updatedAt
 properties:
@@ -19,6 +20,8 @@ properties:
   reentryCount:
     type: integer
   status:
+    type: string
+  paymentStatus:
     type: string
   note:
     type: string

@@ -333,6 +333,7 @@ type ResGetAdminReentry struct {
 type ResGetAdminReentryObjectReentry struct {
 	CreatedAt     string  `json:"createdAt"`
 	Note          *string `json:"note,omitempty"`
+	PaymentStatus string  `json:"paymentStatus"`
 	ReentryCount  int     `json:"reentryCount"`
 	ReentryId     string  `json:"reentryId"`
 	Status        string  `json:"status"`

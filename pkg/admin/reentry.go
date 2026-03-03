@@ -9,6 +9,7 @@ type adminReentry struct {
 	ReentryCount  int    `db:"reentry_count"`
 	Status        string `db:"status"`
 	Note          string `db:"note"`
+	PaymentStatus string `db:"payment_status"`
 	CreatedAt     string `db:"created_at"`
 	UpdatedAt     string `db:"updated_at"`
 }
