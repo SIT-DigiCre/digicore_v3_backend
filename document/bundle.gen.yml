@@ -2510,15 +2510,12 @@ components:
     ResGetUserMeReentryObjectReentry:
       required:
         - reentryId
-        - reentryCount
         - status
         - createdAt
         - updatedAt
       properties:
         reentryId:
           type: string
-        reentryCount:
-          type: integer
         status:
           type: string
         createdAt:
@@ -3947,7 +3944,6 @@ components:
         - userId
         - username
         - studentNumber
-        - reentryCount
         - status
         - paymentStatus
         - createdAt
@@ -3961,8 +3957,6 @@ components:
           type: string
         studentNumber:
           type: string
-        reentryCount:
-          type: integer
         status:
           type: string
         paymentStatus:

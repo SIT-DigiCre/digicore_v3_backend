@@ -3,7 +3,6 @@ required:
   - userId
   - username
   - studentNumber
-  - reentryCount
   - status
   - paymentStatus
   - createdAt
@@ -17,8 +16,6 @@ properties:
     type: string
   studentNumber:
     type: string
-  reentryCount:
-    type: integer
   status:
     type: string
   paymentStatus:

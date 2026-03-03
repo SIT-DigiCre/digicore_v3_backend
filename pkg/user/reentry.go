@@ -9,8 +9,8 @@ import (
 
 const maxReentryCount = 2
 
-type reentryCount struct {
-	ReentryCount int `db:"reentry_count"`
+type reentryTotalCount struct {
+	TotalCount int `db:"total_count"`
 }
 
 type reentryPendingCount struct {
@@ -18,13 +18,12 @@ type reentryPendingCount struct {
 }
 
 type reentryDetail struct {
-	ReentryId    string `db:"reentry_id"`
-	UserId       string `db:"user_id"`
-	ReentryCount int    `db:"reentry_count"`
-	Status       string `db:"status"`
-	Note         string `db:"note"`
-	CreatedAt    string `db:"created_at"`
-	UpdatedAt    string `db:"updated_at"`
+	ReentryId string `db:"reentry_id"`
+	UserId    string `db:"user_id"`
+	Status    string `db:"status"`
+	Note      string `db:"note"`
+	CreatedAt string `db:"created_at"`
+	UpdatedAt string `db:"updated_at"`
 }
 
 func notifyReentryApplied(studentNumber string) {

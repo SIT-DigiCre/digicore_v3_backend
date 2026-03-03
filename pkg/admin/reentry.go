@@ -6,7 +6,6 @@ type adminReentry struct {
 	UserId        string `db:"user_id"`
 	Username      string `db:"username"`
 	StudentNumber string `db:"student_number"`
-	ReentryCount  int    `db:"reentry_count"`
 	Status        string `db:"status"`
 	Note          string `db:"note"`
 	PaymentStatus string `db:"payment_status"`
@@ -15,11 +14,10 @@ type adminReentry struct {
 }
 
 type reentryDetail struct {
-	ReentryId    string `db:"reentry_id"`
-	UserId       string `db:"user_id"`
-	ReentryCount int    `db:"reentry_count"`
-	Status       string `db:"status"`
-	Note         string `db:"note"`
-	CreatedAt    string `db:"created_at"`
-	UpdatedAt    string `db:"updated_at"`
+	ReentryId string `db:"reentry_id"`
+	UserId    string `db:"user_id"`
+	Status    string `db:"status"`
+	Note      string `db:"note"`
+	CreatedAt string `db:"created_at"`
+	UpdatedAt string `db:"updated_at"`
 }

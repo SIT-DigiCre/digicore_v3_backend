@@ -2,7 +2,6 @@ CREATE TABLE reentries
 (
     id            BINARY(16)   NOT NULL DEFAULT (UUID_TO_BIN(UUID())),
     user_id       BINARY(16)   NOT NULL,
-    reentry_count INT          NOT NULL,
     status        VARCHAR(20)  NOT NULL DEFAULT 'pending',
     note          VARCHAR(255) NOT NULL DEFAULT '',
     checked_by    BINARY(16)            DEFAULT NULL,

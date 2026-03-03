@@ -33,31 +33,27 @@ func PutUserMeReentry(ctx echo.Context, dbClient db.TransactionClient, requestBo
 		return api.ResGetUserMeReentryObjectReentry{}, &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "未処理の再入部申請があります", Log: "pending reentry exists"}
 	}
 
-	counts := []reentryCount{}
-	err = dbClient.Select(&counts, "sql/reentry/select_latest_reentry_count_by_user_id.sql", &params)
+	counts := []reentryTotalCount{}
+	err = dbClient.Select(&counts, "sql/reentry/select_reentry_total_count_by_user_id.sql", &params)
 	if err != nil {
 		return api.ResGetUserMeReentryObjectReentry{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "再入部申請回数の取得に失敗しました", Log: err.Error()}
 	}
-	latestCount := 0
+	totalCount := 0
 	if len(counts) > 0 {
-		latestCount = counts[0].ReentryCount
+		totalCount = counts[0].TotalCount
 	}
-	if latestCount >= maxReentryCount {
+	if totalCount >= maxReentryCount {
 		return api.ResGetUserMeReentryObjectReentry{}, &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "再入部申請は最大2回までです", Log: "reentry count exceeded"}
 	}
 
-	_, errRes := updateUserPayment(dbClient, userId, api.ReqPutUserMePayment{TransferName: requestBody.TransferName})
+	_, errRes := updateUserPayment(dbClient, userId, api.ReqPutUserMePayment(requestBody))
 	if errRes != nil {
 		return api.ResGetUserMeReentryObjectReentry{}, errRes
 	}
 
 	insertParams := struct {
-		UserId       string `twowaysql:"userId"`
-		ReentryCount int    `twowaysql:"reentryCount"`
-	}{
-		UserId:       userId,
-		ReentryCount: latestCount + 1,
-	}
+		UserId string `twowaysql:"userId"`
+	}{UserId: userId}
 	_, execErr := dbClient.Exec("sql/reentry/insert_reentry.sql", &insertParams, true)
 	if execErr != nil {
 		return api.ResGetUserMeReentryObjectReentry{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "再入部申請の作成に失敗しました", Log: execErr.Error()}
@@ -84,10 +80,9 @@ func PutUserMeReentry(ctx echo.Context, dbClient db.TransactionClient, requestBo
 
 	detail := details[0]
 	return api.ResGetUserMeReentryObjectReentry{
-		ReentryId:    detail.ReentryId,
-		ReentryCount: detail.ReentryCount,
-		Status:       detail.Status,
-		CreatedAt:    detail.CreatedAt,
-		UpdatedAt:    detail.UpdatedAt,
+		ReentryId: detail.ReentryId,
+		Status:    detail.Status,
+		CreatedAt: detail.CreatedAt,
+		UpdatedAt: detail.UpdatedAt,
 	}, nil
 }

@@ -334,7 +334,6 @@ type ResGetAdminReentryObjectReentry struct {
 	CreatedAt     string  `json:"createdAt"`
 	Note          *string `json:"note,omitempty"`
 	PaymentStatus string  `json:"paymentStatus"`
-	ReentryCount  int     `json:"reentryCount"`
 	ReentryId     string  `json:"reentryId"`
 	Status        string  `json:"status"`
 	StudentNumber string  `json:"studentNumber"`
@@ -665,11 +664,10 @@ type ResGetUserMePrivate struct {
 
 // ResGetUserMeReentryObjectReentry defines model for ResGetUserMeReentryObjectReentry.
 type ResGetUserMeReentryObjectReentry struct {
-	CreatedAt    string `json:"createdAt"`
-	ReentryCount int    `json:"reentryCount"`
-	ReentryId    string `json:"reentryId"`
-	Status       string `json:"status"`
-	UpdatedAt    string `json:"updatedAt"`
+	CreatedAt string `json:"createdAt"`
+	ReentryId string `json:"reentryId"`
+	Status    string `json:"status"`
+	UpdatedAt string `json:"updatedAt"`
 }
 
 // ResGetUserObjectUser defines model for ResGetUserObjectUser.
