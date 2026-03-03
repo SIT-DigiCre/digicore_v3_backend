@@ -1,0 +1,1 @@
+SELECT BIN_TO_UUID(id) AS grade_update_id, grade_diff, reason, status, created_at, updated_at FROM grade_updates WHERE user_id = UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee') ORDER BY created_at DESC;

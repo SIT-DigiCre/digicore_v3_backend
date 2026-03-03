@@ -29,3 +29,6 @@ ALTER TABLE budgets ADD CONSTRAINT fk_budgets_proposer_user_id_users_id FOREIGN 
 ALTER TABLE budgets ADD CONSTRAINT fk_budgets_approver_user_id_users_id FOREIGN KEY (approver_user_id) REFERENCES users(id);
 
 ALTER TABLE group_claims ADD CONSTRAINT fk_group_claims_group_id_groups_id FOREIGN KEY (group_id) REFERENCES `groups`(id);
+
+ALTER TABLE grade_updates ADD CONSTRAINT fk_grade_updates_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE grade_updates ADD CONSTRAINT fk_grade_updates_approved_by_users_id FOREIGN KEY (approved_by) REFERENCES users(id);

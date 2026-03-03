@@ -1,0 +1,7 @@
+required:
+  - gradeUpdates
+properties:
+  gradeUpdates:
+    type: array
+    items:
+      $ref: './res_get_user_me_grade_update.grade_update.yml'
