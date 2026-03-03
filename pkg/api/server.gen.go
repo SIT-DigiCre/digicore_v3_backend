@@ -41,6 +41,9 @@ type ServerInterface interface {
 	// (PUT /admin/grade-update/{gradeUpdateId})
 	PutAdminGradeUpdateGradeUpdateId(ctx echo.Context, gradeUpdateId string) error
 
+	// (PUT /admin/inactive)
+	PutAdminInactive(ctx echo.Context) error
+
 	// (GET /budget)
 	GetBudget(ctx echo.Context, params GetBudgetParams) error
 
@@ -178,6 +181,9 @@ type ServerInterface interface {
 
 	// (POST /user/me/grade-update)
 	PostUserMeGradeUpdate(ctx echo.Context) error
+
+	// (PUT /user/me/graduated)
+	PutUserMeGraduated(ctx echo.Context) error
 
 	// (GET /user/me/introduction)
 	GetUserMeIntroduction(ctx echo.Context) error
@@ -431,6 +437,17 @@ func (w *ServerInterfaceWrapper) PutAdminGradeUpdateGradeUpdateId(ctx echo.Conte
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PutAdminGradeUpdateGradeUpdateId(ctx, gradeUpdateId)
+	return err
+}
+
+// PutAdminInactive converts echo context to params.
+func (w *ServerInterfaceWrapper) PutAdminInactive(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutAdminInactive(ctx)
 	return err
 }
 
@@ -1149,6 +1166,17 @@ func (w *ServerInterfaceWrapper) PostUserMeGradeUpdate(ctx echo.Context) error {
 	return err
 }
 
+// PutUserMeGraduated converts echo context to params.
+func (w *ServerInterfaceWrapper) PutUserMeGraduated(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutUserMeGraduated(ctx)
+	return err
+}
+
 // GetUserMeIntroduction converts echo context to params.
 func (w *ServerInterfaceWrapper) GetUserMeIntroduction(ctx echo.Context) error {
 	var err error
@@ -1548,6 +1576,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/activity/user/:userId/records", wrapper.GetActivityUserUserIdRecords)
 	router.GET(baseURL+"/admin/grade-update", wrapper.GetAdminGradeUpdate)
 	router.PUT(baseURL+"/admin/grade-update/:gradeUpdateId", wrapper.PutAdminGradeUpdateGradeUpdateId)
+	router.PUT(baseURL+"/admin/inactive", wrapper.PutAdminInactive)
 	router.GET(baseURL+"/budget", wrapper.GetBudget)
 	router.POST(baseURL+"/budget", wrapper.PostBudget)
 	router.GET(baseURL+"/budget/:budgetId", wrapper.GetBudgetBudgetId)
@@ -1594,6 +1623,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.PUT(baseURL+"/user/me/discord/callback", wrapper.PutUserMeDiscordCallback)
 	router.GET(baseURL+"/user/me/grade-update", wrapper.GetUserMeGradeUpdate)
 	router.POST(baseURL+"/user/me/grade-update", wrapper.PostUserMeGradeUpdate)
+	router.PUT(baseURL+"/user/me/graduated", wrapper.PutUserMeGraduated)
 	router.GET(baseURL+"/user/me/introduction", wrapper.GetUserMeIntroduction)
 	router.PUT(baseURL+"/user/me/introduction", wrapper.PutUserMeIntroduction)
 	router.GET(baseURL+"/user/me/payment", wrapper.GetUserMePayment)

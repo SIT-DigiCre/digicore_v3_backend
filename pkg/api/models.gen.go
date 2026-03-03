@@ -570,6 +570,8 @@ type ResGetUserMe struct {
 	DiscordUserId     string `json:"discordUserId"`
 	IconUrl           string `json:"iconUrl"`
 	IsAdmin           bool   `json:"isAdmin"`
+	IsGraduated       bool   `json:"isGraduated"`
+	IsMember          bool   `json:"isMember"`
 	SchoolGrade       int    `json:"schoolGrade"`
 	ShortIntroduction string `json:"shortIntroduction"`
 	StudentNumber     string `json:"studentNumber"`
@@ -634,6 +636,8 @@ type ResGetUserMePrivate struct {
 // ResGetUserObjectUser defines model for ResGetUserObjectUser.
 type ResGetUserObjectUser struct {
 	IconUrl           string `json:"iconUrl"`
+	IsGraduated       bool   `json:"isGraduated"`
+	IsMember          bool   `json:"isMember"`
 	SchoolGrade       int    `json:"schoolGrade"`
 	ShortIntroduction string `json:"shortIntroduction"`
 	UserId            string `json:"userId"`
@@ -645,6 +649,8 @@ type ResGetUserUserId struct {
 	ActiveLimit       string `json:"activeLimit"`
 	DiscordUserId     string `json:"discordUserId"`
 	IconUrl           string `json:"iconUrl"`
+	IsGraduated       bool   `json:"isGraduated"`
+	IsMember          bool   `json:"isMember"`
 	SchoolGrade       int    `json:"schoolGrade"`
 	ShortIntroduction string `json:"shortIntroduction"`
 	StudentNumber     string `json:"studentNumber"`

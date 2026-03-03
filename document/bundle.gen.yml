@@ -27,6 +27,8 @@ tags:
     description: Mattermost system
   - name: mail
     description: Mail system
+  - name: admin
+    description: Admin system
   - name: activity
     description: Activity system
   - name: grade-update
@@ -367,6 +369,26 @@ paths:
       responses:
         '200':
           description: Success update my private profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMe'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /user/me/graduated:
+    put:
+      tags:
+        - user
+      description: Set my graduated status
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success update my profile
           content:
             application/json:
               schema:
@@ -1700,6 +1722,21 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /admin/inactive:
+    put:
+      tags:
+        - admin
+      description: Set inactive members is_member=false in bulk
+      security:
+        - BearerAuth:
+            - infra
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /activity/checkin:
     post:
       tags:
@@ -2105,6 +2142,8 @@ components:
         - username
         - schoolGrade
         - iconUrl
+        - isGraduated
+        - isMember
         - shortIntroduction
       properties:
         userId:
@@ -2115,6 +2154,10 @@ components:
           type: integer
         iconUrl:
           type: string
+        isGraduated:
+          type: boolean
+        isMember:
+          type: boolean
         shortIntroduction:
           type: string
     ResGetUserUserId:
@@ -2127,6 +2170,8 @@ components:
         - discordUserId
         - shortIntroduction
         - activeLimit
+        - isGraduated
+        - isMember
       properties:
         userId:
           type: string
@@ -2144,6 +2189,10 @@ components:
           type: string
         activeLimit:
           type: string
+        isGraduated:
+          type: boolean
+        isMember:
+          type: boolean
     ResGetUserUserIdIntroduction:
       required:
         - introduction
@@ -2160,6 +2209,8 @@ components:
         - discordUserId
         - shortIntroduction
         - activeLimit
+        - isGraduated
+        - isMember
         - isAdmin
       properties:
         userId:
@@ -2178,6 +2229,10 @@ components:
           type: string
         activeLimit:
           type: string
+        isGraduated:
+          type: boolean
+        isMember:
+          type: boolean
         isAdmin:
           type: boolean
     ReqPutUserMe:
