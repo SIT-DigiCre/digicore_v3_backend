@@ -48,3 +48,7 @@ func sendEmail(to string, subject string, body string) error {
 
 	return fmt.Errorf("メール送信に失敗しました (ステータスコード: %d): %s", response.StatusCode, response.Body)
 }
+
+func SendEmail(to string, subject string, body string) error {
+	return sendEmail(to, subject, body)
+}

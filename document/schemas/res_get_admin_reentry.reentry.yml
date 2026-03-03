@@ -1,0 +1,28 @@
+required:
+  - reentryId
+  - userId
+  - username
+  - studentNumber
+  - reentryCount
+  - status
+  - createdAt
+  - updatedAt
+properties:
+  reentryId:
+    type: string
+  userId:
+    type: string
+  username:
+    type: string
+  studentNumber:
+    type: string
+  reentryCount:
+    type: integer
+  status:
+    type: string
+  note:
+    type: string
+  createdAt:
+    type: string
+  updatedAt:
+    type: string

@@ -38,6 +38,8 @@
   $ref: "./paths/user_me_private.yml"
 /user/me/payment:
   $ref: "./paths/user_me_payment.yml"
+/user/me/reentry:
+  $ref: "./paths/user_me_reentry.yml"
 /payment:
   $ref: "./paths/payment.yml"
 /payment/{paymentId}:
@@ -116,3 +118,7 @@
   $ref: "./paths/admin_grade_update.yml"
 /admin/grade-update/{gradeUpdateId}:
   $ref: "./paths/admin_grade_update_grade_update_id.yml"
+/admin/reentry:
+  $ref: "./paths/admin_reentry.yml"
+/admin/reentry/{reentryId}:
+  $ref: "./paths/admin_reentry_reentry_id.yml"

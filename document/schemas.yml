@@ -44,6 +44,10 @@ ResGetUserMePaymentObjectHistory:
   $ref: "./schemas/res_get_user_me_payment.history.yml"
 ReqPutUserMePayment:
   $ref: "./schemas/req_put_user_me_payment.yml"
+ReqPutUserMeReentry:
+  $ref: "./schemas/req_put_user_me_reentry.yml"
+ResGetUserMeReentryObjectReentry:
+  $ref: "./schemas/res_get_user_me_reentry.reentry.yml"
 ResGetUserMeDiscord:
   $ref: "./schemas/res_user_me_discord.yml"
 ReqPutUserMeDiscordCallback:
@@ -203,6 +207,12 @@ ResGetAdminGradeUpdate:
   $ref: "./schemas/res_get_admin_grade_update.yml"
 ResGetAdminGradeUpdateObjectGradeUpdate:
   $ref: "./schemas/res_get_admin_grade_update.grade_update.yml"
+ReqPutAdminReentryReentryId:
+  $ref: "./schemas/req_put_admin_reentry_reentry_id.yml"
+ResGetAdminReentry:
+  $ref: "./schemas/res_get_admin_reentry.yml"
+ResGetAdminReentryObjectReentry:
+  $ref: "./schemas/res_get_admin_reentry.reentry.yml"
 
 Error:
   $ref: "./schemas/error.yml"

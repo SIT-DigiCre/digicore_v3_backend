@@ -1,0 +1,1 @@
+UPDATE reentries SET status = /*status*/'approved', note = /*note*/'', checked_by = UUID_TO_BIN(/*checkedBy*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'), checked_at = NOW() WHERE id = UUID_TO_BIN(/*reentryId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee') AND status = 'pending';

@@ -1,0 +1,17 @@
+required:
+  - reentryId
+  - reentryCount
+  - status
+  - createdAt
+  - updatedAt
+properties:
+  reentryId:
+    type: string
+  reentryCount:
+    type: integer
+  status:
+    type: string
+  createdAt:
+    type: string
+  updatedAt:
+    type: string

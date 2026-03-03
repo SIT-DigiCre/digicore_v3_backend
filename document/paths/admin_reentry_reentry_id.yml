@@ -1,0 +1,29 @@
+put:
+  tags:
+    - reentry
+  description: "再入部申請の承認/却下（管理者用）"
+  security:
+    - BearerAuth:
+        - "infra"
+  parameters:
+    - name: reentryId
+      in: path
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: "承認/却下リクエスト"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_put_admin_reentry_reentry_id.yml"
+  responses:
+    200:
+      $ref: "../responses/blank_success.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
