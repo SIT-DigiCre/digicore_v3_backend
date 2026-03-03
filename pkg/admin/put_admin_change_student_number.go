@@ -50,8 +50,8 @@ func PutAdminChangeStudentNumber(_ echo.Context, dbClient db.TransactionClient, 
 		return api.BlankSuccess{}, &response.Error{
 			Code:    http.StatusBadRequest,
 			Level:   "Info",
-			Message: "更新対象のユーザーが存在しません",
-			Log:     "user not found",
+			Message: "更新対象のユーザーが存在しないか、学籍番号が変更されていません",
+			Log:     "user not found or student number unchanged",
 		}
 	}
 
