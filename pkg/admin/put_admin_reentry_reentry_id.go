@@ -13,7 +13,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func PutAdminReentryReentryId(ctx echo.Context, dbClient db.TransactionClient, reentryId string, requestBody api.ReqPutAdminReentryReentryId) (api.BlankSuccess, *response.Error) {
+func PutAdminReentryReentryId(ctx echo.Context, dbClient db.TransactionClient, reentryId string, requestBody api.ReqPutAdminReentryReentryId) (api.BlankSuccess, string, *response.Error) {
 	checkerId := ctx.Get("user_id").(string)
 
 	detailParams := struct {
@@ -22,10 +22,10 @@ func PutAdminReentryReentryId(ctx echo.Context, dbClient db.TransactionClient, r
 	details := []reentryDetail{}
 	err := dbClient.Select(&details, "sql/reentry/select_reentry_by_id.sql", &detailParams)
 	if err != nil {
-		return api.BlankSuccess{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "再入部申請の取得に失敗しました", Log: err.Error()}
+		return api.BlankSuccess{}, "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "再入部申請の取得に失敗しました", Log: err.Error()}
 	}
 	if len(details) == 0 {
-		return api.BlankSuccess{}, &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "指定された再入部申請が見つかりません", Log: "reentry not found"}
+		return api.BlankSuccess{}, "", &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "指定された再入部申請が見つかりません", Log: "reentry not found"}
 	}
 
 	note := ""
@@ -35,10 +35,10 @@ func PutAdminReentryReentryId(ctx echo.Context, dbClient db.TransactionClient, r
 	if requestBody.Status == "approved" {
 		checked, cerr := isCurrentSchoolYearPaymentChecked(dbClient, details[0].UserId)
 		if cerr != nil {
-			return api.BlankSuccess{}, cerr
+			return api.BlankSuccess{}, "", cerr
 		}
 		if !checked {
-			return api.BlankSuccess{}, &response.Error{
+			return api.BlankSuccess{}, "", &response.Error{
 				Code:    http.StatusBadRequest,
 				Level:   "Info",
 				Message: "今年度の部費振込報告が会計承認されていないため、再入部を承認できません",
@@ -60,11 +60,11 @@ func PutAdminReentryReentryId(ctx echo.Context, dbClient db.TransactionClient, r
 	}
 	result, rerr := dbClient.Exec("sql/reentry/update_reentry_status.sql", &updateParams, false)
 	if rerr != nil {
-		return api.BlankSuccess{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "再入部申請の更新に失敗しました", Log: rerr.Error()}
+		return api.BlankSuccess{}, "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "再入部申請の更新に失敗しました", Log: rerr.Error()}
 	}
 	rowsAffected, _ := result.RowsAffected()
 	if rowsAffected == 0 {
-		return api.BlankSuccess{}, &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "指定された申請が見つからないか、既に処理済みです", Log: "reentry not found or already processed"}
+		return api.BlankSuccess{}, "", &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "指定された申請が見つからないか、既に処理済みです", Log: "reentry not found or already processed"}
 	}
 
 	reentry := details[0]
@@ -78,21 +78,20 @@ func PutAdminReentryReentryId(ctx echo.Context, dbClient db.TransactionClient, r
 		}
 		_, rerr = dbClient.Exec("sql/reentry/update_user_member_status.sql", &memberParams, false)
 		if rerr != nil {
-			return api.BlankSuccess{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "ユーザー状態の更新に失敗しました", Log: rerr.Error()}
+			return api.BlankSuccess{}, "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "ユーザー状態の更新に失敗しました", Log: rerr.Error()}
 		}
 	}
 
 	studentNumber, serr := getStudentNumberByUserId(dbClient, reentry.UserId)
-	if serr == nil {
-		notifyReentryDecision(studentNumber, requestBody.Status, note)
-	} else {
+	if serr != nil {
 		logrus.Warnf("再入部通知メール送信用の学籍番号取得に失敗しました(%s): %v", reentry.UserId, serr)
+		return api.BlankSuccess{Success: true}, "", nil
 	}
 
-	return api.BlankSuccess{Success: true}, nil
+	return api.BlankSuccess{Success: true}, studentNumber, nil
 }
 
-func notifyReentryDecision(studentNumber string, status string, note string) {
+func NotifyReentryDecision(studentNumber string, status string, note string) {
 	address := fmt.Sprintf("%s@shibaura-it.ac.jp", studentNumber)
 	subject := "再入部申請結果のお知らせ"
 	body := "再入部申請の審査結果をお知らせします。\n"

@@ -25,7 +25,7 @@ func (s *server) PutAdminReentryReentryId(ctx echo.Context, reentryId string) er
 	}
 	defer dbTranisactionClient.Rollback()
 
-	res, err := admin.PutAdminReentryReentryId(ctx, &dbTranisactionClient, reentryId, requestBody)
+	res, studentNumber, err := admin.PutAdminReentryReentryId(ctx, &dbTranisactionClient, reentryId, requestBody)
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
 	}
@@ -33,6 +33,14 @@ func (s *server) PutAdminReentryReentryId(ctx echo.Context, reentryId string) er
 	err = dbTranisactionClient.Commit()
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
+	}
+
+	if studentNumber != "" {
+		note := ""
+		if requestBody.Note != nil {
+			note = *requestBody.Note
+		}
+		admin.NotifyReentryDecision(studentNumber, requestBody.Status, note)
 	}
 
 	return response.SuccessResponse(ctx, res)
