@@ -1,0 +1,43 @@
+post:
+  tags:
+    - grade-update
+  description: "学年補正申請の作成"
+  security:
+    - BearerAuth: []
+  requestBody:
+    description: "学年補正申請"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_post_user_me_grade_update.yml"
+  responses:
+    200:
+      description: "Success create grade update request"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_user_me_grade_update.grade_update.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+get:
+  tags:
+    - grade-update
+  description: "自分の学年補正申請一覧の取得"
+  security:
+    - BearerAuth: []
+  responses:
+    200:
+      description: "Success get my grade update requests"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_user_me_grade_update.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

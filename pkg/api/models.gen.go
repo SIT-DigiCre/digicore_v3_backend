@@ -109,6 +109,11 @@ type ReqPostStorageMyfile struct {
 	Name     string `ja:"ファイル名" json:"name" validate:"required,max=255"`
 }
 
+// ReqPostUserMeGradeUpdate defines model for ReqPostUserMeGradeUpdate.
+type ReqPostUserMeGradeUpdate struct {
+	Reason string `ja:"申請理由" json:"reason" validate:"required"`
+}
+
 // ReqPostWorkTag defines model for ReqPostWorkTag.
 type ReqPostWorkTag struct {
 	Description string `ja:"説明" json:"description" validate:"required"`
@@ -132,6 +137,11 @@ type ReqPutActivityRecordRecordId struct {
 
 // ReqPutActivityRecordRecordIdActivityType defines model for ReqPutActivityRecordRecordId.ActivityType.
 type ReqPutActivityRecordRecordIdActivityType string
+
+// ReqPutAdminGradeUpdateGradeUpdateId defines model for ReqPutAdminGradeUpdateGradeUpdateId.
+type ReqPutAdminGradeUpdateGradeUpdateId struct {
+	Status string `ja:"ステータス" json:"status" validate:"required,oneof=approved rejected"`
+}
 
 // ReqPutBudgetBudgetIdAdmin defines model for ReqPutBudgetBudgetIdAdmin.
 type ReqPutBudgetBudgetIdAdmin struct {
@@ -284,6 +294,23 @@ type ResGetActivityUserUserIdRecordsObjectRecord struct {
 	InitialCheckedOutAt *time.Time `json:"initialCheckedOutAt"`
 	Place               string     `json:"place"`
 	RecordId            string     `json:"recordId"`
+}
+
+// ResGetAdminGradeUpdate defines model for ResGetAdminGradeUpdate.
+type ResGetAdminGradeUpdate struct {
+	GradeUpdates []ResGetAdminGradeUpdateObjectGradeUpdate `json:"gradeUpdates"`
+}
+
+// ResGetAdminGradeUpdateObjectGradeUpdate defines model for ResGetAdminGradeUpdateObjectGradeUpdate.
+type ResGetAdminGradeUpdateObjectGradeUpdate struct {
+	CreatedAt     string `json:"createdAt"`
+	GradeDiff     int    `json:"gradeDiff"`
+	GradeUpdateId string `json:"gradeUpdateId"`
+	Reason        string `json:"reason"`
+	Status        string `json:"status"`
+	UpdatedAt     string `json:"updatedAt"`
+	UserId        string `json:"userId"`
+	Username      string `json:"username"`
 }
 
 // ResGetBudget defines model for ResGetBudget.
@@ -555,6 +582,21 @@ type ResGetUserMe struct {
 // ResGetUserMeDiscord defines model for ResGetUserMeDiscord.
 type ResGetUserMeDiscord struct {
 	Url string `json:"url"`
+}
+
+// ResGetUserMeGradeUpdate defines model for ResGetUserMeGradeUpdate.
+type ResGetUserMeGradeUpdate struct {
+	GradeUpdates []ResGetUserMeGradeUpdateObjectGradeUpdate `json:"gradeUpdates"`
+}
+
+// ResGetUserMeGradeUpdateObjectGradeUpdate defines model for ResGetUserMeGradeUpdateObjectGradeUpdate.
+type ResGetUserMeGradeUpdateObjectGradeUpdate struct {
+	CreatedAt     string `json:"createdAt"`
+	GradeDiff     int    `json:"gradeDiff"`
+	GradeUpdateId string `json:"gradeUpdateId"`
+	Reason        string `json:"reason"`
+	Status        string `json:"status"`
+	UpdatedAt     string `json:"updatedAt"`
 }
 
 // ResGetUserMeIntroduction defines model for ResGetUserMeIntroduction.
@@ -853,6 +895,9 @@ type PostActivityCheckoutUserIdJSONRequestBody = ReqPostActivityCheckout
 // PutActivityRecordRecordIdJSONRequestBody defines body for PutActivityRecordRecordId for application/json ContentType.
 type PutActivityRecordRecordIdJSONRequestBody = ReqPutActivityRecordRecordId
 
+// PutAdminGradeUpdateGradeUpdateIdJSONRequestBody defines body for PutAdminGradeUpdateGradeUpdateId for application/json ContentType.
+type PutAdminGradeUpdateGradeUpdateIdJSONRequestBody = ReqPutAdminGradeUpdateGradeUpdateId
+
 // PostBudgetJSONRequestBody defines body for PostBudget for application/json ContentType.
 type PostBudgetJSONRequestBody = ReqPostBudget
 
@@ -915,6 +960,9 @@ type PutUserMeJSONRequestBody = ReqPutUserMe
 
 // PutUserMeDiscordCallbackJSONRequestBody defines body for PutUserMeDiscordCallback for application/json ContentType.
 type PutUserMeDiscordCallbackJSONRequestBody = ReqPutUserMeDiscordCallback
+
+// PostUserMeGradeUpdateJSONRequestBody defines body for PostUserMeGradeUpdate for application/json ContentType.
+type PostUserMeGradeUpdateJSONRequestBody = ReqPostUserMeGradeUpdate
 
 // PutUserMeIntroductionJSONRequestBody defines body for PutUserMeIntroduction for application/json ContentType.
 type PutUserMeIntroductionJSONRequestBody = ReqPutUserMeIntroduction

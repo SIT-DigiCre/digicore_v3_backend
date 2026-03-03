@@ -1,0 +1,8 @@
+required:
+  - reason
+properties:
+  reason:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 申請理由
