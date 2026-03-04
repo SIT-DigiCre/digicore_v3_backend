@@ -1,0 +1,16 @@
+required:
+  - userId
+  - studentNumber
+properties:
+  userId:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,uuid
+      ja: ユーザーID
+  studentNumber:
+    type: string
+    minLength: 1
+    maxLength: 8
+    x-oapi-codegen-extra-tags:
+      validate: required,max=8
+      ja: 学籍番号

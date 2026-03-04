@@ -35,6 +35,9 @@ type ServerInterface interface {
 	// (GET /activity/user/{userId}/records)
 	GetActivityUserUserIdRecords(ctx echo.Context, userId string, params GetActivityUserUserIdRecordsParams) error
 
+	// (PUT /admin/change-student-number)
+	PutAdminChangeStudentNumber(ctx echo.Context) error
+
 	// (GET /admin/grade-update)
 	GetAdminGradeUpdate(ctx echo.Context) error
 
@@ -408,6 +411,17 @@ func (w *ServerInterfaceWrapper) GetActivityUserUserIdRecords(ctx echo.Context) 
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetActivityUserUserIdRecords(ctx, userId, params)
+	return err
+}
+
+// PutAdminChangeStudentNumber converts echo context to params.
+func (w *ServerInterfaceWrapper) PutAdminChangeStudentNumber(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutAdminChangeStudentNumber(ctx)
 	return err
 }
 
@@ -1574,6 +1588,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/activity/place/:place/history", wrapper.GetActivityPlacePlaceHistory)
 	router.PUT(baseURL+"/activity/record/:recordId", wrapper.PutActivityRecordRecordId)
 	router.GET(baseURL+"/activity/user/:userId/records", wrapper.GetActivityUserUserIdRecords)
+	router.PUT(baseURL+"/admin/change-student-number", wrapper.PutAdminChangeStudentNumber)
 	router.GET(baseURL+"/admin/grade-update", wrapper.GetAdminGradeUpdate)
 	router.PUT(baseURL+"/admin/grade-update/:gradeUpdateId", wrapper.PutAdminGradeUpdateGradeUpdateId)
 	router.PUT(baseURL+"/admin/inactive", wrapper.PutAdminInactive)

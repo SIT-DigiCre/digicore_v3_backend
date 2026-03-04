@@ -138,6 +138,12 @@ type ReqPutActivityRecordRecordId struct {
 // ReqPutActivityRecordRecordIdActivityType defines model for ReqPutActivityRecordRecordId.ActivityType.
 type ReqPutActivityRecordRecordIdActivityType string
 
+// ReqPutAdminChangeStudentNumber defines model for ReqPutAdminChangeStudentNumber.
+type ReqPutAdminChangeStudentNumber struct {
+	StudentNumber string `ja:"学籍番号" json:"studentNumber" validate:"required,max=8"`
+	UserId        string `ja:"ユーザーID" json:"userId" validate:"required,uuid"`
+}
+
 // ReqPutAdminGradeUpdateGradeUpdateId defines model for ReqPutAdminGradeUpdateGradeUpdateId.
 type ReqPutAdminGradeUpdateGradeUpdateId struct {
 	Status string `ja:"ステータス" json:"status" validate:"required,oneof=approved rejected"`
@@ -894,6 +900,9 @@ type PostActivityCheckoutUserIdJSONRequestBody = ReqPostActivityCheckout
 
 // PutActivityRecordRecordIdJSONRequestBody defines body for PutActivityRecordRecordId for application/json ContentType.
 type PutActivityRecordRecordIdJSONRequestBody = ReqPutActivityRecordRecordId
+
+// PutAdminChangeStudentNumberJSONRequestBody defines body for PutAdminChangeStudentNumber for application/json ContentType.
+type PutAdminChangeStudentNumberJSONRequestBody = ReqPutAdminChangeStudentNumber
 
 // PutAdminGradeUpdateGradeUpdateIdJSONRequestBody defines body for PutAdminGradeUpdateGradeUpdateId for application/json ContentType.
 type PutAdminGradeUpdateGradeUpdateIdJSONRequestBody = ReqPutAdminGradeUpdateGradeUpdateId
