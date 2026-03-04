@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
@@ -54,7 +55,7 @@ func PutUserMeReentry(ctx echo.Context, dbClient db.TransactionClient, requestBo
 		totalCount = counts[0].TotalCount
 	}
 	if totalCount >= maxReentryCount {
-		return api.ResGetUserMeReentryObjectReentry{}, &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "再入部申請は最大2回までです", Log: "reentry count exceeded"}
+		return api.ResGetUserMeReentryObjectReentry{}, &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: fmt.Sprintf("再入部申請は最大%d回までです", maxReentryCount), Log: "reentry count exceeded"}
 	}
 
 	_, errRes := updateUserPayment(dbClient, userId, api.ReqPutUserMePayment(requestBody))
