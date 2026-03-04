@@ -1766,6 +1766,30 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /admin/change-student-number:
+    put:
+      tags:
+        - admin
+      description: ユーザーの学籍番号を更新する
+      security:
+        - BearerAuth:
+            - infra
+      requestBody:
+        description: 更新対象ユーザーと更新後学籍番号
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutAdminChangeStudentNumber'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /activity/checkin:
     post:
       tags:
@@ -3881,6 +3905,23 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'required,oneof=approved rejected'
             ja: ステータス
+    ReqPutAdminChangeStudentNumber:
+      required:
+        - userId
+        - studentNumber
+      properties:
+        userId:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,uuid'
+            ja: ユーザーID
+        studentNumber:
+          type: string
+          minLength: 1
+          maxLength: 8
+          x-oapi-codegen-extra-tags:
+            validate: 'required,max=8'
+            ja: 学籍番号
     ResGetAdminGradeUpdate:
       required:
         - gradeUpdates

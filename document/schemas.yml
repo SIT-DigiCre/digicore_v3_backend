@@ -203,6 +203,8 @@ ResGetUserMeGradeUpdateObjectGradeUpdate:
   $ref: "./schemas/res_get_user_me_grade_update.grade_update.yml"
 ReqPutAdminGradeUpdateGradeUpdateId:
   $ref: "./schemas/req_put_admin_grade_update_grade_update_id.yml"
+ReqPutAdminChangeStudentNumber:
+  $ref: "./schemas/req_put_admin_change_student_number.yml"
 ResGetAdminGradeUpdate:
   $ref: "./schemas/res_get_admin_grade_update.yml"
 ResGetAdminGradeUpdateObjectGradeUpdate:

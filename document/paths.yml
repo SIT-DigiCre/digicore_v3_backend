@@ -98,6 +98,8 @@
   $ref: "./paths/mail.yml"
 /admin/inactive:
   $ref: "./paths/admin_inactive.yml"
+/admin/change-student-number:
+  $ref: "./paths/admin_change_student_number.yml"
 /activity/checkin:
   $ref: "./paths/activity_checkin.yml"
 /activity/checkout:
