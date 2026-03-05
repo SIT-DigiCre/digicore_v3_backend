@@ -47,6 +47,12 @@ type ServerInterface interface {
 	// (PUT /admin/inactive)
 	PutAdminInactive(ctx echo.Context) error
 
+	// (GET /admin/reentry)
+	GetAdminReentry(ctx echo.Context) error
+
+	// (PUT /admin/reentry/{reentryId})
+	PutAdminReentryReentryId(ctx echo.Context, reentryId string) error
+
 	// (GET /budget)
 	GetBudget(ctx echo.Context, params GetBudgetParams) error
 
@@ -205,6 +211,9 @@ type ServerInterface interface {
 
 	// (PUT /user/me/private)
 	PutUserMePrivate(ctx echo.Context) error
+
+	// (PUT /user/me/reentry)
+	PutUserMeReentry(ctx echo.Context) error
 
 	// (PUT /user/me/renewal)
 	PutUserMeRenewal(ctx echo.Context) error
@@ -462,6 +471,35 @@ func (w *ServerInterfaceWrapper) PutAdminInactive(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PutAdminInactive(ctx)
+	return err
+}
+
+// GetAdminReentry converts echo context to params.
+func (w *ServerInterfaceWrapper) GetAdminReentry(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetAdminReentry(ctx)
+	return err
+}
+
+// PutAdminReentryReentryId converts echo context to params.
+func (w *ServerInterfaceWrapper) PutAdminReentryReentryId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "reentryId" -------------
+	var reentryId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "reentryId", runtime.ParamLocationPath, ctx.Param("reentryId"), &reentryId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter reentryId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutAdminReentryReentryId(ctx, reentryId)
 	return err
 }
 
@@ -1257,6 +1295,17 @@ func (w *ServerInterfaceWrapper) PutUserMePrivate(ctx echo.Context) error {
 	return err
 }
 
+// PutUserMeReentry converts echo context to params.
+func (w *ServerInterfaceWrapper) PutUserMeReentry(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutUserMeReentry(ctx)
+	return err
+}
+
 // PutUserMeRenewal converts echo context to params.
 func (w *ServerInterfaceWrapper) PutUserMeRenewal(ctx echo.Context) error {
 	var err error
@@ -1592,6 +1641,8 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/admin/grade-update", wrapper.GetAdminGradeUpdate)
 	router.PUT(baseURL+"/admin/grade-update/:gradeUpdateId", wrapper.PutAdminGradeUpdateGradeUpdateId)
 	router.PUT(baseURL+"/admin/inactive", wrapper.PutAdminInactive)
+	router.GET(baseURL+"/admin/reentry", wrapper.GetAdminReentry)
+	router.PUT(baseURL+"/admin/reentry/:reentryId", wrapper.PutAdminReentryReentryId)
 	router.GET(baseURL+"/budget", wrapper.GetBudget)
 	router.POST(baseURL+"/budget", wrapper.PostBudget)
 	router.GET(baseURL+"/budget/:budgetId", wrapper.GetBudgetBudgetId)
@@ -1645,6 +1696,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.PUT(baseURL+"/user/me/payment", wrapper.PutUserMePayment)
 	router.GET(baseURL+"/user/me/private", wrapper.GetUserMePrivate)
 	router.PUT(baseURL+"/user/me/private", wrapper.PutUserMePrivate)
+	router.PUT(baseURL+"/user/me/reentry", wrapper.PutUserMeReentry)
 	router.PUT(baseURL+"/user/me/renewal", wrapper.PutUserMeRenewal)
 	router.GET(baseURL+"/user/search", wrapper.GetUserSearch)
 	router.GET(baseURL+"/user/:userId", wrapper.GetUserUserId)

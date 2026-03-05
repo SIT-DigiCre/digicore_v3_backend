@@ -28,3 +28,5 @@
   description: Activity system
 - name: grade-update
   description: Grade update request system
+- name: reentry
+  description: Reentry request system

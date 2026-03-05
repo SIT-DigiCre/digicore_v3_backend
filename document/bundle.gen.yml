@@ -33,6 +33,8 @@ tags:
     description: Activity system
   - name: grade-update
     description: Grade update request system
+  - name: reentry
+    description: Reentry request system
 paths:
   /status:
     get:
@@ -568,6 +570,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetUserMePayment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /user/me/reentry:
+    put:
+      tags:
+        - reentry
+      description: 再入部申請（振込報告と同時）
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: 再入部申請
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutUserMeReentry'
+      responses:
+        '200':
+          description: Success create reentry request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMeReentryObjectReentry'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -2076,6 +2105,55 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /admin/reentry:
+    get:
+      tags:
+        - reentry
+      description: 承認待ち再入部申請一覧の取得（管理者用）
+      security:
+        - BearerAuth:
+            - infra
+      responses:
+        '200':
+          description: Success get pending reentry requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetAdminReentry'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/admin/reentry/{reentryId}':
+    put:
+      tags:
+        - reentry
+      description: 再入部申請の承認/却下（管理者用）
+      security:
+        - BearerAuth:
+            - infra
+      parameters:
+        - name: reentryId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: 承認/却下リクエスト
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutAdminReentryReentryId'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -2444,6 +2522,30 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: 振込名義
+    ReqPutUserMeReentry:
+      required:
+        - transferName
+      properties:
+        transferName:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 振込名義
+    ResGetUserMeReentryObjectReentry:
+      required:
+        - reentryId
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        reentryId:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
     ResGetUserMeDiscord:
       required:
         - url
@@ -3850,6 +3952,57 @@ components:
         reason:
           type: string
         status:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    ReqPutAdminReentryReentryId:
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,oneof=approved rejected'
+            ja: ステータス
+        note:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: max=255
+            ja: 備考
+    ResGetAdminReentry:
+      required:
+        - reentries
+      properties:
+        reentries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetAdminReentryObjectReentry'
+    ResGetAdminReentryObjectReentry:
+      required:
+        - reentryId
+        - userId
+        - username
+        - studentNumber
+        - status
+        - paymentStatus
+        - createdAt
+        - updatedAt
+      properties:
+        reentryId:
+          type: string
+        userId:
+          type: string
+        username:
+          type: string
+        studentNumber:
+          type: string
+        status:
+          type: string
+        paymentStatus:
+          type: string
+        note:
           type: string
         createdAt:
           type: string

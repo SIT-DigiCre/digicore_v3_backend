@@ -149,6 +149,12 @@ type ReqPutAdminGradeUpdateGradeUpdateId struct {
 	Status string `ja:"ステータス" json:"status" validate:"required,oneof=approved rejected"`
 }
 
+// ReqPutAdminReentryReentryId defines model for ReqPutAdminReentryReentryId.
+type ReqPutAdminReentryReentryId struct {
+	Note   *string `ja:"備考" json:"note,omitempty" validate:"max=255"`
+	Status string  `ja:"ステータス" json:"status" validate:"required,oneof=approved rejected"`
+}
+
 // ReqPutBudgetBudgetIdAdmin defines model for ReqPutBudgetBudgetIdAdmin.
 type ReqPutBudgetBudgetIdAdmin struct {
 	Status string `ja:"ステータス" json:"status" validate:"oneof=reject approve paid"`
@@ -241,6 +247,11 @@ type ReqPutUserMePrivate struct {
 	PhoneNumber           string  `ja:"電話番号" json:"phoneNumber" validate:"required,phonenumber"`
 }
 
+// ReqPutUserMeReentry defines model for ReqPutUserMeReentry.
+type ReqPutUserMeReentry struct {
+	TransferName string `ja:"振込名義" json:"transferName" validate:"required,min=1,max=255"`
+}
+
 // ReqPutWorkTagTagId defines model for ReqPutWorkTagTagId.
 type ReqPutWorkTagTagId struct {
 	Description string `ja:"説明" json:"description" validate:"required"`
@@ -317,6 +328,24 @@ type ResGetAdminGradeUpdateObjectGradeUpdate struct {
 	UpdatedAt     string `json:"updatedAt"`
 	UserId        string `json:"userId"`
 	Username      string `json:"username"`
+}
+
+// ResGetAdminReentry defines model for ResGetAdminReentry.
+type ResGetAdminReentry struct {
+	Reentries []ResGetAdminReentryObjectReentry `json:"reentries"`
+}
+
+// ResGetAdminReentryObjectReentry defines model for ResGetAdminReentryObjectReentry.
+type ResGetAdminReentryObjectReentry struct {
+	CreatedAt     string  `json:"createdAt"`
+	Note          *string `json:"note,omitempty"`
+	PaymentStatus string  `json:"paymentStatus"`
+	ReentryId     string  `json:"reentryId"`
+	Status        string  `json:"status"`
+	StudentNumber string  `json:"studentNumber"`
+	UpdatedAt     string  `json:"updatedAt"`
+	UserId        string  `json:"userId"`
+	Username      string  `json:"username"`
 }
 
 // ResGetBudget defines model for ResGetBudget.
@@ -639,6 +668,14 @@ type ResGetUserMePrivate struct {
 	PhoneNumber           string `json:"phoneNumber"`
 }
 
+// ResGetUserMeReentryObjectReentry defines model for ResGetUserMeReentryObjectReentry.
+type ResGetUserMeReentryObjectReentry struct {
+	CreatedAt string `json:"createdAt"`
+	ReentryId string `json:"reentryId"`
+	Status    string `json:"status"`
+	UpdatedAt string `json:"updatedAt"`
+}
+
 // ResGetUserObjectUser defines model for ResGetUserObjectUser.
 type ResGetUserObjectUser struct {
 	IconUrl           string `json:"iconUrl"`
@@ -907,6 +944,9 @@ type PutAdminChangeStudentNumberJSONRequestBody = ReqPutAdminChangeStudentNumber
 // PutAdminGradeUpdateGradeUpdateIdJSONRequestBody defines body for PutAdminGradeUpdateGradeUpdateId for application/json ContentType.
 type PutAdminGradeUpdateGradeUpdateIdJSONRequestBody = ReqPutAdminGradeUpdateGradeUpdateId
 
+// PutAdminReentryReentryIdJSONRequestBody defines body for PutAdminReentryReentryId for application/json ContentType.
+type PutAdminReentryReentryIdJSONRequestBody = ReqPutAdminReentryReentryId
+
 // PostBudgetJSONRequestBody defines body for PostBudget for application/json ContentType.
 type PostBudgetJSONRequestBody = ReqPostBudget
 
@@ -981,6 +1021,9 @@ type PutUserMePaymentJSONRequestBody = ReqPutUserMePayment
 
 // PutUserMePrivateJSONRequestBody defines body for PutUserMePrivate for application/json ContentType.
 type PutUserMePrivateJSONRequestBody = ReqPutUserMePrivate
+
+// PutUserMeReentryJSONRequestBody defines body for PutUserMeReentry for application/json ContentType.
+type PutUserMeReentryJSONRequestBody = ReqPutUserMeReentry
 
 // PostWorkTagJSONRequestBody defines body for PostWorkTag for application/json ContentType.
 type PostWorkTagJSONRequestBody = ReqPostWorkTag

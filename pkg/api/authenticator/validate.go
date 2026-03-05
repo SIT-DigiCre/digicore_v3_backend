@@ -67,6 +67,20 @@ func Login(next echo.HandlerFunc) echo.HandlerFunc {
 				Log:     fmt.Sprintf("non member user access denied(%s, %s)", userId, c.Path()),
 			})
 		}
+		if !isMember && c.Path() == "/user/me/reentry" {
+			pending, rerr := hasPendingReentry(userId)
+			if rerr != nil {
+				return response.ErrorResponse(c, rerr)
+			}
+			if pending {
+				return response.ErrorResponse(c, &response.Error{
+					Code:    http.StatusForbidden,
+					Level:   "Info",
+					Message: "再入部申請の確認中です。振込案内ページをご確認ください",
+					Log:     fmt.Sprintf("pending reentry user access denied(%s, %s)", userId, c.Path()),
+				})
+			}
+		}
 		return next(c)
 	}
 }
@@ -99,6 +113,31 @@ func checkUserIsMember(userId string) (bool, *response.Error) {
 		}
 	}
 	return rows[0].IsMember, nil
+}
+
+func hasPendingReentry(userId string) (bool, *response.Error) {
+	dbClient := db.Open()
+	params := struct {
+		UserId string `twowaysql:"userId"`
+	}{
+		UserId: userId,
+	}
+	rows := []struct {
+		PendingCount int `db:"pending_count"`
+	}{}
+	err := dbClient.Select(&rows, "sql/reentry/select_pending_reentry_count_by_user_id.sql", &params)
+	if err != nil {
+		return false, &response.Error{
+			Code:    http.StatusInternalServerError,
+			Level:   "Error",
+			Message: "不明なエラーが発生しました",
+			Log:     err.Error(),
+		}
+	}
+	if len(rows) == 0 {
+		return false, nil
+	}
+	return rows[0].PendingCount > 0, nil
 }
 
 func validateJWT(token string) (jwt.Token, error) {
