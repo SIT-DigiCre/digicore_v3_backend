@@ -102,21 +102,20 @@ type placeHistoryUser struct {
 }
 
 func selectPlaceHistory(dbClient db.Client, place string, period string, startDate time.Time, endDate time.Time) ([]placeHistoryUser, *response.Error) {
+	periodIsDay := period == "day"
 	params := struct {
+		PeriodIsDay bool    `twowaysql:"periodIsDay"`
 		Place     string    `twowaysql:"place"`
 		StartDate time.Time `twowaysql:"startDate"`
 		EndDate   time.Time `twowaysql:"endDate"`
 	}{
+		PeriodIsDay: periodIsDay,
 		Place:     place,
 		StartDate: startDate,
 		EndDate:   endDate,
 	}
-	sqlFile := "sql/activity/select_place_history.sql"
-	if period == "week" || period == "month" {
-		sqlFile = "sql/activity/select_place_history_distinct_days.sql"
-	}
 	users := []placeHistoryUser{}
-	err := dbClient.Select(&users, sqlFile, &params)
+	err := dbClient.Select(&users, "sql/activity/select_place_history.sql", &params)
 	if err != nil {
 		return []placeHistoryUser{}, &response.Error{
 			Code:    http.StatusInternalServerError,
