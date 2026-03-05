@@ -32,7 +32,7 @@ func GetActivityPlacePlaceHistory(ctx echo.Context, dbClient db.Client, place st
 		return api.ResGetActivityPlacePlaceHistory{}, errResp
 	}
 
-	users, errResp := selectPlaceHistory(dbClient, place, startDate, endDate)
+	users, errResp := selectPlaceHistory(dbClient, place, string(period), startDate, endDate)
 	if errResp != nil {
 		return api.ResGetActivityPlacePlaceHistory{}, errResp
 	}
@@ -101,12 +101,15 @@ type placeHistoryUser struct {
 	CheckInCount      int    `db:"check_in_count"`
 }
 
-func selectPlaceHistory(dbClient db.Client, place string, startDate time.Time, endDate time.Time) ([]placeHistoryUser, *response.Error) {
+func selectPlaceHistory(dbClient db.Client, place string, period string, startDate time.Time, endDate time.Time) ([]placeHistoryUser, *response.Error) {
+	periodIsDay := period == "day"
 	params := struct {
+		PeriodIsDay bool    `twowaysql:"periodIsDay"`
 		Place     string    `twowaysql:"place"`
 		StartDate time.Time `twowaysql:"startDate"`
 		EndDate   time.Time `twowaysql:"endDate"`
 	}{
+		PeriodIsDay: periodIsDay,
 		Place:     place,
 		StartDate: startDate,
 		EndDate:   endDate,
