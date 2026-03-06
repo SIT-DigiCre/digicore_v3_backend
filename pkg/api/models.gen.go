@@ -19,6 +19,16 @@ const (
 	Checkout ReqPutActivityRecordRecordIdActivityType = "checkout"
 )
 
+// Defines values for ResGetUserMeGrantsGrants.
+const (
+	ActivityRecordEditOther ResGetUserMeGrantsGrants = "activity_record_edit_other"
+	BudgetAdmin             ResGetUserMeGrantsGrants = "budget_admin"
+	ForceCheckout           ResGetUserMeGrantsGrants = "force_checkout"
+	GroupAdmin              ResGetUserMeGrantsGrants = "group_admin"
+	MailBroadcast           ResGetUserMeGrantsGrants = "mail_broadcast"
+	PaymentAdmin            ResGetUserMeGrantsGrants = "payment_admin"
+)
+
 // Defines values for GetActivityPlacePlaceHistoryParamsPeriod.
 const (
 	Day   GetActivityPlacePlaceHistoryParamsPeriod = "day"
@@ -633,6 +643,15 @@ type ResGetUserMeGradeUpdateObjectGradeUpdate struct {
 	Status        string `json:"status"`
 	UpdatedAt     string `json:"updatedAt"`
 }
+
+// ResGetUserMeGrants defines model for ResGetUserMeGrants.
+type ResGetUserMeGrants struct {
+	// Grants claim 由来の利用可能機能。infra: group_admin/force_checkout/mail_broadcast/activity_record_edit_other, account: budget_admin/payment_admin
+	Grants []ResGetUserMeGrantsGrants `json:"grants"`
+}
+
+// ResGetUserMeGrantsGrants defines model for ResGetUserMeGrants.Grants.
+type ResGetUserMeGrantsGrants string
 
 // ResGetUserMeIntroduction defines model for ResGetUserMeIntroduction.
 type ResGetUserMeIntroduction struct {

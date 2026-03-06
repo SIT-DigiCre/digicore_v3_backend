@@ -1,0 +1,15 @@
+required:
+  - grants
+properties:
+  grants:
+    type: array
+    description: "claim 由来の利用可能機能。infra: group_admin/force_checkout/mail_broadcast/activity_record_edit_other, account: budget_admin/payment_admin"
+    items:
+      type: string
+      enum:
+        - group_admin
+        - force_checkout
+        - mail_broadcast
+        - activity_record_edit_other
+        - budget_admin
+        - payment_admin

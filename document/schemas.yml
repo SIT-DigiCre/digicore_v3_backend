@@ -42,6 +42,8 @@ ResGetUserMePayment:
   $ref: "./schemas/res_get_user_me_payment.yml"
 ResGetUserMePaymentObjectHistory:
   $ref: "./schemas/res_get_user_me_payment.history.yml"
+ResGetUserMeGrants:
+  $ref: "./schemas/res_get_user_me_grants.yml"
 ReqPutUserMePayment:
   $ref: "./schemas/req_put_user_me_payment.yml"
 ReqPutUserMeReentry:
