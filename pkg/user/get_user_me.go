@@ -3,6 +3,7 @@ package user
 import (
 	"net/http"
 
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/group"
 	"github.com/jinzhu/copier"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
@@ -18,7 +19,7 @@ func GetUserMe(ctx echo.Context, dbClient db.Client) (api.ResGetUserMe, *respons
 	if err != nil {
 		return api.ResGetUserMe{}, err
 	}
-	claims, err := GetClaimsFromUserId(dbClient, userId)
+	claims, err := group.GetClaimsFromUserId(dbClient, userId)
 	if err != nil {
 		return api.ResGetUserMe{}, err
 	}
