@@ -18,9 +18,14 @@ func GetUserMe(ctx echo.Context, dbClient db.Client) (api.ResGetUserMe, *respons
 	if err != nil {
 		return api.ResGetUserMe{}, err
 	}
+	claims, err := GetClaimsFromUserId(dbClient, userId)
+	if err != nil {
+		return api.ResGetUserMe{}, err
+	}
 	rerr := copier.Copy(&res, &profile)
 	if rerr != nil {
 		return api.ResGetUserMe{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
+	res.Claims = claims
 	return res, nil
 }

@@ -2,19 +2,23 @@
 
 -- ユーザーデータの投入
 INSERT INTO users (id, student_number) VALUES 
-  (UUID_TO_BIN('11111111-1111-1111-1111-111111111111'), '20230001'),
-  (UUID_TO_BIN('22222222-2222-2222-2222-222222222222'), '20230002'),
-  (UUID_TO_BIN('33333333-3333-3333-3333-333333333333'), '20230003'),
-  (UUID_TO_BIN('44444444-4444-4444-4444-444444444444'), '20230004'),
-  (UUID_TO_BIN('55555555-5555-5555-5555-555555555555'), '20230005');
+  (UUID_TO_BIN('11111111-1111-1111-1111-111111111111'), 'aa230001'),
+  (UUID_TO_BIN('22222222-2222-2222-2222-222222222222'), 'bp230002'),
+  (UUID_TO_BIN('33333333-3333-3333-3333-333333333333'), 'cy230003'),
+  (UUID_TO_BIN('44444444-4444-4444-4444-444444444444'), 'z2300004'),
+  (UUID_TO_BIN('55555555-5555-5555-5555-555555555555'), 'ab230005'),
+  (UUID_TO_BIN('66666666-6666-6666-6666-666666666666'), 'bq230006'),
+  (UUID_TO_BIN('77777777-7777-7777-7777-777777777777'), 'dp230007');
 
 -- ユーザープロフィールの投入
-INSERT INTO user_profiles (id, user_id, username, school_grade, icon_url, discord_userid, active_limit, short_introduction, introduction) VALUES
-  (UUID_TO_BIN('aaaa1111-1111-1111-1111-111111111111'), UUID_TO_BIN('11111111-1111-1111-1111-111111111111'), '田中太郎', 3, 'https://example.com/icons/tanaka.jpg', 'tanaka123', '2024-12-31', 'プログラミング大好き！', 'フルスタック開発者を目指している3年生です。React、Go、機械学習に興味があります。'),
-  (UUID_TO_BIN('bbbb2222-2222-2222-2222-222222222222'), UUID_TO_BIN('22222222-2222-2222-2222-222222222222'), '佐藤花子', 2, 'https://example.com/icons/sato.jpg', 'sato456', '2025-12-31', 'デザイナー志望！', 'UI/UXデザインが専門です。Figmaを使ったプロトタイプ作成が得意で、フロントエンド開発もできます。'),
-  (UUID_TO_BIN('cccc3333-3333-3333-3333-333333333333'), UUID_TO_BIN('33333333-3333-3333-3333-333333333333'), '山田次郎', 4, 'https://example.com/icons/yamada.jpg', 'yamada789', '2024-03-31', 'バックエンドエンジニア', 'インフラとバックエンドが専門です。Docker、Kubernetes、AWS、データベース設計が得意です。'),
-  (UUID_TO_BIN('dddd4444-4444-4444-4444-444444444444'), UUID_TO_BIN('44444444-4444-4444-4444-444444444444'), '鈴木美咲', 1, 'https://example.com/icons/suzuki.jpg', 'suzuki012', '2026-12-31', 'AI・機械学習研究中', '人工知能と機械学習の研究をしています。Python、TensorFlow、PyTorchを使ってモデル開発をしています。'),
-  (UUID_TO_BIN('eeee5555-5555-5555-5555-555555555555'), UUID_TO_BIN('55555555-5555-5555-5555-555555555555'), '高橋健太', 3, 'https://example.com/icons/takahashi.jpg', 'takahashi345', '2024-12-31', 'フロントエンド開発者', 'モダンなWebフロントエンド開発が専門です。Vue.js、TypeScript、アニメーションライブラリが得意です。');
+INSERT INTO user_profiles (id, user_id, username, school_grade, icon_url, discord_userid, active_limit, is_member, short_introduction, introduction) VALUES
+  (UUID_TO_BIN('aaaa1111-1111-1111-1111-111111111111'), UUID_TO_BIN('11111111-1111-1111-1111-111111111111'), '田中太郎', 3, 'https://example.com/icons/tanaka.jpg', 'tanaka123', '2024-12-31', true, 'プログラミング大好き！', 'フルスタック開発者を目指している3年生です。React、Go、機械学習に興味があります。'),
+  (UUID_TO_BIN('bbbb2222-2222-2222-2222-222222222222'), UUID_TO_BIN('22222222-2222-2222-2222-222222222222'), '佐藤花子', 2, 'https://example.com/icons/sato.jpg', 'sato456', '2025-12-31', true, 'デザイナー志望！', 'UI/UXデザインが専門です。Figmaを使ったプロトタイプ作成が得意で、フロントエンド開発もできます。'),
+  (UUID_TO_BIN('cccc3333-3333-3333-3333-333333333333'), UUID_TO_BIN('33333333-3333-3333-3333-333333333333'), '山田次郎', 4, 'https://example.com/icons/yamada.jpg', 'yamada789', '2024-03-31', true, 'バックエンドエンジニア', 'インフラとバックエンドが専門です。Docker、Kubernetes、AWS、データベース設計が得意です。'),
+  (UUID_TO_BIN('dddd4444-4444-4444-4444-444444444444'), UUID_TO_BIN('44444444-4444-4444-4444-444444444444'), '鈴木美咲', 1, 'https://example.com/icons/suzuki.jpg', 'suzuki012', '2026-12-31', false, 'AI・機械学習研究中', '人工知能と機械学習の研究をしています。Python、TensorFlow、PyTorchを使ってモデル開発をしています。'),
+  (UUID_TO_BIN('eeee5555-5555-5555-5555-555555555555'), UUID_TO_BIN('55555555-5555-5555-5555-555555555555'), '高橋健太', 3, 'https://example.com/icons/takahashi.jpg', 'takahashi345', '2024-12-31', true, 'フロントエンド開発者', 'モダンなWebフロントエンド開発が専門です。Vue.js、TypeScript、アニメーションライブラリが得意です。'),
+  (UUID_TO_BIN('ffff6666-6666-6666-6666-666666666666'), UUID_TO_BIN('66666666-6666-6666-6666-666666666666'), '伊藤一真', 2, 'https://example.com/icons/ito.jpg', 'ito678', '2025-12-31', false, '休部中メンバー', '現在は休部中で、個人でWeb制作を進めています。'),
+  (UUID_TO_BIN('ffff7777-7777-7777-7777-777777777777'), UUID_TO_BIN('77777777-7777-7777-7777-777777777777'), '中村直樹', 4, 'https://example.com/icons/nakamura.jpg', 'nakamura901', '2025-03-31', false, '運営サポート', '運営タスクを中心にサポートしています。');
 
 -- イベントデータの投入
 INSERT INTO events (id, name, calendar_view, description) VALUES
@@ -85,7 +89,7 @@ INSERT INTO groups_users (id, group_id, user_id) VALUES
 
 -- インフラグループ作成（infraクレーム）
 INSERT INTO `groups` (id, name, description, joinable, user_count) VALUES
-  (UUID_TO_BIN('f0000007-1111-1111-1111-111111111111'), 'インフラグループ', 'インフラ担当専用', false, 1);
+  (UUID_TO_BIN('f0000007-1111-1111-1111-111111111111'), 'インフラグループ', 'インフラ担当専用', false, 2);
 
 -- infraクレーム付与
 INSERT INTO group_claims (id, group_id, claim) VALUES
@@ -93,7 +97,8 @@ INSERT INTO group_claims (id, group_id, claim) VALUES
 
 -- ユーザーをインフラグループに追加（山田次郎: インフラ担当）
 INSERT INTO groups_users (id, group_id, user_id) VALUES
-  (UUID_TO_BIN('f0000009-1111-1111-1111-111111111111'), UUID_TO_BIN('f0000007-1111-1111-1111-111111111111'), UUID_TO_BIN('33333333-3333-3333-3333-333333333333'));
+  (UUID_TO_BIN('f0000009-1111-1111-1111-111111111111'), UUID_TO_BIN('f0000007-1111-1111-1111-111111111111'), UUID_TO_BIN('33333333-3333-3333-3333-333333333333')),
+  (UUID_TO_BIN('f000000d-1111-1111-1111-111111111111'), UUID_TO_BIN('f0000007-1111-1111-1111-111111111111'), UUID_TO_BIN('77777777-7777-7777-7777-777777777777'));
 
 -- 会計グループ作成（accountクレーム）
 INSERT INTO `groups` (id, name, description, joinable, user_count) VALUES

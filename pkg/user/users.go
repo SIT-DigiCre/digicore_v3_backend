@@ -2,6 +2,7 @@ package user
 
 import (
 	"net/http"
+	"sort"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
@@ -41,6 +42,10 @@ type profile struct {
 	IsAdmin           bool   `db:"is_admin"`
 }
 
+type groupClaim struct {
+	Claim string `db:"claim"`
+}
+
 func GetUserProfileFromUserId(dbClient db.Client, userId string) (profile, *response.Error) {
 	params := struct {
 		UserId      string   `twowaysql:"userId"`
@@ -58,6 +63,27 @@ func GetUserProfileFromUserId(dbClient db.Client, userId string) (profile, *resp
 		return profile{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "プロフィールが有りません", Log: "no rows in result"}
 	}
 	return profiles[0], nil
+}
+
+func GetClaimsFromUserId(dbClient db.Client, userId string) ([]string, *response.Error) {
+	params := struct {
+		UserId string `twowaysql:"userId"`
+	}{
+		UserId: userId,
+	}
+	claims := []groupClaim{}
+	err := dbClient.Select(&claims, "sql/group/select_claim_group_from_user_id.sql", &params)
+	if err != nil {
+		return nil, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "権限一覧の取得に失敗しました", Log: err.Error()}
+	}
+
+	claimStrings := make([]string, 0, len(claims))
+	for _, claim := range claims {
+		claimStrings = append(claimStrings, claim.Claim)
+	}
+	sort.Strings(claimStrings)
+
+	return claimStrings, nil
 }
 
 type introduction struct {

@@ -601,17 +601,17 @@ type ResGetUser struct {
 
 // ResGetUserMe defines model for ResGetUserMe.
 type ResGetUserMe struct {
-	ActiveLimit       string `json:"activeLimit"`
-	DiscordUserId     string `json:"discordUserId"`
-	IconUrl           string `json:"iconUrl"`
-	IsAdmin           bool   `json:"isAdmin"`
-	IsGraduated       bool   `json:"isGraduated"`
-	IsMember          bool   `json:"isMember"`
-	SchoolGrade       int    `json:"schoolGrade"`
-	ShortIntroduction string `json:"shortIntroduction"`
-	StudentNumber     string `json:"studentNumber"`
-	UserId            string `json:"userId"`
-	Username          string `json:"username"`
+	ActiveLimit       string   `json:"activeLimit"`
+	Claims            []string `json:"claims"`
+	DiscordUserId     string   `json:"discordUserId"`
+	IconUrl           string   `json:"iconUrl"`
+	IsGraduated       bool     `json:"isGraduated"`
+	IsMember          bool     `json:"isMember"`
+	SchoolGrade       int      `json:"schoolGrade"`
+	ShortIntroduction string   `json:"shortIntroduction"`
+	StudentNumber     string   `json:"studentNumber"`
+	UserId            string   `json:"userId"`
+	Username          string   `json:"username"`
 }
 
 // ResGetUserMeDiscord defines model for ResGetUserMeDiscord.

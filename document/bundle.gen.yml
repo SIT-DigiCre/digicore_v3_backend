@@ -2313,7 +2313,7 @@ components:
         - activeLimit
         - isGraduated
         - isMember
-        - isAdmin
+        - claims
       properties:
         userId:
           type: string
@@ -2335,8 +2335,10 @@ components:
           type: boolean
         isMember:
           type: boolean
-        isAdmin:
-          type: boolean
+        claims:
+          type: array
+          items:
+            type: string
     ReqPutUserMe:
       required:
         - username
