@@ -8,14 +8,7 @@ SELECT
     active_limit,
     is_graduated,
     is_member,
-    short_introduction,
-    IF(EXISTS(
-        SELECT 1
-        FROM groups_users
-        INNER JOIN group_claims ON groups_users.group_id = group_claims.group_id
-        WHERE groups_users.user_id = user_profiles.user_id
-        AND group_claims.claim IN /*adminClaims*/('account', 'infra')
-    ), true, false) as is_admin
+    short_introduction
 FROM user_profiles
 LEFT JOIN users ON users.id = user_profiles.user_id
 WHERE user_profiles.user_id = UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');

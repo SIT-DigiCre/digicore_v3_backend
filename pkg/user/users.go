@@ -3,7 +3,6 @@ package user
 import (
 	"net/http"
 
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 )
@@ -38,16 +37,13 @@ type profile struct {
 	IsGraduated       bool   `db:"is_graduated"`
 	IsMember          bool   `db:"is_member"`
 	ShortIntroduction string `db:"short_introduction"`
-	IsAdmin           bool   `db:"is_admin"`
 }
 
 func GetUserProfileFromUserId(dbClient db.Client, userId string) (profile, *response.Error) {
 	params := struct {
-		UserId      string   `twowaysql:"userId"`
-		AdminClaims []string `twowaysql:"adminClaims"`
+		UserId string `twowaysql:"userId"`
 	}{
-		UserId:      userId,
-		AdminClaims: admin.GetAdminClaims(),
+		UserId: userId,
 	}
 	profiles := []profile{}
 	err := dbClient.Select(&profiles, "sql/user/select_user_profile_from_user_id.sql", &params)
