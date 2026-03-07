@@ -634,6 +634,12 @@ type ResGetUserMeGradeUpdateObjectGradeUpdate struct {
 	UpdatedAt     string `json:"updatedAt"`
 }
 
+// ResGetUserMeGrants defines model for ResGetUserMeGrants.
+type ResGetUserMeGrants struct {
+	// Grants claim 由来の利用可能機能。infra: group_admin/force_checkout/mail_broadcast/activity_record_edit_other, account: budget_admin/payment_admin
+	Grants []string `json:"grants"`
+}
+
 // ResGetUserMeIntroduction defines model for ResGetUserMeIntroduction.
 type ResGetUserMeIntroduction struct {
 	Introduction string `json:"introduction"`

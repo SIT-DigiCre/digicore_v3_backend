@@ -194,6 +194,9 @@ type ServerInterface interface {
 	// (PUT /user/me/graduated)
 	PutUserMeGraduated(ctx echo.Context) error
 
+	// (GET /user/me/grants)
+	GetUserMeGrants(ctx echo.Context) error
+
 	// (GET /user/me/introduction)
 	GetUserMeIntroduction(ctx echo.Context) error
 
@@ -1229,6 +1232,17 @@ func (w *ServerInterfaceWrapper) PutUserMeGraduated(ctx echo.Context) error {
 	return err
 }
 
+// GetUserMeGrants converts echo context to params.
+func (w *ServerInterfaceWrapper) GetUserMeGrants(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetUserMeGrants(ctx)
+	return err
+}
+
 // GetUserMeIntroduction converts echo context to params.
 func (w *ServerInterfaceWrapper) GetUserMeIntroduction(ctx echo.Context) error {
 	var err error
@@ -1690,6 +1704,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/user/me/grade-update", wrapper.GetUserMeGradeUpdate)
 	router.POST(baseURL+"/user/me/grade-update", wrapper.PostUserMeGradeUpdate)
 	router.PUT(baseURL+"/user/me/graduated", wrapper.PutUserMeGraduated)
+	router.GET(baseURL+"/user/me/grants", wrapper.GetUserMeGrants)
 	router.GET(baseURL+"/user/me/introduction", wrapper.GetUserMeIntroduction)
 	router.PUT(baseURL+"/user/me/introduction", wrapper.PutUserMeIntroduction)
 	router.GET(baseURL+"/user/me/payment", wrapper.GetUserMePayment)

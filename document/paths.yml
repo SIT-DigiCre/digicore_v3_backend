@@ -38,6 +38,8 @@
   $ref: "./paths/user_me_private.yml"
 /user/me/payment:
   $ref: "./paths/user_me_payment.yml"
+/user/me/grants:
+  $ref: "./paths/user_me_grants.yml"
 /user/me/reentry:
   $ref: "./paths/user_me_reentry.yml"
 /payment:
