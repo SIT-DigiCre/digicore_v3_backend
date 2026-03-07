@@ -87,6 +87,11 @@ make insert_test
 
 **エラーハンドリング**: `pkg/api/response`による HTTP ステータス、ログレベル、日本語ユーザーメッセージの構造化エラー
 
+**claim と grants の整合性**:
+
+- claim によって利用可否が決まる新機能を追加・変更する場合は、`pkg/grant/grant.go` の `claimToGrants` 対応表を必ず更新すること
+- フロント向けの機能制御は `GET /user/me/grants` の返却値を基準にするため、claim 判定ロジックを個別実装に分散させないこと
+
 ### コード生成ワークフロー
 
 1. `document/`ディレクトリの OpenAPI 仕様を編集

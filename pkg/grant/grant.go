@@ -2,27 +2,25 @@ package grant
 
 import (
 	"sort"
-
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 )
 
 // claimToGrants は claim と利用可能 grant の対応を一元管理する。
-var claimToGrants = map[string][]api.ResGetUserMeGrantsGrants{
+var claimToGrants = map[string][]string{
 	"infra": {
-		api.GroupAdmin,
-		api.ForceCheckout,
-		api.MailBroadcast,
-		api.ActivityRecordEditOther,
+		"group_admin",
+		"force_checkout",
+		"mail_broadcast",
+		"activity_record_edit_other",
 	},
 	"account": {
-		api.BudgetAdmin,
-		api.PaymentAdmin,
+		"budget_admin",
+		"payment_admin",
 	},
 }
 
 // ResolveFromClaims は claim 一覧から重複を除いた grant 一覧を返す。
-func ResolveFromClaims(claims []string) []api.ResGetUserMeGrantsGrants {
-	grantMap := map[api.ResGetUserMeGrantsGrants]struct{}{}
+func ResolveFromClaims(claims []string) []string {
+	grantMap := map[string]struct{}{}
 
 	for _, claim := range claims {
 		grants, ok := claimToGrants[claim]
@@ -34,7 +32,7 @@ func ResolveFromClaims(claims []string) []api.ResGetUserMeGrantsGrants {
 		}
 	}
 
-	resolved := make([]api.ResGetUserMeGrantsGrants, 0, len(grantMap))
+	resolved := make([]string, 0, len(grantMap))
 	for g := range grantMap {
 		resolved = append(resolved, g)
 	}
