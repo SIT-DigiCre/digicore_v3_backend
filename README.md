@@ -69,6 +69,14 @@ make migrate
 make insert_test
 ```
 
+### 管理者 claim の付与
+
+指定した学籍番号のアカウントに infra claim と account claim を付与する（`make insert_test` 実行後、infra/account グループが存在することが前提）:
+
+```sh
+make grant_admin_claims STUDENT_NUMBER=aa230001
+```
+
 ### api パッケージの更新
 
 > [!WARNING]
