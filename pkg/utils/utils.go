@@ -21,6 +21,15 @@ func GetSchoolYear() int {
 	return now.Year()
 }
 
+func GetFiscalYear() int {
+	now := time.Now()
+	month := int(now.Month())
+	if 1 <= month && month <= 2 {
+		return now.Year() - 1
+	}
+	return now.Year()
+}
+
 func GetYear() int {
 	now := time.Now()
 	return now.Year()
