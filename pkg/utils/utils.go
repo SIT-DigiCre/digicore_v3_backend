@@ -12,6 +12,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// 現在の年度を取得する。4月から翌年3月までを年度とする。
 func GetSchoolYear() int {
 	now := time.Now()
 	month := int(now.Month())
@@ -21,6 +22,7 @@ func GetSchoolYear() int {
 	return now.Year()
 }
 
+// 3月中の部費振込に対応するために、3月を翌年度として現在の年度を取得する。
 func GetFiscalYear() int {
 	now := time.Now()
 	month := int(now.Month())
