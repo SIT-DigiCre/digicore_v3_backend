@@ -54,6 +54,9 @@ make migrate
 
 # テストデータ挿入
 make insert_test
+
+# 指定学籍番号に infra/account claim を付与
+make grant_admin_claims STUDENT_NUMBER=<学籍番号>
 ```
 
 ### 認証設定
