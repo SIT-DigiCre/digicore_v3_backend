@@ -1,0 +1,5 @@
+required:
+  - count
+properties:
+  count:
+    type: integer

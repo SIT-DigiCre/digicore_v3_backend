@@ -184,6 +184,8 @@ ResGetActivityUserUserIdRecords:
   $ref: "./schemas/res_get_activity_user_user_id_records.yml"
 ResGetActivityUserUserIdRecordsObjectRecord:
   $ref: "./schemas/res_get_activity_user_user_id_records.record.yml"
+ResGetPublicMemberCount:
+  $ref: "./schemas/res_get_public_member_count.yml"
 
 Error:
   $ref: "./schemas/error.yml"
