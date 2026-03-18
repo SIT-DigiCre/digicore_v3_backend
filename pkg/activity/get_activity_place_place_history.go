@@ -11,15 +11,29 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+const maxPlaceHistoryRange = 31 * 24 * time.Hour
+
 func GetActivityPlacePlaceHistory(ctx echo.Context, dbClient db.Client, place string, startAt time.Time, endAt time.Time) (api.ResGetActivityPlacePlaceHistory, *response.Error) {
 	res := api.ResGetActivityPlacePlaceHistory{}
 
+	// 開始日時と終了日時の前後関係チェック
 	if startAt.After(endAt) {
 		errResp := &response.Error{
 			Code:    http.StatusBadRequest,
 			Level:   "Info",
 			Message: "開始日時は終了日時以前である必要があります",
 			Log:     "startAt is after endAt",
+		}
+		return api.ResGetActivityPlacePlaceHistory{}, errResp
+	}
+
+	// 取得期間の最大長チェック（DoS/負荷対策）
+	if endAt.Sub(startAt) > maxPlaceHistoryRange {
+		errResp := &response.Error{
+			Code:    http.StatusBadRequest,
+			Level:   "Info",
+			Message: "取得可能な期間は最大31日までです",
+			Log:     "requested range exceeds maxPlaceHistoryRange(31d)",
 		}
 		return api.ResGetActivityPlacePlaceHistory{}, errResp
 	}
