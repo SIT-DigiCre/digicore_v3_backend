@@ -50,12 +50,13 @@ func CalculateSchoolGradeFromStudentNumber(studentNumber string) (int, error) {
 		return 0, fmt.Errorf("student number is too short: %s", studentNumber)
 	}
 
+	currentSchoolYear := GetSchoolYear()
 	enterYear, err := strconv.Atoi(studentNumber[2:4])
 	if err != nil {
-		enterYear = GetSchoolYear()
+		return 0, fmt.Errorf("student number has invalid enter year: %s", studentNumber)
 	}
 
-	schoolGrade := GetSchoolYear() - 2000 - enterYear + 1
+	schoolGrade := currentSchoolYear - 2000 - enterYear + 1
 	switch studentNumber[0] {
 	case 'm':
 		schoolGrade += 4
