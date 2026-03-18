@@ -1,15 +1,15 @@
 required:
-  - link_url
-  - created_at
-  - updated_at
+  - linkUrl
+  - createdAt
+  - updatedAt
 properties:
-  link_url:
+  linkUrl:
     type: string
     format: uri
-  created_at:
+  createdAt:
     type: string
     format: date-time
-  updated_at:
+  updatedAt:
     type: string
     format: date-time
     
