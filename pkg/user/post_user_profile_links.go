@@ -19,7 +19,7 @@ func PostUserProfileLinks(c echo.Context, userID string, reqBody api.PostUserPro
 		LinkUrl: reqBody.LinkUrl,
 	}
 
-	err := client.Exec("user/insert_user_profile_links", params)
+	err := client.Exec("sql/user/insert_user_profile_links.sql", &params)
 	if err != nil {
 		return response.InternalServerError(c, "プロフィールリンクの作成に失敗しました", err)
 	}
