@@ -1,7 +1,7 @@
 required:
-  - link_url
+  - linkUrl
 properties:
-  link_url:
+  linkUrl:
     type: string
     x-oapi-codegen-extra-tags:
       validate: max=2048
