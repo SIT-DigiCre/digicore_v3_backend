@@ -1,7 +1,6 @@
 package grant
 
 import (
-	"fmt"
 	"sort"
 )
 
@@ -13,7 +12,7 @@ func ResolveFromClaims(claims []string) []string {
 		if claim == "" {
 			continue
 		}
-		grantMap[fmt.Sprintf("CLAIM_%s", claim)] = struct{}{}
+		grantMap["CLAIM_"+claim] = struct{}{}
 	}
 
 	resolved := make([]string, 0, len(grantMap))
