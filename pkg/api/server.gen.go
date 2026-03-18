@@ -53,6 +53,9 @@ type ServerInterface interface {
 	// (PUT /admin/reentry/{reentryId})
 	PutAdminReentryReentryId(ctx echo.Context, reentryId string) error
 
+	// (PUT /admin/school-grade)
+	PutAdminSchoolGrade(ctx echo.Context) error
+
 	// (GET /budget)
 	GetBudget(ctx echo.Context, params GetBudgetParams) error
 
@@ -503,6 +506,17 @@ func (w *ServerInterfaceWrapper) PutAdminReentryReentryId(ctx echo.Context) erro
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PutAdminReentryReentryId(ctx, reentryId)
+	return err
+}
+
+// PutAdminSchoolGrade converts echo context to params.
+func (w *ServerInterfaceWrapper) PutAdminSchoolGrade(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutAdminSchoolGrade(ctx)
 	return err
 }
 
@@ -1657,6 +1671,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.PUT(baseURL+"/admin/inactive", wrapper.PutAdminInactive)
 	router.GET(baseURL+"/admin/reentry", wrapper.GetAdminReentry)
 	router.PUT(baseURL+"/admin/reentry/:reentryId", wrapper.PutAdminReentryReentryId)
+	router.PUT(baseURL+"/admin/school-grade", wrapper.PutAdminSchoolGrade)
 	router.GET(baseURL+"/budget", wrapper.GetBudget)
 	router.POST(baseURL+"/budget", wrapper.PostBudget)
 	router.GET(baseURL+"/budget/:budgetId", wrapper.GetBudgetBudgetId)

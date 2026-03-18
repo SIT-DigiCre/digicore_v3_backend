@@ -3,7 +3,10 @@ package utils
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
@@ -41,6 +44,28 @@ func GetAfterDate(year int, month int, day int) string {
 	now := time.Now()
 	now = now.AddDate(year, month, day)
 	return now.Format("2006-01-02")
+}
+
+func CalculateSchoolGradeFromStudentNumber(studentNumber string) (int, error) {
+	if len(studentNumber) < 4 {
+		return 0, fmt.Errorf("student number is too short: %s", studentNumber)
+	}
+
+	currentSchoolYear := GetSchoolYear()
+	enterYear, err := strconv.Atoi(studentNumber[2:4])
+	if err != nil {
+		return 0, fmt.Errorf("student number has invalid enter year: %s: %w", studentNumber, err)
+	}
+
+	schoolGrade := currentSchoolYear - 2000 - enterYear + 1
+	switch strings.ToLower(studentNumber[:1]) {
+	case "m":
+		schoolGrade += 4
+	case "n":
+		schoolGrade += 6
+	}
+
+	return schoolGrade, nil
 }
 
 func GetUniqueString(str []string) []string {

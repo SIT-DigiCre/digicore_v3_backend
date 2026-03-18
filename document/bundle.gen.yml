@@ -1808,6 +1808,21 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /admin/school-grade:
+    put:
+      tags:
+        - admin
+      description: school_gradeを一括更新する
+      security:
+        - BearerAuth:
+            - infra
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /activity/checkin:
     post:
       tags:
