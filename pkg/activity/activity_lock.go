@@ -14,6 +14,10 @@ func lockActivityUser(dbClient db.TransactionClient, userId string) *response.Er
 		UserId: userId,
 	}
 
+	// activity の checkin / checkout は「そのユーザーの現在在室中レコード」を更新するため、
+	// 同一ユーザーに対する並行リクエストだけを直列化できれば十分です。
+	// user_profiles は user_id ごとに一意なので、この行を FOR UPDATE で掴んで
+	// activities 更新の前にユーザー単位の排他制御をかけています。
 	lockedUser := []struct {
 		UserId string `db:"user_id"`
 	}{}

@@ -51,6 +51,9 @@ func TestExecuteCheckoutReturnsFalseWhenRowsAreNotUpdated(t *testing.T) {
 	now := time.Date(2026, 3, 19, 10, 0, 0, 0, time.Local)
 	client := &fakeTransactionClient{
 		selectFunc: func(dest interface{}, queryPath string, params interface{}) error {
+			if queryPath != "sql/activity/select_current_activity.sql" {
+				t.Fatalf("unexpected query path: %s", queryPath)
+			}
 			records := dest.(*[]ActivityRecord)
 			*records = []ActivityRecord{
 				{
@@ -82,6 +85,9 @@ func TestExecuteCheckoutReturnsErrorWhenRowsAffectedFails(t *testing.T) {
 	now := time.Date(2026, 3, 19, 10, 0, 0, 0, time.Local)
 	client := &fakeTransactionClient{
 		selectFunc: func(dest interface{}, queryPath string, params interface{}) error {
+			if queryPath != "sql/activity/select_current_activity.sql" {
+				t.Fatalf("unexpected query path: %s", queryPath)
+			}
 			records := dest.(*[]ActivityRecord)
 			*records = []ActivityRecord{
 				{
@@ -100,5 +106,47 @@ func TestExecuteCheckoutReturnsErrorWhenRowsAffectedFails(t *testing.T) {
 	_, err := executeCheckout(client, "user-id", "room", &now, nil)
 	if err == nil {
 		t.Fatal("expected error but got nil")
+	}
+}
+
+func TestExecuteCheckoutUsesCurrentOpenRecordEvenIfLatestEditedRecordWouldDiffer(t *testing.T) {
+	now := time.Date(2026, 3, 19, 10, 0, 0, 0, time.Local)
+	client := &fakeTransactionClient{
+		selectFunc: func(dest interface{}, queryPath string, params interface{}) error {
+			if queryPath != "sql/activity/select_current_activity.sql" {
+				t.Fatalf("unexpected query path: %s", queryPath)
+			}
+			records := dest.(*[]ActivityRecord)
+			*records = []ActivityRecord{
+				{
+					ID:                 "open-record-id",
+					InitialCheckedInAt: now.Add(-2 * time.Hour),
+					CheckedInAt:        now.Add(-2 * time.Hour),
+				},
+			}
+			return nil
+		},
+		execFunc: func(queryPath string, params interface{}, generateId bool) (sql.Result, error) {
+			updateParams, ok := params.(*struct {
+				Id           string    `twowaysql:"id"`
+				CheckedOutAt time.Time `twowaysql:"checkedOutAt"`
+				Note         *string   `twowaysql:"note"`
+			})
+			if !ok {
+				t.Fatal("failed to cast update params")
+			}
+			if updateParams.Id != "open-record-id" {
+				t.Fatalf("unexpected record id: %s", updateParams.Id)
+			}
+			return fakeResult{rowsAffected: 1}, nil
+		},
+	}
+
+	executed, err := executeCheckout(client, "user-id", "room", &now, nil)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if !executed {
+		t.Fatal("expected checkout to succeed for current open record")
 	}
 }

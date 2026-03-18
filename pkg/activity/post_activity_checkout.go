@@ -34,11 +34,11 @@ func PostActivityCheckout(ctx echo.Context, dbClient db.TransactionClient, reque
 }
 
 func executeCheckout(dbClient db.TransactionClient, userId string, place string, requestedCheckoutAt *time.Time, note *string) (executed bool, err *response.Error) {
-	latest, err := selectLatestActivity(dbClient, userId, place)
+	current, err := selectCurrentActivity(dbClient, userId, place)
 	if err != nil {
 		return false, err
 	}
-	if latest == nil || latest.CheckedOutAt != nil {
+	if current == nil {
 		return false, nil
 	}
 
@@ -54,7 +54,7 @@ func executeCheckout(dbClient db.TransactionClient, userId string, place string,
 		}
 		checkOutAt = *requestedCheckoutAt
 	}
-	if checkOutAt.Before(latest.InitialCheckedInAt) || checkOutAt.Before(latest.CheckedInAt) {
+	if checkOutAt.Before(current.InitialCheckedInAt) || checkOutAt.Before(current.CheckedInAt) {
 		return false, &response.Error{
 			Code:    http.StatusBadRequest,
 			Level:   "Info",
@@ -68,7 +68,7 @@ func executeCheckout(dbClient db.TransactionClient, userId string, place string,
 		CheckedOutAt time.Time `twowaysql:"checkedOutAt"`
 		Note         *string   `twowaysql:"note"`
 	}{
-		Id:           latest.ID,
+		Id:           current.ID,
 		CheckedOutAt: checkOutAt,
 		Note:         note,
 	}
