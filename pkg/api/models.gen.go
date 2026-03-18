@@ -636,7 +636,7 @@ type ResGetUserMeGradeUpdateObjectGradeUpdate struct {
 
 // ResGetUserMeGrants defines model for ResGetUserMeGrants.
 type ResGetUserMeGrants struct {
-	// Grants claim 由来の利用可能機能。infra: group_admin/force_checkout/mail_broadcast/activity_record_edit_other, account: budget_admin/payment_admin
+	// Grants claim 一覧を CLAIM_ プレフィックス付きで返す。例: infra -> CLAIM_infra, account -> CLAIM_account
 	Grants []string `json:"grants"`
 }
 
