@@ -102,6 +102,8 @@
   $ref: "./paths/admin_inactive.yml"
 /admin/change-student-number:
   $ref: "./paths/admin_change_student_number.yml"
+/admin/school-grade:
+  $ref: "./paths/admin_school_grade.yml"
 /activity/checkin:
   $ref: "./paths/activity_checkin.yml"
 /activity/checkout:
