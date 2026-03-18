@@ -7,6 +7,7 @@ import (
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/budget"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 	"github.com/aws/aws-sdk-go/aws"
@@ -17,6 +18,11 @@ import (
 
 func GetStorageFileId(ctx echo.Context, dbClient db.Client, fileId string) (api.ResGetStorageFileId, *response.Error) {
 	res := api.ResGetStorageFileId{}
+	userId := ctx.Get("user_id").(string)
+	err := validateBudgetFileAccess(dbClient, userId, fileId)
+	if err != nil {
+		return api.ResGetStorageFileId{}, err
+	}
 	file, err := getFileFromFileId(dbClient, fileId)
 	if err != nil {
 		return api.ResGetStorageFileId{}, err
@@ -31,6 +37,26 @@ func GetStorageFileId(ctx echo.Context, dbClient db.Client, fileId string) (api.
 		return api.ResGetStorageFileId{}, err
 	}
 	return res, nil
+}
+
+func validateBudgetFileAccess(dbClient db.Client, requestUserId string, fileId string) *response.Error {
+	budgetFileAccess, err := budget.GetBudgetFileAccessFromFileId(dbClient, fileId)
+	if err != nil {
+		return err
+	}
+	if budgetFileAccess == nil {
+		return nil
+	}
+
+	canViewFiles, err := budget.CanViewBudgetFiles(dbClient, requestUserId, budgetFileAccess.ProposerUserId)
+	if err != nil {
+		return err
+	}
+	if !canViewFiles {
+		return &response.Error{Code: http.StatusForbidden, Level: "Info", Message: "ファイルの閲覧権限がありません", Log: "permission denied"}
+	}
+
+	return nil
 }
 
 func getFileURL(key string, isPublic bool) (string, *response.Error) {
