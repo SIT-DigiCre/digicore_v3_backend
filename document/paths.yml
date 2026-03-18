@@ -40,6 +40,8 @@
   $ref: "./paths/payment.yml"
 /payment/{paymentId}:
   $ref: "./paths/payment_payment_id.yml"
+/user/profile/links:
+  $ref: "./paths/user_profile_links.yml"
 /tool:
   $ref: "./paths/tool.yml"
 /event:

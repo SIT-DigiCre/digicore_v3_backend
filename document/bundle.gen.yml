@@ -636,6 +636,56 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /user/profile/links:
+    '/user/profile/links/{userID}':
+      post:
+        tags:
+          - user_profile_links
+        summary: 新しいリンクを登録する
+        security:
+          - BearerAuth: []
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                required:
+                  - link_url
+                properties:
+                  link_url:
+                    type: string
+                    x-oapi-codegen-extra-tags:
+                      validate: max=2048
+                      ja: URL
+        responses:
+          '201':
+            description: Success create user_profile_links
+          '400':
+            $ref: '#/components/responses/BadRequest'
+          '500':
+            $ref: '#/components/responses/InternalServer'
+      delete:
+        tags:
+          - user_profile_links
+        summary: ユーザープロフィールリンクを削除する
+        security:
+          - BearerAuth: []
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: integer
+              format: uuid
+        responses:
+          '204':
+            description: Success delete user_profile_links
+          '403':
+            $ref: '#/components/responses/Unauthorized'
+          '404':
+            $ref: '#/components/responses/NotFound'
+          '500':
+            $ref: '#/components/responses/InternalServer'
   /tool:
     get:
       tags:
@@ -1930,7 +1980,7 @@ components:
           type: string
         shortIntroduction:
           type: string
-        link_urls:
+        link_url:
           type: array
           items:
             required:

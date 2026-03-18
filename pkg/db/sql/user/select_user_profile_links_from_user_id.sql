@@ -1,5 +1,5 @@
 SELECT
-    upl.link_url,
+    upl.url_link,
     upl.created_at,
     upl.updated_at
 FROM user_profile_links as upl
