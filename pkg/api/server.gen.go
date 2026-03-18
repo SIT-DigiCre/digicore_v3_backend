@@ -116,6 +116,9 @@ type ServerInterface interface {
 	// (PUT /payment/{paymentId})
 	PutPaymentPaymentId(ctx echo.Context, paymentId string) error
 
+	// (GET /public/member/count)
+	GetPublicMemberCount(ctx echo.Context) error
+
 	// (GET /signup)
 	GetSignup(ctx echo.Context) error
 
@@ -870,6 +873,15 @@ func (w *ServerInterfaceWrapper) PutPaymentPaymentId(ctx echo.Context) error {
 	return err
 }
 
+// GetPublicMemberCount converts echo context to params.
+func (w *ServerInterfaceWrapper) GetPublicMemberCount(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetPublicMemberCount(ctx)
+	return err
+}
+
 // GetSignup converts echo context to params.
 func (w *ServerInterfaceWrapper) GetSignup(ctx echo.Context) error {
 	var err error
@@ -1461,6 +1473,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/payment", wrapper.GetPayment)
 	router.GET(baseURL+"/payment/:paymentId", wrapper.GetPaymentPaymentId)
 	router.PUT(baseURL+"/payment/:paymentId", wrapper.PutPaymentPaymentId)
+	router.GET(baseURL+"/public/member/count", wrapper.GetPublicMemberCount)
 	router.GET(baseURL+"/signup", wrapper.GetSignup)
 	router.POST(baseURL+"/signup/callback", wrapper.PostSignupCallback)
 	router.GET(baseURL+"/status", wrapper.GetStatus)

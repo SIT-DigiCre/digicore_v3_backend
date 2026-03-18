@@ -29,6 +29,8 @@ tags:
     description: Mail system
   - name: activity
     description: Activity system
+  - name: public
+    description: Public system
 paths:
   /status:
     get:
@@ -1830,6 +1832,20 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /public/member/count:
+    get:
+      tags:
+        - public
+      description: Get active member count
+      responses:
+        '200':
+          description: Get member count
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPublicMemberCount'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -3403,6 +3419,12 @@ components:
           type: string
           format: date-time
           nullable: true
+    ResGetPublicMemberCount:
+      required:
+        - count
+      properties:
+        count:
+          type: integer
     Error:
       required:
         - level
