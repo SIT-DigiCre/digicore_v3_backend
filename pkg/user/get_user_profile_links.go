@@ -9,7 +9,7 @@ import (
 )
 
 type UserProfileLink struct {
-	UrlLink string `db:"url_link"`
+	LinkUrl   string    `db:"link_url"`
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`
 }
