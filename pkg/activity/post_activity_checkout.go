@@ -13,6 +13,10 @@ import (
 func PostActivityCheckout(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPostActivityCheckout) (api.BlankSuccess, *response.Error) {
 	userId := ctx.Get("user_id").(string)
 
+	if err := lockActivityUser(dbClient, userId); err != nil {
+		return api.BlankSuccess{}, err
+	}
+
 	executed, err := executeCheckout(dbClient, userId, requestBody.Place, requestBody.CheckoutAt, nil)
 	if err != nil {
 		return api.BlankSuccess{}, err
@@ -69,7 +73,7 @@ func executeCheckout(dbClient db.TransactionClient, userId string, place string,
 		Note:         note,
 	}
 
-	_, execErr := dbClient.Exec("sql/activity/update_activity_checkout.sql", &params, false)
+	result, execErr := dbClient.Exec("sql/activity/update_activity_checkout.sql", &params, false)
 	if execErr != nil {
 		return false, &response.Error{
 			Code:    http.StatusInternalServerError,
@@ -77,6 +81,19 @@ func executeCheckout(dbClient db.TransactionClient, userId string, place string,
 			Message: "DBエラーが発生しました",
 			Log:     execErr.Error(),
 		}
+	}
+
+	rowsAffected, rowsErr := result.RowsAffected()
+	if rowsErr != nil {
+		return false, &response.Error{
+			Code:    http.StatusInternalServerError,
+			Level:   "Info",
+			Message: "DBエラーが発生しました",
+			Log:     rowsErr.Error(),
+		}
+	}
+	if rowsAffected == 0 {
+		return false, nil
 	}
 
 	return true, nil
