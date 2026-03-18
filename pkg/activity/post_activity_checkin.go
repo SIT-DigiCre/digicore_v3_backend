@@ -13,6 +13,10 @@ import (
 func PostActivityCheckin(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPostActivityCheckin) (api.BlankSuccess, *response.Error) {
 	userId := ctx.Get("user_id").(string)
 
+	if err := lockActivityUser(dbClient, userId); err != nil {
+		return api.BlankSuccess{}, err
+	}
+
 	checkInAt := time.Now()
 
 	// 同じ場所に在室中の場合はチェックアウトしてから新規レコードを作成。在室中ではない場合は第1引数がfalseになるが、チェックアウト処理を実行するうえで関係がないので無視

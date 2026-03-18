@@ -10,6 +10,10 @@ import (
 )
 
 func PostActivityCheckoutUserId(ctx echo.Context, dbClient db.TransactionClient, userId string, requestBody api.ReqPostActivityCheckout) (api.BlankSuccess, *response.Error) {
+	if err := lockActivityUser(dbClient, userId); err != nil {
+		return api.BlankSuccess{}, err
+	}
+
 	note := "管理者による退室"
 	executed, err := executeCheckout(dbClient, userId, requestBody.Place, requestBody.CheckoutAt, &note)
 	if err != nil {
