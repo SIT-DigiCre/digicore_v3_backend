@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
@@ -53,14 +54,14 @@ func CalculateSchoolGradeFromStudentNumber(studentNumber string) (int, error) {
 	currentSchoolYear := GetSchoolYear()
 	enterYear, err := strconv.Atoi(studentNumber[2:4])
 	if err != nil {
-		return 0, fmt.Errorf("student number has invalid enter year: %s", studentNumber)
+		return 0, fmt.Errorf("student number has invalid enter year: %s: %w", studentNumber, err)
 	}
 
 	schoolGrade := currentSchoolYear - 2000 - enterYear + 1
-	switch studentNumber[0] {
-	case 'm':
+	switch strings.ToLower(studentNumber[:1]) {
+	case "m":
 		schoolGrade += 4
-	case 'n':
+	case "n":
 		schoolGrade += 6
 	}
 
