@@ -3,11 +3,11 @@ package user
 import(
     "github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
+	"net/http"
 )
 
 
-
-func deleteUserProfileLinks(dbClient db.Client, userId string, linkUrl string) *response.Error {
+func deleteUserProfileLinks(dbClient db.TransactionClient, userId string, linkUrl string) *response.Error {
 	params := struct {
 		UserId string `twowaysql:"user_id"`
 		LinkUrl string `twowaysql:"link_url"`
