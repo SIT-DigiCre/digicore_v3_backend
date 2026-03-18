@@ -14,18 +14,14 @@ func TestResolveFromClaims(t *testing.T) {
 			name:   "infra のみ",
 			claims: []string{"infra"},
 			expected: []string{
-				"activity_record_edit_other",
-				"force_checkout",
-				"group_admin",
-				"mail_broadcast",
+				"CLAIM_infra",
 			},
 		},
 		{
 			name:   "account のみ",
 			claims: []string{"account"},
 			expected: []string{
-				"budget_admin",
-				"payment_admin",
+				"CLAIM_account",
 			},
 		},
 		{
@@ -37,22 +33,23 @@ func TestResolveFromClaims(t *testing.T) {
 			name:   "infra と account の両方",
 			claims: []string{"infra", "account"},
 			expected: []string{
-				"activity_record_edit_other",
-				"budget_admin",
-				"force_checkout",
-				"group_admin",
-				"mail_broadcast",
-				"payment_admin",
+				"CLAIM_account",
+				"CLAIM_infra",
 			},
 		},
 		{
 			name:   "未知 claim と重複を含む",
 			claims: []string{"infra", "infra", "unknown"},
 			expected: []string{
-				"activity_record_edit_other",
-				"force_checkout",
-				"group_admin",
-				"mail_broadcast",
+				"CLAIM_infra",
+				"CLAIM_unknown",
+			},
+		},
+		{
+			name:   "空文字 claim は無視する",
+			claims: []string{"infra", ""},
+			expected: []string{
+				"CLAIM_infra",
 			},
 		},
 	}

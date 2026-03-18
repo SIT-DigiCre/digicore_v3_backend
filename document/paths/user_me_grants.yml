@@ -1,7 +1,7 @@
 get:
   tags:
     - user
-  description: "Get my available grants from claims"
+  description: "Get my available grants from claims with CLAIM_ prefix"
   security:
     - BearerAuth: []
   responses:
