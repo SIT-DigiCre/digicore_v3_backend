@@ -3,12 +3,12 @@ package user
 import (
 
 	"github.com/labstack/echo/v4"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
-	
 )
 
-func PostUserProfileLinks(c echo.Context, userID string, reqBody PostUserProfileLinksRequestBody) error {
+func PostUserProfileLinks(c echo.Context, userID string, reqBody api.PostUserProfileLinksJSONRequestBody) error {
 	client := c.Get("db").(*db.Client)
 
 	params := struct {
