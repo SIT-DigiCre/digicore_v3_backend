@@ -1,4 +1,5 @@
 SELECT
+    BIN_TO_UUID(upl.id) as id,
     upl.url_link,
     upl.created_at,
     upl.updated_at

@@ -6,14 +6,11 @@ import(
 	"net/http"
 )
 
-
-func deleteUserProfileLinks(dbClient db.TransactionClient, userId string, linkUrl string) *response.Error {
+func deleteUserProfileLinksFromId(dbClient db.TransactionClient, id string) *response.Error {
 	params := struct {
-		UserId string `twowaysql:"user_id"`
-		LinkUrl string `twowaysql:"link_url"`
+		Id string `twowaysql:"id"`
 	}{
-		UserId: userId,
-		LinkUrl: linkUrl,
+		Id: id,
 	}
 	_, err := dbClient.Exec("sql/user/delete_user_profile_links.sql", &params,nil)
 	if err != nil {
