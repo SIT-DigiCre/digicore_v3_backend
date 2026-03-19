@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/utils"
 	"github.com/labstack/echo/v4"
 )
 
@@ -54,7 +55,7 @@ func TestPutAdminSchoolGradeUpdatesEachTarget(t *testing.T) {
 				ApprovedGradeDiffs int    `db:"approved_grade_diffs"`
 			}{
 				{UserId: "user-1", StudentNumber: "aa25001", ApprovedGradeDiffs: 0},
-				{UserId: "user-2", StudentNumber: "m024001", ApprovedGradeDiffs: -1},
+				{UserId: "user-2", StudentNumber: "m250001", ApprovedGradeDiffs: -1},
 			}
 			return nil
 		},
@@ -90,7 +91,9 @@ func TestPutAdminSchoolGradeUpdatesEachTarget(t *testing.T) {
 	if updates[0].UserId != "user-1" || updates[0].SchoolGrade != 1 {
 		t.Fatalf("unexpected first update: %+v", updates[0])
 	}
-	if updates[1].UserId != "user-2" || updates[1].SchoolGrade != 5 {
+	currentSchoolYear := utils.GetSchoolYear()
+	expectedGraduateGrade := currentSchoolYear - 2000 - 25 + 1 + 4 - 1
+	if updates[1].UserId != "user-2" || updates[1].SchoolGrade != expectedGraduateGrade {
 		t.Fatalf("unexpected second update: %+v", updates[1])
 	}
 }
