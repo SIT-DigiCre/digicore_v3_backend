@@ -19,13 +19,6 @@ const (
 	Checkout ReqPutActivityRecordRecordIdActivityType = "checkout"
 )
 
-// Defines values for GetActivityPlacePlaceHistoryParamsPeriod.
-const (
-	Day   GetActivityPlacePlaceHistoryParamsPeriod = "day"
-	Month GetActivityPlacePlaceHistoryParamsPeriod = "month"
-	Week  GetActivityPlacePlaceHistoryParamsPeriod = "week"
-)
-
 // Error defines model for Error.
 type Error struct {
 	Level   string `json:"level"`
@@ -288,6 +281,7 @@ type ResGetActivityPlacePlaceHistory struct {
 
 // ResGetActivityPlacePlaceHistoryObjectUser defines model for ResGetActivityPlacePlaceHistoryObjectUser.
 type ResGetActivityPlacePlaceHistoryObjectUser struct {
+	// CheckInCount 指定期間内の訪問回数。単日範囲では訪問レコード数、複数日範囲では同一日の重複訪問を1回として数える。
 	CheckInCount      int    `json:"checkInCount"`
 	IconUrl           string `json:"iconUrl"`
 	ShortIntroduction string `json:"shortIntroduction"`
@@ -874,12 +868,12 @@ type Unauthorized = Error
 
 // GetActivityPlacePlaceHistoryParams defines parameters for GetActivityPlacePlaceHistory.
 type GetActivityPlacePlaceHistoryParams struct {
-	Period GetActivityPlacePlaceHistoryParamsPeriod `form:"period" json:"period"`
-	Date   openapi_types.Date                       `form:"date" json:"date"`
-}
+	// StartAt 集計開始日時。endAt 以下である必要がある。
+	StartAt time.Time `form:"startAt" json:"startAt"`
 
-// GetActivityPlacePlaceHistoryParamsPeriod defines parameters for GetActivityPlacePlaceHistory.
-type GetActivityPlacePlaceHistoryParamsPeriod string
+	// EndAt 集計終了日時。startAt 以上である必要がある。
+	EndAt time.Time `form:"endAt" json:"endAt"`
+}
 
 // GetActivityUserUserIdRecordsParams defines parameters for GetActivityUserUserIdRecords.
 type GetActivityUserUserIdRecordsParams struct {

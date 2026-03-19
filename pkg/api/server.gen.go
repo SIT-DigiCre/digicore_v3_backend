@@ -351,18 +351,18 @@ func (w *ServerInterfaceWrapper) GetActivityPlacePlaceHistory(ctx echo.Context) 
 
 	// Parameter object where we will unmarshal all parameters from the context
 	var params GetActivityPlacePlaceHistoryParams
-	// ------------- Required query parameter "period" -------------
+	// ------------- Required query parameter "startAt" -------------
 
-	err = runtime.BindQueryParameter("form", true, true, "period", ctx.QueryParams(), &params.Period)
+	err = runtime.BindQueryParameter("form", true, true, "startAt", ctx.QueryParams(), &params.StartAt)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter period: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter startAt: %s", err))
 	}
 
-	// ------------- Required query parameter "date" -------------
+	// ------------- Required query parameter "endAt" -------------
 
-	err = runtime.BindQueryParameter("form", true, true, "date", ctx.QueryParams(), &params.Date)
+	err = runtime.BindQueryParameter("form", true, true, "endAt", ctx.QueryParams(), &params.EndAt)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter date: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter endAt: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshalled arguments
