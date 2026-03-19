@@ -28,3 +28,24 @@ put:
       $ref: "../responses/not_found.yml"
     500:
       $ref: "../responses/internal_server.yml"
+delete:
+  tags:
+    - activity
+  description: "Delete activity record"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: recordId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    200:
+      $ref: "../responses/blank_success.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

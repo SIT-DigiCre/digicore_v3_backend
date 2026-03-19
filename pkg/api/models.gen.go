@@ -289,6 +289,26 @@ type ResGetActivityPlacePlaceHistoryObjectUser struct {
 	Username          string `json:"username"`
 }
 
+// ResGetActivityRecords defines model for ResGetActivityRecords.
+type ResGetActivityRecords struct {
+	Limit   int                                 `json:"limit"`
+	Offset  int                                 `json:"offset"`
+	Records []ResGetActivityRecordsObjectRecord `json:"records"`
+	Total   int                                 `json:"total"`
+}
+
+// ResGetActivityRecordsObjectRecord defines model for ResGetActivityRecordsObjectRecord.
+type ResGetActivityRecordsObjectRecord struct {
+	CheckedInAt         time.Time  `json:"checkedInAt"`
+	CheckedOutAt        *time.Time `json:"checkedOutAt"`
+	InitialCheckedInAt  time.Time  `json:"initialCheckedInAt"`
+	InitialCheckedOutAt *time.Time `json:"initialCheckedOutAt"`
+	Place               string     `json:"place"`
+	RecordId            string     `json:"recordId"`
+	UserId              string     `json:"userId"`
+	Username            string     `json:"username"`
+}
+
 // ResGetActivityUserUserIdRecords defines model for ResGetActivityUserUserIdRecords.
 type ResGetActivityUserUserIdRecords struct {
 	Limit   int                                           `json:"limit"`
@@ -873,6 +893,12 @@ type GetActivityPlacePlaceHistoryParams struct {
 
 	// EndAt 集計終了日時。startAt 以上である必要がある。
 	EndAt time.Time `form:"endAt" json:"endAt"`
+}
+
+// GetActivityRecordsParams defines parameters for GetActivityRecords.
+type GetActivityRecordsParams struct {
+	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+	Limit  *int `form:"limit,omitempty" json:"limit,omitempty"`
 }
 
 // GetActivityUserUserIdRecordsParams defines parameters for GetActivityUserUserIdRecords.
