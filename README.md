@@ -63,6 +63,21 @@ make migrate
 
 ## 開発手順
 
+### テストの実行
+
+Docker 上の DB を使って backend コンテナ内で全テストを実行できます。
+
+```sh
+make test
+```
+
+DB コンテナが起動していない場合は、先に起動してください。
+
+```sh
+docker compose up -d db
+make test
+```
+
 ### テストデータの投入
 
 ```sh
