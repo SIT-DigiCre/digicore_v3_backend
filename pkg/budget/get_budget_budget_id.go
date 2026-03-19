@@ -23,10 +23,29 @@ func GetBudgetBudgetId(ctx echo.Context, dbClient db.Client, budgetId string) (a
 	if rerr != nil {
 		return api.ResGetBudgetBudgetId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "稟議の取得に失敗しました", Log: rerr.Error()}
 	}
+	if requestUserId, ok := ctx.Get("user_id").(string); ok {
+		err = filterBudgetFilesForResponse(dbClient, requestUserId, &res)
+		if err != nil {
+			return api.ResGetBudgetBudgetId{}, err
+		}
+	} else {
+		res.Files = []api.ResGetBudgetBudgetIdObjectFile{}
+	}
 	if res.Files == nil {
 		res.Files = []api.ResGetBudgetBudgetIdObjectFile{}
 	}
 	return res, nil
+}
+
+func filterBudgetFilesForResponse(dbClient budgetFilePermissionClient, requestUserId string, res *api.ResGetBudgetBudgetId) *response.Error {
+	canViewFiles, err := CanViewBudgetFiles(dbClient, requestUserId, res.Proposer.UserId)
+	if err != nil {
+		return err
+	}
+	if !canViewFiles {
+		res.Files = []api.ResGetBudgetBudgetIdObjectFile{}
+	}
+	return nil
 }
 
 type budgetDetail struct {

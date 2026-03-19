@@ -1,0 +1,17 @@
+get:
+  tags:
+    - user
+  description: "Get my available grants from claims with CLAIM_ prefix"
+  security:
+    - BearerAuth: []
+  responses:
+    200:
+      description: "Success get my grants"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_user_me_grants.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

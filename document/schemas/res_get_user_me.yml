@@ -7,7 +7,9 @@ required:
   - discordUserId
   - shortIntroduction
   - activeLimit
-  - isAdmin
+  - isGraduated
+  - isMember
+  - claims
 properties:
   userId:
     type: string
@@ -25,5 +27,11 @@ properties:
     type: string
   activeLimit:
     type: string
-  isAdmin:
+  isGraduated:
     type: boolean
+  isMember:
+    type: boolean
+  claims:
+    type: array
+    items:
+      type: string

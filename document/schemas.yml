@@ -42,8 +42,14 @@ ResGetUserMePayment:
   $ref: "./schemas/res_get_user_me_payment.yml"
 ResGetUserMePaymentObjectHistory:
   $ref: "./schemas/res_get_user_me_payment.history.yml"
+ResGetUserMeGrants:
+  $ref: "./schemas/res_get_user_me_grants.yml"
 ReqPutUserMePayment:
   $ref: "./schemas/req_put_user_me_payment.yml"
+ReqPutUserMeReentry:
+  $ref: "./schemas/req_put_user_me_reentry.yml"
+ResGetUserMeReentryObjectReentry:
+  $ref: "./schemas/res_get_user_me_reentry.reentry.yml"
 ResGetUserMeDiscord:
   $ref: "./schemas/res_user_me_discord.yml"
 ReqPutUserMeDiscordCallback:
@@ -62,6 +68,10 @@ ResGetEventEventIdReservationIdObjectUser:
   $ref: "./schemas/res_get_event_event_id_reservation_id.user.yml"
 ReqPutEventEventIdReservationIdMe:
   $ref: "./schemas/req_put_event_event_id_reservation_id_me.yml"
+ReqPostEventEvent:
+  $ref: "./schemas/req_post_event_event.yml"
+ResPostEventEvent:
+  $ref: "./schemas/res_post_event_event.yml"
 ResGetStorageMyfile:
   $ref: "./schemas/res_get_storage_myfile.yml"
 ResGetStorageMyfileObjectFile:
@@ -120,6 +130,8 @@ ResGetGroupGroupIdObjectUser:
   $ref: "./schemas/res_get_group_group_id.user.yml"
 ReqPostGroup:
   $ref: "./schemas/req_post_group.yml"
+ReqPostGroupAdmin:
+  $ref: "./schemas/req_post_group_admin.yml"
 ResPostGroup:
   $ref: "./schemas/res_post_group.yml"
 ReqPostGroupGroupIdUser:
@@ -186,6 +198,27 @@ ResGetActivityUserUserIdRecordsObjectRecord:
   $ref: "./schemas/res_get_activity_user_user_id_records.record.yml"
 ResGetPublicMemberCount:
   $ref: "./schemas/res_get_public_member_count.yml"
+
+ReqPostUserMeGradeUpdate:
+  $ref: "./schemas/req_post_user_me_grade_update.yml"
+ResGetUserMeGradeUpdate:
+  $ref: "./schemas/res_get_user_me_grade_update.yml"
+ResGetUserMeGradeUpdateObjectGradeUpdate:
+  $ref: "./schemas/res_get_user_me_grade_update.grade_update.yml"
+ReqPutAdminGradeUpdateGradeUpdateId:
+  $ref: "./schemas/req_put_admin_grade_update_grade_update_id.yml"
+ReqPutAdminChangeStudentNumber:
+  $ref: "./schemas/req_put_admin_change_student_number.yml"
+ResGetAdminGradeUpdate:
+  $ref: "./schemas/res_get_admin_grade_update.yml"
+ResGetAdminGradeUpdateObjectGradeUpdate:
+  $ref: "./schemas/res_get_admin_grade_update.grade_update.yml"
+ReqPutAdminReentryReentryId:
+  $ref: "./schemas/req_put_admin_reentry_reentry_id.yml"
+ResGetAdminReentry:
+  $ref: "./schemas/res_get_admin_reentry.yml"
+ResGetAdminReentryObjectReentry:
+  $ref: "./schemas/res_get_admin_reentry.reentry.yml"
 
 Error:
   $ref: "./schemas/error.yml"

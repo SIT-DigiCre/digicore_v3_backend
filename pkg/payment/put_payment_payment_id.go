@@ -23,7 +23,7 @@ func PutPaymentPaymentId(ctx echo.Context, dbClient db.TransactionClient, paymen
 		return api.ResGetPaymentPaymentId{}, err
 	}
 	if requestBody.Checked {
-		err = utils.RenewalActiveLimit(dbClient, userId, strconv.Itoa(utils.GetSchoolYear()+1)+"-05-01")
+		err = utils.RenewalActiveLimit(dbClient, userId, strconv.Itoa(utils.GetFiscalYear()+1)+"-05-01")
 		if err != nil {
 			return api.ResGetPaymentPaymentId{}, err
 		}

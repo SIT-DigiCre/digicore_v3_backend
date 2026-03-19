@@ -1,0 +1,26 @@
+post:
+  tags:
+    - group
+  description: "Create new group with any claim. infra権限を持つユーザーが任意のclaimのグループを作成可能"
+  security:
+    - BearerAuth:
+        - "infra"
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_post_group_admin.yml"
+  responses:
+    200:
+      description: "Success create admin group"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_post_group.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

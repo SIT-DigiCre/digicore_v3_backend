@@ -2,7 +2,14 @@
 
 ## 環境構築
 
+1. Windowsにて開発をする方は、Ubuntuで開発を行うために[WSLおよびUbuntuの環境構築](#WSLおよびUbuntuの環境構築)をする　
+1. [Docker Desktop](https://www.docker.com)をダウンロード・インストールする
+1. VSCodeの拡張機能のところから`ms-vscode-remote.remote-wsl`と検索してVSCodeにWSLの拡張機能をインストールする
+1. Ubuntuに開発用の[ディレクトリを作成](#ディレクトリを作成)する 
+1. `https://github.com/SIT-DigiCre/digicore_v3_frontend.git` と `https://github.com/SIT-DigiCre/digicore_v3_backend.git` を[クローン](#クローン)する
+1. クローンしたディレクトリを[VSCodeで編集](#VSCodeで編集)していく
 1. `.env.sample` をコピーして `.env` を作成する
+1.  `.env`に環境変数を入力する ※環境変数はsysdevの既存メンバーから教えてもらってください
 1. [Discord developers](https://discord.com/developers/applications)で App を作成し、Oauth2 の Redirects に`${FRONTEND_ROOT_URL}/user/discord/callback`を指定する
 1. 上記で作成した App の Client information から Client ID と Client Secret を取得し、.env に追記する。
 1. [Google Cloud Platform](https://console.cloud.google.com/home/dashboard)で App を作成し、OAuth クライアント ID をアプリケーションの種類をウェブアプリケーションにして作成し、承認済みのリダイレクト URI に`${FRONTEND_ROOT_URL}/signup/callback`と`${FRONTEND_ROOT_URL}/login/callback`を指定する。
@@ -11,10 +18,34 @@
 1. [実行](#実行)を行う
 1. [DB マイグレーション](#DBマイグレーション)を行う
 
+##  WSLおよびUbuntuの環境構築
+```sh
+wsl --install
+wsl --install -d Ubuntu-24.04.4 
+```
+## ディレクトリを作成
+```sh
+cd    ##ホームディレクトリに戻る
+mkdir digicre
+cd digicre #digicreフォルダに入る
+```
+
+## クローン
+```sh
+git clone https://github.com/SIT-DigiCre/digicore_v3_frontend.git
+git clone https://github.com/SIT-DigiCre/digicore_v3_backend.git
+```
+## VSCodeで編集
+```sh
+cd digicore_v3_backend
+code . #VSCodeを開く
+```
+
 ## コンテナのビルド
 
 ```sh
 make build
+# ubuntuの場合はsudo権限が必要
 ```
 
 ## 実行
@@ -32,10 +63,33 @@ make migrate
 
 ## 開発手順
 
+### テストの実行
+
+Docker 上の DB を使って backend コンテナ内で全テストを実行できます。
+
+```sh
+make test
+```
+
+DB コンテナが起動していない場合は、先に起動してください。
+
+```sh
+docker compose up -d db
+make test
+```
+
 ### テストデータの投入
 
 ```sh
 make insert_test
+```
+
+### 管理者 claim の付与
+
+指定した学籍番号のアカウントに infra claim と account claim を付与する（`make insert_test` 実行後、infra/account グループが存在することが前提）:
+
+```sh
+make grant_admin_claims STUDENT_NUMBER=aa230001
 ```
 
 ### api パッケージの更新

@@ -1,0 +1,18 @@
+get:
+  tags:
+    - reentry
+  description: "承認待ち再入部申請一覧の取得（管理者用）"
+  security:
+    - BearerAuth:
+        - "infra"
+  responses:
+    200:
+      description: "Success get pending reentry requests"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_admin_reentry.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

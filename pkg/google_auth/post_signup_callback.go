@@ -3,7 +3,6 @@ package google_auth
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/authenticator"
@@ -60,16 +59,9 @@ func createUser(studentNumber string, dbClient db.TransactionClient) (string, *r
 }
 
 func createDefaultUser(dbClient db.TransactionClient, userId string, studentNumber string) *response.Error {
-	enterYear, err := strconv.Atoi(studentNumber[2:4])
+	schoolGrade, err := utils.CalculateSchoolGradeFromStudentNumber(studentNumber)
 	if err != nil {
-		enterYear = utils.GetSchoolYear()
-	}
-	schoolGrade := utils.GetSchoolYear() - 2000 - enterYear + 1
-	switch studentNumber[0] {
-	case 'm':
-		schoolGrade += 4
-	case 'n':
-		schoolGrade += 6
+		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "学年の計算に失敗しました", Log: err.Error()}
 	}
 	rerr := user.UpdateUserProfile(dbClient, userId, api.ReqPutUserMe{Username: studentNumber, SchoolGrade: schoolGrade, IconUrl: env.DefaultIconUrl})
 	if rerr != nil {

@@ -1,0 +1,26 @@
+required:
+  - gradeUpdateId
+  - userId
+  - username
+  - gradeDiff
+  - reason
+  - status
+  - createdAt
+  - updatedAt
+properties:
+  gradeUpdateId:
+    type: string
+  userId:
+    type: string
+  username:
+    type: string
+  gradeDiff:
+    type: integer
+  reason:
+    type: string
+  status:
+    type: string
+  createdAt:
+    type: string
+  updatedAt:
+    type: string

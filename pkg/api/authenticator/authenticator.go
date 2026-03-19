@@ -11,6 +11,7 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/group"
 	"github.com/deepmap/oapi-codegen/pkg/middleware"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/labstack/echo/v4"
@@ -66,10 +67,11 @@ func CreateToken(user_id string) (string, *response.Error) {
 	if err := t.Set(jwt.SubjectKey, user_id); err != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "JWTトークンにユーザーIDを設定できませんでした", Log: err.Error()}
 	}
-	if err := t.Set(jwt.ExpirationKey, time.Now().Add(time.Hour*72).Unix()); err != nil {
+	if err := t.Set(jwt.ExpirationKey, time.Now().Add(time.Hour*24*30).Unix()); err != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "JWTトークンに有効期限を設定できませんでした", Log: err.Error()}
 	}
-	claims, err := GetClaims(user_id)
+	dbClient := db.Open()
+	claims, err := group.GetClaimsFromUserId(&dbClient, user_id)
 	if err != nil {
 		return "", err
 	}
@@ -83,30 +85,6 @@ func CreateToken(user_id string) (string, *response.Error) {
 	}
 	token := string(signed)
 	return token, nil
-}
-
-func GetClaims(userId string) ([]string, *response.Error) {
-	dbClient := db.Open()
-
-	params := struct {
-		UserId string `twowaysql:"userId"`
-	}{
-		UserId: userId,
-	}
-	claims := []claim{}
-	err := dbClient.Select(&claims, "sql/group/select_claim_group_from_user_id.sql", &params)
-	if err != nil {
-		return nil, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "権限一覧の取得に失敗しました", Log: err.Error()}
-	}
-	claims_str := []string{}
-	for _, claim := range claims {
-		claims_str = append(claims_str, claim.Claim)
-	}
-	return claims_str, nil
-}
-
-type claim struct {
-	Claim string `db:"claim"`
 }
 
 func urlSkipper(c echo.Context) bool {

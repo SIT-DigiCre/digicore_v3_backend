@@ -2,7 +2,6 @@ required:
   - name
   - description
   - joinable
-  - isAdminGroup
 properties:
   name:
     type: string
@@ -18,7 +17,3 @@ properties:
     type: boolean
     x-oapi-codegen-extra-tags:
       ja: 参加可能フラグ
-  isAdminGroup:
-    type: boolean
-    x-oapi-codegen-extra-tags:
-      ja: 管理者グループフラグ

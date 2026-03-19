@@ -1,0 +1,8 @@
+required:
+  - grants
+properties:
+  grants:
+    type: array
+    description: "claim 一覧を CLAIM_ プレフィックス付きで返す。例: infra -> CLAIM_infra, account -> CLAIM_account"
+    items:
+      type: string

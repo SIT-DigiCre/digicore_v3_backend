@@ -3,7 +3,10 @@ package utils
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
@@ -12,10 +15,21 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// 現在の年度を取得する。4月から翌年3月までを年度とする。
 func GetSchoolYear() int {
 	now := time.Now()
 	month := int(now.Month())
 	if 1 <= month && month <= 3 {
+		return now.Year() - 1
+	}
+	return now.Year()
+}
+
+// 3月中の部費振込に対応するために、3月を翌年度として現在の年度を取得する。
+func GetFiscalYear() int {
+	now := time.Now()
+	month := int(now.Month())
+	if 1 <= month && month <= 2 {
 		return now.Year() - 1
 	}
 	return now.Year()
@@ -30,6 +44,34 @@ func GetAfterDate(year int, month int, day int) string {
 	now := time.Now()
 	now = now.AddDate(year, month, day)
 	return now.Format("2006-01-02")
+}
+
+func CalculateSchoolGradeFromStudentNumber(studentNumber string) (int, error) {
+	if len(studentNumber) < 4 {
+		return 0, fmt.Errorf("student number is too short: %s", studentNumber)
+	}
+
+	enterYearText := studentNumber[2:4]
+	switch strings.ToLower(studentNumber[:1]) {
+	case "m", "n":
+		enterYearText = studentNumber[1:3]
+	}
+
+	enterYear, err := strconv.Atoi(enterYearText)
+	if err != nil {
+		return 0, fmt.Errorf("student number has invalid enter year: %s: %w", studentNumber, err)
+	}
+
+	currentSchoolYear := GetSchoolYear()
+	schoolGrade := currentSchoolYear - 2000 - enterYear + 1
+	switch strings.ToLower(studentNumber[:1]) {
+	case "m":
+		schoolGrade += 4
+	case "n":
+		schoolGrade += 6
+	}
+
+	return schoolGrade, nil
 }
 
 func GetUniqueString(str []string) []string {

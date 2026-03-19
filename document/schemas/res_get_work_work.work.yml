@@ -1,6 +1,8 @@
 required:
   - workId
   - name
+  - description
+  - firstFile
   - authors
   - tags
 properties:
@@ -8,6 +10,19 @@ properties:
     type: string
   name:
     type: string
+  description:
+    type: string
+  firstFile:
+    type: object
+    nullable: true
+    required:
+      - fileId
+      - name
+    properties:
+      fileId:
+        type: string
+      name:
+        type: string
   authors:
     type: array
     items:

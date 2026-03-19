@@ -35,6 +35,27 @@ type ServerInterface interface {
 	// (GET /activity/user/{userId}/records)
 	GetActivityUserUserIdRecords(ctx echo.Context, userId string, params GetActivityUserUserIdRecordsParams) error
 
+	// (PUT /admin/change-student-number)
+	PutAdminChangeStudentNumber(ctx echo.Context) error
+
+	// (GET /admin/grade-update)
+	GetAdminGradeUpdate(ctx echo.Context) error
+
+	// (PUT /admin/grade-update/{gradeUpdateId})
+	PutAdminGradeUpdateGradeUpdateId(ctx echo.Context, gradeUpdateId string) error
+
+	// (PUT /admin/inactive)
+	PutAdminInactive(ctx echo.Context) error
+
+	// (GET /admin/reentry)
+	GetAdminReentry(ctx echo.Context) error
+
+	// (PUT /admin/reentry/{reentryId})
+	PutAdminReentryReentryId(ctx echo.Context, reentryId string) error
+
+	// (PUT /admin/school-grade)
+	PutAdminSchoolGrade(ctx echo.Context) error
+
 	// (GET /budget)
 	GetBudget(ctx echo.Context, params GetBudgetParams) error
 
@@ -68,8 +89,14 @@ type ServerInterface interface {
 	// (GET /event)
 	GetEvent(ctx echo.Context, params GetEventParams) error
 
+	// (POST /event)
+	PostEvent(ctx echo.Context) error
+
 	// (GET /event/{eventId})
 	GetEventEventId(ctx echo.Context, eventId string) error
+
+	// (PUT /event/{eventId})
+	PutEventEventId(ctx echo.Context, eventId string) error
 
 	// (GET /event/{eventId}/{reservationId})
 	GetEventEventIdReservationId(ctx echo.Context, eventId string, reservationId string) error
@@ -85,6 +112,9 @@ type ServerInterface interface {
 
 	// (POST /group)
 	PostGroup(ctx echo.Context) error
+
+	// (POST /group/admin)
+	PostGroupAdmin(ctx echo.Context) error
 
 	// (GET /group/{groupId})
 	GetGroupGroupId(ctx echo.Context, groupId string) error
@@ -161,6 +191,18 @@ type ServerInterface interface {
 	// (PUT /user/me/discord/callback)
 	PutUserMeDiscordCallback(ctx echo.Context) error
 
+	// (GET /user/me/grade-update)
+	GetUserMeGradeUpdate(ctx echo.Context) error
+
+	// (POST /user/me/grade-update)
+	PostUserMeGradeUpdate(ctx echo.Context) error
+
+	// (PUT /user/me/graduated)
+	PutUserMeGraduated(ctx echo.Context) error
+
+	// (GET /user/me/grants)
+	GetUserMeGrants(ctx echo.Context) error
+
 	// (GET /user/me/introduction)
 	GetUserMeIntroduction(ctx echo.Context) error
 
@@ -178,6 +220,9 @@ type ServerInterface interface {
 
 	// (PUT /user/me/private)
 	PutUserMePrivate(ctx echo.Context) error
+
+	// (PUT /user/me/reentry)
+	PutUserMeReentry(ctx echo.Context) error
 
 	// (PUT /user/me/renewal)
 	PutUserMeRenewal(ctx echo.Context) error
@@ -269,7 +314,7 @@ func (w *ServerInterfaceWrapper) PostActivityCheckoutUserId(ctx echo.Context) er
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter userId: %s", err))
 	}
 
-	ctx.Set(BearerAuthScopes, []string{""})
+	ctx.Set(BearerAuthScopes, []string{"infra"})
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PostActivityCheckoutUserId(ctx, userId)
@@ -309,18 +354,18 @@ func (w *ServerInterfaceWrapper) GetActivityPlacePlaceHistory(ctx echo.Context) 
 
 	// Parameter object where we will unmarshal all parameters from the context
 	var params GetActivityPlacePlaceHistoryParams
-	// ------------- Required query parameter "period" -------------
+	// ------------- Required query parameter "startAt" -------------
 
-	err = runtime.BindQueryParameter("form", true, true, "period", ctx.QueryParams(), &params.Period)
+	err = runtime.BindQueryParameter("form", true, true, "startAt", ctx.QueryParams(), &params.StartAt)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter period: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter startAt: %s", err))
 	}
 
-	// ------------- Required query parameter "date" -------------
+	// ------------- Required query parameter "endAt" -------------
 
-	err = runtime.BindQueryParameter("form", true, true, "date", ctx.QueryParams(), &params.Date)
+	err = runtime.BindQueryParameter("form", true, true, "endAt", ctx.QueryParams(), &params.EndAt)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter date: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter endAt: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshalled arguments
@@ -384,6 +429,97 @@ func (w *ServerInterfaceWrapper) GetActivityUserUserIdRecords(ctx echo.Context) 
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetActivityUserUserIdRecords(ctx, userId, params)
+	return err
+}
+
+// PutAdminChangeStudentNumber converts echo context to params.
+func (w *ServerInterfaceWrapper) PutAdminChangeStudentNumber(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutAdminChangeStudentNumber(ctx)
+	return err
+}
+
+// GetAdminGradeUpdate converts echo context to params.
+func (w *ServerInterfaceWrapper) GetAdminGradeUpdate(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetAdminGradeUpdate(ctx)
+	return err
+}
+
+// PutAdminGradeUpdateGradeUpdateId converts echo context to params.
+func (w *ServerInterfaceWrapper) PutAdminGradeUpdateGradeUpdateId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "gradeUpdateId" -------------
+	var gradeUpdateId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "gradeUpdateId", runtime.ParamLocationPath, ctx.Param("gradeUpdateId"), &gradeUpdateId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter gradeUpdateId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutAdminGradeUpdateGradeUpdateId(ctx, gradeUpdateId)
+	return err
+}
+
+// PutAdminInactive converts echo context to params.
+func (w *ServerInterfaceWrapper) PutAdminInactive(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutAdminInactive(ctx)
+	return err
+}
+
+// GetAdminReentry converts echo context to params.
+func (w *ServerInterfaceWrapper) GetAdminReentry(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetAdminReentry(ctx)
+	return err
+}
+
+// PutAdminReentryReentryId converts echo context to params.
+func (w *ServerInterfaceWrapper) PutAdminReentryReentryId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "reentryId" -------------
+	var reentryId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "reentryId", runtime.ParamLocationPath, ctx.Param("reentryId"), &reentryId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter reentryId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutAdminReentryReentryId(ctx, reentryId)
+	return err
+}
+
+// PutAdminSchoolGrade converts echo context to params.
+func (w *ServerInterfaceWrapper) PutAdminSchoolGrade(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutAdminSchoolGrade(ctx)
 	return err
 }
 
@@ -454,7 +590,7 @@ func (w *ServerInterfaceWrapper) PutBudgetBudgetIdAdmin(ctx echo.Context) error 
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter budgetId: %s", err))
 	}
 
-	ctx.Set(BearerAuthScopes, []string{"admin"})
+	ctx.Set(BearerAuthScopes, []string{"account"})
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PutBudgetBudgetIdAdmin(ctx, budgetId)
@@ -589,6 +725,17 @@ func (w *ServerInterfaceWrapper) GetEvent(ctx echo.Context) error {
 	return err
 }
 
+// PostEvent converts echo context to params.
+func (w *ServerInterfaceWrapper) PostEvent(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostEvent(ctx)
+	return err
+}
+
 // GetEventEventId converts echo context to params.
 func (w *ServerInterfaceWrapper) GetEventEventId(ctx echo.Context) error {
 	var err error
@@ -604,6 +751,24 @@ func (w *ServerInterfaceWrapper) GetEventEventId(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetEventEventId(ctx, eventId)
+	return err
+}
+
+// PutEventEventId converts echo context to params.
+func (w *ServerInterfaceWrapper) PutEventEventId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "eventId" -------------
+	var eventId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "eventId", runtime.ParamLocationPath, ctx.Param("eventId"), &eventId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutEventEventId(ctx, eventId)
 	return err
 }
 
@@ -723,6 +888,17 @@ func (w *ServerInterfaceWrapper) PostGroup(ctx echo.Context) error {
 	return err
 }
 
+// PostGroupAdmin converts echo context to params.
+func (w *ServerInterfaceWrapper) PostGroupAdmin(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostGroupAdmin(ctx)
+	return err
+}
+
 // GetGroupGroupId converts echo context to params.
 func (w *ServerInterfaceWrapper) GetGroupGroupId(ctx echo.Context) error {
 	var err error
@@ -799,7 +975,7 @@ func (w *ServerInterfaceWrapper) PostLoginCallback(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) PostMail(ctx echo.Context) error {
 	var err error
 
-	ctx.Set(BearerAuthScopes, []string{"admin"})
+	ctx.Set(BearerAuthScopes, []string{"infra"})
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PostMail(ctx)
@@ -1049,6 +1225,50 @@ func (w *ServerInterfaceWrapper) PutUserMeDiscordCallback(ctx echo.Context) erro
 	return err
 }
 
+// GetUserMeGradeUpdate converts echo context to params.
+func (w *ServerInterfaceWrapper) GetUserMeGradeUpdate(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetUserMeGradeUpdate(ctx)
+	return err
+}
+
+// PostUserMeGradeUpdate converts echo context to params.
+func (w *ServerInterfaceWrapper) PostUserMeGradeUpdate(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostUserMeGradeUpdate(ctx)
+	return err
+}
+
+// PutUserMeGraduated converts echo context to params.
+func (w *ServerInterfaceWrapper) PutUserMeGraduated(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutUserMeGraduated(ctx)
+	return err
+}
+
+// GetUserMeGrants converts echo context to params.
+func (w *ServerInterfaceWrapper) GetUserMeGrants(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetUserMeGrants(ctx)
+	return err
+}
+
 // GetUserMeIntroduction converts echo context to params.
 func (w *ServerInterfaceWrapper) GetUserMeIntroduction(ctx echo.Context) error {
 	var err error
@@ -1112,6 +1332,17 @@ func (w *ServerInterfaceWrapper) PutUserMePrivate(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PutUserMePrivate(ctx)
+	return err
+}
+
+// PutUserMeReentry converts echo context to params.
+func (w *ServerInterfaceWrapper) PutUserMeReentry(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutUserMeReentry(ctx)
 	return err
 }
 
@@ -1446,6 +1677,13 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/activity/place/:place/history", wrapper.GetActivityPlacePlaceHistory)
 	router.PUT(baseURL+"/activity/record/:recordId", wrapper.PutActivityRecordRecordId)
 	router.GET(baseURL+"/activity/user/:userId/records", wrapper.GetActivityUserUserIdRecords)
+	router.PUT(baseURL+"/admin/change-student-number", wrapper.PutAdminChangeStudentNumber)
+	router.GET(baseURL+"/admin/grade-update", wrapper.GetAdminGradeUpdate)
+	router.PUT(baseURL+"/admin/grade-update/:gradeUpdateId", wrapper.PutAdminGradeUpdateGradeUpdateId)
+	router.PUT(baseURL+"/admin/inactive", wrapper.PutAdminInactive)
+	router.GET(baseURL+"/admin/reentry", wrapper.GetAdminReentry)
+	router.PUT(baseURL+"/admin/reentry/:reentryId", wrapper.PutAdminReentryReentryId)
+	router.PUT(baseURL+"/admin/school-grade", wrapper.PutAdminSchoolGrade)
 	router.GET(baseURL+"/budget", wrapper.GetBudget)
 	router.POST(baseURL+"/budget", wrapper.PostBudget)
 	router.GET(baseURL+"/budget/:budgetId", wrapper.GetBudgetBudgetId)
@@ -1457,12 +1695,15 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.DELETE(baseURL+"/budget/:budgetId/status_pending", wrapper.DeleteBudgetBudgetIdStatusPending)
 	router.PUT(baseURL+"/budget/:budgetId/status_pending", wrapper.PutBudgetBudgetIdStatusPending)
 	router.GET(baseURL+"/event", wrapper.GetEvent)
+	router.POST(baseURL+"/event", wrapper.PostEvent)
 	router.GET(baseURL+"/event/:eventId", wrapper.GetEventEventId)
+	router.PUT(baseURL+"/event/:eventId", wrapper.PutEventEventId)
 	router.GET(baseURL+"/event/:eventId/:reservationId", wrapper.GetEventEventIdReservationId)
 	router.DELETE(baseURL+"/event/:eventId/:reservationId/me", wrapper.DeleteEventEventIdReservationIdMe)
 	router.PUT(baseURL+"/event/:eventId/:reservationId/me", wrapper.PutEventEventIdReservationIdMe)
 	router.GET(baseURL+"/group", wrapper.GetGroup)
 	router.POST(baseURL+"/group", wrapper.PostGroup)
+	router.POST(baseURL+"/group/admin", wrapper.PostGroupAdmin)
 	router.GET(baseURL+"/group/:groupId", wrapper.GetGroupGroupId)
 	router.POST(baseURL+"/group/:groupId/join", wrapper.PostGroupGroupIdJoin)
 	router.POST(baseURL+"/group/:groupId/user", wrapper.PostGroupGroupIdUser)
@@ -1488,12 +1729,17 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.PUT(baseURL+"/user/me", wrapper.PutUserMe)
 	router.GET(baseURL+"/user/me/discord", wrapper.GetUserMeDiscord)
 	router.PUT(baseURL+"/user/me/discord/callback", wrapper.PutUserMeDiscordCallback)
+	router.GET(baseURL+"/user/me/grade-update", wrapper.GetUserMeGradeUpdate)
+	router.POST(baseURL+"/user/me/grade-update", wrapper.PostUserMeGradeUpdate)
+	router.PUT(baseURL+"/user/me/graduated", wrapper.PutUserMeGraduated)
+	router.GET(baseURL+"/user/me/grants", wrapper.GetUserMeGrants)
 	router.GET(baseURL+"/user/me/introduction", wrapper.GetUserMeIntroduction)
 	router.PUT(baseURL+"/user/me/introduction", wrapper.PutUserMeIntroduction)
 	router.GET(baseURL+"/user/me/payment", wrapper.GetUserMePayment)
 	router.PUT(baseURL+"/user/me/payment", wrapper.PutUserMePayment)
 	router.GET(baseURL+"/user/me/private", wrapper.GetUserMePrivate)
 	router.PUT(baseURL+"/user/me/private", wrapper.PutUserMePrivate)
+	router.PUT(baseURL+"/user/me/reentry", wrapper.PutUserMeReentry)
 	router.PUT(baseURL+"/user/me/renewal", wrapper.PutUserMeRenewal)
 	router.GET(baseURL+"/user/search", wrapper.GetUserSearch)
 	router.GET(baseURL+"/user/:userId", wrapper.GetUserUserId)

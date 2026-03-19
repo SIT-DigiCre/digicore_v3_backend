@@ -54,6 +54,9 @@ make migrate
 
 # テストデータ挿入
 make insert_test
+
+# 指定学籍番号に infra/account claim を付与
+make grant_admin_claims STUDENT_NUMBER=<学籍番号>
 ```
 
 ### 認証設定
@@ -86,6 +89,11 @@ make insert_test
 - `TransactionClient`によるトランザクション支援
 
 **エラーハンドリング**: `pkg/api/response`による HTTP ステータス、ログレベル、日本語ユーザーメッセージの構造化エラー
+
+**claim と grants の整合性**:
+
+- claim によって利用可否が決まる新機能を追加・変更する場合は、`pkg/grant/grant.go` の `claimToGrants` 対応表を必ず更新すること
+- フロント向けの機能制御は `GET /user/me/grants` の返却値を基準にするため、claim 判定ロジックを個別実装に分散させないこと
 
 ### コード生成ワークフロー
 

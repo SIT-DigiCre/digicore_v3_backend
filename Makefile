@@ -59,3 +59,12 @@ jwt:
 	echo "$$TOKEN"; \
 	echo ""; \
 	echo "Authorization: Bearer $$TOKEN"
+
+.PHONY: grant_admin_claims
+grant_admin_claims:
+	@if [ -z "$(STUDENT_NUMBER)" ]; then echo "STUDENT_NUMBER を指定してください。例: make grant_admin_claims STUDENT_NUMBER=aa230001"; exit 1; fi
+	docker compose -f ${DOCKER_COMPOSE} run --rm admin bash scripts/grant_admin_claims.sh $(STUDENT_NUMBER)
+
+.PHONY: test
+test:
+	docker compose -f ${DOCKER_COMPOSE} run --rm -w /app backend go test ./...

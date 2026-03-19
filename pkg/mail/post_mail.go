@@ -1,35 +1,19 @@
 package mail
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/user"
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
 )
 
 func PostMail(ctx echo.Context, dbClient db.Client, requestBody api.ReqPostMail) (api.ResPostMail, *response.Error) {
-	userId := ctx.Get("user_id").(string)
-
-	isAdmin, err := admin.CheckUserIsAdmin(dbClient, userId)
-	if err != nil {
-		return api.ResPostMail{}, err
-	}
-	if !isAdmin {
-		return api.ResPostMail{}, &response.Error{
-			Code:    http.StatusForbidden,
-			Level:   "Info",
-			Message: "メール送信の権限がありません",
-			Log:     "user is not admin",
-		}
-	}
-
 	// addressesとuserIdsの両方が空の場合はエラー
 	addressCount := 0
 	if requestBody.Addresses != nil {
@@ -67,7 +51,7 @@ func PostMail(ctx echo.Context, dbClient db.Client, requestBody api.ReqPostMail)
 		for i, uid := range *requestBody.UserIds {
 			userIds[i] = uid.String()
 		}
-		studentNumbers, respErr := user.GetStudentNumbersFromUserIds(dbClient, userIds)
+		studentNumbers, respErr := getStudentNumbersFromUserIds(dbClient, userIds)
 		if respErr != nil {
 			return api.ResPostMail{}, respErr
 		}
@@ -97,7 +81,7 @@ func PostMail(ctx echo.Context, dbClient db.Client, requestBody api.ReqPostMail)
 	successCount := 0
 
 	for _, address := range addresses {
-		err := sendEmail(address, requestBody.Subject, requestBody.Body)
+		err := SendEmail(address, requestBody.Subject, requestBody.Body)
 		if err != nil {
 			failures = append(failures, struct {
 				Address string `json:"address"`
@@ -118,4 +102,27 @@ func PostMail(ctx echo.Context, dbClient db.Client, requestBody api.ReqPostMail)
 	}
 
 	return res, nil
+}
+
+func getStudentNumbersFromUserIds(dbClient db.Client, userIds []string) (map[string]string, *response.Error) {
+	params := struct {
+		UserIds []string `twowaysql:"userIds"`
+	}{
+		UserIds: userIds,
+	}
+	rows := []struct {
+		UserId        string         `db:"user_id"`
+		StudentNumber sql.NullString `db:"student_number"`
+	}{}
+	err := dbClient.Select(&rows, "sql/user/select_student_numbers_from_user_ids.sql", &params)
+	if err != nil {
+		return nil, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "ユーザー情報の取得に失敗しました", Log: err.Error()}
+	}
+	result := make(map[string]string, len(rows))
+	for _, row := range rows {
+		if row.StudentNumber.Valid {
+			result[row.UserId] = row.StudentNumber.String
+		}
+	}
+	return result, nil
 }
