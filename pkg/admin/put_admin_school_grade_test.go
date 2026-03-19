@@ -2,6 +2,7 @@ package admin
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"reflect"
 	"testing"
@@ -71,10 +72,19 @@ func TestPutAdminSchoolGradeUpdatesEachTarget(t *testing.T) {
 			t.Fatalf("unexpected query path: %s", queryPath)
 		}
 		value := reflect.ValueOf(params).Elem()
-		updates = append(updates, updateParams{
-			UserId:      value.FieldByName("UserId").String(),
-			SchoolGrade: int(value.FieldByName("SchoolGrade").Int()),
-		})
+		var rawUpdates []struct {
+			UserId      string `json:"userId"`
+			SchoolGrade int    `json:"schoolGrade"`
+		}
+		if err := json.Unmarshal([]byte(value.FieldByName("UpdatesJSON").String()), &rawUpdates); err != nil {
+			t.Fatalf("failed to unmarshal updates json: %v", err)
+		}
+		for _, update := range rawUpdates {
+			updates = append(updates, updateParams{
+				UserId:      update.UserId,
+				SchoolGrade: update.SchoolGrade,
+			})
+		}
 		return nil, nil
 	}
 
@@ -88,11 +98,18 @@ func TestPutAdminSchoolGradeUpdatesEachTarget(t *testing.T) {
 	if len(updates) != 2 {
 		t.Fatalf("expected 2 updates, got %d", len(updates))
 	}
-	if updates[0].UserId != "user-1" || updates[0].SchoolGrade != 1 {
+	expectedFirstGrade, calcErr := utils.CalculateSchoolGradeFromStudentNumber("aa25001")
+	if calcErr != nil {
+		t.Fatalf("unexpected error: %v", calcErr)
+	}
+	if updates[0].UserId != "user-1" || updates[0].SchoolGrade != expectedFirstGrade {
 		t.Fatalf("unexpected first update: %+v", updates[0])
 	}
-	currentSchoolYear := utils.GetSchoolYear()
-	expectedGraduateGrade := currentSchoolYear - 2000 - 25 + 1 + 4 - 1
+	expectedGraduateGrade, calcErr := utils.CalculateSchoolGradeFromStudentNumber("m250001")
+	if calcErr != nil {
+		t.Fatalf("unexpected error: %v", calcErr)
+	}
+	expectedGraduateGrade -= 1
 	if updates[1].UserId != "user-2" || updates[1].SchoolGrade != expectedGraduateGrade {
 		t.Fatalf("unexpected second update: %+v", updates[1])
 	}

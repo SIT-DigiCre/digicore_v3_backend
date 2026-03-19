@@ -52,11 +52,9 @@ func CalculateSchoolGradeFromStudentNumber(studentNumber string) (int, error) {
 	}
 
 	enterYearText := studentNumber[2:4]
-	if len(studentNumber) >= 3 {
-		switch strings.ToLower(studentNumber[:1]) {
-		case "m", "n":
-			enterYearText = studentNumber[1:3]
-		}
+	switch strings.ToLower(studentNumber[:1]) {
+	case "m", "n":
+		enterYearText = studentNumber[1:3]
 	}
 
 	enterYear, err := strconv.Atoi(enterYearText)
