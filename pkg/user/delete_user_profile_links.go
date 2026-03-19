@@ -15,7 +15,7 @@ func deleteUserProfileLinks(dbClient db.TransactionClient, userId string, linkUr
 		UserId: userId,
 		LinkUrl: linkUrl,
 	}
-	_, err := dbClient.Exec("sql/user/delete_user_profile_links.sql", &params)
+	_, err := dbClient.Exec("sql/user/delete_user_profile_links.sql", &params,nil)
 	if err != nil {
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: err.Error()}
 	}

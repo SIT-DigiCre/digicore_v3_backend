@@ -650,9 +650,9 @@ paths:
             application/json:
               schema:
                 required:
-                  - link_url
+                  - linkUrl
                 properties:
-                  link_url:
+                  linkUrl:
                     type: string
                     x-oapi-codegen-extra-tags:
                       validate: max=2048
@@ -1970,7 +1970,7 @@ components:
         - username
         - iconUrl
         - shortIntroduction
-        - link_url
+        - linkUrls
       properties:
         userId:
           type: string
@@ -1980,21 +1980,21 @@ components:
           type: string
         shortIntroduction:
           type: string
-        link_url:
+        linkUrls:
           type: array
           items:
             required:
-              - link_url
-              - created_at
-              - updated_at
+              - linkUrl
+              - createdAt
+              - updatedAt
             properties:
-              link_url:
+              linkUrl:
                 type: string
                 format: uri
-              created_at:
+              createdAt:
                 type: string
                 format: date-time
-              updated_at:
+              updatedAt:
                 type: string
                 format: date-time
     ResGetUserUserId:

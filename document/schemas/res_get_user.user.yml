@@ -3,7 +3,7 @@ required:
   - username
   - iconUrl
   - shortIntroduction
-  - link_url
+  - linkUrls
 properties:
   userId:
     type: string
@@ -13,7 +13,7 @@ properties:
     type: string
   shortIntroduction:
     type: string
-  link_url:
+  linkUrls:
     type: array
     items:
       $ref: './res_get_user_profile_links.yml'
