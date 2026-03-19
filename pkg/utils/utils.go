@@ -47,11 +47,14 @@ func GetAfterDate(year int, month int, day int) string {
 }
 
 func CalculateSchoolGradeFromStudentNumber(studentNumber string) (int, error) {
+	return calculateSchoolGradeFromStudentNumber(studentNumber, GetSchoolYear())
+}
+
+func calculateSchoolGradeFromStudentNumber(studentNumber string, currentSchoolYear int) (int, error) {
 	if len(studentNumber) < 4 {
 		return 0, fmt.Errorf("student number is too short: %s", studentNumber)
 	}
 
-	currentSchoolYear := GetSchoolYear()
 	enterYear, err := strconv.Atoi(studentNumber[2:4])
 	if err != nil {
 		return 0, fmt.Errorf("student number has invalid enter year: %s: %w", studentNumber, err)
