@@ -178,6 +178,12 @@ type ServerInterface interface {
 
 	// (PUT /user/me/renewal)
 	PutUserMeRenewal(ctx echo.Context) error
+	// ユーザープロフィールリンクを削除する
+	// (DELETE /user/profile/links)
+	DeleteUserProfileLinks(ctx echo.Context) error
+	// 新しいリンクを登録する
+	// (POST /user/profile/links)
+	PostUserProfileLinks(ctx echo.Context) error
 
 	// (GET /user/search)
 	GetUserSearch(ctx echo.Context, params GetUserSearchParams) error
@@ -1114,6 +1120,28 @@ func (w *ServerInterfaceWrapper) PutUserMeRenewal(ctx echo.Context) error {
 	return err
 }
 
+// DeleteUserProfileLinks converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteUserProfileLinks(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteUserProfileLinks(ctx)
+	return err
+}
+
+// PostUserProfileLinks converts echo context to params.
+func (w *ServerInterfaceWrapper) PostUserProfileLinks(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostUserProfileLinks(ctx)
+	return err
+}
+
 // GetUserSearch converts echo context to params.
 func (w *ServerInterfaceWrapper) GetUserSearch(ctx echo.Context) error {
 	var err error
@@ -1482,6 +1510,8 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/user/me/private", wrapper.GetUserMePrivate)
 	router.PUT(baseURL+"/user/me/private", wrapper.PutUserMePrivate)
 	router.PUT(baseURL+"/user/me/renewal", wrapper.PutUserMeRenewal)
+	router.DELETE(baseURL+"/user/profile/links", wrapper.DeleteUserProfileLinks)
+	router.POST(baseURL+"/user/profile/links", wrapper.PostUserProfileLinks)
 	router.GET(baseURL+"/user/search", wrapper.GetUserSearch)
 	router.GET(baseURL+"/user/:userId", wrapper.GetUserUserId)
 	router.GET(baseURL+"/user/:userId/group", wrapper.GetUserUserIdGroup)

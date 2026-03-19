@@ -796,6 +796,11 @@ type GetUserParams struct {
 	Seed   *int `form:"seed,omitempty" json:"seed,omitempty"`
 }
 
+// PostUserProfileLinksJSONBody defines parameters for PostUserProfileLinks.
+type PostUserProfileLinksJSONBody struct {
+	LinkUrl string `ja:"URL" json:"linkUrl" validate:"max=2048"`
+}
+
 // GetUserSearchParams defines parameters for GetUserSearch.
 type GetUserSearchParams struct {
 	Query string `form:"query" json:"query"`
@@ -886,6 +891,9 @@ type PutUserMePaymentJSONRequestBody = ReqPutUserMePayment
 
 // PutUserMePrivateJSONRequestBody defines body for PutUserMePrivate for application/json ContentType.
 type PutUserMePrivateJSONRequestBody = ReqPutUserMePrivate
+
+// PostUserProfileLinksJSONRequestBody defines body for PostUserProfileLinks for application/json ContentType.
+type PostUserProfileLinksJSONRequestBody PostUserProfileLinksJSONBody
 
 // PostWorkTagJSONRequestBody defines body for PostWorkTag for application/json ContentType.
 type PostWorkTagJSONRequestBody = ReqPostWorkTag
