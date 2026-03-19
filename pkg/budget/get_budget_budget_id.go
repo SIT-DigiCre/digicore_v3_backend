@@ -28,6 +28,8 @@ func GetBudgetBudgetId(ctx echo.Context, dbClient db.Client, budgetId string) (a
 		if err != nil {
 			return api.ResGetBudgetBudgetId{}, err
 		}
+	} else {
+		res.Files = []api.ResGetBudgetBudgetIdObjectFile{}
 	}
 	if res.Files == nil {
 		res.Files = []api.ResGetBudgetBudgetIdObjectFile{}

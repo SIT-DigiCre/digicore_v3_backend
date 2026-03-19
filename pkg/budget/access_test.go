@@ -109,3 +109,20 @@ func TestFilterBudgetFilesForResponseHidesFilesFromThirdParty(t *testing.T) {
 		t.Fatalf("expected files to be hidden, got %d", len(res.Files))
 	}
 }
+
+func TestFilterBudgetFilesForResponseKeepsFilesForProposer(t *testing.T) {
+	res := api.ResGetBudgetBudgetId{
+		Proposer: api.ResGetBudgetBudgetIdObjectProposer{UserId: "proposer-user"},
+		Files: []api.ResGetBudgetBudgetIdObjectFile{
+			{FileId: "file-id", Name: "receipt.pdf"},
+		},
+	}
+
+	err := filterBudgetFilesForResponse(&fakeSelectClient{}, "proposer-user", &res)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(res.Files) != 1 {
+		t.Fatalf("expected files to remain visible, got %d", len(res.Files))
+	}
+}

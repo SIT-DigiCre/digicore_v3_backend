@@ -18,14 +18,19 @@ import (
 
 func GetStorageFileId(ctx echo.Context, dbClient db.Client, fileId string) (api.ResGetStorageFileId, *response.Error) {
 	res := api.ResGetStorageFileId{}
-	userId := ctx.Get("user_id").(string)
-	err := validateBudgetFileAccess(dbClient, userId, fileId)
-	if err != nil {
-		return api.ResGetStorageFileId{}, err
-	}
 	file, err := getFileFromFileId(dbClient, fileId)
 	if err != nil {
 		return api.ResGetStorageFileId{}, err
+	}
+	if !file.IsPublic {
+		userId, err := getRequestUserId(ctx)
+		if err != nil {
+			return api.ResGetStorageFileId{}, err
+		}
+		err = validateBudgetFileAccess(dbClient, userId, fileId)
+		if err != nil {
+			return api.ResGetStorageFileId{}, err
+		}
 	}
 	rerr := copier.Copy(&res, &file)
 	if rerr != nil {
@@ -37,6 +42,14 @@ func GetStorageFileId(ctx echo.Context, dbClient db.Client, fileId string) (api.
 		return api.ResGetStorageFileId{}, err
 	}
 	return res, nil
+}
+
+func getRequestUserId(ctx echo.Context) (string, *response.Error) {
+	userId, ok := ctx.Get("user_id").(string)
+	if !ok || userId == "" {
+		return "", &response.Error{Code: http.StatusUnauthorized, Level: "Info", Message: "ログインされていません", Log: "user_id is not set"}
+	}
+	return userId, nil
 }
 
 func validateBudgetFileAccess(dbClient db.Client, requestUserId string, fileId string) *response.Error {
