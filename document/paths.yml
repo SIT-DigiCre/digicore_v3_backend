@@ -112,6 +112,8 @@
   $ref: "./paths/activity_checkout_user_id.yml"
 /activity/record/{recordId}:
   $ref: "./paths/activity_record_record_id.yml"
+/activity/records:
+  $ref: "./paths/activity_records.yml"
 /activity/place/{place}/current:
   $ref: "./paths/activity_place_place_current.yml"
 /activity/place/{place}/history:

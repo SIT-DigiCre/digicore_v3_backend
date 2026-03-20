@@ -11,5 +11,6 @@ CREATE TABLE activities
     created_at             DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at             DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
-    INDEX idx_user_id_place_checked_in_at (user_id, place, checked_in_at DESC)
+    INDEX idx_user_id_place_checked_in_at (user_id, place, checked_in_at DESC),
+    INDEX idx_checked_in_at_id (checked_in_at DESC, id)
 );
