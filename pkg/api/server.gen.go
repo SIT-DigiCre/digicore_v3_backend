@@ -29,8 +29,14 @@ type ServerInterface interface {
 	// (GET /activity/place/{place}/history)
 	GetActivityPlacePlaceHistory(ctx echo.Context, place string, params GetActivityPlacePlaceHistoryParams) error
 
+	// (DELETE /activity/record/{recordId})
+	DeleteActivityRecordRecordId(ctx echo.Context, recordId string) error
+
 	// (PUT /activity/record/{recordId})
 	PutActivityRecordRecordId(ctx echo.Context, recordId string) error
+
+	// (GET /activity/records)
+	GetActivityRecords(ctx echo.Context, params GetActivityRecordsParams) error
 
 	// (GET /activity/user/{userId}/records)
 	GetActivityUserUserIdRecords(ctx echo.Context, userId string, params GetActivityUserUserIdRecordsParams) error
@@ -370,6 +376,24 @@ func (w *ServerInterfaceWrapper) GetActivityPlacePlaceHistory(ctx echo.Context) 
 	return err
 }
 
+// DeleteActivityRecordRecordId converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteActivityRecordRecordId(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "recordId" -------------
+	var recordId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "recordId", runtime.ParamLocationPath, ctx.Param("recordId"), &recordId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter recordId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteActivityRecordRecordId(ctx, recordId)
+	return err
+}
+
 // PutActivityRecordRecordId converts echo context to params.
 func (w *ServerInterfaceWrapper) PutActivityRecordRecordId(ctx echo.Context) error {
 	var err error
@@ -385,6 +409,33 @@ func (w *ServerInterfaceWrapper) PutActivityRecordRecordId(ctx echo.Context) err
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PutActivityRecordRecordId(ctx, recordId)
+	return err
+}
+
+// GetActivityRecords converts echo context to params.
+func (w *ServerInterfaceWrapper) GetActivityRecords(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetActivityRecordsParams
+	// ------------- Optional query parameter "offset" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "offset", ctx.QueryParams(), &params.Offset)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter offset: %s", err))
+	}
+
+	// ------------- Optional query parameter "limit" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "limit", ctx.QueryParams(), &params.Limit)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter limit: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetActivityRecords(ctx, params)
 	return err
 }
 
@@ -1663,7 +1714,9 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.POST(baseURL+"/activity/checkout/:userId", wrapper.PostActivityCheckoutUserId)
 	router.GET(baseURL+"/activity/place/:place/current", wrapper.GetActivityPlacePlaceCurrent)
 	router.GET(baseURL+"/activity/place/:place/history", wrapper.GetActivityPlacePlaceHistory)
+	router.DELETE(baseURL+"/activity/record/:recordId", wrapper.DeleteActivityRecordRecordId)
 	router.PUT(baseURL+"/activity/record/:recordId", wrapper.PutActivityRecordRecordId)
+	router.GET(baseURL+"/activity/records", wrapper.GetActivityRecords)
 	router.GET(baseURL+"/activity/user/:userId/records", wrapper.GetActivityUserUserIdRecords)
 	router.PUT(baseURL+"/admin/change-student-number", wrapper.PutAdminChangeStudentNumber)
 	router.GET(baseURL+"/admin/grade-update", wrapper.GetAdminGradeUpdate)

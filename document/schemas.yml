@@ -184,6 +184,10 @@ ReqPostActivityCheckout:
   $ref: "./schemas/req_post_activity_checkout.yml"
 ReqPutActivityRecordRecordId:
   $ref: "./schemas/req_put_activity_record_record_id.yml"
+ResGetActivityRecords:
+  $ref: "./schemas/res_get_activity_records.yml"
+ResGetActivityRecordsObjectRecord:
+  $ref: "./schemas/res_get_activity_records.record.yml"
 ResGetActivityPlacePlaceCurrent:
   $ref: "./schemas/res_get_activity_place_place_current.yml"
 ResGetActivityPlacePlaceCurrentObjectUser:
