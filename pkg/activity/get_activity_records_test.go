@@ -113,3 +113,24 @@ func TestSelectActivityRecordsCountReturnsInternalServerErrorOnDBFailure(t *test
 		t.Fatalf("unexpected status code: %d", err.Code)
 	}
 }
+
+func TestSelectActivityRecordsCountUsesSameJoinAsList(t *testing.T) {
+	client := &fakeClient{
+		selectFunc: func(dest interface{}, queryPath string, params interface{}) error {
+			if queryPath != "sql/activity/select_activity_records_count.sql" {
+				t.Fatalf("unexpected query path: %s", queryPath)
+			}
+			counts := dest.(*[]activityRecordsCount)
+			*counts = []activityRecordsCount{{Total: 3}}
+			return nil
+		},
+	}
+
+	total, err := selectActivityRecordsCount(client)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if total != 3 {
+		t.Fatalf("unexpected total: %d", total)
+	}
+}

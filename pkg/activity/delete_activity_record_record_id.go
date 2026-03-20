@@ -1,6 +1,7 @@
 package activity
 
 import (
+	"database/sql"
 	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
@@ -54,14 +55,42 @@ func deleteActivityRecord(dbClient db.TransactionClient, id string) *response.Er
 		Id: id,
 	}
 
-	_, err := dbClient.Exec("sql/activity/delete_activity.sql", &params, false)
+	result, err := dbClient.Exec("sql/activity/delete_activity.sql", &params, false)
 	if err != nil {
 		return &response.Error{
 			Code:    http.StatusInternalServerError,
-			Level:   "Info",
-			Message: "DBエラーが発生しました",
+			Level:   "Error",
+			Message: "アクティビティレコードの削除に失敗しました",
 			Log:     err.Error(),
 		}
 	}
+
+	if err := validateDeletedRows(result); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func validateDeletedRows(result sql.Result) *response.Error {
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return &response.Error{
+			Code:    http.StatusInternalServerError,
+			Level:   "Error",
+			Message: "アクティビティレコードの削除結果の確認に失敗しました",
+			Log:     err.Error(),
+		}
+	}
+
+	if rowsAffected == 0 {
+		return &response.Error{
+			Code:    http.StatusNotFound,
+			Level:   "Info",
+			Message: "アクティビティレコードが存在しません",
+			Log:     "削除対象のアクティビティレコードが存在しないか、既に削除されています",
+		}
+	}
+
 	return nil
 }
