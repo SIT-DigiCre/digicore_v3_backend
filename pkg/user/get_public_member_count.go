@@ -10,10 +10,8 @@ package user
 
 
 func GetPublicMemberCount(dbClient db.Client) (api.ResGetPublicMemberCount, *response.Error) {
-	params := struct{}{}
-
 	memberCounts := []api.ResGetPublicMemberCount{}
-	err := dbClient.Select(&memberCounts, "sql/user/select_member_count.sql", &params)
+	err := dbClient.Select(&memberCounts, "sql/user/select_member_count.sql", nil)
 	if err != nil {
 		return api.ResGetPublicMemberCount{}, &response.Error{
 			Code:    http.StatusInternalServerError,
