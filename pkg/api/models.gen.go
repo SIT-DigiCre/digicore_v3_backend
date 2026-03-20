@@ -558,6 +558,11 @@ type ResGetPaymentPaymentId struct {
 	UserId        string `json:"userId"`
 }
 
+// ResGetPublicMemberCount defines model for ResGetPublicMemberCount.
+type ResGetPublicMemberCount struct {
+	Count int `json:"count"`
+}
+
 // ResGetSignup defines model for ResGetSignup.
 type ResGetSignup struct {
 	Url string `json:"url"`

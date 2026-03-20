@@ -120,6 +120,8 @@
   $ref: "./paths/activity_place_place_history.yml"
 /activity/user/{userId}/records:
   $ref: "./paths/activity_user_user_id_records.yml"
+/public/member/count:
+  $ref: "./paths/public_member_count.yml"
 /user/me/grade-update:
   $ref: "./paths/user_me_grade_update.yml"
 /admin/grade-update:

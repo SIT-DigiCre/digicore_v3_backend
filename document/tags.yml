@@ -26,6 +26,8 @@
   description: Admin system
 - name: activity
   description: Activity system
+- name: public
+  description: Public system
 - name: grade-update
   description: Grade update request system
 - name: reentry

@@ -31,6 +31,8 @@ tags:
     description: Admin system
   - name: activity
     description: Activity system
+  - name: public
+    description: Public system
   - name: grade-update
     description: Grade update request system
   - name: reentry
@@ -2098,6 +2100,20 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /public/member/count:
+    get:
+      tags:
+        - public
+      description: Get active member count
+      responses:
+        '200':
+          description: Get member count
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPublicMemberCount'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me/grade-update:
     post:
       tags:
@@ -4006,6 +4022,12 @@ components:
           type: string
           format: date-time
           nullable: true
+    ResGetPublicMemberCount:
+      required:
+        - count
+      properties:
+        count:
+          type: integer
     ReqPostUserMeGradeUpdate:
       required:
         - reason
