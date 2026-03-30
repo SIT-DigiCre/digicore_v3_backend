@@ -59,6 +59,17 @@ func PostEventEventIdReservation(ctx echo.Context, dbClient db.TransactionClient
 }
 
 func createEventReservation(dbClient db.TransactionClient, eventId string, requestBody api.PostEventEventIdReservationJSONRequestBody) (string, *response.Error) {
+	// 日付のビジネスロジック検証
+	if !requestBody.StartDate.Before(requestBody.FinishDate) {
+		return "", &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "開始日時は終了日時より前である必要があります", Log: "startDate is not before finishDate"}
+	}
+	if !requestBody.ReservationStartDate.Before(requestBody.ReservationFinishDate) {
+		return "", &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "予約開始日時は予約終了日時より前である必要があります", Log: "reservationStartDate is not before reservationFinishDate"}
+	}
+	if requestBody.ReservationStartDate.After(requestBody.FinishDate) {
+		return "", &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "予約開始日時はイベント終了日時以前である必要があります", Log: "reservationStartDate is after finishDate"}
+	}
+
 	// 予約枠IDを生成
 	_, rerr := dbClient.Exec("sql/transaction/generate_id.sql", nil, false)
 	if rerr != nil {
