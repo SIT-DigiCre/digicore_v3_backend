@@ -1002,6 +1002,119 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - event
+      description: Update event reservation
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - startDate
+                - finishDate
+                - reservationStartDate
+                - reservationFinishDate
+                - capacity
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1,max=255'
+                    ja: 枠名
+                description:
+                  type: string
+                  minLength: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1'
+                    ja: 枠の説明
+                startDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 枠開始日時
+                finishDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 枠終了日時
+                reservationStartDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 予約開始日時
+                reservationFinishDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 予約終了日時
+                capacity:
+                  type: integer
+                  minimum: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1'
+                    ja: 定員
+      responses:
+        '200':
+          description: Success update event reservation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetEventEventIdReservationId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - event
+      description: Delete event reservation
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Success delete event reservation
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   '/event/{eventId}/{reservationId}/me':
     put:
       tags:

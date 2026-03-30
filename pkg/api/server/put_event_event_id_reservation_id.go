@@ -9,6 +9,35 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+func (s *server) PutEventEventIdReservationId(ctx echo.Context, eventId string, reservationId string) error {
+	var requestBody api.PutEventEventIdReservationIdJSONRequestBody
+	if err := ctx.Bind(&requestBody); err != nil {
+		return response.ErrorResponse(ctx, &response.Error{Code: 400, Level: "Info", Message: "リクエストボディの解析に失敗しました。正しい形式で送信してください", Log: err.Error()})
+	}
+	err := validator.Validate(requestBody)
+	if err != nil {
+		return response.ErrorResponse(ctx, err)
+	}
+
+	dbTranisactionClient, err := db.OpenTransaction()
+	if err != nil {
+		return response.ErrorResponse(ctx, err)
+	}
+	defer dbTranisactionClient.Rollback()
+
+	res, err := event.PutEventEventIdReservationId(ctx, &dbTranisactionClient, eventId, reservationId, requestBody)
+	if err != nil {
+		return response.ErrorResponse(ctx, err)
+	}
+
+	err = dbTranisactionClient.Commit()
+	if err != nil {
+		return response.ErrorResponse(ctx, err)
+	}
+
+	return response.SuccessResponse(ctx, res)
+}
+
 func (s *server) PutEventEventIdReservationIdMe(ctx echo.Context, eventId string, reservationId string) error {
 	var requestBody api.ReqPutEventEventIdReservationIdMe
 	if err := ctx.Bind(&requestBody); err != nil {
