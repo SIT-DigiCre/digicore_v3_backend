@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/validator"
@@ -24,6 +25,16 @@ func (s *server) PutEventEventIdReservationId(ctx echo.Context, eventId string, 
 		return response.ErrorResponse(ctx, err)
 	}
 	defer dbTranisactionClient.Rollback()
+
+	// 管理者であるか確認
+	userId := ctx.Get("user_id").(string)
+	isAdmin, err := admin.CheckUserIsAdmin(&dbTranisactionClient, userId)
+	if err != nil {
+		return response.ErrorResponse(ctx, err)
+	}
+	if !isAdmin {
+		return response.ErrorResponse(ctx, &response.Error{Code: 403, Level: "Info", Message: "管理者権限が必要です", Log: "user is not admin"})
+	}
 
 	res, err := event.PutEventEventIdReservationId(ctx, &dbTranisactionClient, eventId, reservationId, requestBody)
 	if err != nil {
