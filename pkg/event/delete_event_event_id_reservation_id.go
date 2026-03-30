@@ -11,6 +11,17 @@ import (
 // 予約枠を削除する関数。
 // 削除に成功した場合、エラーを返さない。
 func DeleteEventEventIdReservationId(ctx echo.Context, dbClient db.TransactionClient, eventId string, reservationId string) *response.Error {
+	// 参加者を削除
+	deleteUsersParams := struct {
+		ReservationId string `twowaysql:"reservationId"`
+	}{
+		ReservationId: reservationId,
+	}
+	_, uerr := dbClient.Exec("sql/event/delete_reservation_users.sql", &deleteUsersParams, false)
+	if uerr != nil {
+		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "DBエラーが発生しました", Log: uerr.Error()}
+	}
+
 	// 予約枠を削除
 	params := struct {
 		EventId       string `twowaysql:"eventId"`

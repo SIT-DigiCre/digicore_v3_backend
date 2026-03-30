@@ -1,0 +1,1 @@
+SELECT COUNT(event_reservation_users.id) AS count FROM event_reservations LEFT JOIN event_reservation_users ON event_reservations.id = event_reservation_users.reservation_id WHERE event_reservations.id = UUID_TO_BIN(/*reservationId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee') AND event_reservations.event_id = UUID_TO_BIN(/*eventId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee')

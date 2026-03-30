@@ -59,15 +59,9 @@ func PostEventEventIdReservation(ctx echo.Context, dbClient db.TransactionClient
 }
 
 func createEventReservation(dbClient db.TransactionClient, eventId string, requestBody api.PostEventEventIdReservationJSONRequestBody) (string, *response.Error) {
-	// 日付のビジネスロジック検証
-	if !requestBody.StartDate.Before(requestBody.FinishDate) {
-		return "", &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "開始日時は終了日時より前である必要があります", Log: "startDate is not before finishDate"}
-	}
-	if !requestBody.ReservationStartDate.Before(requestBody.ReservationFinishDate) {
-		return "", &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "予約開始日時は予約終了日時より前である必要があります", Log: "reservationStartDate is not before reservationFinishDate"}
-	}
-	if requestBody.ReservationStartDate.After(requestBody.FinishDate) {
-		return "", &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "予約開始日時はイベント終了日時以前である必要があります", Log: "reservationStartDate is after finishDate"}
+	// 日付のビジネスロジック検証（共通関数を使用）
+	if err := validateReservationDates(requestBody.StartDate, requestBody.FinishDate, requestBody.ReservationStartDate, requestBody.ReservationFinishDate); err != nil {
+		return "", err
 	}
 
 	// 予約枠IDを生成
@@ -81,6 +75,25 @@ func createEventReservation(dbClient db.TransactionClient, eventId string, reque
 	}
 	if reservationId == "" {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "予約枠IDの生成に失敗しました", Log: "空のIDが返されました"}
+	}
+
+	// eventId が存在するか確認
+	eventExistsParams := struct {
+		EventId string `twowaysql:"eventId"`
+	}{
+		EventId: eventId,
+	}
+	eventRows := []struct {
+		EventId string `db:"event_id"`
+	}{}
+	err := dbClient.Select(&eventRows, "sql/event/select_event_from_event_id_exists.sql", &eventExistsParams)
+	if err != nil {
+		logrus.Errorf("イベントの存在確認に失敗しました: %v", err)
+		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントの確認に失敗しました", Log: err.Error()}
+	}
+	if len(eventRows) == 0 {
+		logrus.Warnf("指定されたイベントが見つかりません: eventId=%s", eventId)
+		return "", &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "指定されたイベントが見つかりません", Log: "no rows in result"}
 	}
 
 	// event_reservationsテーブルに挿入

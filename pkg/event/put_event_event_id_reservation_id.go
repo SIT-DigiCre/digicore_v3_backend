@@ -59,15 +59,18 @@ func PutEventEventIdReservationId(ctx echo.Context, dbClient db.TransactionClien
 }
 
 func updateEventReservation(dbClient db.TransactionClient, eventId string, reservationId string, requestBody api.PutEventEventIdReservationIdJSONRequestBody) *response.Error {
-	// 日付のビジネスロジック検証
-	if !requestBody.StartDate.Before(requestBody.FinishDate) {
-		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "開始日時は終了日時より前である必要があります", Log: "startDate is not before finishDate"}
+	// 日付のビジネスロジック検証（共通関数を使用）
+	if err := validateReservationDates(requestBody.StartDate, requestBody.FinishDate, requestBody.ReservationStartDate, requestBody.ReservationFinishDate); err != nil {
+		return err
 	}
-	if !requestBody.ReservationStartDate.Before(requestBody.ReservationFinishDate) {
-		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "予約開始日時は予約終了日時より前である必要があります", Log: "reservationStartDate is not before reservationFinishDate"}
+
+	// 新しいcapacityが既に予約済み人数以上であることを検証
+	currentReservationCount, err := getReservationCountFromReservationId(dbClient, eventId, reservationId)
+	if err != nil {
+		return err
 	}
-	if requestBody.ReservationStartDate.After(requestBody.FinishDate) {
-		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "予約開始日時はイベント終了日時以前である必要があります", Log: "reservationStartDate is after finishDate"}
+	if requestBody.Capacity < currentReservationCount {
+		return &response.Error{Code: http.StatusConflict, Level: "Info", Message: "参加枠は既に予約済みの人数以上である必要があります", Log: "requested capacity is less than current reservation count"}
 	}
 
 	params := struct {
@@ -97,13 +100,40 @@ func updateEventReservation(dbClient db.TransactionClient, eventId string, reser
 	}
 
 	// 影響を受けた行数を確認
-	rowsAffected, err := result.RowsAffected()
-	if err != nil {
-		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "更新結果の確認に失敗しました", Log: err.Error()}
+	rowsAffected, rowErr := result.RowsAffected()
+	if rowErr != nil {
+		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "更新結果の確認に失敗しました", Log: rowErr.Error()}
 	}
 	if rowsAffected == 0 {
 		return &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "指定された予約枠が見つかりません", Log: "reservation not found"}
 	}
 
 	return nil
+}
+
+// [must] 指定された予約枠の現在の予約数を取得する
+func getReservationCountFromReservationId(dbClient db.TransactionClient, eventId string, reservationId string) (int, *response.Error) {
+	params := struct {
+		EventId       string `twowaysql:"eventId"`
+		ReservationId string `twowaysql:"reservationId"`
+	}{
+		EventId:       eventId,
+		ReservationId: reservationId,
+	}
+
+	type reservationCount struct {
+		Count int `db:"count"`
+	}
+
+	results := []reservationCount{}
+	err := dbClient.Select(&results, "sql/event/select_reservation_count_from_reservation_id.sql", &params)
+	if err != nil {
+		return 0, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "予約数の取得に失敗しました", Log: err.Error()}
+	}
+
+	if len(results) == 0 {
+		return 0, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "指定された予約枠が見つかりません", Log: "reservation not found"}
+	}
+
+	return results[0].Count, nil
 }
