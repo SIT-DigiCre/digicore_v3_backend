@@ -111,7 +111,7 @@ func updateEventReservation(dbClient db.TransactionClient, eventId string, reser
 	return nil
 }
 
-// [must] 指定された予約枠の現在の予約数を取得する
+// 指定された予約枠の現在の予約数を取得する
 func getReservationCountFromReservationId(dbClient db.TransactionClient, eventId string, reservationId string) (int, *response.Error) {
 	params := struct {
 		EventId       string `twowaysql:"eventId"`
