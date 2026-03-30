@@ -834,6 +834,143 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+  '/event/{eventId}/reservation':
+    post:
+      tags:
+        - event
+      description: Create event reservation
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Create event reservation
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - startDate
+                - finishDate
+                - reservationStartDate
+                - reservationFinishDate
+                - capacity
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1,max=255'
+                    ja: 枠名
+                description:
+                  type: string
+                  minLength: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1'
+                    ja: 枠の説明
+                startDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 枠開始日時
+                finishDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 枠終了日時
+                reservationStartDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 予約開始日時
+                reservationFinishDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 予約終了日時
+                capacity:
+                  type: integer
+                  minimum: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1'
+                    ja: 定員
+      responses:
+        '200':
+          description: Success create event reservation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - eventId
+                  - reservationId
+                  - name
+                  - description
+                  - startDate
+                  - finishDate
+                  - reservationStartDate
+                  - reservationFinishDate
+                  - capacity
+                properties:
+                  eventId:
+                    type: string
+                    format: uuid
+                    x-oapi-codegen-extra-tags:
+                      ja: イベントID
+                  reservationId:
+                    type: string
+                    format: uuid
+                    x-oapi-codegen-extra-tags:
+                      ja: 枠ID
+                  name:
+                    type: string
+                    x-oapi-codegen-extra-tags:
+                      ja: 枠名
+                  description:
+                    type: string
+                    x-oapi-codegen-extra-tags:
+                      ja: 枠の説明
+                  startDate:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 枠開始日時
+                  finishDate:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 枠終了日時
+                  reservationStartDate:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 予約開始日時
+                  reservationFinishDate:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 予約終了日時
+                  capacity:
+                    type: integer
+                    x-oapi-codegen-extra-tags:
+                      ja: 定員
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   '/event/{eventId}/{reservationId}':
     get:
       tags:

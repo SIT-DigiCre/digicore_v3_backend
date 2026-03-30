@@ -1,0 +1,2 @@
+INSERT INTO event_reservations (id, event_id, name, description, start_date, finish_date, reservation_start_date, reservation_finish_date, capacity)
+VALUES (UUID_TO_BIN(/*reservationId*/''), UUID_TO_BIN(/*eventId*/''), /*name*/'name', /*description*/'description', /*startDate*/'2024-01-01T00:00:00Z', /*finishDate*/'2024-01-01T00:00:00Z', /*reservationStartDate*/'2024-01-01T00:00:00Z', /*reservationFinishDate*/'2024-01-01T00:00:00Z', /*capacity*/1);

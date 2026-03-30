@@ -104,6 +104,9 @@ type ServerInterface interface {
 	// (PUT /event/{eventId})
 	PutEventEventId(ctx echo.Context, eventId string) error
 
+	// (POST /event/{eventId}/reservation)
+	PostEventEventIdReservation(ctx echo.Context, eventId string) error
+
 	// (GET /event/{eventId}/{reservationId})
 	GetEventEventIdReservationId(ctx echo.Context, eventId string, reservationId string) error
 
@@ -820,6 +823,24 @@ func (w *ServerInterfaceWrapper) PutEventEventId(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PutEventEventId(ctx, eventId)
+	return err
+}
+
+// PostEventEventIdReservation converts echo context to params.
+func (w *ServerInterfaceWrapper) PostEventEventIdReservation(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "eventId" -------------
+	var eventId string
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "eventId", runtime.ParamLocationPath, ctx.Param("eventId"), &eventId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventId: %s", err))
+	}
+
+	ctx.Set(BearerAuthScopes, []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostEventEventIdReservation(ctx, eventId)
 	return err
 }
 
@@ -1751,6 +1772,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.POST(baseURL+"/event", wrapper.PostEvent)
 	router.GET(baseURL+"/event/:eventId", wrapper.GetEventEventId)
 	router.PUT(baseURL+"/event/:eventId", wrapper.PutEventEventId)
+	router.POST(baseURL+"/event/:eventId/reservation", wrapper.PostEventEventIdReservation)
 	router.GET(baseURL+"/event/:eventId/:reservationId", wrapper.GetEventEventIdReservationId)
 	router.DELETE(baseURL+"/event/:eventId/:reservationId/me", wrapper.DeleteEventEventIdReservationIdMe)
 	router.PUT(baseURL+"/event/:eventId/:reservationId/me", wrapper.PutEventEventIdReservationIdMe)

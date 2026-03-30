@@ -924,6 +924,17 @@ type GetEventParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
 }
 
+// PostEventEventIdReservationJSONBody defines parameters for PostEventEventIdReservation.
+type PostEventEventIdReservationJSONBody struct {
+	Capacity              int       `ja:"定員" json:"capacity" validate:"required,min=1"`
+	Description           string    `ja:"枠の説明" json:"description" validate:"required,min=1"`
+	FinishDate            time.Time `ja:"枠終了日時" json:"finishDate" validate:"required"`
+	Name                  string    `ja:"枠名" json:"name" validate:"required,min=1,max=255"`
+	ReservationFinishDate time.Time `ja:"予約終了日時" json:"reservationFinishDate" validate:"required"`
+	ReservationStartDate  time.Time `ja:"予約開始日時" json:"reservationStartDate" validate:"required"`
+	StartDate             time.Time `ja:"枠開始日時" json:"startDate" validate:"required"`
+}
+
 // GetGroupParams defines parameters for GetGroup.
 type GetGroupParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
@@ -1001,6 +1012,9 @@ type PostEventJSONRequestBody = ReqPostEventEvent
 
 // PutEventEventIdJSONRequestBody defines body for PutEventEventId for application/json ContentType.
 type PutEventEventIdJSONRequestBody = ReqPostEventEvent
+
+// PostEventEventIdReservationJSONRequestBody defines body for PostEventEventIdReservation for application/json ContentType.
+type PostEventEventIdReservationJSONRequestBody PostEventEventIdReservationJSONBody
 
 // PutEventEventIdReservationIdMeJSONRequestBody defines body for PutEventEventIdReservationIdMe for application/json ContentType.
 type PutEventEventIdReservationIdMeJSONRequestBody = ReqPutEventEventIdReservationIdMe
