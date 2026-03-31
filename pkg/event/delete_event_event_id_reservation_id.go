@@ -13,8 +13,10 @@ import (
 func DeleteEventEventIdReservationId(ctx echo.Context, dbClient db.TransactionClient, eventId string, reservationId string) *response.Error {
 	// 参加者を削除
 	deleteUsersParams := struct {
+		EventId       string `twowaysql:"eventId"`
 		ReservationId string `twowaysql:"reservationId"`
 	}{
+		EventId:       eventId,
 		ReservationId: reservationId,
 	}
 	_, uerr := dbClient.Exec("sql/event/delete_reservation_users.sql", &deleteUsersParams, false)
