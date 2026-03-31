@@ -64,15 +64,6 @@ func updateEventReservation(dbClient db.TransactionClient, eventId string, reser
 		return err
 	}
 
-	// 新しいcapacityが既に予約済み人数以上であることを検証
-	currentReservationCount, err := getReservationCountFromReservationId(dbClient, eventId, reservationId)
-	if err != nil {
-		return err
-	}
-	if requestBody.Capacity < currentReservationCount {
-		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "参加枠は既に予約済みの人数以上である必要があります", Log: "requested capacity is less than current reservation count"}
-	}
-
 	params := struct {
 		EventId               string `twowaysql:"eventId"`
 		ReservationId         string `twowaysql:"reservationId"`
@@ -105,6 +96,15 @@ func updateEventReservation(dbClient db.TransactionClient, eventId string, reser
 		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "更新結果の確認に失敗しました", Log: rowErr.Error()}
 	}
 	if rowsAffected == 0 {
+		// 容量チェックが失敗した可能性を確認（他のリクエストによって予約が増えた場合）
+		currentReservationCount, err := getReservationCountFromReservationId(dbClient, eventId, reservationId)
+		if err != nil {
+			return err
+		}
+		if requestBody.Capacity < currentReservationCount {
+			return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "参加枠は既に予約済みの人数以上である必要があります", Log: "requested capacity is less than current reservation count"}
+		}
+		// 容量チェック以外の理由で失敗
 		return &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "指定された予約枠が見つかりません", Log: "reservation not found"}
 	}
 
