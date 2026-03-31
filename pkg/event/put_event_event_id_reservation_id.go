@@ -70,7 +70,7 @@ func updateEventReservation(dbClient db.TransactionClient, eventId string, reser
 		return err
 	}
 	if requestBody.Capacity < currentReservationCount {
-		return &response.Error{Code: http.StatusConflict, Level: "Info", Message: "参加枠は既に予約済みの人数以上である必要があります", Log: "requested capacity is less than current reservation count"}
+		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "参加枠は既に予約済みの人数以上である必要があります", Log: "requested capacity is less than current reservation count"}
 	}
 
 	params := struct {
