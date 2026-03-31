@@ -52,6 +52,8 @@
   $ref: "./paths/event.yml"
 /event/{eventId}:
   $ref: "./paths/event_event_id.yml"
+/event/{eventId}/reservation:
+  $ref: "./paths/event_event_id_reservation.yml"
 /event/{eventId}/{reservationId}:
   $ref: "./paths/event_event_id_reservation_id.yml"
 /event/{eventId}/{reservationId}/me:

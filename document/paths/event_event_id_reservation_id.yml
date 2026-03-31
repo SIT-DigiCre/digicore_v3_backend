@@ -28,3 +28,69 @@ get:
       $ref: "../responses/not_found.yml"
     500:
       $ref: "../responses/internal_server.yml"
+
+put:
+  tags:
+    - event
+  description: "Update event reservation"
+  security:
+    - BearerAuth:
+        - "infra"
+  parameters:
+    - name: eventId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: reservationId
+      in: path
+      required: true
+      schema:
+        type: string
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_put_event_event_id_reservation_id.yml"
+  responses:
+    200:
+      description: "Success update event reservation"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_event_event_id_reservation_id.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
+
+delete:
+  tags:
+    - event
+  description: "Delete event reservation"
+  security:
+    - BearerAuth:
+        - "infra"
+  parameters:
+    - name: eventId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: reservationId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    204:
+      description: "Success delete event reservation"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
