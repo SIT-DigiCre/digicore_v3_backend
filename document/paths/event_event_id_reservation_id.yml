@@ -34,7 +34,8 @@ put:
     - event
   description: "Update event reservation"
   security:
-    - BearerAuth: []
+    - BearerAuth:
+        - "infra"
   parameters:
     - name: eventId
       in: path
@@ -71,7 +72,8 @@ delete:
     - event
   description: "Delete event reservation"
   security:
-    - BearerAuth: []
+    - BearerAuth:
+        - "infra"
   parameters:
     - name: eventId
       in: path

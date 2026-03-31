@@ -3,7 +3,8 @@ post:
     - event
   description: "Create event reservation"
   security:
-    - BearerAuth: []
+    - BearerAuth:
+        - "infra"
   parameters:
     - name: eventId
       in: path
