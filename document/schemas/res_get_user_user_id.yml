@@ -7,6 +7,7 @@ required:
   - discordUserId
   - shortIntroduction
   - activeLimit
+  - linkUrls
 properties:
   userId:
     type: string
@@ -24,3 +25,7 @@ properties:
     type: string
   activeLimit:
     type: string
+  linkUrls:
+    type: array
+    items:  
+      $ref: './res_get_user_profile_links.yml'

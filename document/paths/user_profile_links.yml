@@ -11,7 +11,7 @@ post:
         schema:
           $ref: "../schemas/req_post_user_profile_links.yml"
   responses:
-    201:
+    200:
       description: "Success create user_profile_links"
     400:
       $ref: "../responses/bad_request.yml"
@@ -25,12 +25,13 @@ delete:
       - BearerAuth: []
     parameters:
       - name: id
+        in: query
         required: true
         schema:
           type: string
           format: uuid
     responses:
-      204:
+      200:
         description: "Success delete user_profile_links"
       403:
        $ref: "../responses/unauthorized.yml"

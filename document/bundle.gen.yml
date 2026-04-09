@@ -657,7 +657,7 @@ paths:
                     validate: max=2048
                     ja: URL
       responses:
-        '201':
+        '200':
           description: Success create user_profile_links
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -671,12 +671,13 @@ paths:
         - BearerAuth: []
       parameters:
         - name: id
+          in: query
           required: true
           schema:
             type: string
             format: uuid
       responses:
-        '204':
+        '200':
           description: Success delete user_profile_links
         '403':
           $ref: '#/components/responses/Unauthorized'
@@ -1968,7 +1969,6 @@ components:
         - username
         - iconUrl
         - shortIntroduction
-        - linkUrls
       properties:
         userId:
           type: string
@@ -1978,23 +1978,6 @@ components:
           type: string
         shortIntroduction:
           type: string
-        linkUrls:
-          type: array
-          items:
-            required:
-              - linkUrl
-              - createdAt
-              - updatedAt
-            properties:
-              linkUrl:
-                type: string
-                format: uri
-              createdAt:
-                type: string
-                format: date-time
-              updatedAt:
-                type: string
-                format: date-time
     ResGetUserUserId:
       required:
         - userId
@@ -2005,6 +1988,7 @@ components:
         - discordUserId
         - shortIntroduction
         - activeLimit
+        - linkUrls
       properties:
         userId:
           type: string
@@ -2022,6 +2006,27 @@ components:
           type: string
         activeLimit:
           type: string
+        linkUrls:
+          type: array
+          items:
+            required:
+              - id
+              - linkUrl
+              - createdAt
+              - updatedAt
+            properties:
+              id:
+                type: string
+                format: uuid
+              linkUrl:
+                type: string
+                format: uri
+              createdAt:
+                type: string
+                format: date-time
+              updatedAt:
+                type: string
+                format: date-time
     ResGetUserUserIdIntroduction:
       required:
         - introduction
