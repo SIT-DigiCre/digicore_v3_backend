@@ -21,5 +21,15 @@ func GetUserUserId(ctx echo.Context, dbClient db.Client, userId string) (api.Res
 	if rerr != nil {
 		return api.ResGetUserUserId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
 	}
+
+	linkUrls, err := GetUserProfileLinksFromUserId(dbClient, userId)
+	if err != nil {
+		return api.ResGetUserUserId{}, err
+	}
+	rerr = copier.Copy(&res.LinkUrls, &linkUrls)
+	if rerr != nil {
+		return api.ResGetUserUserId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
+	}
+
 	return res, nil
 }
