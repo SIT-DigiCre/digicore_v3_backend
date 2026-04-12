@@ -180,7 +180,7 @@ type ServerInterface interface {
 	PutUserMeRenewal(ctx echo.Context) error
 	// ユーザープロフィールリンクを削除する
 	// (DELETE /user/profile/links)
-	DeleteUserProfileLinks(ctx echo.Context) error
+	DeleteUserProfileLinks(ctx echo.Context, params DeleteUserProfileLinksParams) error
 	// 新しいリンクを登録する
 	// (POST /user/profile/links)
 	PostUserProfileLinks(ctx echo.Context) error
@@ -1126,8 +1126,17 @@ func (w *ServerInterfaceWrapper) DeleteUserProfileLinks(ctx echo.Context) error 
 
 	ctx.Set(BearerAuthScopes, []string{""})
 
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteUserProfileLinksParams
+	// ------------- Required query parameter "id" -------------
+
+	err = runtime.BindQueryParameter("form", true, true, "id", ctx.QueryParams(), &params.Id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter id: %s", err))
+	}
+
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.DeleteUserProfileLinks(ctx)
+	err = w.Handler.DeleteUserProfileLinks(ctx, params)
 	return err
 }
 

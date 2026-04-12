@@ -4,5 +4,5 @@ properties:
   linkUrl:
     type: string
     x-oapi-codegen-extra-tags:
-      validate: max=2048
+      validate: required,url,max=2048
       ja: URL

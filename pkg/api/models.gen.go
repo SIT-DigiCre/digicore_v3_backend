@@ -577,12 +577,7 @@ type ResGetUserMePrivate struct {
 
 // ResGetUserObjectUser defines model for ResGetUserObjectUser.
 type ResGetUserObjectUser struct {
-	IconUrl  string `json:"iconUrl"`
-	LinkUrls []struct {
-		CreatedAt time.Time `json:"createdAt"`
-		LinkUrl   string    `json:"linkUrl"`
-		UpdatedAt time.Time `json:"updatedAt"`
-	} `json:"linkUrls"`
+	IconUrl           string `json:"iconUrl"`
 	ShortIntroduction string `json:"shortIntroduction"`
 	UserId            string `json:"userId"`
 	Username          string `json:"username"`
@@ -590,9 +585,15 @@ type ResGetUserObjectUser struct {
 
 // ResGetUserUserId defines model for ResGetUserUserId.
 type ResGetUserUserId struct {
-	ActiveLimit       string `json:"activeLimit"`
-	DiscordUserId     string `json:"discordUserId"`
-	IconUrl           string `json:"iconUrl"`
+	ActiveLimit   string `json:"activeLimit"`
+	DiscordUserId string `json:"discordUserId"`
+	IconUrl       string `json:"iconUrl"`
+	LinkUrls      []struct {
+		CreatedAt time.Time          `json:"createdAt"`
+		Id        openapi_types.UUID `json:"id"`
+		LinkUrl   string             `json:"linkUrl"`
+		UpdatedAt time.Time          `json:"updatedAt"`
+	} `json:"linkUrls"`
 	SchoolGrade       int    `json:"schoolGrade"`
 	ShortIntroduction string `json:"shortIntroduction"`
 	StudentNumber     string `json:"studentNumber"`
@@ -796,9 +797,14 @@ type GetUserParams struct {
 	Seed   *int `form:"seed,omitempty" json:"seed,omitempty"`
 }
 
+// DeleteUserProfileLinksParams defines parameters for DeleteUserProfileLinks.
+type DeleteUserProfileLinksParams struct {
+	Id openapi_types.UUID `form:"id" json:"id"`
+}
+
 // PostUserProfileLinksJSONBody defines parameters for PostUserProfileLinks.
 type PostUserProfileLinksJSONBody struct {
-	LinkUrl string `ja:"URL" json:"linkUrl" validate:"max=2048"`
+	LinkUrl string `ja:"URL" json:"linkUrl" validate:"required,url,max=2048"`
 }
 
 // GetUserSearchParams defines parameters for GetUserSearch.
