@@ -42,7 +42,7 @@ func createUser(studentNumber string, dbClient db.TransactionClient) (string, *r
 	if err != nil {
 		if mysqlErr, ok := err.(*mysql.MySQLError); ok {
 			if mysqlErr.Number == 1062 {
-				return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "ユーザー登録済みです", Log: err.Error()}
+				return "", &response.Error{Code: http.StatusConflict, Level: "Info", Message: "ユーザー登録済みです", Log: err.Error()}
 			}
 		}
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}

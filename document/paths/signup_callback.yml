@@ -16,5 +16,9 @@ post:
         application/json:
           schema:
             $ref: "../schemas/res_post_signup_callback.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
+    409:
+      $ref: "../responses/conflict.yml"
     500:
       $ref: "../responses/internal_server.yml"
