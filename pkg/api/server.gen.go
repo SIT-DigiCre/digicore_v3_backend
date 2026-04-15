@@ -843,7 +843,7 @@ func (w *ServerInterfaceWrapper) PostEventEventIdReservation(ctx echo.Context) e
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventId: %s", err))
 	}
 
-	ctx.Set(BearerAuthScopes, []string{""})
+	ctx.Set(BearerAuthScopes, []string{"infra"})
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PostEventEventIdReservation(ctx, eventId)
@@ -869,7 +869,7 @@ func (w *ServerInterfaceWrapper) DeleteEventEventIdReservationId(ctx echo.Contex
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter reservationId: %s", err))
 	}
 
-	ctx.Set(BearerAuthScopes, []string{""})
+	ctx.Set(BearerAuthScopes, []string{"infra"})
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.DeleteEventEventIdReservationId(ctx, eventId, reservationId)
@@ -921,7 +921,7 @@ func (w *ServerInterfaceWrapper) PutEventEventIdReservationId(ctx echo.Context) 
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter reservationId: %s", err))
 	}
 
-	ctx.Set(BearerAuthScopes, []string{""})
+	ctx.Set(BearerAuthScopes, []string{"infra"})
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PutEventEventIdReservationId(ctx, eventId, reservationId)

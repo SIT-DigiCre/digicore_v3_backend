@@ -882,6 +882,9 @@ type BadRequest = Error
 // BlankSuccess defines model for BlankSuccess.
 type BlankSuccess = Success
 
+// Conflict defines model for Conflict.
+type Conflict = Error
+
 // InternalServer defines model for InternalServer.
 type InternalServer = Error
 

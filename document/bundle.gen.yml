@@ -121,6 +121,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResPostSignupCallback'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServer'
   /login:
@@ -840,7 +842,8 @@ paths:
         - event
       description: Create event reservation
       security:
-        - BearerAuth: []
+        - BearerAuth:
+            - infra
       parameters:
         - name: eventId
           in: path
@@ -1007,7 +1010,8 @@ paths:
         - event
       description: Update event reservation
       security:
-        - BearerAuth: []
+        - BearerAuth:
+            - infra
       parameters:
         - name: eventId
           in: path
@@ -1094,7 +1098,8 @@ paths:
         - event
       description: Delete event reservation
       security:
-        - BearerAuth: []
+        - BearerAuth:
+            - infra
       parameters:
         - name: eventId
           in: path
@@ -4446,6 +4451,12 @@ components:
   responses:
     BadRequest:
       description: 'Validation error, etc.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Resource already exists
       content:
         application/json:
           schema:
