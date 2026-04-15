@@ -85,7 +85,7 @@ type ReqPostMail struct {
 
 // ReqPostMattermostCreateuser defines model for ReqPostMattermostCreateuser.
 type ReqPostMattermostCreateuser struct {
-	Nickname string `ja:"ニックネーム" json:"nickname" validate:"required,min=3,max=22"`
+	Nickname string `ja:"ニックネーム" json:"nickname" validate:"required,min=1,max=64"`
 	Password string `ja:"パスワード" json:"password" validate:"required,min=8,max=64"`
 	Username string `ja:"ユーザー名" json:"username" validate:"required,min=3,max=22"`
 }
