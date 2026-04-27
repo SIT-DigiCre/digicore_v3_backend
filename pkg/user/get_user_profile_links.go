@@ -3,13 +3,12 @@ package user
 import (
 	"time"
 	"net/http"
-    "github.com/getkin/kin-openapi/openapi_types"
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
+    "github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 )
 
 type UserProfileLink struct {
-	Id        openapi_types.UUID    `db:"id"`
+	Id        string    `db:"id"`
 	LinkUrl   string    `db:"link_url"`
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`
