@@ -3,7 +3,7 @@ module github.com/SIT-DigiCre/digicore_v3_backend
 go 1.20
 
 require (
-	github.com/aws/aws-sdk-go v1.44.281
+	github.com/aws/aws-sdk-go v1.55.8
 	github.com/deepmap/oapi-codegen v1.12.4
 	github.com/future-architect/go-twowaysql v1.8.0
 	github.com/getkin/kin-openapi v0.118.0
@@ -11,6 +11,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.1
 	github.com/go-playground/validator/v10 v10.14.1
 	github.com/go-sql-driver/mysql v1.7.1
+	github.com/google/uuid v1.3.0
 	github.com/jinzhu/copier v0.3.5
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/labstack/echo-contrib v0.14.1
@@ -56,7 +57,6 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang-sql/civil v0.0.0-20190719163853-cb61b32ac6fe // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
