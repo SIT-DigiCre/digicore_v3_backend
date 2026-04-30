@@ -9,7 +9,7 @@ import (
 )
 
 func (s *server) DeleteUserProfileLinks(ctx echo.Context, param api.DeleteUserProfileLinksParams) error {
-	id := param.ID.String()
+	id := param.Id.String()
 	dbTransactionClient, err := db.OpenTransaction()
 	if err != nil {
 		return response.ErrorResponse(ctx, err)
