@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *server) DeleteUserProfileLinks(ctx echo.Context, param *api.DeleteUserProfileLinksParams) error {
+func (s *server) DeleteUserProfileLinks(ctx echo.Context, param api.DeleteUserProfileLinksParams) error {
 	id := param.ID.String()
 	dbTransactionClient, err := db.OpenTransaction()
 	if err != nil {
