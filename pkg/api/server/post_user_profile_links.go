@@ -11,20 +11,21 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 )
 
-func (s *server) PostUserProfileLinks(ctx echo.Context) error{
-	dbTransactionClient, err := db.OpenTransaction()
-	if err != nil {
-		return response.ErrorResponse(ctx, err)
-	}
-	defer dbTransactionClient.Rollback()
-	
-	req := api.PostUserProfileLinksJSONBody{}
-	if err := ctx.Bind(&req); err != nil {
-		return response.ErrorResponse(ctx, &response.Error{Code: http.StatusBadRequest, Level: "Error", Message: "リクエストの形式が不正です", Log: err.Error()})
-	}
+func (s *server) PostUserProfileLinks(ctx echo.Context) error {
+    dbTransactionClient, opErr := db.OpenTransaction() 
+   if opErr != nil {
+		return response.ErrorResponse(ctx, opErr) 
+     
+    }
+    defer dbTransactionClient.Rollback()
+    
+    req := api.PostUserProfileLinksJSONBody{}
+    if bindErr := ctx.Bind(&req); bindErr != nil {
+		return response.ErrorResponse(ctx, &response.Error{Code: http.StatusBadRequest, Level: "Error", Message: "...", Log: bindErr.Error()})
+    }
 
 	if err := validator.Validate(req); err != nil {
-		return response.ErrorResponse(ctx, &response.Error{Code: http.StatusBadRequest, Level: "Error", Message: "リクエストの形式が不正です", Log: err.Error()})
+		return response.ErrorResponse(ctx, err)
 	}
 
 	res, err := user.PostUserProfileLinks(ctx, &dbTransactionClient, req)
@@ -32,10 +33,9 @@ func (s *server) PostUserProfileLinks(ctx echo.Context) error{
 		return response.ErrorResponse(ctx, err)
 	}
 
-	err = dbTransactionClient.Commit()
-	if err != nil {
-		return response.ErrorResponse(ctx, err)
-	}
+    if comErr := dbTransactionClient.Commit(); comErr != nil { 
+        return response.ErrorResponse(ctx, comErr)
+    }
 
-	return response.SuccessResponse(ctx, res)
-}	
+    return response.SuccessResponse(ctx, res)
+}
