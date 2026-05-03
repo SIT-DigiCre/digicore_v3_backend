@@ -1,6 +1,6 @@
 SELECT
     BIN_TO_UUID(upl.id) as id,
-    upl.url_link,
+    upl.link_url,
     upl.created_at,
     upl.updated_at
 FROM user_profile_links as upl
