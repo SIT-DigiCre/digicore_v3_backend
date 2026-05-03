@@ -589,10 +589,10 @@ type ResGetUserUserId struct {
 	DiscordUserId string `json:"discordUserId"`
 	IconUrl       string `json:"iconUrl"`
 	LinkUrls      []struct {
-		CreatedAt time.Time          `json:"createdAt"`
-		Id        openapi_types.UUID `json:"id"`
-		LinkUrl   string             `json:"linkUrl"`
-		UpdatedAt time.Time          `json:"updatedAt"`
+		CreatedAt time.Time `json:"createdAt"`
+		Id        string    `json:"id"`
+		LinkUrl   string    `json:"linkUrl"`
+		UpdatedAt time.Time `json:"updatedAt"`
 	} `json:"linkUrls"`
 	SchoolGrade       int    `json:"schoolGrade"`
 	ShortIntroduction string `json:"shortIntroduction"`

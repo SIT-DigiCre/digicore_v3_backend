@@ -6,7 +6,6 @@ required:
 properties:
   id:
     type: string
-    format: uuid
   linkUrl:
     type: string
     format: uri
