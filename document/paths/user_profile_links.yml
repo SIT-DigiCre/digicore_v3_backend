@@ -18,24 +18,24 @@ post:
     500:
       $ref: "../responses/internal_server.yml"
 delete:
-    tags:
-      - user_profile_links
-    summary: "ユーザープロフィールリンクを削除する"
-    security:
-      - BearerAuth: []
-    parameters:
-      - name: id
-        in: query
-        required: true
-        schema:
-          type: string
-          format: uuid
-    responses:
-      200:
-        description: "Success delete user_profile_links"
-      403:
-       $ref: "../responses/unauthorized.yml"
-      404:
-        $ref: "../responses/not_found.yml"
-      500:
-        $ref: "../responses/internal_server.yml"
+  tags:
+    - user_profile_links
+  summary: "ユーザープロフィールリンクを削除する"
+  security:
+    - BearerAuth: []
+  parameters:
+    - name: id
+      in: query
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    200:
+      description: "Success delete user_profile_links"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"
