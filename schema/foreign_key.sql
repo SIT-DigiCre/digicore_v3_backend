@@ -31,3 +31,8 @@ ALTER TABLE budgets ADD CONSTRAINT fk_budgets_approver_user_id_users_id FOREIGN 
 ALTER TABLE group_claims ADD CONSTRAINT fk_group_claims_group_id_groups_id FOREIGN KEY (group_id) REFERENCES `groups`(id);
 
 ALTER TABLE user_profile_links ADD CONSTRAINT fk_user_profile_links_user_id_users_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE;
+ALTER TABLE grade_updates ADD CONSTRAINT fk_grade_updates_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE grade_updates ADD CONSTRAINT fk_grade_updates_approved_by_users_id FOREIGN KEY (approved_by) REFERENCES users(id);
+
+ALTER TABLE reentries ADD CONSTRAINT fk_reentries_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE reentries ADD CONSTRAINT fk_reentries_checked_by_users_id FOREIGN KEY (checked_by) REFERENCES users(id);

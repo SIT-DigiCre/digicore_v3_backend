@@ -14,7 +14,7 @@ const (
 	fromName     = "芝浦工業大学 デジクリ"
 )
 
-func sendEmail(to string, subject string, body string) error {
+func SendEmail(to string, subject string, body string) error {
 	if env.SendGridApiKey == "" {
 		return fmt.Errorf("SENDGRID_API_KEYが設定されていません")
 	}

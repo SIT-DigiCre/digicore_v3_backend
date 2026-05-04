@@ -13,6 +13,10 @@ import (
 func PostActivityCheckout(ctx echo.Context, dbClient db.TransactionClient, requestBody api.ReqPostActivityCheckout) (api.BlankSuccess, *response.Error) {
 	userId := ctx.Get("user_id").(string)
 
+	if err := lockActivityUser(dbClient, userId); err != nil {
+		return api.BlankSuccess{}, err
+	}
+
 	executed, err := executeCheckout(dbClient, userId, requestBody.Place, requestBody.CheckoutAt, nil)
 	if err != nil {
 		return api.BlankSuccess{}, err
@@ -30,11 +34,11 @@ func PostActivityCheckout(ctx echo.Context, dbClient db.TransactionClient, reque
 }
 
 func executeCheckout(dbClient db.TransactionClient, userId string, place string, requestedCheckoutAt *time.Time, note *string) (executed bool, err *response.Error) {
-	latest, err := selectLatestActivity(dbClient, userId, place)
+	current, err := selectCurrentActivity(dbClient, userId, place)
 	if err != nil {
 		return false, err
 	}
-	if latest == nil || latest.CheckedOutAt != nil {
+	if current == nil {
 		return false, nil
 	}
 
@@ -50,7 +54,7 @@ func executeCheckout(dbClient db.TransactionClient, userId string, place string,
 		}
 		checkOutAt = *requestedCheckoutAt
 	}
-	if checkOutAt.Before(latest.InitialCheckedInAt) || checkOutAt.Before(latest.CheckedInAt) {
+	if checkOutAt.Before(current.InitialCheckedInAt) || checkOutAt.Before(current.CheckedInAt) {
 		return false, &response.Error{
 			Code:    http.StatusBadRequest,
 			Level:   "Info",
@@ -64,12 +68,12 @@ func executeCheckout(dbClient db.TransactionClient, userId string, place string,
 		CheckedOutAt time.Time `twowaysql:"checkedOutAt"`
 		Note         *string   `twowaysql:"note"`
 	}{
-		Id:           latest.ID,
+		Id:           current.ID,
 		CheckedOutAt: checkOutAt,
 		Note:         note,
 	}
 
-	_, execErr := dbClient.Exec("sql/activity/update_activity_checkout.sql", &params, false)
+	result, execErr := dbClient.Exec("sql/activity/update_activity_checkout.sql", &params, false)
 	if execErr != nil {
 		return false, &response.Error{
 			Code:    http.StatusInternalServerError,
@@ -77,6 +81,19 @@ func executeCheckout(dbClient db.TransactionClient, userId string, place string,
 			Message: "DBエラーが発生しました",
 			Log:     execErr.Error(),
 		}
+	}
+
+	rowsAffected, rowsErr := result.RowsAffected()
+	if rowsErr != nil {
+		return false, &response.Error{
+			Code:    http.StatusInternalServerError,
+			Level:   "Info",
+			Message: "DBエラーが発生しました",
+			Log:     rowsErr.Error(),
+		}
+	}
+	if rowsAffected == 0 {
+		return false, nil
 	}
 
 	return true, nil

@@ -1,0 +1,14 @@
+put:
+  tags:
+    - admin
+  description: "Set inactive members is_member=false in bulk"
+  security:
+    - BearerAuth:
+        - "infra"
+  responses:
+    200:
+      $ref: "../responses/blank_success.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

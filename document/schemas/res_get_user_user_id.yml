@@ -8,6 +8,8 @@ required:
   - shortIntroduction
   - activeLimit
   - linkUrls
+  - isGraduated
+  - isMember
 properties:
   userId:
     type: string
@@ -29,3 +31,7 @@ properties:
     type: array
     items:  
       $ref: './res_get_user_profile_links.yml'
+  isGraduated:
+    type: boolean
+  isMember:
+    type: boolean

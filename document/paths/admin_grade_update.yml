@@ -1,0 +1,18 @@
+get:
+  tags:
+    - grade-update
+  description: "承認待ち学年補正申請一覧の取得（管理者用）"
+  security:
+    - BearerAuth:
+        - "infra"
+  responses:
+    200:
+      description: "Success get pending grade update requests"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_admin_grade_update.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

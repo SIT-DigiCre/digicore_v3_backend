@@ -19,13 +19,6 @@ const (
 	Checkout ReqPutActivityRecordRecordIdActivityType = "checkout"
 )
 
-// Defines values for GetActivityPlacePlaceHistoryParamsPeriod.
-const (
-	Day   GetActivityPlacePlaceHistoryParamsPeriod = "day"
-	Month GetActivityPlacePlaceHistoryParamsPeriod = "month"
-	Week  GetActivityPlacePlaceHistoryParamsPeriod = "week"
-)
-
 // Error defines model for Error.
 type Error struct {
 	Level   string `json:"level"`
@@ -49,12 +42,26 @@ type ReqPostBudget struct {
 	Name  string `ja:"名前" json:"name" validate:"required"`
 }
 
+// ReqPostEventEvent defines model for ReqPostEventEvent.
+type ReqPostEventEvent struct {
+	CalendarView bool   `ja:"カレンダー表示" json:"calendar_view" validate:"required"`
+	Description  string `ja:"説明" json:"description" validate:"required,min=1"`
+	Name         string `ja:"イベント名" json:"name" validate:"required,min=1"`
+}
+
 // ReqPostGroup defines model for ReqPostGroup.
 type ReqPostGroup struct {
-	Description  string `ja:"グループの説明" json:"description" validate:"required,min=1,max=1000"`
-	IsAdminGroup bool   `ja:"管理者グループフラグ" json:"isAdminGroup"`
-	Joinable     bool   `ja:"参加可能フラグ" json:"joinable"`
-	Name         string `ja:"グループ名" json:"name" validate:"required,min=1,max=255"`
+	Description string `ja:"グループの説明" json:"description" validate:"required,min=1,max=1000"`
+	Joinable    bool   `ja:"参加可能フラグ" json:"joinable"`
+	Name        string `ja:"グループ名" json:"name" validate:"required,min=1,max=255"`
+}
+
+// ReqPostGroupAdmin defines model for ReqPostGroupAdmin.
+type ReqPostGroupAdmin struct {
+	Claim       string `ja:"グループに付与するclaim名" json:"claim" validate:"required,max=255"`
+	Description string `ja:"グループの説明" json:"description" validate:"required,min=1,max=1000"`
+	Joinable    bool   `ja:"参加可能フラグ" json:"joinable"`
+	Name        string `ja:"グループ名" json:"name" validate:"required,min=1,max=255"`
 }
 
 // ReqPostGroupGroupIdUser defines model for ReqPostGroupGroupIdUser.
@@ -78,7 +85,7 @@ type ReqPostMail struct {
 
 // ReqPostMattermostCreateuser defines model for ReqPostMattermostCreateuser.
 type ReqPostMattermostCreateuser struct {
-	Nickname string `ja:"ニックネーム" json:"nickname" validate:"required,min=3,max=22"`
+	Nickname string `ja:"ニックネーム" json:"nickname" validate:"required,min=1,max=64"`
 	Password string `ja:"パスワード" json:"password" validate:"required,min=8,max=64"`
 	Username string `ja:"ユーザー名" json:"username" validate:"required,min=3,max=22"`
 }
@@ -93,6 +100,11 @@ type ReqPostStorageMyfile struct {
 	File     string `ja:"ファイル" json:"file" validate:"required,max=104857600"`
 	IsPublic bool   `ja:"公開" json:"isPublic" validate:""`
 	Name     string `ja:"ファイル名" json:"name" validate:"required,max=255"`
+}
+
+// ReqPostUserMeGradeUpdate defines model for ReqPostUserMeGradeUpdate.
+type ReqPostUserMeGradeUpdate struct {
+	Reason string `ja:"申請理由" json:"reason" validate:"required"`
 }
 
 // ReqPostWorkTag defines model for ReqPostWorkTag.
@@ -118,6 +130,23 @@ type ReqPutActivityRecordRecordId struct {
 
 // ReqPutActivityRecordRecordIdActivityType defines model for ReqPutActivityRecordRecordId.ActivityType.
 type ReqPutActivityRecordRecordIdActivityType string
+
+// ReqPutAdminChangeStudentNumber defines model for ReqPutAdminChangeStudentNumber.
+type ReqPutAdminChangeStudentNumber struct {
+	StudentNumber string `ja:"学籍番号" json:"studentNumber" validate:"required,max=8"`
+	UserId        string `ja:"ユーザーID" json:"userId" validate:"required,uuid"`
+}
+
+// ReqPutAdminGradeUpdateGradeUpdateId defines model for ReqPutAdminGradeUpdateGradeUpdateId.
+type ReqPutAdminGradeUpdateGradeUpdateId struct {
+	Status string `ja:"ステータス" json:"status" validate:"required,oneof=approved rejected"`
+}
+
+// ReqPutAdminReentryReentryId defines model for ReqPutAdminReentryReentryId.
+type ReqPutAdminReentryReentryId struct {
+	Note   *string `ja:"備考" json:"note,omitempty" validate:"max=255"`
+	Status string  `ja:"ステータス" json:"status" validate:"required,oneof=approved rejected"`
+}
 
 // ReqPutBudgetBudgetIdAdmin defines model for ReqPutBudgetBudgetIdAdmin.
 type ReqPutBudgetBudgetIdAdmin struct {
@@ -156,8 +185,8 @@ type ReqPutBudgetBudgetIdStatusPending struct {
 
 // ReqPutEventEventIdReservationIdMe defines model for ReqPutEventEventIdReservationIdMe.
 type ReqPutEventEventIdReservationIdMe struct {
-	Comment string `ja:"コメント" json:"comment" validate:"max=255"`
-	Url     string `ja:"URL" json:"url" validate:"max=255"`
+	Comment string `ja:"コメント" json:"comment" validate:"min=1,max=255"`
+	Url     string `ja:"URL" json:"url" validate:"min=1,max=255"`
 }
 
 // ReqPutPaymentPaymentId defines model for ReqPutPaymentPaymentId.
@@ -211,6 +240,11 @@ type ReqPutUserMePrivate struct {
 	PhoneNumber           string  `ja:"電話番号" json:"phoneNumber" validate:"required,phonenumber"`
 }
 
+// ReqPutUserMeReentry defines model for ReqPutUserMeReentry.
+type ReqPutUserMeReentry struct {
+	TransferName string `ja:"振込名義" json:"transferName" validate:"required,min=1,max=255"`
+}
+
 // ReqPutWorkTagTagId defines model for ReqPutWorkTagTagId.
 type ReqPutWorkTagTagId struct {
 	Description string `ja:"説明" json:"description" validate:"required"`
@@ -247,11 +281,32 @@ type ResGetActivityPlacePlaceHistory struct {
 
 // ResGetActivityPlacePlaceHistoryObjectUser defines model for ResGetActivityPlacePlaceHistoryObjectUser.
 type ResGetActivityPlacePlaceHistoryObjectUser struct {
+	// CheckInCount 指定期間内の訪問回数。単日範囲では訪問レコード数、複数日範囲では同一日の重複訪問を1回として数える。
 	CheckInCount      int    `json:"checkInCount"`
 	IconUrl           string `json:"iconUrl"`
 	ShortIntroduction string `json:"shortIntroduction"`
 	UserId            string `json:"userId"`
 	Username          string `json:"username"`
+}
+
+// ResGetActivityRecords defines model for ResGetActivityRecords.
+type ResGetActivityRecords struct {
+	Limit   int                                 `json:"limit"`
+	Offset  int                                 `json:"offset"`
+	Records []ResGetActivityRecordsObjectRecord `json:"records"`
+	Total   int                                 `json:"total"`
+}
+
+// ResGetActivityRecordsObjectRecord defines model for ResGetActivityRecordsObjectRecord.
+type ResGetActivityRecordsObjectRecord struct {
+	CheckedInAt         time.Time  `json:"checkedInAt"`
+	CheckedOutAt        *time.Time `json:"checkedOutAt"`
+	InitialCheckedInAt  time.Time  `json:"initialCheckedInAt"`
+	InitialCheckedOutAt *time.Time `json:"initialCheckedOutAt"`
+	Place               string     `json:"place"`
+	RecordId            string     `json:"recordId"`
+	UserId              string     `json:"userId"`
+	Username            string     `json:"username"`
 }
 
 // ResGetActivityUserUserIdRecords defines model for ResGetActivityUserUserIdRecords.
@@ -270,6 +325,41 @@ type ResGetActivityUserUserIdRecordsObjectRecord struct {
 	InitialCheckedOutAt *time.Time `json:"initialCheckedOutAt"`
 	Place               string     `json:"place"`
 	RecordId            string     `json:"recordId"`
+}
+
+// ResGetAdminGradeUpdate defines model for ResGetAdminGradeUpdate.
+type ResGetAdminGradeUpdate struct {
+	GradeUpdates []ResGetAdminGradeUpdateObjectGradeUpdate `json:"gradeUpdates"`
+}
+
+// ResGetAdminGradeUpdateObjectGradeUpdate defines model for ResGetAdminGradeUpdateObjectGradeUpdate.
+type ResGetAdminGradeUpdateObjectGradeUpdate struct {
+	CreatedAt     string `json:"createdAt"`
+	GradeDiff     int    `json:"gradeDiff"`
+	GradeUpdateId string `json:"gradeUpdateId"`
+	Reason        string `json:"reason"`
+	Status        string `json:"status"`
+	UpdatedAt     string `json:"updatedAt"`
+	UserId        string `json:"userId"`
+	Username      string `json:"username"`
+}
+
+// ResGetAdminReentry defines model for ResGetAdminReentry.
+type ResGetAdminReentry struct {
+	Reentries []ResGetAdminReentryObjectReentry `json:"reentries"`
+}
+
+// ResGetAdminReentryObjectReentry defines model for ResGetAdminReentryObjectReentry.
+type ResGetAdminReentryObjectReentry struct {
+	CreatedAt     string  `json:"createdAt"`
+	Note          *string `json:"note,omitempty"`
+	PaymentStatus string  `json:"paymentStatus"`
+	ReentryId     string  `json:"reentryId"`
+	Status        string  `json:"status"`
+	StudentNumber string  `json:"studentNumber"`
+	UpdatedAt     string  `json:"updatedAt"`
+	UserId        string  `json:"userId"`
+	Username      string  `json:"username"`
 }
 
 // ResGetBudget defines model for ResGetBudget.
@@ -468,6 +558,11 @@ type ResGetPaymentPaymentId struct {
 	UserId        string `json:"userId"`
 }
 
+// ResGetPublicMemberCount defines model for ResGetPublicMemberCount.
+type ResGetPublicMemberCount struct {
+	Count int `json:"count"`
+}
+
 // ResGetSignup defines model for ResGetSignup.
 type ResGetSignup struct {
 	Url string `json:"url"`
@@ -525,20 +620,43 @@ type ResGetUser struct {
 
 // ResGetUserMe defines model for ResGetUserMe.
 type ResGetUserMe struct {
-	ActiveLimit       string `json:"activeLimit"`
-	DiscordUserId     string `json:"discordUserId"`
-	IconUrl           string `json:"iconUrl"`
-	IsAdmin           bool   `json:"isAdmin"`
-	SchoolGrade       int    `json:"schoolGrade"`
-	ShortIntroduction string `json:"shortIntroduction"`
-	StudentNumber     string `json:"studentNumber"`
-	UserId            string `json:"userId"`
-	Username          string `json:"username"`
+	ActiveLimit       string   `json:"activeLimit"`
+	Claims            []string `json:"claims"`
+	DiscordUserId     string   `json:"discordUserId"`
+	IconUrl           string   `json:"iconUrl"`
+	IsGraduated       bool     `json:"isGraduated"`
+	IsMember          bool     `json:"isMember"`
+	SchoolGrade       int      `json:"schoolGrade"`
+	ShortIntroduction string   `json:"shortIntroduction"`
+	StudentNumber     string   `json:"studentNumber"`
+	UserId            string   `json:"userId"`
+	Username          string   `json:"username"`
 }
 
 // ResGetUserMeDiscord defines model for ResGetUserMeDiscord.
 type ResGetUserMeDiscord struct {
 	Url string `json:"url"`
+}
+
+// ResGetUserMeGradeUpdate defines model for ResGetUserMeGradeUpdate.
+type ResGetUserMeGradeUpdate struct {
+	GradeUpdates []ResGetUserMeGradeUpdateObjectGradeUpdate `json:"gradeUpdates"`
+}
+
+// ResGetUserMeGradeUpdateObjectGradeUpdate defines model for ResGetUserMeGradeUpdateObjectGradeUpdate.
+type ResGetUserMeGradeUpdateObjectGradeUpdate struct {
+	CreatedAt     string `json:"createdAt"`
+	GradeDiff     int    `json:"gradeDiff"`
+	GradeUpdateId string `json:"gradeUpdateId"`
+	Reason        string `json:"reason"`
+	Status        string `json:"status"`
+	UpdatedAt     string `json:"updatedAt"`
+}
+
+// ResGetUserMeGrants defines model for ResGetUserMeGrants.
+type ResGetUserMeGrants struct {
+	// Grants claim 一覧を CLAIM_ プレフィックス付きで返す。例: infra -> CLAIM_infra, account -> CLAIM_account
+	Grants []string `json:"grants"`
 }
 
 // ResGetUserMeIntroduction defines model for ResGetUserMeIntroduction.
@@ -575,9 +693,20 @@ type ResGetUserMePrivate struct {
 	PhoneNumber           string `json:"phoneNumber"`
 }
 
+// ResGetUserMeReentryObjectReentry defines model for ResGetUserMeReentryObjectReentry.
+type ResGetUserMeReentryObjectReentry struct {
+	CreatedAt string `json:"createdAt"`
+	ReentryId string `json:"reentryId"`
+	Status    string `json:"status"`
+	UpdatedAt string `json:"updatedAt"`
+}
+
 // ResGetUserObjectUser defines model for ResGetUserObjectUser.
 type ResGetUserObjectUser struct {
 	IconUrl           string `json:"iconUrl"`
+	IsGraduated       bool   `json:"isGraduated"`
+	IsMember          bool   `json:"isMember"`
+	SchoolGrade       int    `json:"schoolGrade"`
 	ShortIntroduction string `json:"shortIntroduction"`
 	UserId            string `json:"userId"`
 	Username          string `json:"username"`
@@ -588,6 +717,8 @@ type ResGetUserUserId struct {
 	ActiveLimit   string `json:"activeLimit"`
 	DiscordUserId string `json:"discordUserId"`
 	IconUrl       string `json:"iconUrl"`
+	IsGraduated   bool   `json:"isGraduated"`
+	IsMember      bool   `json:"isMember"`
 	LinkUrls      []struct {
 		CreatedAt time.Time `json:"createdAt"`
 		Id        string    `json:"id"`
@@ -631,10 +762,15 @@ type ResGetWorkWork struct {
 
 // ResGetWorkWorkObjectWork defines model for ResGetWorkWorkObjectWork.
 type ResGetWorkWorkObjectWork struct {
-	Authors []ResGetWorkWorkObjectWorkObjectAuthor `json:"authors"`
-	Name    string                                 `json:"name"`
-	Tags    []ResGetWorkWorkObjectWorkObjectTag    `json:"tags"`
-	WorkId  string                                 `json:"workId"`
+	Authors     []ResGetWorkWorkObjectWorkObjectAuthor `json:"authors"`
+	Description string                                 `json:"description"`
+	FirstFile   *struct {
+		FileId string `json:"fileId"`
+		Name   string `json:"name"`
+	} `json:"firstFile"`
+	Name   string                              `json:"name"`
+	Tags   []ResGetWorkWorkObjectWorkObjectTag `json:"tags"`
+	WorkId string                              `json:"workId"`
 }
 
 // ResGetWorkWorkObjectWorkObjectAuthor defines model for ResGetWorkWorkObjectWorkObjectAuthor.
@@ -688,6 +824,14 @@ type ResGetWorkWorkWorkIdPublic struct {
 	Name        string                             `json:"name"`
 	Tags        []ResGetWorkWorkWorkIdObjectTag    `json:"tags"`
 	WorkId      string                             `json:"workId"`
+}
+
+// ResPostEventEvent defines model for ResPostEventEvent.
+type ResPostEventEvent struct {
+	CalendarView bool               `ja:"カレンダー表示" json:"calendar_view"`
+	Description  string             `ja:"説明" json:"description"`
+	EventId      openapi_types.UUID `ja:"イベントID" json:"event_id"`
+	Name         string             `ja:"イベント名" json:"name"`
 }
 
 // ResPostGroup defines model for ResPostGroup.
@@ -744,6 +888,9 @@ type BadRequest = Error
 // BlankSuccess defines model for BlankSuccess.
 type BlankSuccess = Success
 
+// Conflict defines model for Conflict.
+type Conflict = Error
+
 // InternalServer defines model for InternalServer.
 type InternalServer = Error
 
@@ -755,12 +902,18 @@ type Unauthorized = Error
 
 // GetActivityPlacePlaceHistoryParams defines parameters for GetActivityPlacePlaceHistory.
 type GetActivityPlacePlaceHistoryParams struct {
-	Period GetActivityPlacePlaceHistoryParamsPeriod `form:"period" json:"period"`
-	Date   openapi_types.Date                       `form:"date" json:"date"`
+	// StartAt 集計開始日時。endAt 以下である必要がある。
+	StartAt time.Time `form:"startAt" json:"startAt"`
+
+	// EndAt 集計終了日時。startAt 以上である必要がある。
+	EndAt time.Time `form:"endAt" json:"endAt"`
 }
 
-// GetActivityPlacePlaceHistoryParamsPeriod defines parameters for GetActivityPlacePlaceHistory.
-type GetActivityPlacePlaceHistoryParamsPeriod string
+// GetActivityRecordsParams defines parameters for GetActivityRecords.
+type GetActivityRecordsParams struct {
+	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+	Limit  *int `form:"limit,omitempty" json:"limit,omitempty"`
+}
 
 // GetActivityUserUserIdRecordsParams defines parameters for GetActivityUserUserIdRecords.
 type GetActivityUserUserIdRecordsParams struct {
@@ -778,6 +931,28 @@ type GetBudgetParams struct {
 // GetEventParams defines parameters for GetEvent.
 type GetEventParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
+}
+
+// PostEventEventIdReservationJSONBody defines parameters for PostEventEventIdReservation.
+type PostEventEventIdReservationJSONBody struct {
+	Capacity              int       `ja:"定員" json:"capacity" validate:"required,min=1"`
+	Description           string    `ja:"枠の説明" json:"description" validate:"required,min=1"`
+	FinishDate            time.Time `ja:"枠終了日時" json:"finishDate" validate:"required"`
+	Name                  string    `ja:"枠名" json:"name" validate:"required,min=1,max=255"`
+	ReservationFinishDate time.Time `ja:"予約終了日時" json:"reservationFinishDate" validate:"required"`
+	ReservationStartDate  time.Time `ja:"予約開始日時" json:"reservationStartDate" validate:"required"`
+	StartDate             time.Time `ja:"枠開始日時" json:"startDate" validate:"required"`
+}
+
+// PutEventEventIdReservationIdJSONBody defines parameters for PutEventEventIdReservationId.
+type PutEventEventIdReservationIdJSONBody struct {
+	Capacity              int       `ja:"定員" json:"capacity" validate:"required,min=1"`
+	Description           string    `ja:"枠の説明" json:"description" validate:"required,min=1"`
+	FinishDate            time.Time `ja:"枠終了日時" json:"finishDate" validate:"required"`
+	Name                  string    `ja:"枠名" json:"name" validate:"required,min=1,max=255"`
+	ReservationFinishDate time.Time `ja:"予約終了日時" json:"reservationFinishDate" validate:"required"`
+	ReservationStartDate  time.Time `ja:"予約開始日時" json:"reservationStartDate" validate:"required"`
+	StartDate             time.Time `ja:"枠開始日時" json:"startDate" validate:"required"`
 }
 
 // GetGroupParams defines parameters for GetGroup.
@@ -835,6 +1010,15 @@ type PostActivityCheckoutUserIdJSONRequestBody = ReqPostActivityCheckout
 // PutActivityRecordRecordIdJSONRequestBody defines body for PutActivityRecordRecordId for application/json ContentType.
 type PutActivityRecordRecordIdJSONRequestBody = ReqPutActivityRecordRecordId
 
+// PutAdminChangeStudentNumberJSONRequestBody defines body for PutAdminChangeStudentNumber for application/json ContentType.
+type PutAdminChangeStudentNumberJSONRequestBody = ReqPutAdminChangeStudentNumber
+
+// PutAdminGradeUpdateGradeUpdateIdJSONRequestBody defines body for PutAdminGradeUpdateGradeUpdateId for application/json ContentType.
+type PutAdminGradeUpdateGradeUpdateIdJSONRequestBody = ReqPutAdminGradeUpdateGradeUpdateId
+
+// PutAdminReentryReentryIdJSONRequestBody defines body for PutAdminReentryReentryId for application/json ContentType.
+type PutAdminReentryReentryIdJSONRequestBody = ReqPutAdminReentryReentryId
+
 // PostBudgetJSONRequestBody defines body for PostBudget for application/json ContentType.
 type PostBudgetJSONRequestBody = ReqPostBudget
 
@@ -853,11 +1037,26 @@ type PutBudgetBudgetIdStatusPaidJSONRequestBody = ReqPutBudgetBudgetIdStatusPaid
 // PutBudgetBudgetIdStatusPendingJSONRequestBody defines body for PutBudgetBudgetIdStatusPending for application/json ContentType.
 type PutBudgetBudgetIdStatusPendingJSONRequestBody = ReqPutBudgetBudgetIdStatusPending
 
+// PostEventJSONRequestBody defines body for PostEvent for application/json ContentType.
+type PostEventJSONRequestBody = ReqPostEventEvent
+
+// PutEventEventIdJSONRequestBody defines body for PutEventEventId for application/json ContentType.
+type PutEventEventIdJSONRequestBody = ReqPostEventEvent
+
+// PostEventEventIdReservationJSONRequestBody defines body for PostEventEventIdReservation for application/json ContentType.
+type PostEventEventIdReservationJSONRequestBody PostEventEventIdReservationJSONBody
+
+// PutEventEventIdReservationIdJSONRequestBody defines body for PutEventEventIdReservationId for application/json ContentType.
+type PutEventEventIdReservationIdJSONRequestBody PutEventEventIdReservationIdJSONBody
+
 // PutEventEventIdReservationIdMeJSONRequestBody defines body for PutEventEventIdReservationIdMe for application/json ContentType.
 type PutEventEventIdReservationIdMeJSONRequestBody = ReqPutEventEventIdReservationIdMe
 
 // PostGroupJSONRequestBody defines body for PostGroup for application/json ContentType.
 type PostGroupJSONRequestBody = ReqPostGroup
+
+// PostGroupAdminJSONRequestBody defines body for PostGroupAdmin for application/json ContentType.
+type PostGroupAdminJSONRequestBody = ReqPostGroupAdmin
 
 // PostGroupGroupIdUserJSONRequestBody defines body for PostGroupGroupIdUser for application/json ContentType.
 type PostGroupGroupIdUserJSONRequestBody = ReqPostGroupGroupIdUser
@@ -889,6 +1088,9 @@ type PutUserMeJSONRequestBody = ReqPutUserMe
 // PutUserMeDiscordCallbackJSONRequestBody defines body for PutUserMeDiscordCallback for application/json ContentType.
 type PutUserMeDiscordCallbackJSONRequestBody = ReqPutUserMeDiscordCallback
 
+// PostUserMeGradeUpdateJSONRequestBody defines body for PostUserMeGradeUpdate for application/json ContentType.
+type PostUserMeGradeUpdateJSONRequestBody = ReqPostUserMeGradeUpdate
+
 // PutUserMeIntroductionJSONRequestBody defines body for PutUserMeIntroduction for application/json ContentType.
 type PutUserMeIntroductionJSONRequestBody = ReqPutUserMeIntroduction
 
@@ -897,6 +1099,9 @@ type PutUserMePaymentJSONRequestBody = ReqPutUserMePayment
 
 // PutUserMePrivateJSONRequestBody defines body for PutUserMePrivate for application/json ContentType.
 type PutUserMePrivateJSONRequestBody = ReqPutUserMePrivate
+
+// PutUserMeReentryJSONRequestBody defines body for PutUserMeReentry for application/json ContentType.
+type PutUserMeReentryJSONRequestBody = ReqPutUserMeReentry
 
 // PostUserProfileLinksJSONRequestBody defines body for PostUserProfileLinks for application/json ContentType.
 type PostUserProfileLinksJSONRequestBody PostUserProfileLinksJSONBody

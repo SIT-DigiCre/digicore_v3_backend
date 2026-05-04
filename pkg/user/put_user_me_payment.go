@@ -36,7 +36,7 @@ func updateUserPayment(dbClient db.TransactionClient, userId string, requestBody
 		TransferName string `twowaysql:"transferName"`
 	}{
 		UserId:       userId,
-		Year:         utils.GetSchoolYear(),
+		Year:         utils.GetFiscalYear(),
 		TransferName: requestBody.TransferName,
 	}
 	_, update, err := dbClient.DuplicateUpdate("sql/user/insert_user_payment.sql", "sql/user/update_user_payment.sql", &params)

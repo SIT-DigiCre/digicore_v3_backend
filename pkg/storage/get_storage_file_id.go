@@ -7,6 +7,7 @@ import (
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/budget"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 	"github.com/aws/aws-sdk-go/aws"
@@ -21,6 +22,16 @@ func GetStorageFileId(ctx echo.Context, dbClient db.Client, fileId string) (api.
 	if err != nil {
 		return api.ResGetStorageFileId{}, err
 	}
+	if !file.IsPublic {
+		userId, err := getRequestUserId(ctx)
+		if err != nil {
+			return api.ResGetStorageFileId{}, err
+		}
+		err = validateBudgetFileAccess(dbClient, userId, fileId)
+		if err != nil {
+			return api.ResGetStorageFileId{}, err
+		}
+	}
 	rerr := copier.Copy(&res, &file)
 	if rerr != nil {
 		return api.ResGetStorageFileId{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "不明なエラーが発生しました", Log: rerr.Error()}
@@ -31,6 +42,34 @@ func GetStorageFileId(ctx echo.Context, dbClient db.Client, fileId string) (api.
 		return api.ResGetStorageFileId{}, err
 	}
 	return res, nil
+}
+
+func getRequestUserId(ctx echo.Context) (string, *response.Error) {
+	userId, ok := ctx.Get("user_id").(string)
+	if !ok || userId == "" {
+		return "", &response.Error{Code: http.StatusUnauthorized, Level: "Info", Message: "ログインされていません", Log: "user_id is not set"}
+	}
+	return userId, nil
+}
+
+func validateBudgetFileAccess(dbClient db.Client, requestUserId string, fileId string) *response.Error {
+	budgetFileAccess, err := budget.GetBudgetFileAccessFromFileId(dbClient, fileId)
+	if err != nil {
+		return err
+	}
+	if budgetFileAccess == nil {
+		return nil
+	}
+
+	canViewFiles, err := budget.CanViewBudgetFiles(dbClient, requestUserId, budgetFileAccess.ProposerUserId)
+	if err != nil {
+		return err
+	}
+	if !canViewFiles {
+		return &response.Error{Code: http.StatusForbidden, Level: "Info", Message: "ファイルの閲覧権限がありません", Log: "permission denied"}
+	}
+
+	return nil
 }
 
 func getFileURL(key string, isPublic bool) (string, *response.Error) {

@@ -27,8 +27,16 @@ tags:
     description: Mattermost system
   - name: mail
     description: Mail system
+  - name: admin
+    description: Admin system
   - name: activity
     description: Activity system
+  - name: public
+    description: Public system
+  - name: grade-update
+    description: Grade update request system
+  - name: reentry
+    description: Reentry request system
 paths:
   /status:
     get:
@@ -113,6 +121,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResPostSignupCallback'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServer'
   /login:
@@ -375,6 +387,26 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /user/me/graduated:
+    put:
+      tags:
+        - user
+      description: Set my graduated status
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success update my profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMe'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me/discord:
     get:
       tags:
@@ -544,6 +576,51 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetUserMePayment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /user/me/grants:
+    get:
+      tags:
+        - user
+      description: Get my available grants from claims with CLAIM_ prefix
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success get my grants
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMeGrants'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /user/me/reentry:
+    put:
+      tags:
+        - reentry
+      description: 再入部申請（振込報告と同時）
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: 再入部申請
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutUserMeReentry'
+      responses:
+        '200':
+          description: Success create reentry request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMeReentryObjectReentry'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -724,6 +801,32 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+    post:
+      tags:
+        - event
+      description: Post event
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Create event
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostEventEvent'
+      responses:
+        '200':
+          description: Create event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostEventEvent'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   '/event/{eventId}':
     get:
       tags:
@@ -744,6 +847,178 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetEventEventId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - event
+      description: Update event
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update event
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostEventEvent'
+      responses:
+        '200':
+          description: Success update event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostEventEvent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/event/{eventId}/reservation':
+    post:
+      tags:
+        - event
+      description: Create event reservation
+      security:
+        - BearerAuth:
+            - infra
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Create event reservation
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - startDate
+                - finishDate
+                - reservationStartDate
+                - reservationFinishDate
+                - capacity
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1,max=255'
+                    ja: 枠名
+                description:
+                  type: string
+                  minLength: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1'
+                    ja: 枠の説明
+                startDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 枠開始日時
+                finishDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 枠終了日時
+                reservationStartDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 予約開始日時
+                reservationFinishDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 予約終了日時
+                capacity:
+                  type: integer
+                  minimum: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1'
+                    ja: 定員
+      responses:
+        '200':
+          description: Success create event reservation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - eventId
+                  - reservationId
+                  - name
+                  - description
+                  - startDate
+                  - finishDate
+                  - reservationStartDate
+                  - reservationFinishDate
+                  - capacity
+                properties:
+                  eventId:
+                    type: string
+                    format: uuid
+                    x-oapi-codegen-extra-tags:
+                      ja: イベントID
+                  reservationId:
+                    type: string
+                    format: uuid
+                    x-oapi-codegen-extra-tags:
+                      ja: 枠ID
+                  name:
+                    type: string
+                    x-oapi-codegen-extra-tags:
+                      ja: 枠名
+                  description:
+                    type: string
+                    x-oapi-codegen-extra-tags:
+                      ja: 枠の説明
+                  startDate:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 枠開始日時
+                  finishDate:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 枠終了日時
+                  reservationStartDate:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 予約開始日時
+                  reservationFinishDate:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 予約終了日時
+                  capacity:
+                    type: integer
+                    x-oapi-codegen-extra-tags:
+                      ja: 定員
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -775,6 +1050,121 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetEventEventIdReservationId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - event
+      description: Update event reservation
+      security:
+        - BearerAuth:
+            - infra
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - startDate
+                - finishDate
+                - reservationStartDate
+                - reservationFinishDate
+                - capacity
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1,max=255'
+                    ja: 枠名
+                description:
+                  type: string
+                  minLength: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1'
+                    ja: 枠の説明
+                startDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 枠開始日時
+                finishDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 枠終了日時
+                reservationStartDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 予約開始日時
+                reservationFinishDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 予約終了日時
+                capacity:
+                  type: integer
+                  minimum: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1'
+                    ja: 定員
+      responses:
+        '200':
+          description: Success update event reservation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetEventEventIdReservationId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - event
+      description: Delete event reservation
+      security:
+        - BearerAuth:
+            - infra
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Success delete event reservation
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1263,6 +1653,33 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /group/admin:
+    post:
+      tags:
+        - group
+      description: Create new group with any claim. infra権限を持つユーザーが任意のclaimのグループを作成可能
+      security:
+        - BearerAuth:
+            - infra
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostGroupAdmin'
+      responses:
+        '200':
+          description: Success create admin group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostGroup'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   '/group/{groupId}':
     get:
       tags:
@@ -1602,10 +2019,10 @@ paths:
     put:
       tags:
         - budget
-      description: Update budget by admin
+      description: Update budget by account role
       security:
         - BearerAuth:
-            - admin
+            - account
       parameters:
         - name: budgetId
           in: path
@@ -1639,7 +2056,7 @@ paths:
       description: Send bulk email
       security:
         - BearerAuth:
-            - admin
+            - infra
       requestBody:
         description: Email request
         required: true
@@ -1656,6 +2073,60 @@ paths:
                 $ref: '#/components/schemas/ResPostMail'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /admin/inactive:
+    put:
+      tags:
+        - admin
+      description: Set inactive members is_member=false in bulk
+      security:
+        - BearerAuth:
+            - infra
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /admin/change-student-number:
+    put:
+      tags:
+        - admin
+      description: ユーザーの学籍番号を更新する
+      security:
+        - BearerAuth:
+            - infra
+      requestBody:
+        description: 更新対象ユーザーと更新後学籍番号
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutAdminChangeStudentNumber'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /admin/school-grade:
+    put:
+      tags:
+        - admin
+      description: school_gradeを一括更新する
+      security:
+        - BearerAuth:
+            - infra
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '500':
@@ -1714,7 +2185,8 @@ paths:
         - activity
       description: Admin force activity checkout
       security:
-        - BearerAuth: []
+        - BearerAuth:
+            - infra
       parameters:
         - name: userId
           in: path
@@ -1770,6 +2242,62 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - activity
+      description: Delete activity record
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: recordId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /activity/records:
+    get:
+      tags:
+        - activity
+      description: Get activity records for admin
+      security:
+        - BearerAuth:
+            - infra
+      parameters:
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+      responses:
+        '200':
+          description: Success get activity records
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetActivityRecords'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   '/activity/place/{place}/current':
     get:
       tags:
@@ -1798,7 +2326,7 @@ paths:
     get:
       tags:
         - activity
-      description: Get place visit history
+      description: Get place visit history. startAt から endAt までの訪問回数を返す。単日範囲では訪問レコード数、複数日範囲では同一ユーザーの同一日の複数回訪問を1回として数える。
       security:
         - BearerAuth: []
       parameters:
@@ -1807,21 +2335,20 @@ paths:
           required: true
           schema:
             type: string
-        - name: period
+        - name: startAt
           in: query
           required: true
           schema:
             type: string
-            enum:
-              - day
-              - week
-              - month
-        - name: date
+            format: date-time
+          description: 集計開始日時。endAt 以下である必要がある。
+        - name: endAt
           in: query
           required: true
           schema:
             type: string
-            format: date
+            format: date-time
+          description: 集計終了日時。startAt 以上である必要がある。
       responses:
         '200':
           description: Success get place history
@@ -1875,6 +2402,164 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetActivityUserUserIdRecords'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /public/member/count:
+    get:
+      tags:
+        - public
+      description: Get active member count
+      responses:
+        '200':
+          description: Get member count
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPublicMemberCount'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /user/me/grade-update:
+    post:
+      tags:
+        - grade-update
+      description: 学年補正申請の作成
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: 学年補正申請
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostUserMeGradeUpdate'
+      responses:
+        '200':
+          description: Success create grade update request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMeGradeUpdateObjectGradeUpdate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    get:
+      tags:
+        - grade-update
+      description: 自分の学年補正申請一覧の取得
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success get my grade update requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMeGradeUpdate'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /admin/grade-update:
+    get:
+      tags:
+        - grade-update
+      description: 承認待ち学年補正申請一覧の取得（管理者用）
+      security:
+        - BearerAuth:
+            - infra
+      responses:
+        '200':
+          description: Success get pending grade update requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetAdminGradeUpdate'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/admin/grade-update/{gradeUpdateId}':
+    put:
+      tags:
+        - grade-update
+      description: 学年補正申請の承認/却下（管理者用）
+      security:
+        - BearerAuth:
+            - infra
+      parameters:
+        - name: gradeUpdateId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: 承認/却下リクエスト
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutAdminGradeUpdateGradeUpdateId'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /admin/reentry:
+    get:
+      tags:
+        - reentry
+      description: 承認待ち再入部申請一覧の取得（管理者用）
+      security:
+        - BearerAuth:
+            - infra
+      responses:
+        '200':
+          description: Success get pending reentry requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetAdminReentry'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/admin/reentry/{reentryId}':
+    put:
+      tags:
+        - reentry
+      description: 再入部申請の承認/却下（管理者用）
+      security:
+        - BearerAuth:
+            - infra
+      parameters:
+        - name: reentryId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: 承認/却下リクエスト
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutAdminReentryReentryId'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '500':
@@ -1967,15 +2652,24 @@ components:
       required:
         - userId
         - username
+        - schoolGrade
         - iconUrl
+        - isGraduated
+        - isMember
         - shortIntroduction
       properties:
         userId:
           type: string
         username:
           type: string
+        schoolGrade:
+          type: integer
         iconUrl:
           type: string
+        isGraduated:
+          type: boolean
+        isMember:
+          type: boolean
         shortIntroduction:
           type: string
     ResGetUserUserId:
@@ -1989,6 +2683,8 @@ components:
         - shortIntroduction
         - activeLimit
         - linkUrls
+        - isGraduated
+        - isMember
       properties:
         userId:
           type: string
@@ -2026,6 +2722,10 @@ components:
               updatedAt:
                 type: string
                 format: date-time
+        isGraduated:
+          type: boolean
+        isMember:
+          type: boolean
     ResGetUserUserIdIntroduction:
       required:
         - introduction
@@ -2042,7 +2742,9 @@ components:
         - discordUserId
         - shortIntroduction
         - activeLimit
-        - isAdmin
+        - isGraduated
+        - isMember
+        - claims
       properties:
         userId:
           type: string
@@ -2060,8 +2762,14 @@ components:
           type: string
         activeLimit:
           type: string
-        isAdmin:
+        isGraduated:
           type: boolean
+        isMember:
+          type: boolean
+        claims:
+          type: array
+          items:
+            type: string
     ReqPutUserMe:
       required:
         - username
@@ -2238,6 +2946,15 @@ components:
           type: boolean
         updatedAt:
           type: string
+    ResGetUserMeGrants:
+      required:
+        - grants
+      properties:
+        grants:
+          type: array
+          description: 'claim 一覧を CLAIM_ プレフィックス付きで返す。例: infra -> CLAIM_infra, account -> CLAIM_account'
+          items:
+            type: string
     ReqPutUserMePayment:
       required:
         - transferName
@@ -2247,6 +2964,30 @@ components:
           x-oapi-codegen-extra-tags:
             validate: 'required,min=1,max=255'
             ja: 振込名義
+    ReqPutUserMeReentry:
+      required:
+        - transferName
+      properties:
+        transferName:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 振込名義
+    ResGetUserMeReentryObjectReentry:
+      required:
+        - reentryId
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        reentryId:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
     ResGetUserMeDiscord:
       required:
         - url
@@ -2427,14 +3168,64 @@ components:
       properties:
         comment:
           type: string
+          minLength: 1
           x-oapi-codegen-extra-tags:
-            validate: max=255
+            validate: 'min=1,max=255'
             ja: コメント
         url:
           type: string
+          minLength: 1
           x-oapi-codegen-extra-tags:
-            validate: max=255
+            validate: 'min=1,max=255'
             ja: URL
+    ReqPostEventEvent:
+      required:
+        - name
+        - description
+        - calendar_view
+      properties:
+        name:
+          type: string
+          minLength: 1
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1'
+            ja: イベント名
+        description:
+          type: string
+          minLength: 1
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1'
+            ja: 説明
+        calendar_view:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: カレンダー表示
+    ResPostEventEvent:
+      type: object
+      required:
+        - event_id
+        - name
+        - description
+        - calendar_view
+      properties:
+        event_id:
+          type: string
+          format: uuid
+          x-oapi-codegen-extra-tags:
+            ja: イベントID
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: イベント名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: 説明
+        calendar_view:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: カレンダー表示
     ResGetStorageMyfile:
       required:
         - files
@@ -2535,7 +3326,7 @@ components:
         nickname:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: 'required,min=3,max=22'
+            validate: 'required,min=1,max=64'
             ja: ニックネーム
         password:
           type: string
@@ -2560,6 +3351,8 @@ components:
       required:
         - workId
         - name
+        - description
+        - firstFile
         - authors
         - tags
       properties:
@@ -2567,6 +3360,19 @@ components:
           type: string
         name:
           type: string
+        description:
+          type: string
+        firstFile:
+          type: object
+          nullable: true
+          required:
+            - fileId
+            - name
+          properties:
+            fileId:
+              type: string
+            name:
+              type: string
         authors:
           type: array
           items:
@@ -2912,7 +3718,6 @@ components:
         - name
         - description
         - joinable
-        - isAdminGroup
       properties:
         name:
           type: string
@@ -2928,10 +3733,32 @@ components:
           type: boolean
           x-oapi-codegen-extra-tags:
             ja: 参加可能フラグ
-        isAdminGroup:
+    ReqPostGroupAdmin:
+      required:
+        - name
+        - description
+        - joinable
+        - claim
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: グループ名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=1000'
+            ja: グループの説明
+        joinable:
           type: boolean
           x-oapi-codegen-extra-tags:
-            ja: 管理者グループフラグ
+            ja: 参加可能フラグ
+        claim:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,max=255'
+            ja: グループに付与するclaim名
     ResPostGroup:
       required:
         - groupId
@@ -3378,6 +4205,54 @@ components:
           format: date-time
           x-oapi-codegen-extra-tags:
             ja: 更新時刻
+    ResGetActivityRecords:
+      required:
+        - records
+        - total
+        - offset
+        - limit
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetActivityRecordsObjectRecord'
+        total:
+          type: integer
+        offset:
+          type: integer
+        limit:
+          type: integer
+    ResGetActivityRecordsObjectRecord:
+      required:
+        - recordId
+        - userId
+        - username
+        - place
+        - checkedInAt
+        - initialCheckedInAt
+      properties:
+        recordId:
+          type: string
+        userId:
+          type: string
+        username:
+          type: string
+        place:
+          type: string
+        checkedInAt:
+          type: string
+          format: date-time
+        checkedOutAt:
+          type: string
+          format: date-time
+          nullable: true
+        initialCheckedInAt:
+          type: string
+          format: date-time
+        initialCheckedOutAt:
+          type: string
+          format: date-time
+          nullable: true
     ResGetActivityPlacePlaceCurrent:
       required:
         - users
@@ -3431,6 +4306,7 @@ components:
           type: string
         checkInCount:
           type: integer
+          description: 指定期間内の訪問回数。単日範囲では訪問レコード数、複数日範囲では同一日の重複訪問を1回として数える。
     ResGetActivityUserUserIdRecords:
       required:
         - records
@@ -3473,6 +4349,162 @@ components:
           type: string
           format: date-time
           nullable: true
+    ResGetPublicMemberCount:
+      required:
+        - count
+      properties:
+        count:
+          type: integer
+    ReqPostUserMeGradeUpdate:
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 申請理由
+    ResGetUserMeGradeUpdate:
+      required:
+        - gradeUpdates
+      properties:
+        gradeUpdates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetUserMeGradeUpdateObjectGradeUpdate'
+    ResGetUserMeGradeUpdateObjectGradeUpdate:
+      required:
+        - gradeUpdateId
+        - gradeDiff
+        - reason
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        gradeUpdateId:
+          type: string
+        gradeDiff:
+          type: integer
+        reason:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    ReqPutAdminGradeUpdateGradeUpdateId:
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,oneof=approved rejected'
+            ja: ステータス
+    ReqPutAdminChangeStudentNumber:
+      required:
+        - userId
+        - studentNumber
+      properties:
+        userId:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,uuid'
+            ja: ユーザーID
+        studentNumber:
+          type: string
+          minLength: 1
+          maxLength: 8
+          x-oapi-codegen-extra-tags:
+            validate: 'required,max=8'
+            ja: 学籍番号
+    ResGetAdminGradeUpdate:
+      required:
+        - gradeUpdates
+      properties:
+        gradeUpdates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetAdminGradeUpdateObjectGradeUpdate'
+    ResGetAdminGradeUpdateObjectGradeUpdate:
+      required:
+        - gradeUpdateId
+        - userId
+        - username
+        - gradeDiff
+        - reason
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        gradeUpdateId:
+          type: string
+        userId:
+          type: string
+        username:
+          type: string
+        gradeDiff:
+          type: integer
+        reason:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    ReqPutAdminReentryReentryId:
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,oneof=approved rejected'
+            ja: ステータス
+        note:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: max=255
+            ja: 備考
+    ResGetAdminReentry:
+      required:
+        - reentries
+      properties:
+        reentries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetAdminReentryObjectReentry'
+    ResGetAdminReentryObjectReentry:
+      required:
+        - reentryId
+        - userId
+        - username
+        - studentNumber
+        - status
+        - paymentStatus
+        - createdAt
+        - updatedAt
+      properties:
+        reentryId:
+          type: string
+        userId:
+          type: string
+        username:
+          type: string
+        studentNumber:
+          type: string
+        status:
+          type: string
+        paymentStatus:
+          type: string
+        note:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
     Error:
       required:
         - level
@@ -3491,6 +4523,12 @@ components:
   responses:
     BadRequest:
       description: 'Validation error, etc.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Resource already exists
       content:
         application/json:
           schema:

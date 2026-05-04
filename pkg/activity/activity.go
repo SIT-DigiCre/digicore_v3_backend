@@ -27,7 +27,7 @@ type ActivityRecordUpdateRequest struct {
 	Time         time.Time `json:"time" validate:"required" ja:"更新時刻"`
 }
 
-func selectLatestActivity(dbClient db.TransactionClient, userId string, place string) (*ActivityRecord, *response.Error) {
+func selectCurrentActivity(dbClient db.TransactionClient, userId string, place string) (*ActivityRecord, *response.Error) {
 	params := struct {
 		UserId string `twowaysql:"userId"`
 		Place  string `twowaysql:"place"`
@@ -37,7 +37,7 @@ func selectLatestActivity(dbClient db.TransactionClient, userId string, place st
 	}
 
 	records := []ActivityRecord{}
-	err := dbClient.Select(&records, "sql/activity/select_latest_activity.sql", &params)
+	err := dbClient.Select(&records, "sql/activity/select_current_activity.sql", &params)
 	if err != nil {
 		return nil, &response.Error{
 			Code:    http.StatusInternalServerError,

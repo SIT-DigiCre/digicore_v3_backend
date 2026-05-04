@@ -1,0 +1,34 @@
+get:
+  tags:
+    - activity
+  description: "Get activity records for admin"
+  security:
+    - BearerAuth:
+        - "infra"
+  parameters:
+    - name: offset
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    - name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 50
+  responses:
+    200:
+      description: "Success get activity records"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_activity_records.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

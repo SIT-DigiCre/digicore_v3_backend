@@ -1,0 +1,33 @@
+post:
+  tags:
+    - event
+  description: "Create event reservation"
+  security:
+    - BearerAuth:
+        - "infra"
+  parameters:
+    - name: eventId
+      in: path
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: "Create event reservation"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_post_event_event_id_reservation.yml"
+  responses:
+    200:
+      description: "Success create event reservation"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_post_event_event_id_reservation.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    404:
+      $ref: "../responses/not_found.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

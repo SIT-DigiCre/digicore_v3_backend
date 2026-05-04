@@ -1,0 +1,23 @@
+put:
+  tags:
+    - admin
+  description: "ユーザーの学籍番号を更新する"
+  security:
+    - BearerAuth:
+        - "infra"
+  requestBody:
+    description: "更新対象ユーザーと更新後学籍番号"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_put_admin_change_student_number.yml"
+  responses:
+    200:
+      $ref: "../responses/blank_success.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

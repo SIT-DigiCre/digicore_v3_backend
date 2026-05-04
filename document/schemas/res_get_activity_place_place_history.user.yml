@@ -15,3 +15,4 @@ properties:
     type: string
   checkInCount:
     type: integer
+    description: "指定期間内の訪問回数。単日範囲では訪問レコード数、複数日範囲では同一日の重複訪問を1回として数える。"

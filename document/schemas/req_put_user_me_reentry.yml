@@ -1,0 +1,8 @@
+required:
+  - transferName
+properties:
+  transferName:
+    type: string
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 振込名義

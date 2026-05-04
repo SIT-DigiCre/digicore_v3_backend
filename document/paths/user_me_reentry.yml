@@ -1,0 +1,26 @@
+put:
+  tags:
+    - reentry
+  description: "再入部申請（振込報告と同時）"
+  security:
+    - BearerAuth: []
+  requestBody:
+    description: "再入部申請"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/req_put_user_me_reentry.yml"
+  responses:
+    200:
+      description: "Success create reentry request"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/res_get_user_me_reentry.reentry.yml"
+    400:
+      $ref: "../responses/bad_request.yml"
+    403:
+      $ref: "../responses/unauthorized.yml"
+    500:
+      $ref: "../responses/internal_server.yml"

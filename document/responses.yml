@@ -1,5 +1,7 @@
 BadRequest:
   $ref: "./responses/bad_request.yml"
+Conflict:
+  $ref: "./responses/conflict.yml"
 Unauthorized:
   $ref: "./responses/unauthorized.yml"
 NotFound:

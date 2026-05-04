@@ -1,14 +1,23 @@
 required:
   - userId
   - username
+  - schoolGrade
   - iconUrl
+  - isGraduated
+  - isMember
   - shortIntroduction
 properties:
   userId:
     type: string
   username:
     type: string
+  schoolGrade:
+    type: integer
   iconUrl:
     type: string
+  isGraduated:
+    type: boolean
+  isMember:
+    type: boolean
   shortIntroduction:
     type: string

@@ -1,0 +1,7 @@
+required:
+  - reentries
+properties:
+  reentries:
+    type: array
+    items:
+      $ref: './res_get_admin_reentry.reentry.yml'

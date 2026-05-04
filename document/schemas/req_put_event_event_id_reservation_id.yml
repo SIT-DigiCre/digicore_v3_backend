@@ -1,0 +1,52 @@
+type: object
+required:
+  - name
+  - description
+  - startDate
+  - finishDate
+  - reservationStartDate
+  - reservationFinishDate
+  - capacity
+properties:
+  name:
+    type: string
+    minLength: 1
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1,max=255
+      ja: 枠名
+  description:
+    type: string
+    minLength: 1
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1
+      ja: 枠の説明
+  startDate:
+    type: string
+    format: date-time
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 枠開始日時
+  finishDate:
+    type: string
+    format: date-time
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 枠終了日時
+  reservationStartDate:
+    type: string
+    format: date-time
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 予約開始日時
+  reservationFinishDate:
+    type: string
+    format: date-time
+    x-oapi-codegen-extra-tags:
+      validate: required
+      ja: 予約終了日時
+  capacity:
+    type: integer
+    minimum: 1
+    x-oapi-codegen-extra-tags:
+      validate: required,min=1
+      ja: 定員

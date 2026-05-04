@@ -1,0 +1,1 @@
+INSERT INTO grade_updates (id, user_id, grade_diff, reason, status) VALUES (UUID_TO_BIN(@id), UUID_TO_BIN(/*userId*/'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'), /*gradeDiff*/-1, /*reason*/'reason', 'pending');

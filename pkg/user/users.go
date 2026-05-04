@@ -1,8 +1,6 @@
 package user
 
 import (
-	"database/sql"
-	"fmt"
 	"net/http"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
@@ -16,18 +14,14 @@ func IdFromStudentNumber(dbClient db.Client, studentNumber string) (string, *res
 		StudentNumber: studentNumber,
 	}
 	user := []struct {
-		Id     string `db:"id"`
-		Active bool   `db:"active"`
+		Id string `db:"id"`
 	}{}
 	err := dbClient.Select(&user, "sql/user/select_id_from_student_number.sql", &params)
 	if err != nil {
 		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "DBエラーが発生しました", Log: err.Error()}
 	}
 	if len(user) == 0 {
-		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "ユーザーが存在しません", Log: "ユーザーが存在しません"}
-	}
-	if !user[0].Active {
-		return "", &response.Error{Code: http.StatusInternalServerError, Level: "Info", Message: "無効なアカウントです", Log: fmt.Sprintf("non active user login(%s)", user[0].Id)}
+		return "", &response.Error{Code: http.StatusForbidden, Level: "Info", Message: "ユーザーが存在しません", Log: "ユーザーが存在しません"}
 	}
 	return user[0].Id, nil
 }
@@ -40,8 +34,9 @@ type profile struct {
 	IconUrl           string `db:"icon_url"`
 	DiscordUserId     string `db:"discord_userid"`
 	ActiveLimit       string `db:"active_limit"`
+	IsGraduated       bool   `db:"is_graduated"`
+	IsMember          bool   `db:"is_member"`
 	ShortIntroduction string `db:"short_introduction"`
-	IsAdmin           bool   `db:"is_admin"`
 }
 
 func GetUserProfileFromUserId(dbClient db.Client, userId string) (profile, *response.Error) {
@@ -63,32 +58,6 @@ func GetUserProfileFromUserId(dbClient db.Client, userId string) (profile, *resp
 
 type introduction struct {
 	Introduction string `db:"introduction"`
-}
-
-func GetStudentNumbersFromUserIds(dbClient db.Client, userIds []string) (map[string]string, *response.Error) {
-	if len(userIds) == 0 {
-		return map[string]string{}, nil
-	}
-	params := struct {
-		UserIds []string `twowaysql:"userIds"`
-	}{
-		UserIds: userIds,
-	}
-	rows := []struct {
-		UserId        string         `db:"user_id"`
-		StudentNumber sql.NullString `db:"student_number"`
-	}{}
-	err := dbClient.Select(&rows, "sql/user/select_student_numbers_from_user_ids.sql", &params)
-	if err != nil {
-		return nil, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "ユーザー情報の取得に失敗しました", Log: err.Error()}
-	}
-	result := make(map[string]string, len(rows))
-	for _, row := range rows {
-		if row.StudentNumber.Valid {
-			result[row.UserId] = row.StudentNumber.String
-		}
-	}
-	return result, nil
 }
 
 func GetUserIntroductionFromUserId(dbClient db.Client, userId string) (introduction, *response.Error) {

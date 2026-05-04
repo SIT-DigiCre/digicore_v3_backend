@@ -3,7 +3,6 @@ package group
 import (
 	"net/http"
 
-	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/admin"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
@@ -12,22 +11,6 @@ import (
 
 func PostGroup(ctx echo.Context, dbClient db.TransactionClient, req api.ReqPostGroup) (api.ResPostGroup, *response.Error) {
 	userId := ctx.Get("user_id").(string)
-
-	// isAdminGroup=trueの場合、リクエストユーザーが管理者かどうかを確認
-	if req.IsAdminGroup {
-		isAdmin, err := admin.CheckUserIsAdmin(dbClient, userId)
-		if err != nil {
-			return api.ResPostGroup{}, err
-		}
-		if !isAdmin {
-			return api.ResPostGroup{}, &response.Error{
-				Code:    http.StatusForbidden,
-				Level:   "Info",
-				Message: "管理者グループを作成する権限がありません",
-				Log:     "user is not admin",
-			}
-		}
-	}
 
 	// グループを作成
 	err := insertGroup(dbClient, req.Name, req.Description, req.Joinable)
@@ -52,14 +35,6 @@ func PostGroup(ctx echo.Context, dbClient db.TransactionClient, req api.ReqPostG
 		return api.ResPostGroup{}, err
 	}
 
-	// isAdminGroup=trueの場合、group_claimsテーブルにclaim="admin"を追加
-	if req.IsAdminGroup {
-		err = insertGroupClaim(dbClient, groupId, "admin")
-		if err != nil {
-			return api.ResPostGroup{}, err
-		}
-	}
-
 	// レスポンスを返す
 	res := api.ResPostGroup{
 		GroupId:     groupId,
@@ -71,4 +46,3 @@ func PostGroup(ctx echo.Context, dbClient db.TransactionClient, req api.ReqPostG
 
 	return res, nil
 }
-

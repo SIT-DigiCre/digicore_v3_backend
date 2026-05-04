@@ -11,7 +11,7 @@ properties:
   nickname:
     type: string
     x-oapi-codegen-extra-tags:
-      validate: required,min=3,max=22
+      validate: required,min=1,max=64
       ja: ニックネーム
   password:
     type: string

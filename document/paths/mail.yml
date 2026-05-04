@@ -4,7 +4,7 @@ post:
   description: "Send bulk email"
   security:
     - BearerAuth:
-        - "admin"
+        - "infra"
   requestBody:
     description: "Email request"
     required: true

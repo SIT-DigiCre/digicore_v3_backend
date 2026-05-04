@@ -45,6 +45,7 @@ code . #VSCodeを開く
 
 ```sh
 make build
+# ubuntuの場合はsudo権限が必要
 ```
 
 ## 実行
@@ -62,10 +63,33 @@ make migrate
 
 ## 開発手順
 
+### テストの実行
+
+Docker 上の DB を使って backend コンテナ内で全テストを実行できます。
+
+```sh
+make test
+```
+
+DB コンテナが起動していない場合は、先に起動してください。
+
+```sh
+docker compose up -d db
+make test
+```
+
 ### テストデータの投入
 
 ```sh
 make insert_test
+```
+
+### 管理者 claim の付与
+
+指定した学籍番号のアカウントに infra claim と account claim を付与する（`make insert_test` 実行後、infra/account グループが存在することが前提）:
+
+```sh
+make grant_admin_claims STUDENT_NUMBER=aa230001
 ```
 
 ### api パッケージの更新

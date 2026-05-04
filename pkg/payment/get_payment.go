@@ -28,7 +28,7 @@ func GetPayment(ctx echo.Context, dbClient db.Client, params api.GetPaymentParam
 }
 
 func getPaymentList(dbClient db.Client, year *int) ([]payment, *response.Error) {
-	searchYear := utils.GetSchoolYear()
+	searchYear := utils.GetFiscalYear()
 	if year != nil {
 		searchYear = *year
 	}

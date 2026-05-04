@@ -3,7 +3,8 @@ post:
     - activity
   description: "Admin force activity checkout"
   security:
-    - BearerAuth: []
+    - BearerAuth:
+        - "infra"
   parameters:
     - name: userId
       in: path
