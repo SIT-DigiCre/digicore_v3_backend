@@ -185,8 +185,8 @@ type ReqPutBudgetBudgetIdStatusPending struct {
 
 // ReqPutEventEventIdReservationIdMe defines model for ReqPutEventEventIdReservationIdMe.
 type ReqPutEventEventIdReservationIdMe struct {
-	Comment string `ja:"コメント" json:"comment" validate:"min=1,max=255"`
-	Url     string `ja:"URL" json:"url" validate:"min=1,max=255"`
+	Comment *string `ja:"コメント" json:"comment" validate:"omitempty,max=255"`
+	Url     *string `ja:"URL" json:"url" validate:"omitempty,max=255"`
 }
 
 // ReqPutPaymentPaymentId defines model for ReqPutPaymentPaymentId.

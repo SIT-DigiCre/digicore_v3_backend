@@ -3162,21 +3162,22 @@ components:
           format: date-time
           description: ユーザーの登録日時
     ReqPutEventEventIdReservationIdMe:
-      required:
-        - comment
-        - url
       properties:
         comment:
           type: string
+          nullable: true
           minLength: 1
+          maxLength: 255
           x-oapi-codegen-extra-tags:
-            validate: 'min=1,max=255'
+            validate: 'omitempty,max=255'
             ja: コメント
         url:
           type: string
+          nullable: true
           minLength: 1
+          maxLength: 255
           x-oapi-codegen-extra-tags:
-            validate: 'min=1,max=255'
+            validate: 'omitempty,max=255'
             ja: URL
     ReqPostEventEvent:
       required:
