@@ -1,16 +1,11 @@
-required:
-  - comment
-  - url
 properties:
   comment:
     type: string
-    minLength: 1
     x-oapi-codegen-extra-tags:
-      validate: min=1,max=255
+      validate: omitempty,max=255
       ja: コメント
   url:
     type: string
-    minLength: 1
     x-oapi-codegen-extra-tags:
-      validate: min=1,max=255
+      validate: omitempty,max=255
       ja: URL
