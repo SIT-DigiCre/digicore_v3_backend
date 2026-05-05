@@ -1,0 +1,18 @@
+required:
+  - id
+  - linkUrl
+  - createdAt
+  - updatedAt
+properties:
+  id:
+    type: string
+  linkUrl:
+    type: string
+    format: uri
+  createdAt:
+    type: string
+    format: date-time
+  updatedAt:
+    type: string
+    format: date-time
+    

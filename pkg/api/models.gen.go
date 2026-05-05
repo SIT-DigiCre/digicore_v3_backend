@@ -714,11 +714,17 @@ type ResGetUserObjectUser struct {
 
 // ResGetUserUserId defines model for ResGetUserUserId.
 type ResGetUserUserId struct {
-	ActiveLimit       string `json:"activeLimit"`
-	DiscordUserId     string `json:"discordUserId"`
-	IconUrl           string `json:"iconUrl"`
-	IsGraduated       bool   `json:"isGraduated"`
-	IsMember          bool   `json:"isMember"`
+	ActiveLimit   string `json:"activeLimit"`
+	DiscordUserId string `json:"discordUserId"`
+	IconUrl       string `json:"iconUrl"`
+	IsGraduated   bool   `json:"isGraduated"`
+	IsMember      bool   `json:"isMember"`
+	LinkUrls      []struct {
+		CreatedAt time.Time `json:"createdAt"`
+		Id        string    `json:"id"`
+		LinkUrl   string    `json:"linkUrl"`
+		UpdatedAt time.Time `json:"updatedAt"`
+	} `json:"linkUrls"`
 	SchoolGrade       int    `json:"schoolGrade"`
 	ShortIntroduction string `json:"shortIntroduction"`
 	StudentNumber     string `json:"studentNumber"`
@@ -966,6 +972,16 @@ type GetUserParams struct {
 	Seed   *int `form:"seed,omitempty" json:"seed,omitempty"`
 }
 
+// DeleteUserProfileLinksParams defines parameters for DeleteUserProfileLinks.
+type DeleteUserProfileLinksParams struct {
+	Id openapi_types.UUID `form:"id" json:"id"`
+}
+
+// PostUserProfileLinksJSONBody defines parameters for PostUserProfileLinks.
+type PostUserProfileLinksJSONBody struct {
+	LinkUrl string `ja:"URL" json:"linkUrl" validate:"required,url,max=2048"`
+}
+
 // GetUserSearchParams defines parameters for GetUserSearch.
 type GetUserSearchParams struct {
 	Query string `form:"query" json:"query"`
@@ -1086,6 +1102,9 @@ type PutUserMePrivateJSONRequestBody = ReqPutUserMePrivate
 
 // PutUserMeReentryJSONRequestBody defines body for PutUserMeReentry for application/json ContentType.
 type PutUserMeReentryJSONRequestBody = ReqPutUserMeReentry
+
+// PostUserProfileLinksJSONRequestBody defines body for PostUserProfileLinks for application/json ContentType.
+type PostUserProfileLinksJSONRequestBody PostUserProfileLinksJSONBody
 
 // PostWorkTagJSONRequestBody defines body for PostWorkTag for application/json ContentType.
 type PostWorkTagJSONRequestBody = ReqPostWorkTag
