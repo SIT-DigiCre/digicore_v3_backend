@@ -3166,7 +3166,6 @@ components:
         comment:
           type: string
           nullable: true
-          minLength: 1
           maxLength: 255
           x-oapi-codegen-extra-tags:
             validate: 'omitempty,max=255'
@@ -3174,7 +3173,6 @@ components:
         url:
           type: string
           nullable: true
-          minLength: 1
           maxLength: 255
           x-oapi-codegen-extra-tags:
             validate: 'omitempty,max=255'

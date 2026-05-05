@@ -2,7 +2,6 @@ properties:
   comment:
     type: string
     nullable: true
-    minLength: 1
     maxLength: 255
     x-oapi-codegen-extra-tags:
       validate: omitempty,max=255
@@ -10,7 +9,6 @@ properties:
   url:
     type: string
     nullable: true
-    minLength: 1
     maxLength: 255
     x-oapi-codegen-extra-tags:
       validate: omitempty,max=255
