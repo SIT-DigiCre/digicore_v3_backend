@@ -4,8 +4,7 @@ import (
 	"fmt"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
-	"github.com/sendgrid/sendgrid-go"
-	"github.com/sendgrid/sendgrid-go/helpers/mail"
+	"github.com/resend/resend-go/v3"
 	"github.com/sirupsen/logrus"
 )
 
@@ -15,8 +14,8 @@ const (
 )
 
 func SendEmail(to string, subject string, body string) error {
-	if env.SendGridApiKey == "" {
-		return fmt.Errorf("SENDGRID_API_KEYが設定されていません")
+	if env.ResendApiKey == "" {
+		return fmt.Errorf("RESEND_API_KEYが設定されていません")
 	}
 
 	templateData := map[string]string{
@@ -28,23 +27,21 @@ func SendEmail(to string, subject string, body string) error {
 		return fmt.Errorf("テンプレートの展開に失敗しました: %w", err)
 	}
 
-	// SendGrid SDKを使用してメールを作成
-	from := mail.NewEmail(fromName, emailAddress)
-	toEmail := mail.NewEmail("", to)
-	content := mail.NewContent("text/plain", renderedBody)
-	message := mail.NewV3MailInit(from, subject, toEmail, content)
+	params := &resend.SendEmailRequest{
+		From:fmt.Sprintf("%s <%s>", fromName, emailAddress),
+		To:[]string{to},
+		Subject:subject,
+		Text:renderedBody,
+	}
 
-	// SendGridクライアントを作成して送信
-	client := sendgrid.NewSendClient(env.SendGridApiKey)
-	response, err := client.Send(message)
+	// Resendクライアントを作成して送信
+	client := resend.NewClient(env.ResendApiKey)
+	response, err := client.Emails.Send(params)
 	if err != nil {
 		return fmt.Errorf("メール送信に失敗しました: %w", err)
 	}
 
-	if response.StatusCode >= 200 && response.StatusCode < 300 {
-		logrus.Infof("メール送信成功: %s (ステータスコード: %d)", to, response.StatusCode)
-		return nil
-	}
+	logrus.Infof("メール送信成功: %s (id: %s)", to, response.Id)
+	return nil
 
-	return fmt.Errorf("メール送信に失敗しました (ステータスコード: %d): %s", response.StatusCode, response.Body)
 }

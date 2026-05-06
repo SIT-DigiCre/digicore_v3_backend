@@ -11,14 +11,15 @@ require (
 	github.com/go-playground/universal-translator v0.18.1
 	github.com/go-playground/validator/v10 v10.14.1
 	github.com/go-sql-driver/mysql v1.7.1
+	github.com/google/uuid v1.3.0
 	github.com/jinzhu/copier v0.3.5
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/labstack/echo-contrib v0.14.1
 	github.com/labstack/echo/v4 v4.10.2
 	github.com/lestrrat-go/jwx/v2 v2.0.10
 	github.com/mattermost/mattermost-server/v5 v5.39.3
+	github.com/resend/resend-go/v3 v3.6.0
 	github.com/rubenv/sql-migrate v1.4.0
-	github.com/sendgrid/sendgrid-go v3.16.1+incompatible
 	github.com/sirupsen/logrus v1.9.3
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e
 	golang.org/x/oauth2 v0.8.0
@@ -56,7 +57,6 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang-sql/civil v0.0.0-20190719163853-cb61b32ac6fe // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
@@ -113,7 +113,6 @@ require (
 	github.com/rs/xid v1.4.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
-	github.com/sendgrid/rest v2.6.9+incompatible // indirect
 	github.com/shibukawa/formatdata-go v0.1.3 // indirect
 	github.com/shibukawa/mdd-go v0.1.7 // indirect
 	github.com/shibukawa/stringwidth v0.2.0 // indirect
