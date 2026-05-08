@@ -79,34 +79,22 @@ func PostMail(ctx echo.Context, dbClient db.Client, requestBody api.ReqPostMail)
 	}
 
 	successCount := 0
-	if len(addresses) == 0 {
-		return api.ResPostMail{
-			SuccessCount: 0,
-			Failures:     failures,
-		}, nil
-	}
 
-	batchRes, err := SendEmails(addresses, requestBody.Subject, requestBody.Body, ctx.Request().Context())
-	if err != nil {
-		return api.ResPostMail{}, &response.Error{
-			Code:    http.StatusInternalServerError,
-			Level:   "Error",
-			Message: "メール送信に失敗しました",
-			Log:     err.Error(),
-		}
-	}
-	for _, be := range batchRes.Errors {
-		if be.Index >= 0 && be.Index < len(addresses) {
+	for _, address := range addresses {
+		err := SendEmail(address, requestBody.Subject, requestBody.Body)
+		if err != nil {
 			failures = append(failures, struct {
 				Address string `json:"address"`
 				Error   string `json:"error"`
 			}{
-				Address: addresses[be.Index],
-				Error:   be.Message,
+				Address: address,
+				Error:   err.Error(),
 			})
+			logrus.Errorf("メール送信失敗 [%s]: %v", address, err)
+		} else {
+			successCount++
 		}
 	}
-	successCount = len(batchRes.Data)
 
 	res := api.ResPostMail{
 		SuccessCount: successCount,
