@@ -3,9 +3,11 @@
 
 set -e
 
-if mysql --help 2>/dev/null | grep -q -- "--ssl-mode"; then
+MYSQL_HELP="$(mysql --help 2>/dev/null || true)"
+
+if grep -q -- "--ssl-mode" <<< "${MYSQL_HELP}"; then
   echo "--ssl-mode=DISABLED"
-elif mysql --help 2>/dev/null | grep -q -- "--skip-ssl"; then
+elif grep -q -- "--skip-ssl" <<< "${MYSQL_HELP}"; then
   echo "--skip-ssl"
 else
   echo "--ssl=0"
