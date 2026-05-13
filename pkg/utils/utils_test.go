@@ -17,12 +17,12 @@ func TestCalculateSchoolGradeFromStudentNumber(t *testing.T) {
 		},
 		{
 			name:          "大学院修士は 4 年加算する",
-			studentNumber: "m250001",
+			studentNumber: "ma25001",
 			expected:      currentSchoolYear - 2000 - 25 + 1 + 4,
 		},
 		{
 			name:          "大学院博士は 6 年加算する",
-			studentNumber: "N250001",
+			studentNumber: "na25001",
 			expected:      currentSchoolYear - 2000 - 25 + 1 + 6,
 		},
 		{
