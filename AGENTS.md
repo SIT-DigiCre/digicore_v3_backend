@@ -10,7 +10,7 @@ Digicore v3 Backend は、日本のデジタルクリエイション学生団体
 
 ## 技術スタック
 
-- **言語**: Go 1.19+
+- **言語**: Go 1.26+
 - **フレームワーク**: Echo v4 web framework
 - **データベース**: MySQL 8.0.33
 - **認証**: JWT with Google/Discord OAuth

@@ -12,6 +12,7 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STUDENT_NUMBER="${1:?学籍番号を指定してください。例: ./scripts/grant_admin_claims.sh aa230001}"
 
 # 学籍番号の簡易バリデーション（英数字とハイフンのみ許可）
@@ -21,7 +22,8 @@ if ! [[ "$STUDENT_NUMBER" =~ ^[a-zA-Z0-9\-]+$ ]]; then
 fi
 
 # DB接続情報（docker compose 実行時に .env から注入される）
-MYSQL_CMD="mysql -u ${DB_USER} -p${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} --default-character-set=utf8mb4 -N"
+MYSQL_SSL_OPTION="$(bash "${SCRIPT_DIR}/mysql_ssl_option.sh")"
+MYSQL_CMD="mysql ${MYSQL_SSL_OPTION} -u ${DB_USER} -p${DB_PASSWORD} --host=${DB_HOST} ${DB_DATABASE} --default-character-set=utf8mb4 -N"
 
 # 1. student_number から user_id を取得
 USER_ID=$($MYSQL_CMD -e "SELECT BIN_TO_UUID(id) FROM users WHERE student_number = '${STUDENT_NUMBER}' LIMIT 1;" 2>/dev/null || true)
