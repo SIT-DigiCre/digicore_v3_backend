@@ -21,10 +21,10 @@ func PutEventEventIdReservationIdMe(ctx echo.Context, dbClient db.TransactionCli
 
 func updateReservationUser(dbClient db.TransactionClient, reservationId string, userId string, requestBody api.ReqPutEventEventIdReservationIdMe) *response.Error {
 	params := struct {
-		ReservationId string `twowaysql:"reservationId"`
-		UserId        string `twowaysql:"userId"`
-		Url           string `twowaysql:"url"`
-		Comment       string `twowaysql:"comment"`
+		ReservationId string  `twowaysql:"reservationId"`
+		UserId        string  `twowaysql:"userId"`
+		Url           *string `twowaysql:"url"`
+		Comment       *string `twowaysql:"comment"`
 	}{
 		ReservationId: reservationId,
 		UserId:        userId,

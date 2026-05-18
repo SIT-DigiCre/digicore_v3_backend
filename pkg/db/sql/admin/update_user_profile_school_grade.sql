@@ -15,5 +15,5 @@ SET user_profiles.school_grade = updates.school_grade
 WHERE user_profiles.is_graduated = false
   AND (
       user_profiles.is_member = true
-      OR user_profiles.school_grade < 6
+      OR user_profiles.school_grade < 4
   );

@@ -56,7 +56,7 @@ func TestPutAdminSchoolGradeUpdatesEachTarget(t *testing.T) {
 				ApprovedGradeDiffs int    `db:"approved_grade_diffs"`
 			}{
 				{UserId: "user-1", StudentNumber: "aa25001", ApprovedGradeDiffs: 0},
-				{UserId: "user-2", StudentNumber: "m250001", ApprovedGradeDiffs: -1},
+				{UserId: "user-2", StudentNumber: "ma25001", ApprovedGradeDiffs: -1},
 			}
 			return nil
 		},
@@ -105,7 +105,7 @@ func TestPutAdminSchoolGradeUpdatesEachTarget(t *testing.T) {
 	if updates[0].UserId != "user-1" || updates[0].SchoolGrade != expectedFirstGrade {
 		t.Fatalf("unexpected first update: %+v", updates[0])
 	}
-	expectedGraduateGrade, calcErr := utils.CalculateSchoolGradeFromStudentNumber("m250001")
+	expectedGraduateGrade, calcErr := utils.CalculateSchoolGradeFromStudentNumber("ma25001")
 	if calcErr != nil {
 		t.Fatalf("unexpected error: %v", calcErr)
 	}
