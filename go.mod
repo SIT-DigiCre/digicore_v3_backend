@@ -20,6 +20,7 @@ require (
 	github.com/labstack/echo/v4 v4.10.2
 	github.com/lestrrat-go/jwx/v2 v2.0.10
 	github.com/mattermost/mattermost-server/v5 v5.39.3
+	github.com/mattermost/mattermost-server/v6 v6.7.2
 	github.com/nyaruka/phonenumbers v1.7.4
 	github.com/resend/resend-go/v3 v3.6.0
 	github.com/rubenv/sql-migrate v1.4.0
