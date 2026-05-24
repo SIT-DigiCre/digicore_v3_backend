@@ -131,7 +131,7 @@ func TestPhoneNumberValidation(t *testing.T) {
 				}
 			} else {
 				if err != nil {
-					t.Fatalf("エラーが発生しませんことを期待していましたが、エラーが発生しました: %v", err)
+					t.Fatalf("エラーが発生しないことを期待していましたが、エラーが発生しました: %v", err)
 				}
 			}
 		})
