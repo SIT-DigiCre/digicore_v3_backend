@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"regexp"
 	"strings"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
@@ -36,6 +37,10 @@ func init() {
 	})
 
 	err := validate.RegisterValidation("phonenumber", func(fl validator.FieldLevel) bool {
+		isValidNumber := regexp.MustCompile(`^(\d{0,15}|\+\d{0,20})$`).MatchString(fl.Field().String())
+		if !isValidNumber {
+			return false
+		}
 		phone := fl.Field().String()
 		if strings.HasPrefix(phone, "+") {
 			num, err := phonenumbers.Parse(phone, "")

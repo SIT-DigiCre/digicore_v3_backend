@@ -78,6 +78,14 @@ func TestPhoneNumberValidation(t *testing.T) {
 			expectErr:             true,
 		},
 		{
+			name:                  "-あり番号で失敗",
+			phoneNumber:           "090-1234-5678",
+			parentCellphoneNumber: "090-8765-4321",
+			parentHomephoneNumber: nil,
+			expectErr:             true,
+		},
+
+		{
 			name:                  "携帯が12桁で失敗",
 			phoneNumber:           "090123456789",
 			parentCellphoneNumber: "09087654321",
