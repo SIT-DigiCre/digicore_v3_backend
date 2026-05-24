@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
-	"regexp"
+	"strings"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/go-playground/locales/ja_JP"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	ja_translations "github.com/go-playground/validator/v10/translations/ja"
+	"github.com/nyaruka/phonenumbers"
 	"github.com/sirupsen/logrus"
 )
 
@@ -35,8 +36,19 @@ func init() {
 	})
 
 	err := validate.RegisterValidation("phonenumber", func(fl validator.FieldLevel) bool {
-		fmt.Print(fl.Field().String())
-		return regexp.MustCompile(`^\d{0,15}$`).MatchString(fl.Field().String())
+		phone := fl.Field().String()
+		if strings.HasPrefix(phone, "+") {
+			num, err := phonenumbers.Parse(phone, "")
+			if err != nil {
+				return false
+			}
+			return phonenumbers.IsValidNumber(num)
+		}
+		num, err := phonenumbers.Parse(phone, "JP")
+		if err != nil {
+			return false
+		}
+		return phonenumbers.IsValidNumber(num)
 	})
 	if err != nil {
 		logrus.Fatal("Failed to create validation translator")
@@ -61,7 +73,7 @@ func Validate(s interface{}) *response.Error {
 			message += ", "
 		}
 		if err.ActualTag() == "phonenumber" {
-			message += fmt.Sprintf("%sは電話番号でなければなりません", err.Field())
+			message += fmt.Sprintf("%sは有効な電話番号（国際形式または国内形式）でなければなりません", err.Field())
 		} else {
 			message += mes
 		}
