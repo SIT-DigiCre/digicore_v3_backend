@@ -19,4 +19,4 @@ WHERE (user_profiles.active_limit < CURRENT_DATE
        AND user_profiles.is_member = true
        AND user_profiles.is_graduated = false)
    OR user_profiles.is_member = false;
-   /* is_member = falseも条件に入れることでこれまでの先輩方の個人情報も消えるよう調整
+   /* is_member = falseも条件に入れることでこれまでの先輩方の個人情報も消えるよう調整 */
