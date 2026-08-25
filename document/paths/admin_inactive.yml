@@ -1,7 +1,7 @@
 put:
   tags:
     - admin
-  description: "Set inactive members is_member=false in bulk"
+  description: "Set inactive members is_member=false in bulk and delete user_private_profiles"
   security:
     - BearerAuth:
         - "infra"
