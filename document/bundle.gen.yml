@@ -2081,7 +2081,7 @@ paths:
     put:
       tags:
         - admin
-      description: Set inactive members is_member=false in bulk
+      description: Set inactive members is_member=false in bulk and clear personal fields in user_private_profile
       security:
         - BearerAuth:
             - infra
