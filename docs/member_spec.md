@@ -169,7 +169,7 @@ INSERT INTO user_profiles (
 ```yaml
 # document/paths/admin_inactive.yml
 put:
-  description: "Set inactive members is_member=false in bulk"
+  description: "Set inactive members is_member=false in bulk and clear personal fields in user_private_profile"
   security:
     - BearerAuth:
         - "infra"
@@ -179,13 +179,29 @@ put:
 
 ```sql
 UPDATE user_profiles
-SET is_member = false
-WHERE active_limit < CURRENT_DATE
-  AND is_member = true;
+LEFT JOIN user_private_profiles
+  ON user_private_profiles.user_id = user_profiles.user_id
+SET user_profiles.is_member = false,
+    user_private_profiles.first_name = '',
+    user_private_profiles.last_name = '',
+    user_private_profiles.first_name_kana = '',
+    user_private_profiles.last_name_kana = '',
+    user_private_profiles.phone_number = '',
+    user_private_profiles.address = '',
+    user_private_profiles.parent_name = '',
+    user_private_profiles.parent_last_name = '',
+    user_private_profiles.parent_first_name = '',
+    user_private_profiles.parent_cellphone_number = '',
+    user_private_profiles.parent_homephone_number = '',
+    user_private_profiles.parent_address = ''
+WHERE (user_profiles.active_limit < CURRENT_DATE
+       AND user_profiles.is_member = true
+       AND user_profiles.is_graduated = false)
+   OR user_profiles.is_member = false;
 ```
 
 - 意味:
-  - 部費有効期限 (`active_limit`) が切れたユーザーを一括で **キック（= is_member=false）** する。
+  - 部費有効期限 (`active_limit`) が切れたユーザーを一括で **キック（= is_member=false）** し、個人情報を削除する。
   - これにより、次回以降のアクセスは `Login` ミドルウェアで「無効なアカウントです」としてブロックされる。
 
 ### 無効アカウント時の挙動（休学・退部状態）
