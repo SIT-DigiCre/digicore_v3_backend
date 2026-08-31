@@ -1,6 +1,6 @@
 module github.com/SIT-DigiCre/digicore_v3_backend
 
-go 1.26
+go 1.26.0
 
 toolchain go1.26.3
 
@@ -24,7 +24,7 @@ require (
 	github.com/resend/resend-go/v3 v3.6.0
 	github.com/rubenv/sql-migrate v1.4.0
 	github.com/sirupsen/logrus v1.9.3
-	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e
+	golang.org/x/exp v0.0.0-20260824195058-e88cd73687aa
 	golang.org/x/oauth2 v0.8.0
 )
 
