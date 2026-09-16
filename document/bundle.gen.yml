@@ -2131,6 +2131,21 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /admin/delete-expired-user-private-profiles:
+    delete:
+      tags:
+        - admin
+      description: active_limitから1年以上経過したユーザーの個人情報を削除する
+      security:
+        - BearerAuth:
+            - infra
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /activity/checkin:
     post:
       tags:
