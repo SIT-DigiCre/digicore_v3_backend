@@ -188,6 +188,11 @@ WHERE active_limit < CURRENT_DATE
   - 部費有効期限 (`active_limit`) が切れたユーザーを一括で **キック（= is_member=false）** する。
   - これにより、次回以降のアクセスは `Login` ミドルウェアで「無効なアカウントです」としてブロックされる。
 
+### 個人情報の削除 (`delete /admin/delete-expired-user-private-profiles`)
+
+- `active_limit` から 1 年以上経過したユーザーの `user_private_profiles` レコードを一括削除する。
+- `users` や `user_profiles` は削除せず、再入部や卒業後のアカウント状態を維持する。
+
 ### 無効アカウント時の挙動（休学・退部状態）
 
 - 認証ミドルウェア (`pkg/api/authenticator/validate.go`) の概略:
