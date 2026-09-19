@@ -108,6 +108,8 @@
   $ref: "./paths/admin_change_student_number.yml"
 /admin/school-grade:
   $ref: "./paths/admin_school_grade.yml"
+/admin/delete-expired-user-private-profiles:
+  $ref: "./paths/admin_delete_expired_user_private_profiles.yml"
 /activity/checkin:
   $ref: "./paths/activity_checkin.yml"
 /activity/checkout:

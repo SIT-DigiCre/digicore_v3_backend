@@ -44,6 +44,9 @@ type ServerInterface interface {
 	// (PUT /admin/change-student-number)
 	PutAdminChangeStudentNumber(ctx echo.Context) error
 
+	// (DELETE /admin/delete-expired-user-private-profiles)
+	DeleteAdminDeleteExpiredUserPrivateProfiles(ctx echo.Context) error
+
 	// (GET /admin/grade-update)
 	GetAdminGradeUpdate(ctx echo.Context) error
 
@@ -506,6 +509,17 @@ func (w *ServerInterfaceWrapper) PutAdminChangeStudentNumber(ctx echo.Context) e
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PutAdminChangeStudentNumber(ctx)
+	return err
+}
+
+// DeleteAdminDeleteExpiredUserPrivateProfiles converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteAdminDeleteExpiredUserPrivateProfiles(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{"infra"})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteAdminDeleteExpiredUserPrivateProfiles(ctx)
 	return err
 }
 
@@ -1847,6 +1861,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/activity/records", wrapper.GetActivityRecords)
 	router.GET(baseURL+"/activity/user/:userId/records", wrapper.GetActivityUserUserIdRecords)
 	router.PUT(baseURL+"/admin/change-student-number", wrapper.PutAdminChangeStudentNumber)
+	router.DELETE(baseURL+"/admin/delete-expired-user-private-profiles", wrapper.DeleteAdminDeleteExpiredUserPrivateProfiles)
 	router.GET(baseURL+"/admin/grade-update", wrapper.GetAdminGradeUpdate)
 	router.PUT(baseURL+"/admin/grade-update/:gradeUpdateId", wrapper.PutAdminGradeUpdateGradeUpdateId)
 	router.PUT(baseURL+"/admin/inactive", wrapper.PutAdminInactive)
