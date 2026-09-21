@@ -1,7 +1,7 @@
 delete:
   tags:
     - admin
-  description: "active_limitから1年以上経過したユーザーの個人情報を削除する"
+  description: "active_limitから1年以上経過した卒業生と非会員の個人情報を削除する"
   security:
     - BearerAuth:
         - "infra"

@@ -190,8 +190,17 @@ WHERE active_limit < CURRENT_DATE
 
 ### 個人情報の削除 (`delete /admin/delete-expired-user-private-profiles`)
 
-- `active_limit` から 1 年以上経過したユーザーの `user_private_profiles` レコードを一括削除する。
+- `active_limit` から 1 年以上経過した卒業生と非会員の`user_private_profiles` レコードを一括削除する。
 - `users` や `user_profiles` は削除せず、退部後も情報を残しておく。
+
+- 実体クエリ
+```sql
+DELETE user_private_profiles
+FROM user_private_profiles
+INNER JOIN user_profiles ON user_private_profiles.user_id = user_profiles.user_id
+WHERE user_profiles.active_limit <= CURRENT_DATE - INTERVAL 1 YEAR 
+AND (user_profiles.is_member = false OR user_profiles.is_graduated=true);
+```
 
 ### 無効アカウント時の挙動（休学・退部状態）
 
