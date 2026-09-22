@@ -61,6 +61,24 @@ jwt:
 	echo ""; \
 	echo "Authorization: Bearer $$TOKEN"
 
+# JWT 署名用の RSA 秘密鍵（PKCS#8 形式）を生成し .env に JWT_PRIVATE_KEY として書き込む
+# 既存の JWT_PRIVATE_KEY が設定されている場合は上書きしない（FORCE=1 を付けて上書き可）
+.PHONY: gen_jwt_key
+gen_jwt_key:
+	@if grep -q '^JWT_PRIVATE_KEY=.' .env 2>/dev/null && [ -z "$(FORCE)" ]; then \
+		echo "JWT_PRIVATE_KEY が既に設定されています。上書きするには make gen_jwt_key FORCE=1 を実行してください。"; \
+		exit 1; \
+	fi
+	@docker compose -f ${DOCKER_COMPOSE} run --rm -w /app admin bash -c 'openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out /tmp/jwt_private.pem && cat /tmp/jwt_private.pem' > /tmp/jwt_private.pem
+	@KEY=$$(awk 'BEGIN{ORS="\\n"} {sub(/\n$$/,"")} 1' /tmp/jwt_private.pem); \
+	if grep -q '^JWT_PRIVATE_KEY=' .env; then \
+		KEY_VAL="$$KEY" awk '/^JWT_PRIVATE_KEY=/{next} {print} END{print "JWT_PRIVATE_KEY=\"" ENVIRON["KEY_VAL"] "\""}' .env > .env.tmp && mv .env.tmp .env; \
+	else \
+		printf '\nJWT_PRIVATE_KEY="%s"\n' "$$KEY" >> .env; \
+	fi
+	@rm -f /tmp/jwt_private.pem
+	@echo "JWT_PRIVATE_KEY を .env に書き込みました"
+
 .PHONY: grant_admin_claims
 grant_admin_claims:
 	@if [ -z "$(STUDENT_NUMBER)" ]; then echo "STUDENT_NUMBER を指定してください。例: make grant_admin_claims STUDENT_NUMBER=aa230001"; exit 1; fi

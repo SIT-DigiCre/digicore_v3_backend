@@ -102,6 +102,42 @@ make grant_admin_claims STUDENT_NUMBER=aa230001
 make generate_api
 ```
 
+## JWT 署名鍵の設定
+
+JWT の署名・検証には RSA 秘密鍵（`JWT_PRIVATE_KEY`）を使用します。
+
+- **設定しない場合**: 起動のたびにランダムな鍵が生成されるため、開発環境では問題ありませんが、**コンテナを再起動すると既存の全トークンが失効**します。
+- **設定する場合**: 以下の手順で鍵を生成し、`.env` に設定してください。本番環境や複数コンテナ構成では設定が必要です。
+
+### 鍵の生成と .env への書き込み
+
+Makefile の `gen_jwt_key` タスクで、鍵を生成して `.env` に自動書き込みできます:
+
+```sh
+make gen_jwt_key
+```
+
+- 既存の `JWT_PRIVATE_KEY` が設定されている場合は上書きしません（上書きするには `make gen_jwt_key FORCE=1`）
+- 手動で生成する場合は、以下のコマンドで PKCS#8 形式の RSA 2048bit 秘密鍵を生成し、PEM の内容を 1 行（改行は `\n` エスケープ）にして `.env` に設定してください:
+
+```sh
+# 鍵生成
+openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out jwt_private.pem
+
+# 1行に変換してコピー
+awk 'BEGIN{ORS="\\n"} {sub(/\n$/,"")} 1' jwt_private.pem
+```
+
+```env
+JWT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEv...\n-----END PRIVATE KEY-----"
+```
+
+> [!WARNING]
+>
+> - 鍵は **PKCS#8 形式**（`BEGIN PRIVATE KEY`）である必要があります。`openssl genrsa` で生成した PKCS#1 形式（`BEGIN RSA PRIVATE KEY`）は `openssl pkcs8 -topk8 -nocrypt -in pkcs1.pem -out pkcs8.pem` で変換してください。
+> - 鍵を変更するとそれまでの全 JWT が無効になるため、デプロイ時は全ユーザーの再ログインが必要です。
+> - 秘密鍵は `.env`（git 管理外）にのみ保管してください。
+
 ## 開発時の JWT 検証の無効化
 
 `.env` の AUTH を disable に書き換えてください。

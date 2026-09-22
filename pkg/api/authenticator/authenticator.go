@@ -3,8 +3,11 @@ package authenticator
 import (
 	"crypto/rand"
 	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -45,7 +48,39 @@ func CreateDebugAuthenticator() ([]echo.MiddlewareFunc, error) {
 }
 
 func init() {
-	key, _ = rsa.GenerateKey(rand.Reader, 2048)
+	key = loadKey()
+}
+
+// loadKey は環境変数 JWT_PRIVATE_KEY から PEM 形式の RSA 秘密鍵を読み込みます。
+// 未設定の場合は従来どおりランダムに生成します（開発環境用）。
+func loadKey() *rsa.PrivateKey {
+	pemText := os.Getenv("JWT_PRIVATE_KEY")
+	if pemText == "" {
+		key, err := rsa.GenerateKey(rand.Reader, 2048)
+		if err != nil {
+			panic(fmt.Sprintf("JWT 鍵の生成に失敗しました: %v", err))
+		}
+		return key
+	}
+
+	// 環境変数経由では改行が失われる可能性があるため復元する
+	pemText = strings.ReplaceAll(pemText, `\n`, "\n")
+
+	block, _ := pem.Decode([]byte(pemText))
+	if block == nil {
+		panic("JWT_PRIVATE_KEY: PEM デコードに失敗しました")
+	}
+
+	// PKCS#8 形式（BEGIN PRIVATE KEY）のみ対応
+	parsed, err := x509.ParsePKCS8PrivateKey(block.Bytes)
+	if err != nil {
+		panic(fmt.Sprintf("JWT_PRIVATE_KEY: 秘密鍵の解析に失敗しました（PKCS#8 形式で設定してください）: %v", err))
+	}
+	rsaKey, ok := parsed.(*rsa.PrivateKey)
+	if !ok {
+		panic("JWT_PRIVATE_KEY: 秘密鍵が RSA ではありません")
+	}
+	return rsaKey
 }
 
 func handler(c echo.Context, err *echo.HTTPError) error {
