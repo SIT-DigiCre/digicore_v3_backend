@@ -1,6 +1,6 @@
 module github.com/SIT-DigiCre/digicore_v3_backend
 
-go 1.26
+go 1.27
 
 toolchain go1.27.2
 
