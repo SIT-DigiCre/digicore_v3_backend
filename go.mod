@@ -1,15 +1,15 @@
 module github.com/SIT-DigiCre/digicore_v3_backend
 
-go 1.26
+go 1.27
 
-toolchain go1.26.3
+toolchain go1.27.2
 
 require (
 	github.com/aws/aws-sdk-go v1.44.281
 	github.com/deepmap/oapi-codegen v1.12.4
 	github.com/future-architect/go-twowaysql v1.8.0
 	github.com/getkin/kin-openapi v0.118.0
-	github.com/go-playground/locales v0.14.1
+	github.com/go-playground/locales v0.14.2
 	github.com/go-playground/universal-translator v0.18.2
 	github.com/go-playground/validator/v10 v10.14.1
 	github.com/go-sql-driver/mysql v1.7.1
