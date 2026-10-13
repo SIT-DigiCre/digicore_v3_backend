@@ -7,13 +7,13 @@ import (
 	"encoding/pem"
 	"fmt"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/group"
 	"github.com/deepmap/oapi-codegen/pkg/middleware"
 	"github.com/getkin/kin-openapi/openapi3filter"
@@ -54,7 +54,7 @@ func init() {
 // loadKey は環境変数 JWT_PRIVATE_KEY から PEM 形式の RSA 秘密鍵を読み込みます。
 // 未設定の場合は従来どおりランダムに生成します（開発環境用）。
 func loadKey() *rsa.PrivateKey {
-	pemText := os.Getenv("JWT_PRIVATE_KEY")
+	pemText := env.Get("JWT_PRIVATE_KEY")
 	if pemText == "" {
 		key, err := rsa.GenerateKey(rand.Reader, 2048)
 		if err != nil {
