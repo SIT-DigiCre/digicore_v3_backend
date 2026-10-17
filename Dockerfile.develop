@@ -13,7 +13,7 @@ FROM golang:1.27.2 as admin
 
 WORKDIR "/app"
 RUN go install github.com/k0kubun/sqldef/cmd/mysqldef@v0.15.12
-RUN go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@v1.12.4
+RUN go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@v1.16.3
 RUN apt-get update && apt-get install -y default-mysql-client-core
 
 COPY . .
