@@ -40,7 +40,7 @@ services:
       - digicoreapi
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5.2.1
+    image: phpmyadmin/phpmyadmin:5.2.3
     environment:
       PMA_HOST: db
     networks:
