@@ -1,26 +1,19 @@
 package env
 
-import "os"
+import (
+	"os"
 
-// 未設定チェックの対象として参照した環境変数名
-var checkedNames []string
+	"github.com/sirupsen/logrus"
+)
 
-// Get は環境変数を取得し、未設定チェックの対象として記録します
-// パッケージ初期化時に呼び出す想定のため、実行時に呼び出さないでください
+// Get は環境変数を取得し、未設定（または空文字）の場合は警告を表示します
+// パッケージ初期化時に呼び出す想定です。実行時に呼び出すと警告が都度出力されます
 func Get(name string) string {
-	checkedNames = append(checkedNames, name)
-	return os.Getenv(name)
-}
-
-// Missing は未設定（または空文字）の環境変数名を返します
-func Missing() []string {
-	var missing []string
-	for _, name := range checkedNames {
-		if os.Getenv(name) == "" {
-			missing = append(missing, name)
-		}
+	value := os.Getenv(name)
+	if value == "" {
+		logrus.Warnf("環境変数 %s が設定されていません", name)
 	}
-	return missing
+	return value
 }
 
 var FrontendRootUrl = Get("FRONTEND_ROOT_URL")

@@ -1,24 +1,28 @@
 package env
 
-import "testing"
+import (
+	"testing"
 
-func TestMissing(t *testing.T) {
-	t.Setenv("FRONTEND_ROOT_URL", "http://example.com")
-	if hasMissing("FRONTEND_ROOT_URL") {
-		t.Fatal("設定済みの環境変数が未設定として報告されました")
+	"github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus/hooks/test"
+)
+
+func TestGetWarnsWhenNotSet(t *testing.T) {
+	hook := test.NewGlobal()
+
+	t.Setenv("DIGICORE_ENV_TEST_UNSET", "")
+	Get("DIGICORE_ENV_TEST_UNSET")
+	entry := hook.LastEntry()
+	if entry == nil || entry.Level != logrus.WarnLevel {
+		t.Fatal("空文字の環境変数で警告が表示されませんでした")
+	}
+	if entry.Message != "環境変数 DIGICORE_ENV_TEST_UNSET が設定されていません" {
+		t.Fatalf("警告メッセージが想定と異なります: %s", entry.Message)
 	}
 
-	t.Setenv("FRONTEND_ROOT_URL", "")
-	if !hasMissing("FRONTEND_ROOT_URL") {
-		t.Fatal("空文字の環境変数が未設定として報告されませんでした")
+	t.Setenv("DIGICORE_ENV_TEST_UNSET", "value")
+	Get("DIGICORE_ENV_TEST_UNSET")
+	if len(hook.AllEntries()) != 1 {
+		t.Fatal("設定済みの環境変数で警告が表示されました")
 	}
-}
-
-func hasMissing(name string) bool {
-	for _, n := range Missing() {
-		if n == name {
-			return true
-		}
-	}
-	return false
 }
