@@ -4,5 +4,5 @@ properties:
   introduction:
     type: string
     x-oapi-codegen-extra-tags:
-      validate:
+      validate: ""
       ja: 自己紹介

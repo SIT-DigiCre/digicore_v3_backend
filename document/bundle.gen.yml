@@ -2825,7 +2825,7 @@ components:
         introduction:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: null
+            validate: ''
             ja: 自己紹介
     ResGetUserMePrivate:
       required:
@@ -2901,7 +2901,7 @@ components:
         isMale:
           type: boolean
           x-oapi-codegen-extra-tags:
-            validate: null
+            validate: ''
             ja: 性別
         phoneNumber:
           type: string
@@ -3294,7 +3294,7 @@ components:
         isPublic:
           type: boolean
           x-oapi-codegen-extra-tags:
-            validate: null
+            validate: ''
             ja: 公開
     ResGetStorageFileId:
       required:

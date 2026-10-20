@@ -16,5 +16,5 @@ properties:
   isPublic:
     type: boolean
     x-oapi-codegen-extra-tags:
-      validate:
+      validate: ""
       ja: 公開

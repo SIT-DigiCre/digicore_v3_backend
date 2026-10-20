@@ -32,7 +32,7 @@ properties:
   isMale:
     type: boolean
     x-oapi-codegen-extra-tags:
-      validate:
+      validate: ""
       ja: 性別
   phoneNumber:
     type: string
