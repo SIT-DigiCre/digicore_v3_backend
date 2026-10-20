@@ -25,7 +25,7 @@ require (
 	github.com/resend/resend-go/v3 v3.6.0
 	github.com/rubenv/sql-migrate v1.4.0
 	github.com/sirupsen/logrus v1.9.3
-	golang.org/x/exp v0.0.0-20261011100332-faecfb24eb49
+	golang.org/x/exp v0.0.0-20261014143641-f0251eb4aa3e
 	golang.org/x/oauth2 v0.8.0
 )
 
