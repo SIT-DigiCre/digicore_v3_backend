@@ -2,7 +2,7 @@ module github.com/SIT-DigiCre/digicore_v3_backend
 
 go 1.27
 
-toolchain go1.27.2
+toolchain go1.27.3
 
 require (
 	github.com/aws/aws-sdk-go v1.44.281
