@@ -48,6 +48,15 @@ services:
       - digicoreapi
     restart: always
 
+  cf-tunnel:
+    image: cloudflare/cloudflared:2026.10.2
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    networks:
+      - https_network
+
 volumes:
   db_data:
 
