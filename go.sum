@@ -877,6 +877,8 @@ github.com/nwaples/rardecode v1.1.0/go.mod h1:5DzqNKiOdpKKBH87u8VlvAnPZMXcGRhxWk
 github.com/nxadm/tail v1.4.4/go.mod h1:kenIhsEOeOJmVchQTgglprH7qJGnHDVpk1VPCcaMI8A=
 github.com/nyaruka/phonenumbers v1.7.4 h1:6gHEciDijqfY1EHiZTQLidEB2lsvU0rFvOL08EoIrhg=
 github.com/nyaruka/phonenumbers v1.7.4/go.mod h1:fsKPJ70O9JetEA4ggnJadYTFWwtGPvu/lETTXNXq6Cs=
+github.com/nyaruka/phonenumbers v1.8.1 h1:2K9YMQuv1dCGqjjzB1DwmdCe89khT4KPBQb2CxAMMlU=
+github.com/nyaruka/phonenumbers v1.8.1/go.mod h1:fsKPJ70O9JetEA4ggnJadYTFWwtGPvu/lETTXNXq6Cs=
 github.com/oapi-codegen/echo-middleware v1.0.0 h1:qAHvXg6mKDcllZKBrBecjy3MmGnGSMYPFCNHtzdeav0=
 github.com/oapi-codegen/echo-middleware v1.0.0/go.mod h1:3cG5def9eX05+mOdiYsqTW+ofX4c659zqz+0g0JmEPA=
 github.com/oapi-codegen/runtime v1.0.0 h1:P4rqFX5fMFWqRzY9M/3YF9+aPSPPB06IzP2P7oOxrWo=
