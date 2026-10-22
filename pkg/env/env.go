@@ -1,39 +1,53 @@
 package env
 
-import "os"
+import (
+	"os"
 
-var FrontendRootUrl = os.Getenv("FRONTEND_ROOT_URL")
-var BackendRootUrl = os.Getenv("BACKEND_ROOT_URL")
+	"github.com/sirupsen/logrus"
+)
 
-var SignupRedirectPath = os.Getenv("SIGNUP_REDIRECT_PATH")
-var LoginRedirectPath = os.Getenv("LOGIN_REDIRECT_PATH")
+// Get は環境変数を取得し、未設定（または空文字）の場合は警告を表示します
+// パッケージ初期化時に呼び出す想定です。実行時に呼び出すと警告が都度出力されます
+func Get(name string) string {
+	value := os.Getenv(name)
+	if value == "" {
+		logrus.Warnf("環境変数 %s が設定されていません", name)
+	}
+	return value
+}
 
-var DiscordLoginRedirectPath = os.Getenv("DISCORD_LOGIN_REDIRECT_PATH")
+var FrontendRootUrl = Get("FRONTEND_ROOT_URL")
+var BackendRootUrl = Get("BACKEND_ROOT_URL")
 
-var DefaultIconUrl = os.Getenv("DEFAULT_ICON_URL")
+var SignupRedirectPath = Get("SIGNUP_REDIRECT_PATH")
+var LoginRedirectPath = Get("LOGIN_REDIRECT_PATH")
 
-var DiscordClientId = os.Getenv("DISCORD_CLIENT_ID")
-var DiscordClientSecret = os.Getenv("DISCORD_CLIENT_SECRET")
+var DiscordLoginRedirectPath = Get("DISCORD_LOGIN_REDIRECT_PATH")
 
-var DiscordJoinUrl = os.Getenv("DISCORD_JOIN_URL")
+var DefaultIconUrl = Get("DEFAULT_ICON_URL")
 
-var Auth = os.Getenv("AUTH")
+var DiscordClientId = Get("DISCORD_CLIENT_ID")
+var DiscordClientSecret = Get("DISCORD_CLIENT_SECRET")
 
-var WasabiAccessKey = os.Getenv("WASABI_ACCESS_KEY")
-var WasabiSecretKey = os.Getenv("WASABI_SECRET_KEY")
+var DiscordJoinUrl = Get("DISCORD_JOIN_URL")
+
+var Auth = Get("AUTH")
+
+var WasabiAccessKey = Get("WASABI_ACCESS_KEY")
+var WasabiSecretKey = Get("WASABI_SECRET_KEY")
 var WasabiEndpoint = "s3.ap-northeast-1-ntt.wasabisys.com"
 var WasabiRegion = "ap-northeast-1"
-var WasabiPrivateBucket = os.Getenv("WASABI_PRIVATE_BUCKET")
-var WasabiPublicBucket = os.Getenv("WASABI_PUBLIC_BUCKET")
+var WasabiPrivateBucket = Get("WASABI_PRIVATE_BUCKET")
+var WasabiPublicBucket = Get("WASABI_PUBLIC_BUCKET")
 var WasabiDirectURLDomain = "s3.ap-northeast-1.wasabisys.com"
 
 var MattermostURL = "https://mm.digicre.net"
-var MattermostDigicreTeamID = os.Getenv("MATTERMOST_DIGICRE_TEAM_ID")
-var MattermostAdminAccount = os.Getenv("MATTERMOST_ADMIN_ACCOUNT")
-var MattermostAdminPassword = os.Getenv("MATTERMOST_ADMIN_PASSWORD")
-var MattermostWebHookURL = os.Getenv("MATTERMOST_WEB_HOOK_URL")
+var MattermostDigicreTeamID = Get("MATTERMOST_DIGICRE_TEAM_ID")
+var MattermostAdminAccount = Get("MATTERMOST_ADMIN_ACCOUNT")
+var MattermostAdminPassword = Get("MATTERMOST_ADMIN_PASSWORD")
+var MattermostWebHookURL = Get("MATTERMOST_WEB_HOOK_URL")
 
-var ClubRoomStatusToken = os.Getenv("CLUB_ROOM_STATUS_TOKEN")
+var ClubRoomStatusToken = Get("CLUB_ROOM_STATUS_TOKEN")
 
-var ResendApiKey = os.Getenv("RESEND_API_KEY")
-var AdminEmail = os.Getenv("ADMIN_EMAIL")
+var ResendApiKey = Get("RESEND_API_KEY")
+var AdminEmail = Get("ADMIN_EMAIL")
