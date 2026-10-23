@@ -118,3 +118,53 @@ INSERT INTO budgets (id, name, proposer_user_id, approver_user_id, status, class
   (UUID_TO_BIN('a0000012-2222-2222-2222-222222222222'), 'デザインソフトライセンス', UUID_TO_BIN('22222222-2222-2222-2222-222222222222'), NULL, 'pending', 'ソフトウェア', 24000, 0, 'デザインチーム用のAdobe Creative Cloud年間ライセンス', 'https://mattermost.example.com/digicore/pl/budget002', '学生割引適用予定'),
   (UUID_TO_BIN('a0000013-3333-3333-3333-333333333333'), 'サーバー利用料', UUID_TO_BIN('33333333-3333-3333-3333-333333333333'), UUID_TO_BIN('33333333-3333-3333-3333-333333333333'), 'paid', 'インフラ', 36000, 36000, 'プロダクション環境のAWS利用料（年間）', 'https://mattermost.example.com/digicore/pl/budget003', 'EC2、RDS、S3の年間利用料'),
   (UUID_TO_BIN('a0000014-4444-4444-4444-444444444444'), 'イベント会場費', UUID_TO_BIN('44444444-4444-4444-4444-444444444444'), NULL, 'pending', 'イベント', 50000, 0, 'ハッカソン2024の会場レンタル費用', 'https://mattermost.example.com/digicore/pl/budget004', '2日間の会場使用料');
+
+-- 部費振り込みデータの投入
+-- 年度はAPI側の判定（1〜2月は前年扱い）に合わせて実行日から算出する
+SET @fiscal_year = YEAR(CURDATE()) - IF(MONTH(CURDATE()) <= 2, 1, 0);
+-- 再入部一覧の振込状況は学年度（1〜3月は前年扱い）で突き合わせる
+SET @school_year = YEAR(CURDATE()) - IF(MONTH(CURDATE()) <= 3, 1, 0);
+
+INSERT INTO user_payments (id, user_id, `year`, transfer_name, checked, note) VALUES
+  (UUID_TO_BIN('a0000021-1111-1111-1111-111111111111'), UUID_TO_BIN('11111111-1111-1111-1111-111111111111'), @fiscal_year, 'タナカ タロウ', true, ''),
+  (UUID_TO_BIN('a0000022-2222-2222-2222-222222222222'), UUID_TO_BIN('22222222-2222-2222-2222-222222222222'), @fiscal_year, 'サトウ ハナコ', false, ''),
+  (UUID_TO_BIN('a0000023-3333-3333-3333-333333333333'), UUID_TO_BIN('33333333-3333-3333-3333-333333333333'), @fiscal_year, 'ヤマダ ジロウ', true, '現金で受領済み'),
+  (UUID_TO_BIN('a0000025-5555-5555-5555-555555555555'), UUID_TO_BIN('55555555-5555-5555-5555-555555555555'), @fiscal_year, 'タカハシ ケンタ', false, '振込名義が異なるため確認中'),
+  -- 再入部申請者の振込（振込済み・未確認 / 確認済み）
+  (UUID_TO_BIN('a0000026-6666-6666-6666-666666666666'), UUID_TO_BIN('66666666-6666-6666-6666-666666666666'), @school_year, 'イトウ カズマ', false, ''),
+  (UUID_TO_BIN('a0000024-4444-4444-4444-444444444444'), UUID_TO_BIN('44444444-4444-4444-4444-444444444444'), @school_year, 'スズキ ミサキ', true, ''),
+  -- 前年度分（年度指定での絞り込み確認用）
+  (UUID_TO_BIN('a0000027-1111-1111-1111-111111111111'), UUID_TO_BIN('11111111-1111-1111-1111-111111111111'), @fiscal_year - 1, 'タナカ タロウ', true, ''),
+  (UUID_TO_BIN('a0000028-3333-3333-3333-333333333333'), UUID_TO_BIN('33333333-3333-3333-3333-333333333333'), @fiscal_year - 1, 'ヤマダ ジロウ', true, '');
+
+-- 入退室データの投入（強制チェックアウト確認用）
+-- checked_out_at が NULL のレコードが在室中として扱われる
+-- place はリクエストのバリデーション（3文字以上）を通る値にする
+INSERT INTO activities (id, user_id, place, note, initial_checked_in_at, initial_checked_out_at, checked_in_at, checked_out_at) VALUES
+  -- 在室中
+  (UUID_TO_BIN('a0000031-1111-1111-1111-111111111111'), UUID_TO_BIN('11111111-1111-1111-1111-111111111111'), 'club_room',NULL, NOW() - INTERVAL 2 HOUR, NULL, NOW() - INTERVAL 2 HOUR, NULL),
+  (UUID_TO_BIN('a0000032-2222-2222-2222-222222222222'), UUID_TO_BIN('22222222-2222-2222-2222-222222222222'), 'club_room',NULL, NOW() - INTERVAL 30 MINUTE, NULL, NOW() - INTERVAL 30 MINUTE, NULL),
+  -- チェックアウト忘れ（前日から在室のまま）
+  (UUID_TO_BIN('a0000033-5555-5555-5555-555555555555'), UUID_TO_BIN('55555555-5555-5555-5555-555555555555'), 'club_room',NULL, NOW() - INTERVAL 1 DAY, NULL, NOW() - INTERVAL 1 DAY, NULL),
+  -- 退室済み（在室一覧には出ない）
+  (UUID_TO_BIN('a0000034-3333-3333-3333-333333333333'), UUID_TO_BIN('33333333-3333-3333-3333-333333333333'), 'club_room',NULL, NOW() - INTERVAL 5 HOUR, NOW() - INTERVAL 3 HOUR, NOW() - INTERVAL 5 HOUR, NOW() - INTERVAL 3 HOUR),
+  (UUID_TO_BIN('a0000035-1111-1111-1111-111111111111'), UUID_TO_BIN('11111111-1111-1111-1111-111111111111'), 'club_room','管理者による退室', NOW() - INTERVAL 2 DAY, NOW() - INTERVAL 2 DAY + INTERVAL 4 HOUR, NOW() - INTERVAL 2 DAY, NOW() - INTERVAL 2 DAY + INTERVAL 4 HOUR);
+
+-- 学年補正申請データの投入
+INSERT INTO grade_updates (id, user_id, grade_diff, reason, status, approved_by, created_at) VALUES
+  -- 承認待ち（一覧に表示される）
+  (UUID_TO_BIN('a0000041-1111-1111-1111-111111111111'), UUID_TO_BIN('11111111-1111-1111-1111-111111111111'), -1, '留年したため学年を1つ下げてください。', 'pending', NULL, NOW() - INTERVAL 3 DAY),
+  (UUID_TO_BIN('a0000042-5555-5555-5555-555555555555'), UUID_TO_BIN('55555555-5555-5555-5555-555555555555'), -1, '休学期間があったため学年の補正をお願いします。', 'pending', NULL, NOW() - INTERVAL 1 DAY),
+  -- 処理済み（一覧には出ない）
+  (UUID_TO_BIN('a0000043-2222-2222-2222-222222222222'), UUID_TO_BIN('22222222-2222-2222-2222-222222222222'), -1, '留年したため。', 'approved', UUID_TO_BIN('33333333-3333-3333-3333-333333333333'), NOW() - INTERVAL 30 DAY),
+  (UUID_TO_BIN('a0000044-2222-2222-2222-222222222222'), UUID_TO_BIN('22222222-2222-2222-2222-222222222222'), -1, '間違えて申請しました。', 'rejected', UUID_TO_BIN('33333333-3333-3333-3333-333333333333'), NOW() - INTERVAL 60 DAY);
+
+-- 再入部申請データの投入
+-- 部費の振込状況（未報告 / 会計確認待ち / 確認済み）がそれぞれ表示されるようにする
+INSERT INTO reentries (id, user_id, status, note, checked_by, checked_at, created_at) VALUES
+  -- 承認待ち（一覧に表示される）
+  (UUID_TO_BIN('a0000051-6666-6666-6666-666666666666'), UUID_TO_BIN('66666666-6666-6666-6666-666666666666'), 'pending', '', NULL, NULL, NOW() - INTERVAL 5 DAY),
+  (UUID_TO_BIN('a0000052-7777-7777-7777-777777777777'), UUID_TO_BIN('77777777-7777-7777-7777-777777777777'), 'pending', '', NULL, NULL, NOW() - INTERVAL 2 DAY),
+  (UUID_TO_BIN('a0000053-4444-4444-4444-444444444444'), UUID_TO_BIN('44444444-4444-4444-4444-444444444444'), 'pending', '', NULL, NULL, NOW() - INTERVAL 1 DAY),
+  -- 処理済み（一覧には出ない）
+  (UUID_TO_BIN('a0000054-6666-6666-6666-666666666666'), UUID_TO_BIN('66666666-6666-6666-6666-666666666666'), 'rejected', '部費の振込が確認できなかったため', UUID_TO_BIN('33333333-3333-3333-3333-333333333333'), NOW() - INTERVAL 90 DAY, NOW() - INTERVAL 100 DAY);
