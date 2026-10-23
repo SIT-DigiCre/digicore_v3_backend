@@ -83,7 +83,11 @@ func getEventFromEventId(dbClient db.Client, eventId string, userId string) (eve
 		if err != nil {
 			return eventDetail{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントの取得に失敗しました", Log: err.Error()}
 		}
-		if eventReservations[i].FreeCapacity == 0 || now_date.Before(reservationStartDate) || now_date.After(reservationFinishDate) {
+		finishDate, err := time.Parse(time.RFC3339, eventReservations[i].FinishDate)
+		if err != nil {
+			return eventDetail{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントの取得に失敗しました", Log: err.Error()}
+		}
+		if eventReservations[i].FreeCapacity == 0 || now_date.Before(reservationStartDate) || now_date.After(reservationFinishDate) || now_date.After(finishDate) {
 			eventReservations[i].Reservable = false
 		} else {
 			eventReservations[i].Reservable = true
