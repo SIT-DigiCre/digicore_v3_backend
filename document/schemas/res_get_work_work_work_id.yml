@@ -1,4 +1,5 @@
 required:
+  - thumbnail
   - workId
   - name
   - description
@@ -24,3 +25,5 @@ properties:
     type: array
     items:
       $ref: './res_get_work_work_work_id.tag.yml'
+  thumbnail:
+    $ref: './res_get_work_work_work_id.thumbnail.yml'
