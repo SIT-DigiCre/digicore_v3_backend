@@ -1,0 +1,31 @@
+post:
+  tags:
+    - work
+  description: "Upload work thumbnail"
+  security:
+    - BearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/req_post_work_thumbnail.yml'
+  responses:
+    200:
+      description: 保存したサムネイル
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/res_post_work_thumbnail.yml'
+    400:
+      $ref: '../responses/bad_request.yml'
+    401:
+      $ref: '../responses/unauthorized.yml'
+    413:
+      description: 画像本体が5MiBを超過
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/error.yml'
+    500:
+      $ref: '../responses/internal_server.yml'

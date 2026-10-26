@@ -76,6 +76,8 @@
   $ref: "./paths/work_tag.yml"
 /work/tag/{tagId}:
   $ref: "./paths/work_tag_tag_id.yml"
+/work/thumbnail:
+  $ref: "./paths/work_thumbnail.yml"
 /group:
   $ref: "./paths/group.yml"
 /group/admin:

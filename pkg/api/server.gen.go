@@ -281,6 +281,9 @@ type ServerInterface interface {
 	// (PUT /work/tag/{tagId})
 	PutWorkTagTagId(ctx echo.Context, tagId string) error
 
+	// (POST /work/thumbnail)
+	PostWorkThumbnail(ctx echo.Context) error
+
 	// (GET /work/work)
 	GetWorkWork(ctx echo.Context, params GetWorkWorkParams) error
 
@@ -1715,6 +1718,17 @@ func (w *ServerInterfaceWrapper) PutWorkTagTagId(ctx echo.Context) error {
 	return err
 }
 
+// PostWorkThumbnail converts echo context to params.
+func (w *ServerInterfaceWrapper) PostWorkThumbnail(ctx echo.Context) error {
+	var err error
+
+	ctx.Set(BearerAuthScopes, []string{})
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.PostWorkThumbnail(ctx)
+	return err
+}
+
 // GetWorkWork converts echo context to params.
 func (w *ServerInterfaceWrapper) GetWorkWork(ctx echo.Context) error {
 	var err error
@@ -1940,6 +1954,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.DELETE(baseURL+"/work/tag/:tagId", wrapper.DeleteWorkTagTagId)
 	router.GET(baseURL+"/work/tag/:tagId", wrapper.GetWorkTagTagId)
 	router.PUT(baseURL+"/work/tag/:tagId", wrapper.PutWorkTagTagId)
+	router.POST(baseURL+"/work/thumbnail", wrapper.PostWorkThumbnail)
 	router.GET(baseURL+"/work/work", wrapper.GetWorkWork)
 	router.POST(baseURL+"/work/work", wrapper.PostWorkWork)
 	router.DELETE(baseURL+"/work/work/:workId", wrapper.DeleteWorkWorkWorkId)

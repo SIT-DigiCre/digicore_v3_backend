@@ -36,3 +36,8 @@ properties:
     x-oapi-codegen-extra-tags:
       validate: dive,uuid
       ja: タグ
+  thumbnailId:
+    type: string
+    nullable: true
+    x-oapi-codegen-extra-tags:
+      ja: サムネイルID、空文字は解除

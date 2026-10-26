@@ -1,0 +1,14 @@
+required:
+  - name
+  - file
+properties:
+  name:
+    type: string
+    maxLength: 255
+    minLength: 1
+  file:
+    type: string
+    description: 画像本体のBase64、復号後5,242,880バイト以下
+    x-oapi-codegen-extra-tags:
+      validate: required,max=6990508
+      ja: ファイル

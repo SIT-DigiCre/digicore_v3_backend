@@ -48,6 +48,10 @@ func PutWorkWorkWorkId(ctx echo.Context, dbClient db.TransactionClient, workId s
 	if err != nil {
 		return api.ResGetWorkWorkWorkId{}, err
 	}
+	err = setWorkThumbnail(dbClient, workId, userId, requestBody.ThumbnailId)
+	if err != nil {
+		return api.ResGetWorkWorkWorkId{}, err
+	}
 	return GetWorkWorkWorkId(ctx, dbClient, workId)
 }
 
