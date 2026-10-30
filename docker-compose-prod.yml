@@ -49,7 +49,7 @@ services:
     restart: always
 
   cf-tunnel:
-    image: cloudflare/cloudflared:2026.10.2
+    image: cloudflare/cloudflared:2026.10.7
     restart: unless-stopped
     command: tunnel run
     environment:
