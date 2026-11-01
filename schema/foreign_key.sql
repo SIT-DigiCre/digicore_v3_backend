@@ -36,3 +36,6 @@ ALTER TABLE grade_updates ADD CONSTRAINT fk_grade_updates_approved_by_users_id F
 
 ALTER TABLE reentries ADD CONSTRAINT fk_reentries_user_id_users_id FOREIGN KEY (user_id) REFERENCES users(id);
 ALTER TABLE reentries ADD CONSTRAINT fk_reentries_checked_by_users_id FOREIGN KEY (checked_by) REFERENCES users(id);
+
+ALTER TABLE work_thumbnails ADD CONSTRAINT fk_work_thumbnails_user FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE works ADD CONSTRAINT fk_works_thumbnail FOREIGN KEY (thumbnail_id) REFERENCES work_thumbnails(id);

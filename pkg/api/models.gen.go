@@ -113,6 +113,13 @@ type ReqPostWorkTag struct {
 	Name        string `ja:"タグ名" json:"name" validate:"required"`
 }
 
+// ReqPostWorkThumbnail defines model for ReqPostWorkThumbnail.
+type ReqPostWorkThumbnail struct {
+	// File 画像本体のBase64、復号後5,242,880バイト以下
+	File string `ja:"ファイル" json:"file" validate:"required,max=6990508"`
+	Name string `json:"name"`
+}
+
 // ReqPostWorkWork defines model for ReqPostWorkWork.
 type ReqPostWorkWork struct {
 	Authors     []string `ja:"作者" json:"authors" validate:"dive,uuid"`
@@ -120,6 +127,7 @@ type ReqPostWorkWork struct {
 	Files       []string `ja:"ファイル" json:"files" validate:"dive,uuid"`
 	Name        string   `ja:"作品名" json:"name" validate:"required"`
 	Tags        []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
+	ThumbnailId *string  `ja:"サムネイルID、空文字は解除" json:"thumbnailId"`
 }
 
 // ReqPutActivityRecordRecordId defines model for ReqPutActivityRecordRecordId.
@@ -258,6 +266,9 @@ type ReqPutWorkWorkWorkId struct {
 	Files       []string `ja:"ファイル" json:"files" validate:"dive,uuid"`
 	Name        string   `ja:"作品名" json:"name" validate:"required"`
 	Tags        []string `ja:"タグ" json:"tags" validate:"dive,uuid"`
+
+	// ThumbnailId サムネイルID、空文字は解除
+	ThumbnailId *string `json:"thumbnailId"`
 }
 
 // ResGetActivityPlacePlaceCurrent defines model for ResGetActivityPlacePlaceCurrent.
@@ -768,9 +779,10 @@ type ResGetWorkWorkObjectWork struct {
 		FileId string `json:"fileId"`
 		Name   string `json:"name"`
 	} `json:"firstFile"`
-	Name   string                              `json:"name"`
-	Tags   []ResGetWorkWorkObjectWorkObjectTag `json:"tags"`
-	WorkId string                              `json:"workId"`
+	Name      string                                   `json:"name"`
+	Tags      []ResGetWorkWorkObjectWorkObjectTag      `json:"tags"`
+	Thumbnail *ResGetWorkWorkObjectWorkObjectThumbnail `json:"thumbnail"`
+	WorkId    string                                   `json:"workId"`
 }
 
 // ResGetWorkWorkObjectWorkObjectAuthor defines model for ResGetWorkWorkObjectWorkObjectAuthor.
@@ -786,14 +798,21 @@ type ResGetWorkWorkObjectWorkObjectTag struct {
 	TagId string `json:"tagId"`
 }
 
+// ResGetWorkWorkObjectWorkObjectThumbnail defines model for ResGetWorkWorkObjectWorkObjectThumbnail.
+type ResGetWorkWorkObjectWorkObjectThumbnail struct {
+	ThumbnailId string `json:"thumbnailId"`
+	Url         string `json:"url"`
+}
+
 // ResGetWorkWorkWorkId defines model for ResGetWorkWorkWorkId.
 type ResGetWorkWorkWorkId struct {
-	Authors     []ResGetWorkWorkWorkIdObjectAuthor `json:"authors"`
-	Description string                             `json:"description"`
-	Files       []ResGetWorkWorkWorkIdObjectFile   `json:"files"`
-	Name        string                             `json:"name"`
-	Tags        []ResGetWorkWorkWorkIdObjectTag    `json:"tags"`
-	WorkId      string                             `json:"workId"`
+	Authors     []ResGetWorkWorkWorkIdObjectAuthor   `json:"authors"`
+	Description string                               `json:"description"`
+	Files       []ResGetWorkWorkWorkIdObjectFile     `json:"files"`
+	Name        string                               `json:"name"`
+	Tags        []ResGetWorkWorkWorkIdObjectTag      `json:"tags"`
+	Thumbnail   *ResGetWorkWorkWorkIdObjectThumbnail `json:"thumbnail"`
+	WorkId      string                               `json:"workId"`
 }
 
 // ResGetWorkWorkWorkIdObjectAuthor defines model for ResGetWorkWorkWorkIdObjectAuthor.
@@ -813,6 +832,12 @@ type ResGetWorkWorkWorkIdObjectFile struct {
 type ResGetWorkWorkWorkIdObjectTag struct {
 	Name  string `json:"name"`
 	TagId string `json:"tagId"`
+}
+
+// ResGetWorkWorkWorkIdObjectThumbnail defines model for ResGetWorkWorkWorkIdObjectThumbnail.
+type ResGetWorkWorkWorkIdObjectThumbnail struct {
+	ThumbnailId string `json:"thumbnailId"`
+	Url         string `json:"url"`
 }
 
 // ResGetWorkWorkWorkIdPublic defines model for ResGetWorkWorkWorkIdPublic.
@@ -1111,6 +1136,9 @@ type PostWorkTagJSONRequestBody = ReqPostWorkTag
 
 // PutWorkTagTagIdJSONRequestBody defines body for PutWorkTagTagId for application/json ContentType.
 type PutWorkTagTagIdJSONRequestBody = ReqPutWorkTagTagId
+
+// PostWorkThumbnailJSONRequestBody defines body for PostWorkThumbnail for application/json ContentType.
+type PostWorkThumbnailJSONRequestBody = ReqPostWorkThumbnail
 
 // PostWorkWorkJSONRequestBody defines body for PostWorkWork for application/json ContentType.
 type PostWorkWorkJSONRequestBody = ReqPostWorkWork

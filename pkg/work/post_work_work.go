@@ -32,6 +32,10 @@ func PostWorkWork(ctx echo.Context, dbClient db.TransactionClient, requestBody a
 	if err != nil {
 		return api.ResGetWorkWorkWorkId{}, err
 	}
+	err = setWorkThumbnail(dbClient, workId, userId, requestBody.ThumbnailId)
+	if err != nil {
+		return api.ResGetWorkWorkWorkId{}, err
+	}
 	return GetWorkWorkWorkId(ctx, dbClient, workId)
 }
 

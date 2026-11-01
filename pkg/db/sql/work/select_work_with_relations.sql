@@ -2,6 +2,8 @@ SELECT
     BIN_TO_UUID(works.id) AS work_id,
     works.name AS work_name,
     works.description AS work_description,
+    BIN_TO_UUID(thumbnail.id) AS thumbnail_id,
+    thumbnail.storage_key AS thumbnail_key,
     BIN_TO_UUID(work_users.user_id) AS author_user_id,
     user_profiles.username AS author_username,
     user_profiles.icon_url AS author_icon_url,
@@ -10,7 +12,7 @@ SELECT
     BIN_TO_UUID(first_work_file.file_id) AS file_id,
     user_files.name AS file_name
 FROM (
-    SELECT works.id, works.name, works.description, works.updated_at
+    SELECT works.id, works.name, works.description, works.updated_at, works.thumbnail_id
     FROM works
     /* IF authorId */
     INNER JOIN work_users AS filter_users ON filter_users.work_id = works.id 
@@ -22,6 +24,7 @@ FROM (
     OFFSET /*offset*/0
     /* END */
 ) AS works
+LEFT JOIN work_thumbnails AS thumbnail ON thumbnail.id = works.thumbnail_id
 LEFT JOIN work_users ON work_users.work_id = works.id
 LEFT JOIN user_profiles ON user_profiles.user_id = work_users.user_id
 LEFT JOIN work_work_tags ON work_work_tags.work_id = works.id

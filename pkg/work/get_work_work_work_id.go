@@ -6,11 +6,14 @@ import (
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/db"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/storage"
 	"github.com/jinzhu/copier"
 	"github.com/labstack/echo/v4"
 )
 
 type workDetailWithRelationsRow struct {
+	ThumbnailId     *string `db:"thumbnail_id"`
+	ThumbnailKey    *string `db:"thumbnail_key"`
 	WorkId          string  `db:"work_id"`
 	WorkName        string  `db:"work_name"`
 	WorkDescription string  `db:"work_description"`
@@ -46,6 +49,7 @@ func GetWorkWorkWorkId(ctx echo.Context, dbClient db.Client, workId string) (api
 }
 
 type work struct {
+	Thumbnail   *workObjectThumbnail
 	Authors     []workObjectAuthor `db:"author"`
 	Description string             `db:"description"`
 	Files       []workObjectFile   `db:"file"`
@@ -63,6 +67,11 @@ type workObjectAuthor struct {
 type workObjectTag struct {
 	TagId string `db:"tag_id"`
 	Name  string `db:"name"`
+}
+
+type workObjectThumbnail struct {
+	ThumbnailId string `db:"thumbnail_id" json:"thumbnailId"`
+	Url         string `db:"url" json:"url"`
 }
 
 type workObjectFile struct {
@@ -96,6 +105,10 @@ func mapRowsToWorkDetail(rows []workDetailWithRelationsRow) work {
 		Authors:     []workObjectAuthor{},
 		Tags:        []workObjectTag{},
 		Files:       []workObjectFile{},
+	}
+
+	if firstRow.ThumbnailId != nil && firstRow.ThumbnailKey != nil {
+		result.Thumbnail = &workObjectThumbnail{ThumbnailId: *firstRow.ThumbnailId, Url: storage.WorkThumbnailURL(*firstRow.ThumbnailKey)}
 	}
 
 	authorMap := make(map[string]bool)
