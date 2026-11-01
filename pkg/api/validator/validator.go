@@ -37,6 +37,9 @@ func init() {
 	})
 
 	err := validate.RegisterValidation("phonenumber", func(fl validator.FieldLevel) bool {
+		if fl.Field().String() == "" {
+			return true
+		}
 		isValidNumber := regexp.MustCompile(`^(\d{0,15}|\+\d{0,20})$`).MatchString(fl.Field().String())
 		if !isValidNumber {
 			return false

@@ -43,6 +43,13 @@ func TestPhoneNumberValidation(t *testing.T) {
 			expectErr:             false,
 		},
 		{
+			name:                  "固定電話空文字で通過",
+			phoneNumber:           "09012345678",
+			parentCellphoneNumber: "09087654321",
+			parentHomephoneNumber: stringPtr(""),
+			expectErr:             false,
+		},
+		{
 			name:                  "固定電話ありで通過",
 			phoneNumber:           "09012345678",
 			parentCellphoneNumber: "09087654321",
