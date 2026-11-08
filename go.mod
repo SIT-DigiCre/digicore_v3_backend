@@ -19,6 +19,7 @@ require (
 	github.com/labstack/echo/v4 v4.11.1
 	github.com/lestrrat-go/jwx/v2 v2.0.10
 	github.com/mattermost/mattermost-server/v5 v5.39.3
+	github.com/mattermost/mattermost-server/v6 v6.7.2
 	github.com/nyaruka/phonenumbers v1.7.4
 	github.com/oapi-codegen/echo-middleware v1.0.0
 	github.com/oapi-codegen/runtime v1.0.0
