@@ -6,9 +6,9 @@ import (
 	"embed"
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/api/response"
+	"github.com/SIT-DigiCre/digicore_v3_backend/pkg/env"
 	"github.com/future-architect/go-twowaysql"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -22,7 +22,7 @@ var query embed.FS
 
 func init() {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true&loc=Asia%%2FTokyo",
-		os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_DATABASE"))
+		env.Get("DB_USER"), env.Get("DB_PASSWORD"), env.Get("DB_HOST"), env.Get("DB_PORT"), env.Get("DB_DATABASE"))
 	sdb, err := sqlx.Open("mysql", dsn)
 	if err != nil {
 		logrus.Fatal(err.Error())
