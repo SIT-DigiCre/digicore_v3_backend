@@ -27,3 +27,33 @@ func validateReservationDates(startDate, finishDate, reservationStartDate, reser
 
 	return nil
 }
+
+// validateReservationPeriod は予約の申込・キャンセルが可能な期間かを検証する共通関数。
+// 予約期間内かつ予約枠の終了前である必要がある。
+func validateReservationPeriod(reservation eventReservation) *response.Error {
+	reservationStartDate, terr := time.Parse(time.RFC3339, reservation.ReservationStartDate)
+	if terr != nil {
+		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "予約枠の取得に失敗しました", Log: terr.Error()}
+	}
+	reservationFinishDate, terr := time.Parse(time.RFC3339, reservation.ReservationFinishDate)
+	if terr != nil {
+		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "予約枠の取得に失敗しました", Log: terr.Error()}
+	}
+	finishDate, terr := time.Parse(time.RFC3339, reservation.FinishDate)
+	if terr != nil {
+		return &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "予約枠の取得に失敗しました", Log: terr.Error()}
+	}
+
+	now := time.Now()
+	if now.Before(reservationStartDate) {
+		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "予約受付開始前のため予約の申込・キャンセルはできません", Log: "reservation period has not started"}
+	}
+	if now.After(reservationFinishDate) {
+		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "予約受付期間が終了したため予約の申込・キャンセルはできません", Log: "reservation period has ended"}
+	}
+	if now.After(finishDate) {
+		return &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "対象の予約枠が終了したため予約の申込・キャンセルはできません", Log: "reservation slot has already finished"}
+	}
+
+	return nil
+}

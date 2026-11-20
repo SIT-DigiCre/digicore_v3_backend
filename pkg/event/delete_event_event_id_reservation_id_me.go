@@ -11,7 +11,14 @@ import (
 
 func DeleteEventEventIdReservationIdMe(ctx echo.Context, dbClient db.TransactionClient, eventId string, reservationId string) (api.ResGetEventEventIdReservationId, *response.Error) {
 	userId := ctx.Get("user_id").(string)
-	err := deleteReservationUser(dbClient, reservationId, userId)
+	reservation, err := getReservationFromReservationId(dbClient, eventId, reservationId, userId)
+	if err != nil {
+		return api.ResGetEventEventIdReservationId{}, err
+	}
+	if err := validateReservationPeriod(reservation); err != nil {
+		return api.ResGetEventEventIdReservationId{}, err
+	}
+	err = deleteReservationUser(dbClient, reservationId, userId)
 	if err != nil {
 		return api.ResGetEventEventIdReservationId{}, err
 	}

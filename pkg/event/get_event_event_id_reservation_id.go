@@ -68,6 +68,9 @@ func getReservationFromReservationId(dbClient db.Client, eventId string, reserva
 	if err != nil {
 		return eventReservation{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントの取得に失敗しました", Log: err.Error()}
 	}
+	if len(eventReservations) == 0 {
+		return eventReservation{}, &response.Error{Code: http.StatusNotFound, Level: "Info", Message: "指定された予約枠が見つかりません", Log: "reservation not found"}
+	}
 	now_date := time.Now()
 	reservationStartDate, err := time.Parse(time.RFC3339, eventReservations[0].ReservationStartDate)
 	if err != nil {
@@ -77,7 +80,11 @@ func getReservationFromReservationId(dbClient db.Client, eventId string, reserva
 	if err != nil {
 		return eventReservation{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントの取得に失敗しました", Log: err.Error()}
 	}
-	if eventReservations[0].FreeCapacity == 0 || now_date.Before(reservationStartDate) || now_date.After(reservationFinishDate) {
+	finishDate, err := time.Parse(time.RFC3339, eventReservations[0].FinishDate)
+	if err != nil {
+		return eventReservation{}, &response.Error{Code: http.StatusInternalServerError, Level: "Error", Message: "イベントの取得に失敗しました", Log: err.Error()}
+	}
+	if eventReservations[0].FreeCapacity == 0 || now_date.Before(reservationStartDate) || now_date.After(reservationFinishDate) || now_date.After(finishDate) {
 		eventReservations[0].Reservable = false
 	} else {
 		eventReservations[0].Reservable = true

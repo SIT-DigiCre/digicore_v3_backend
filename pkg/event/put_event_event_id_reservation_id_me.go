@@ -11,7 +11,17 @@ import (
 
 func PutEventEventIdReservationIdMe(ctx echo.Context, dbClient db.TransactionClient, eventId string, reservationId string, requestBody api.ReqPutEventEventIdReservationIdMe) (api.ResGetEventEventIdReservationId, *response.Error) {
 	userId := ctx.Get("user_id").(string)
-	err := updateReservationUser(dbClient, reservationId, userId, requestBody)
+	reservation, err := getReservationFromReservationId(dbClient, eventId, reservationId, userId)
+	if err != nil {
+		return api.ResGetEventEventIdReservationId{}, err
+	}
+	if err := validateReservationPeriod(reservation); err != nil {
+		return api.ResGetEventEventIdReservationId{}, err
+	}
+	if !reservation.Reservated && reservation.FreeCapacity <= 0 {
+		return api.ResGetEventEventIdReservationId{}, &response.Error{Code: http.StatusBadRequest, Level: "Info", Message: "予約枠が満員のため予約できません", Log: "reservation is full"}
+	}
+	err = updateReservationUser(dbClient, reservationId, userId, requestBody)
 	if err != nil {
 		return api.ResGetEventEventIdReservationId{}, err
 	}
